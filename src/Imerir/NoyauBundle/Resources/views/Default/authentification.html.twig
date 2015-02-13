@@ -1,0 +1,31 @@
+{% extends "::baseAuthentification.html.twig" %}
+
+{% block stylesheets %}
+        <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssAuthentification.css') }}"/>
+{% endblock %}
+
+{% block title %}
+	Authentification
+{% endblock %}
+
+{% block header id=header%}
+	<a href="{{ path('imerir_noyau_homepage') }}"><h1>Alba</h1></a>
+{% endblock %}
+
+{% block body id=contenu%}
+	<form action="" method="get">
+        	<fieldset>
+        		<legend>Identification</legend>
+        		Identifiant :
+			    <input type="text" name="identifiant">
+			    <br>
+			    Mot de passe :
+			    <input type="password" name="mot_de_passe"><br>
+			    <button type="submit" value=bt_valider_identification>Valider</button>
+        	</fieldset>
+		</form>
+		
+		<figure>
+			<img src="" alt="image d'une personne">
+		</figure>
+{% endblock %}

@@ -1,0 +1,15 @@
+/* @CHARSET "UTF-8"; */
+
+h1 {
+	color: red;
+}
+
+#header {
+	width: auto;
+	border: 2px solid red;
+}
+
+#contenu {
+	width: auto;
+	border: 2px solid green;
+}

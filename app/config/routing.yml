@@ -1,3 +1,7 @@
+imerir_produit:
+    resource: "@ImerirProduitBundle/Resources/config/routing.yml"
+    prefix:   /
+
 imerir_noyau:
     resource: "@ImerirNoyauBundle/Resources/config/routing.yml"
     prefix:   /

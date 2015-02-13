@@ -17,6 +17,7 @@ class AppKernel extends Kernel
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
             new Sensio\Bundle\FrameworkExtraBundle\SensioFrameworkExtraBundle(),
             new Imerir\NoyauBundle\ImerirNoyauBundle(),
+            new Imerir\ProduitBundle\ImerirProduitBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

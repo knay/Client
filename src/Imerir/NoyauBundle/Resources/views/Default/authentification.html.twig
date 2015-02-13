@@ -8,24 +8,24 @@
 	Authentification
 {% endblock %}
 
-{% block header id=header%}
+{% block header%}
 	<a href="{{ path('imerir_noyau_homepage') }}"><h1>Alba</h1></a>
 {% endblock %}
 
-{% block body id=contenu%}
+{% block body%}
 	<form action="" method="get">
-        	<fieldset>
-        		<legend>Identification</legend>
-        		Identifiant :
-			    <input type="text" name="identifiant">
-			    <br>
-			    Mot de passe :
-			    <input type="password" name="mot_de_passe"><br>
-			    <button type="submit" value=bt_valider_identification>Valider</button>
-        	</fieldset>
-		</form>
+        <fieldset>
+			<legend>Identification</legend>
+		    Identifiant :
+			<input type="text" name="identifiant">
+			<br>
+			Mot de passe :
+			<input type="password" name="mot_de_passe"><br>
+			<button type="submit" value=bt_valider_identification>Valider</button>
+        </fieldset>
+	</form>
 		
-		<figure>
-			<img src="" alt="image d'une personne">
-		</figure>
+	<figure>
+		<img src="" alt="image d'une personne">
+	</figure>
 {% endblock %}

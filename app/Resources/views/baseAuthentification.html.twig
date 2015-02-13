@@ -6,7 +6,12 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-    	{% block header %}{% endblock %}
-        {% block body %}{% endblock %}
+    	{% block header %}
+    		<div id=header></div>
+    	{% endblock %}
+    	
+        {% block body %}
+        	<div id=contenu></div>
+        {% endblock %}
     </body>
 </html>

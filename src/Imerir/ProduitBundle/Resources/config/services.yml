@@ -1,0 +1,4 @@
+services:
+#    imerir_produit.example:
+#        class: Imerir\ProduitBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

@@ -1,0 +1,3 @@
+imerir_produit_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ImerirProduitBundle:Default:index }

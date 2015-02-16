@@ -10,7 +10,7 @@ class DefaultController extends Controller
     {
     	ini_set("soap.wsdl_cache_enabled", 0);
     	//todo mettre l'url dans un twig de ressources
-    	$client = new \SoapClient('http://192.168.1.60/serveur/web/app_dev.php?wsdl');
+    	$client = new \SoapClient('http://localhost/alba/web/app_dev.php?wsdl');
     	$result = $client->__soapCall('hello', array('name'=>'DUCON'));
     	
         return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('soap_return'=>$result));

@@ -1,31 +1,18 @@
-/* @CHARSET "UTF-8"; */
 html {
 	height: 100%;
+	width: 100%;
+	border: 2px solid red;
+	background: url(../img/background_test.jpg);
 }
 
 body {
 	height: 100%;
-}
-
-h1 {
-	margin-left: 2rem;
-	color: orange;
-	font-size: xx-large;
-}
-
-h1:hover {
-	color: blue;
+	width: 100%;
+	border: 2px solid orange;
 }
 
 a {
 	text-decoration:none;
-}
-
-#header {
-	display: flex;
-	display: -webkit-flex; /* Safari */
-	border-bottom: 2px solid #585858;
-	background-color: White;
 }
 
 input, textarea {
@@ -47,6 +34,7 @@ input {
 label {
     display: inline-block;
     width: 100px;
+    margin-bottom: 2rem;
     margin-right: 2rem;
     text-align: right;
     color: #585858;
@@ -60,18 +48,18 @@ label {
 }
 
 #formulaire_authentification {
-	width: 30%;
+	width: 35%;
 	padding: 4rem;
-	background-color: #F2F2F2;
+	background-color: #CEE3F6;
 	border-radius: 10px;
 	border: 1px solid #585858;
 	margin: 0 auto;
-	/*margin-top: 3rem;*/
+	/*margin-top: 3rem; */
 }
 
 button {
 	margin-top: 3%;
-	margin-left: 80%;
+	margin-left: 100%;
 	background:orange;
 	width:55px;
 	height:55px;

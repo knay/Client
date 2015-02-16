@@ -26,4 +26,8 @@ class DefaultController extends Controller
     	return $this->render('ImerirNoyauBundle:Default:test.html.twig');
     }
     
+    public function baseAction()
+    {
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig');
+    }
 }

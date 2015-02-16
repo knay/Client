@@ -8,15 +8,15 @@
     </head>
     <body>
     	<div id="header">
-    		<i class="fa fa-laptop fa-5x"></i>
-    		<a href="{{ path('imerir_noyau_homepage') }}"><h1>Alba</h1></a>
+    		<i id="logo_logiciel" class="fa fa-laptop fa-3x"></i>
+    		<a id="nom_logiciel" href="{{ path('imerir_noyau_homepage') }}"><h1>Alba</h1></a>
     	</div>
     	
     	<div id="contenu">
     		<h2>Formulaire d'identification</h2>
-	        <form action="" method="get" id="formulaire_authentification">
+	        <form action="{{ path('imerir_noyau_index') }}" method="get" id="formulaire_authentification">
 			    <label id="ecriture">Identifiant :</label>
-				<input type="text" name="identifiant">
+				<input type="text" name="utilisateur">
 				<br>
 				<label id="ecriture">Mot de passe :</label>
 				<input type="password" name="mot_de_passe"><br>

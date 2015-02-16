@@ -1,31 +1,34 @@
-/* @CHARSET "UTF-8"; */
 html {
 	height: 100%;
+	background-color: #FAFAFA;
 }
 
 body {
+	margin: 0;
+ 	padding: 0;
 	height: 100%;
 }
 
 h1 {
 	margin-left: 2rem;
-	color: orange;
-	font-size: xx-large;
+	color: #0099CC;
+	font-size: x-large;
 }
 
-h1:hover {
-	color: blue;
-}
-
-a {
+#nom_logiciel {
 	text-decoration:none;
 }
 
+#logo_logiciel {
+	padding-left: 10px;
+}
+
 #header {
+	height: 7%;
 	display: flex;
 	display: -webkit-flex; /* Safari */
 	border-bottom: 2px solid #585858;
-	background-color: White;
+	background-color: #E6E6E6;
 }
 
 input, textarea {
@@ -56,7 +59,6 @@ label {
 	height: 100%;
     background-size: 100%;
     background-repeat: no-repeat;
-    border: 1px solid white;
 }
 
 #formulaire_authentification {
@@ -72,11 +74,23 @@ label {
 button {
 	margin-top: 3%;
 	margin-left: 80%;
-	background:orange;
-	width:55px;
-	height:55px;
+	background: #0099CC;
+	width: 55px;
+	height: 55px;
 	border: 1px solid white;
-	border-radius:50%;
-	font:bold 11px Arial;
-	color:#fff;
+	border-radius: 50%;
+	font: bold 11px Arial;
+	color: white;
+}
+
+button:hover {
+	margin-top: 3%;
+	margin-left: 80%;
+	background: #0099CC;
+	width: 55px;
+	height: 55px;
+	border: 3px solid white;
+	border-radius: 50%;
+	font: bold 11px Arial;
+	color: white;
 }

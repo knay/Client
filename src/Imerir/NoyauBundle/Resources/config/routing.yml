@@ -6,6 +6,6 @@ imerir_noyau_test:
     path:     /test/
     defaults: { _controller: ImerirNoyauBundle:Default:test }
     
-imerir_noyau_testpagebase:
+imerir_noyau_index:
     path:     /index/
-    defaults: { _controller: ImerirNoyauBundle:Default:base }
+    defaults: { _controller: ImerirNoyauBundle:Default:getindex }

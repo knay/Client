@@ -2,8 +2,7 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {% block stylesheets %}{% endblock %}
+        <title>{% block title %}{% endblock %}</title>
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" href="{{ asset('../vendor/components/font-awesome/css/font-awesome.css') }}"/>
         <link rel="stylesheet" href="{{ asset('../src/Imerir/NoyauBundle/Resources/public/css/cssDefault.css') }}"/>
@@ -11,14 +10,20 @@
     </head>
     <body>
     	<div id="header">
-    		<i class="fa fa-laptop fa-5x"></i>
-    		<a href="{{ path('imerir_noyau_homepage') }}"><h1>Alba</h1></a>
+    		<i id="logo_logiciel" class="fa fa-laptop fa-3x"></i>
+    		<a id="nom_logiciel" href="{{ path('imerir_noyau_homepage') }}"><h1>ALBA</h1></a>
+    		<div id="identifiant">
+    			<i class="fa fa-user" ></i>
+	    		<p id="nom_utilisateur"> {{ utilisateur }}</p>
+	    		<p id="groupe_utilisateur"> {{ mot_de_passe }}</p>
+	    		<a href="{{ path('imerir_noyau_homepage') }}" <i class="fa fa-sign-out"></i></a>
+    		</div>
     	</div>
-    	
-        {% block contenu %}
-        
-        
-        {% endblock %}
-        
+    
+    	<div id="contenu">
+	        {% block menu %}{% endblock %}
+	        {% block sousMenu %}{% endblock %}
+	        {% block affichage %}{% endblock %}
+    	</div>
     </body>
 </html>

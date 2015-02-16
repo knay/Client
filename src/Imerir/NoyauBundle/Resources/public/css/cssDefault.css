@@ -1,81 +1,132 @@
 html {
 	height: 100%;
+	width: 100%;
+	background-color: #FAFAFA;
 }
 
 body {
+	margin: 0;
+ 	padding: 0;
 	height: 100%;
 }
 
 h1 {
+	height: auto;
 	margin-left: 2rem;
-	color: orange;
-	font-size: xx-large;
+	color: #0099CC;
+	font-size: x-large;
 }
 
 h1:hover {
-	color: blue;
+	color: #FAFAFA;
+}
+
+#nom_logiciel {
+	text-decoration:none;
+}
+
+#logo_logiciel {
+	padding-left: 10px;
+}
+
+#header {	
+	height: 7%;
+	display: flex;
+	display: -webkit-flex;
+/* 	box-shadow: -1px 2px 10px 3px rgba(0, 0, 0, 0.3) inset; */
+	border-bottom: 2px solid #585858;
+	background-color: #E6E6E6;
+}
+
+#identifiant {
+	margin-left: auto;
+	margin-right: 0px;
+	margin-top: 2px;
+	margin-bottom: 2px;
+	padding-left: 30px;
+ 	display: flex; 
+ 	display: -webkit-flex;
+ 	height: auto;
+	border-left: 2px solid #585858;
+}
+
+#identifiant i,#identifiant a {
+	margin-right: 1rem;
+	height: 20px;
+	margin-top: 10px;
+}
+
+#identifiant a{
+	color: red;
+}
+
+#nom_utilisateur,#groupe_utilisateur {
+	height: 100%;
+	width: auto;
+	margin-top: 10px;
+	color: #585858;
+	font-size:small;
+	margin-right: 3rem;
+	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
+}
+
+#contenu {
+	height: 100%;
+	width: 100%;
+}
+
+#div_menu {
+	position: relative;
+	margin: 0px;
+	padding: 0px;
+	height: 100%;
+	width: 5%;
+	background-color: #0099CC;
+	
+	display: flex;
+	display: -webkit-flex;
+	
+	flex-direction: column;
+	-webkit-flex-direction: column;
 }
 
 a {
 	text-decoration:none;
 }
 
-#header {
+#menu {
+	margin: 0px;
+	padding: 0px;
+	width: 100%;
+}
+
+#menu li {
+	height: 50px;
+	color: white;
+	list-style-type: none;
+	
 	display: flex;
-	display: -webkit-flex; /* Safari */
-	border-bottom: 2px solid #585858;
-	background-color: White;
+	display: -webkit-flex;
+	
+	flex-direction: column;
+	-webkit-flex-direction: column;
 }
 
-input, textarea {
-    width: 150px;
-    vertical-align: top;
+#menu li:hover {
+	background-color: white;
+	color: orange;
 }
 
-h2 {
-	margin-left: 20%;
-	color: #585858;
-	margin-top: 5%;
+#menu li i {
+	margin-left: auto;
+    margin-right: auto;
+	text-align: center;
+	padding-top:10px;
 }
 
-input {
-    width: 10rem;
-    padding: 0.2rem;
+#menu li p {
+	margin-left: auto;
+    margin-right: auto;
+	text-align: center;
 }
 
-label {
-    display: inline-block;
-    width: 100px;
-    margin-right: 2rem;
-    text-align: right;
-    color: #585858;
-}
-
-#contenu {
-	height: 100%;
-    background-size: 100%;
-    background-repeat: no-repeat;
-    border: 1px solid white;
-}
-
-#formulaire_authentification {
-	width: 30%;
-	padding: 4rem;
-	background-color: #F2F2F2;
-	border-radius: 10px;
-	border: 1px solid #585858;
-	margin: 0 auto;
-	/*margin-top: 3rem;*/
-}
-
-button {
-	margin-top: 3%;
-	margin-left: 80%;
-	background:orange;
-	width:55px;
-	height:55px;
-	border: 1px solid white;
-	border-radius:50%;
-	font:bold 11px Arial;
-	color:#fff;
-}

@@ -1,5 +1,34 @@
 {% extends "::base.html.twig" %}
 
-{% block contenu %}
-	<h1>ttttttttttttt</h1>
+{% block title %}
+Index
+{% endblock %}
+
+{% block menu %}
+	<div id="div_menu">
+		{% for i in 'a'..'g' %}
+			<ul id="menu">
+            	<a href="#">
+            		<li>
+            			<i class="fa fa-cloud"></i>
+            			<p>{{ i }}</p>
+            		</li>
+            	</a>
+            </ul>
+		{% endfor %}
+	</div>
+{% endblock %}
+
+
+{% block sousMenu %}
+	<div id="sousMenu">
+	
+    </div>
+{% endblock %}
+
+
+{% block affichage %}
+	<div id="affichage">
+	
+    </div>
 {% endblock %}

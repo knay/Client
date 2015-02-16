@@ -1,12 +1,26 @@
 {% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}"/>
+{% endblock %}
+
 {% block body %}
 <form action="">
 	<label for="nom">Nom : </label>
 	<input type="text"/><br>
-	<div>
+	<div id="lst_attribut">
 		<p>Ajouter des valeurs</p>
-		<p>Rouge<i class="fa fa-minus-square"></i></p>
-		<p><i class="fa fa-plus-square"></i></p>
+		<p>Rouge<i class="fa fa-minus-square ajout"></i></p>
+		<p>&nbsp;<i class="fa fa-plus-square last" id="ajouterBtn"></i></p>
 	</div>
 </form>
+
+{% endblock %}
+
+{% block javascripts %}
+<script>
+	$('#ajouterBtn').click(function () {
+		alert('bonkour');
+	});
+</script>
 {% endblock %}

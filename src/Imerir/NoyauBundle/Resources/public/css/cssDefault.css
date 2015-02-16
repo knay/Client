@@ -1,0 +1,81 @@
+html {
+	height: 100%;
+}
+
+body {
+	height: 100%;
+}
+
+h1 {
+	margin-left: 2rem;
+	color: orange;
+	font-size: xx-large;
+}
+
+h1:hover {
+	color: blue;
+}
+
+a {
+	text-decoration:none;
+}
+
+#header {
+	display: flex;
+	display: -webkit-flex; /* Safari */
+	border-bottom: 2px solid #585858;
+	background-color: White;
+}
+
+input, textarea {
+    width: 150px;
+    vertical-align: top;
+}
+
+h2 {
+	margin-left: 20%;
+	color: #585858;
+	margin-top: 5%;
+}
+
+input {
+    width: 10rem;
+    padding: 0.2rem;
+}
+
+label {
+    display: inline-block;
+    width: 100px;
+    margin-right: 2rem;
+    text-align: right;
+    color: #585858;
+}
+
+#contenu {
+	height: 100%;
+    background-size: 100%;
+    background-repeat: no-repeat;
+    border: 1px solid white;
+}
+
+#formulaire_authentification {
+	width: 30%;
+	padding: 4rem;
+	background-color: #F2F2F2;
+	border-radius: 10px;
+	border: 1px solid #585858;
+	margin: 0 auto;
+	/*margin-top: 3rem;*/
+}
+
+button {
+	margin-top: 3%;
+	margin-left: 80%;
+	background:orange;
+	width:55px;
+	height:55px;
+	border: 1px solid white;
+	border-radius:50%;
+	font:bold 11px Arial;
+	color:#fff;
+}

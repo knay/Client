@@ -5,3 +5,7 @@ imerir_noyau_homepage:
 imerir_noyau_test:
     path:     /test/
     defaults: { _controller: ImerirNoyauBundle:Default:test }
+    
+imerir_noyau_testpagebase:
+    path:     /index/
+    defaults: { _controller: ImerirNoyauBundle:Default:base }

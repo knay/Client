@@ -2,16 +2,12 @@
 <html>
     <head>
         <meta charset="UTF-8" />
-        <title>{% block title %}{% endblock %}</title>
+        <title>{% block title %}Authentification{% endblock %}</title>
         {% block stylesheets %}{% endblock %}
         <link rel="stylesheet" href="{{ asset('../vendor/components/font-awesome/css/font-awesome.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('../src/Imerir/NoyauBundle/Resources/public/css/test.css') }}"/>
     </head>
     <body>
-    	<div id="header">
-    		<i class="fa fa-laptop fa-5x"></i>
-    		<a href="{{ path('imerir_noyau_homepage') }}"><h1>Alba</h1></a>
-    	</div>
-    	
     	<div id="contenu">
     		<h2>Formulaire d'identification</h2>
 	        <form action="" method="get" id="formulaire_authentification">

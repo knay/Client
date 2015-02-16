@@ -1,3 +1,7 @@
 imerir_noyau_homepage:
     path:     /authentification/
     defaults: { _controller: ImerirNoyauBundle:Default:authentification }
+    
+imerir_noyau_test:
+    path:     /test/
+    defaults: { _controller: ImerirNoyauBundle:Default:test }

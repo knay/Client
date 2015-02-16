@@ -21,8 +21,9 @@ class DefaultController extends Controller
     	return $this->render('ImerirNoyauBundle:Default:authentification.html.twig');
     }
     
-    public function getAuthentification()
+    public function testAction()
     {
+    	return $this->render('ImerirNoyauBundle:Default:test.html.twig');
     }
     
 }

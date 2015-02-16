@@ -1,3 +1,7 @@
-imerir_produit_attributs:
+imerir_produit_modif_attributs:
     path:     /produits/attribut
-    defaults: { _controller: ImerirProduitBundle:Default:ajoutAttribut }
+    defaults: { _controller: ImerirProduitBundle:Attribut:modifAttribut }
+
+imerir_produit_save_attributs:
+    path:     /produits/attribut/save
+    defaults: { _controller: ImerirProduitBundle:Attribut:saveAttribut }

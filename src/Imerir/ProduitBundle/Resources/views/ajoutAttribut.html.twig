@@ -5,14 +5,16 @@
 {% endblock %}
 
 {% block body %}
-<form action="">
+<form action="{{ path('imerir_produit_save_attributs') }}">
 	<label for="nom">Nom : </label>
 	<input type="text"/><br>
 	<div id="lst_attribut">
-		<p>Ajouter des valeurs</p>
-		<p>Rouge<i class="fa fa-minus-square ajout"></i></p>
-		<p>&nbsp;<i class="fa fa-plus-square last" id="ajouterBtn"></i></p>
+		<p class="titre_ajoutattribut">Ajouter des valeurs</p>
+		<p>Rouge<i class="fa fa-minus-square supprimer"></i></p>
+		<p id="last"><input type="text"><i class="fa fa-plus-square ajout" id="ajouterBtn"></i></p>
 	</div>
+	
+	<input type="submit"/>
 </form>
 
 {% endblock %}
@@ -20,7 +22,14 @@
 {% block javascripts %}
 <script>
 	$('#ajouterBtn').click(function () {
-		alert('bonkour');
+		var last = $('#last');
+		var input = $(last).children("input");
+		
+		if (input.val() == "") {
+			input.select();
+			alert("ddd");
+			return false;
+		} 
 	});
 </script>
 {% endblock %}

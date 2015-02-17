@@ -15,9 +15,63 @@ Index
 	 * élément du menu. Un effet fait apparaitre le sous 
 	 * menu correspondant.
 	 */
-	 $( "#element_menu" ).click(function () {
-		 $( "#sousMenu" ).show( "slide" );
+	
+	$( "#menu" ).children( "li" ).click(function () {
+		$id_select = $(this).attr("id");
+		afficheSousMenu($id_select);
 	});
+	
+	function afficheSousMenu($id_menu_select){
+		switch($id_menu_select){
+		case "a":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "b":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "c":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "d":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "e":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "f":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "g":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		}
+	};
+
+	function cacherSousMenu($id_menu_cacher)
+	switch($id_menu_cacher){
+		case "a":
+			$( "#sousMenu:visible" ).removeAttr( "style" ).fadeOut();
+			break;
+		case "b":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "c":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "d":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "e":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "f":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		case "g":
+			$( "#sousMenu" ).show( "slide" );
+			break;
+		}
+	
 </script>
 {% endblock %}
 

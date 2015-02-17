@@ -11,28 +11,27 @@
         <script src="{{ asset('../vendor/components/jqueryui/jquery-ui.js') }}"></script>
     </head>
     <body>
-    	{% block javascripts %}{% endblock %}
     	
     	<div id="header">
     		<i id="logo_logiciel" class="fa fa-laptop fa-3x"></i>
     		<h1>ALBA</h1>
     		<div id="identifiant">
     			<i class="fa fa-user" ></i>
-	    		<p id="nom_utilisateur">{{ utilisateur }}-{{ groupe }}</p>
+	    		<p id="nom_utilisateur">{{ app.security.getToken().getUser() }}-{{ app.security.getToken().getRoles().0.role }}</p>
 	    		<a href="{{ path('imerir_noyau_homepage') }}" <i class="fa fa-sign-out"></i></a>
     		</div>
     	</div>
     
     	<div id="contenu">
 	        <div id="div_menu">
-				{% for i in 'a'..'g' %}
-					<ul id="menu">
-	            		<li id="element_menu">
+	        	<ul id="menu">
+					{% for i in 'a'..'g' %}
+	            		<li id="{{ i }}">
 	            			<i class="fa fa-cloud"></i>
 	            			<p>{{ i }}</p>
 	            		</li>
-		            </ul>
-				{% endfor %}
+					{% endfor %}
+				</ul>
 			</div>
 			
 			<div id="sousMenu" style="display: none">
@@ -42,7 +41,8 @@
 	        <div id="affichage">
 				{% block affichage %}{% endblock %}
     		</div>
-    		
     	</div>
+    	
+    	{% block javascripts %}{% endblock %}
     </body>
 </html>

@@ -76,6 +76,9 @@ h1 {
 #contenu {
 	height: 100%;
 	width: 100%;
+	
+	display: flex;
+	display: -webkit-flex;
 }
 
 #div_menu {
@@ -137,3 +140,14 @@ a{
 	text-decoration: none;
 }
 
+#sousMenu {
+	position: relative;
+	width: 155px;
+	background-color: #33B5E5;
+}
+
+#affichage {
+	position: relative;
+	width: 100%;
+	background-color: red;
+}

@@ -33,6 +33,9 @@ class DefaultController extends Controller
     	
 	    try {
 	    	$result = $client->__soapCall('login', array('username'=>$nom, 'passwd'=>$mot_de_passe));
+			$session_token = uniqid();
+			$this->container->get('request')->getSession()->set('token',$session_token);
+			$client->__setCookie('PHPSESSID',$session_token);
 		} catch (Exception $e) {
 			echo '<script type="text/javascript">window.alert("'.$e.'");</script>';
 		}

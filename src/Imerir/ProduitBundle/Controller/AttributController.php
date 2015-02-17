@@ -13,6 +13,8 @@ class AttributController extends Controller
     	//todo mettre l'url dans un twig de ressources
     	
     	$client = new \SoapClient('http://localhost/serveur/web/app_dev.php/soap');
+        //permet de gérer le token par les cookies
+        $client->__setCookie('PHPSESSID',uniqid());
     	//$client->__setCookie('PHPSESSID', $this->getRequest()->cookies->get('PHPSESSID'));
     	$result = $client->__soapCall('login', array('username'=>'alba', 'passwd'=>'alba'));
 		//$token = new UsernamePasswordToken($u->getUsername(), $u->getPassword(), 'main', $u->getRoles());

@@ -5,3 +5,7 @@ imerir_produit_modif_attributs:
 imerir_produit_save_attributs:
     path:     /produits/attribut/save
     defaults: { _controller: ImerirProduitBundle:Attribut:saveAttribut }
+
+imerir_produit_creation_produit:
+    path:     /produits/creation
+    defaults: { _controller: ImerirProduitBundle:Default:creerProduit }

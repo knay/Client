@@ -26,7 +26,17 @@ class DefaultController extends Controller
     {
     	$query = $this->getRequest();
     	$nom = $query->get('utilisateur');
-    	$groupe = $query->get('mot_de_passe');
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig',array('utilisateur' => $nom,'groupe' => $groupe));
+    	$mot_de_passe = $query->get('mot_de_passe');
+    	
+    	$client = new \SoapClient('http://localhost/serveur/web/app_dev.php/soap');
+    	
+	    try {
+	    	$result = $client->__soapCall('login', array('username'=>$nom, 'passwd'=>$mot_de_passe));
+		} catch (Exception $e) {
+			echo '<script type="text/javascript">window.alert("'.$e.'");</script>';
+		}
+
+		$result_json = json_decode($result,true);
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig',array('utilisateur' => $result_json['username'],'groupe' => $result_json['role']));
     }
 }

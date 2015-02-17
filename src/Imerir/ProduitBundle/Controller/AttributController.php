@@ -14,11 +14,12 @@ class AttributController extends Controller
     	
     	$client = new \SoapClient('http://localhost/serveur/web/app_dev.php/soap');
         //permet de gérer le token par les cookies
-        $client->__setCookie('PHPSESSID',uniqid());
+        // $this->container->get('request')->getSession()->getId()
+        $client->__setCookie('PHPSESSID', 'totolitoto');
     	//$client->__setCookie('PHPSESSID', $this->getRequest()->cookies->get('PHPSESSID'));
-    	$result = $client->__soapCall('login', array('username'=>'alba', 'passwd'=>'alba'));
+    	$result = $client->__soapCall('hello', array("name"=>'toto'));
 		//$token = new UsernamePasswordToken($u->getUsername(), $u->getPassword(), 'main', $u->getRoles());
-    	//print_r($result);
+    	print_r($result);
         return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('utilisateur' => 'jojo','groupe' => 'toto'));
     }
     

@@ -5,7 +5,7 @@ Index
 {% endblock %}
 
 {% block sousMenu %}
-
+    
 {% endblock %}
 
 {% block javascripts %}
@@ -15,17 +15,10 @@ Index
 	 * élément du menu. Un effet fait apparaitre le sous 
 	 * menu correspondant.
 	 */
-	 $("#lst_attribut").children('p').children('.ajouterBtn').click(
-		function ajoutSousMenu() {
-			
-			
-		}
-	);
+	 $( "#element_menu" ).click(function () {
+		 $( "#sousMenu" ).show( "slide" );
+	});
 </script>
 {% endblock %}
 
-
-
-{% block affichage %}
-
-{% endblock %}
+{% block affichage %}{% endblock %}

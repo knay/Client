@@ -30,6 +30,7 @@ class DefaultController extends Controller
     	$mot_de_passe = $query->get('mot_de_passe');
     	
     	$client = new \SoapClient('http://localhost/serveur/web/app_dev.php/soap');
+    	$client->__setCookie('PHPSESSID', 'totolitoto');
     	
 	    try {
 	    	$result = $client->__soapCall('login', array('username'=>$nom, 'passwd'=>$mot_de_passe));

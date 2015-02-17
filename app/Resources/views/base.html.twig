@@ -33,9 +33,15 @@
 		            </ul>
 				{% endfor %}
 			</div>
-	        {% block sousMenu %}{% endblock %}
-	        {% block affichage %}{% endblock %}
+			
+			<div id="sousMenu">
+				{% block sousMenu %}{% endblock %}
+    		</div>
 	        
+	        <div id="affichage">
+				{% block affichage %}{% endblock %}
+    		</div>
+    		
        		{% block javascripts %}{% endblock %}
     	</div>
     </body>

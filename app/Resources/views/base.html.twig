@@ -3,6 +3,7 @@
     <head>
         <meta charset="UTF-8" />
         <title>{% block title %}{% endblock %}</title>
+        {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" href="{{ asset('../vendor/components/font-awesome/css/font-awesome.css') }}"/>
         <link rel="stylesheet" href="{{ asset('../src/Imerir/NoyauBundle/Resources/public/css/cssDefault.css') }}"/>
@@ -20,9 +21,22 @@
     	</div>
     
     	<div id="contenu">
-	        {% block menu %}{% endblock %}
+	        <div id="div_menu">
+				{% for i in 'a'..'g' %}
+					<ul id="menu">
+		            	<a href="#">
+		            		<li>
+		            			<i class="fa fa-cloud"></i>
+		            			<p>{{ i }}</p>
+		            		</li>
+		            	</a>
+		            </ul>
+				{% endfor %}
+			</div>
 	        {% block sousMenu %}{% endblock %}
 	        {% block affichage %}{% endblock %}
+	        
+       		{% block javascripts %}{% endblock %}
     	</div>
     </body>
 </html>

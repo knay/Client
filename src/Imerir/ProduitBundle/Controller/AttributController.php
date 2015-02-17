@@ -11,13 +11,15 @@ class AttributController extends Controller
     {
     	//ini_set("soap.wsdl_cache_enabled", 0);
     	//todo mettre l'url dans un twig de ressources
+    	
     	$client = new \SoapClient('http://localhost/serveur/web/app_dev.php/soap');
+        //permet de gérer le token par les cookies
+        $client->__setCookie('PHPSESSID',uniqid());
     	//$client->__setCookie('PHPSESSID', $this->getRequest()->cookies->get('PHPSESSID'));
     	$result = $client->__soapCall('login', array('username'=>'alba', 'passwd'=>'alba'));
-//    	$token = new UsernamePasswordToken($u->getUsername(), $u->getPassword(), 'main', $u->getRoles());
-    	
-    	print_r($result);
-        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig');
+		//$token = new UsernamePasswordToken($u->getUsername(), $u->getPassword(), 'main', $u->getRoles());
+    	//print_r($result);
+        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('utilisateur' => 'jojo','groupe' => 'toto'));
     }
     
     public function saveAttributAction()

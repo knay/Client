@@ -6,21 +6,102 @@
 
 {% block contenu %}
 <form action="">
-	<label for="nom">Nom : </label>
-	<input type="text"/><br>
+	<div id="divNom">
+		<label for="nom">Nom : </label>
+		<input type="text"/>
+		<input type="submit">
+	</div>
 	<div id="lst_attribut">
-		<p>Ajouter des valeurs</p>
-		<p>Rouge<i class="fa fa-minus-square ajout"></i></p>
-		<p>&nbsp;<i class="fa fa-plus-square last" id="ajouterBtn"></i></p>
+		<p class="titre_lst">Liste des valeurs possibles</p>
+		<p class="last">
+			<input type="text"/>
+			<i class="fa fa-plus-square ajout ajouterBtn"></i>
+		</p>
+	</div>
+	<div id="lst_ligne_produit">
+		<p class="titre_lst">Lignes de produits concernées</p>
+		<p class="last">
+			<select>
+				<option>String</option>
+				<option>Soutient-gorge</option>
+			</select>
+			<i class="fa fa-plus-square ajout ajouterBtn"></i>
+		</p>
 	</div>
 </form>
 
-{% endblock %}
-
-{% block javascripts %}
 <script>
-	$('#ajouterBtn').click(function () {
-		alert('bonkour');
-	});
+	/**
+	 * Fonction permettant de réagir lors du click sur ajouter un élément.
+	 * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
+	 * un élément.
+	 * TODO injection XSS
+	 */
+	 $("#lst_attribut").children('p').children('.ajouterBtn').click(
+		function ajoutItem() {
+			var last = $("#lst_attribut").children('.last').last();
+			var input = $(last).children('input');
+			if ($(input).val() === "") {
+				input.select();
+			}
+			else {
+				$("#lst_attribut").append('<p class="last"><input type="text"/><i class="fa fa-plus-square ajout ajouterBtn"></i></p>');
+				
+				last.children("i").toggleClass("ajout");
+				last.children("i").toggleClass("supprimer");
+				last.children("i").toggleClass("fa-plus-square");
+				last.children("i").toggleClass("fa-minus-square");
+				last.children("i").toggleClass("ajouterBtn");
+				last.toggleClass("last");
+
+				input.prop("disabled", true);
+
+				$(this).unbind('click');
+				$("#lst_attribut").children('p').children('.ajouterBtn').click(ajoutItem);
+				$("#lst_attribut").children('p').children('.supprimer').click(supprimerItem);
+			}
+		}
+	);
+
+	/**
+	 * Cette fonction permet de supprimer une valeur d'attribut.
+	 */
+	 $("#lst_attribut").children('p').children('.supprimer').click(supprimerItem);
+	 function supprimerItem() {
+	 	 $(this).parent().remove();
+	 }
+
+	 /**
+	 * Fonction permettant de réagir lors du click sur ajouter un élément.
+	 * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
+	 * un élément.
+	 */
+	 $("#lst_ligne_produit").children('p').children('.ajouterBtn').click(
+		function ajoutLigne() {
+			var last = $("#lst_ligne_produit").children('.last').last();
+
+			last.children("i").toggleClass("ajout");
+			last.children("i").toggleClass("supprimer");
+			last.children("i").toggleClass("fa-plus-square");
+			last.children("i").toggleClass("fa-minus-square");
+			last.children("i").toggleClass("ajouterBtn");
+			last.toggleClass("last");
+
+			$("#lst_ligne_produit").append('<p class="last">'+
+					"<select>"+
+						'<option>String</option>'+
+						'<option>Soutient-gorge</option>'+
+					'</select>'+
+					'<i class="fa fa-plus-square ajout ajouterBtn"></i>'+
+				'</p>');
+
+			$(this).unbind('click');
+			$("#lst_ligne_produit").children('p').children('.ajouterBtn').click(ajoutLigne);
+			$("#lst_ligne_produit").children('p').children('.supprimer').click(supprimerItem);
+		}
+	);
+
+	 $("#lst_ligne_produit").children('p').children('.supprimer').click(supprimerItem);
 </script>
 {% endblock %}
+

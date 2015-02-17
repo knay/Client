@@ -1,34 +1,110 @@
+#divNom {
+	border-bottom: 1px solid #fafafa;
+	padding-bottom: 10px;
+}
+
+#divNom input[type="text"] {
+	width: 200px;
+	height: 33px;
+	font-size: 13pt;
+}
+
+#divNom input[type="submit"] {
+	float: right;
+	width: 100px;
+	margin-left: 30px;
+	height: 29px;
+	font-size: 11pt;
+	border: 1px solid #0088BB;
+	background-color: #0099CC;
+	border-radius: 5px;
+	color: white;
+	margin-top: 1px;
+	cursor: pointer;
+}
+
+#divNom input[type="submit"]:hover {
+	background-color: #00AADD;
+}
+
+#divNom label {
+	display: inline-block;
+	margin-top: 5px;
+}
+
 #lst_attribut {
-	border: 1px solid #DEDEDE;
 	background-color: #EDEDED;
 	margin: 10px;
+	display: inline-block;
+	width: 50%;
+	vertical-align: top;
+	border-radius: 5px;
 }
 
 #lst_attribut p {
-	border: 1px solid #DEDEDE;
+	border-top: 1px solid #DEDEDE;
 	margin: 0;
 	padding-left: 10px;
 	padding-right: 10px;
 	padding-top: 5px;
 	padding-bottom: 5px;
+	vertical-align: middle;
+}
+#lst_attribut p input{
+	width: 95%;
+	height: 27px;
 }
 
-.titre_ajoutattribut {
-	background-color: #bfbfbf;
+#lst_attribut p span {
+	margin-top: 4px;
+	border-left: 1px solid black;
+}
+
+#lst_ligne_produit {
+	background-color: #EDEDED;
+	margin: 10px;
+	display: inline-block;
+	width: 25%;
+	border-radius: 5px;
+	vertical-align: top;
+}
+
+#lst_ligne_produit p {
+	border-top: 1px solid #DEDEDE;
+	margin: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+	vertical-align: middle;
+}
+
+.titre_lst {
+	background-color: #0099CC;
+	color: #efefef;
+	border-radius: 5px 5px 0 0;
+	text-align: center;
+	padding: 3px 4px;
+	letter-spacing: 0.03em;
+	font-family: arial;
 }
 
 .ajout {
 	color: green;
 	float: right;
 	cursor: pointer;
+	margin-top: 4px;
 }
 
 .supprimer {
 	color: red;
 	float: right;
 	cursor: pointer;
+	margin-top: 4px;
 }
 
-#last input {
-	width: 50%;
+select {
+	padding: 0;
+	width: 90%;
+	height: 27px;
 }

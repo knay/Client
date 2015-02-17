@@ -11,11 +11,10 @@
     <body>
     	<div id="header">
     		<i id="logo_logiciel" class="fa fa-laptop fa-3x"></i>
-    		<a id="nom_logiciel" href="{{ path('imerir_noyau_homepage') }}"><h1>ALBA</h1></a>
+    		<h1>ALBA</h1>
     		<div id="identifiant">
     			<i class="fa fa-user" ></i>
-	    		<p id="nom_utilisateur"> {{ utilisateur }}</p>
-	    		<p id="groupe_utilisateur"> {{ mot_de_passe }}</p>
+	    		<p id="nom_utilisateur">{{ utilisateur }}-{{ groupe }}</p>
 	    		<a href="{{ path('imerir_noyau_homepage') }}" <i class="fa fa-sign-out"></i></a>
     		</div>
     	</div>

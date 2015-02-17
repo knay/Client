@@ -1,19 +1,34 @@
 #lst_attribut {
 	border: 1px solid #DEDEDE;
 	background-color: #EDEDED;
+	margin: 10px;
 }
 
 #lst_attribut p {
 	border: 1px solid #DEDEDE;
 	margin: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 5px;
+}
+
+.titre_ajoutattribut {
+	background-color: #bfbfbf;
 }
 
 .ajout {
 	color: green;
 	float: right;
+	cursor: pointer;
 }
 
-.last {
+.supprimer {
 	color: red;
 	float: right;
+	cursor: pointer;
+}
+
+#last input {
+	width: 50%;
 }

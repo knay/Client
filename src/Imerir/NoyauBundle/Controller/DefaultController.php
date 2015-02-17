@@ -3,6 +3,7 @@
 namespace Imerir\NoyauBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
+use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class DefaultController extends Controller
 {
@@ -35,8 +36,14 @@ class DefaultController extends Controller
 		} catch (Exception $e) {
 			echo '<script type="text/javascript">window.alert("'.$e.'");</script>';
 		}
-
 		$result_json = json_decode($result,true);
+		$role[0] = $result_json['role'];
+		
+		$token = new UsernamePasswordToken($nom, $mot_de_passe,'main', $role);
+		$context = $this->container->get('security.context');
+		$context->setToken($token);
+		
+		
     	return $this->render('ImerirNoyauBundle:Default:index.html.twig',array('utilisateur' => $result_json['username'],'groupe' => $result_json['role']));
     }
 }

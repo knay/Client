@@ -24,7 +24,7 @@ class DefaultController extends Controller
     
     public function getindexAction()
     {
-    	$query = $this->getRequest();
+    	/*$query = $this->getRequest();
     	$nom = $query->get('utilisateur');
     	$mot_de_passe = $query->get('mot_de_passe');
     	
@@ -36,7 +36,7 @@ class DefaultController extends Controller
 			echo '<script type="text/javascript">window.alert("'.$e.'");</script>';
 		}
 
-		$result_json = json_decode($result,true);
+		$result_json = json_decode($result,true);*/
     	return $this->render('ImerirNoyauBundle:Default:index.html.twig',array('utilisateur' => $result_json['username'],'groupe' => $result_json['role']));
     }
 }

@@ -10,9 +10,17 @@ class AttributController extends Controller
     public function modifAttributAction()
     {
     	$soap = $this->get('noyau_soap');
-    	$return = $soap->call('hello', array("name"=>'toto'));
     	
-        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('utilisateur' => 'jojo','groupe' => 'toto'));
+    	$args = array(
+    			'count' => 0,
+    			'offset' => 0,
+    			'nom' => ''
+    	);
+    	
+    	$return = $soap->call('getLigneProduit', $args);
+    	$jsonLigneProduit = json_decode($return);
+    	
+        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit));
     }
     
     public function saveAttributAction()

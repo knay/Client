@@ -1,0 +1,15 @@
+{% extends "::base.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/creerproduit.css') }}"/>
+{% endblock %}
+
+{% block affichage %}
+    <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
+        <div id="divNom">
+            <label for="nom">Nom ligne produit: </label>
+            <input type="text" name="nom"/>
+            <input type="submit" value="Ajouter">
+        </div>
+    </form>
+{% endblock %}

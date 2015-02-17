@@ -25,7 +25,7 @@ class DefaultController extends Controller
     
     public function getindexAction()
     {
-    	/*$query = $this->getRequest();
+    	$query = $this->getRequest();
     	$nom = $query->get('utilisateur');
     	$mot_de_passe = $query->get('mot_de_passe');
     	

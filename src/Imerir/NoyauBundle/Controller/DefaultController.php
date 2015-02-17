@@ -29,7 +29,7 @@ class DefaultController extends Controller
     	$nom = $query->get('utilisateur');
     	$mot_de_passe = $query->get('mot_de_passe');
     	
-    	$client = new \SoapClient('http://localhost/serveur/web/app_dev.php/soap');
+    	/*$client = new \SoapClient('http://localhost/serveur/web/app_dev.php/soap');
     	$client->__setCookie('PHPSESSID', 'totolitoto');
     	
 	    try {
@@ -45,9 +45,11 @@ class DefaultController extends Controller
 		
 		$token = new UsernamePasswordToken($nom, $mot_de_passe,'main', $role);
 		$context = $this->container->get('security.context');
-		$context->setToken($token);
+		$context->setToken($token);*/
+    	
+    	$soap = $this->get('noyau_soap');
+		$soap->login($nom, $mot_de_passe);
 		
-		
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig',array('utilisateur' => $result_json['username'],'groupe' => $result_json['role']));
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig');
     }
 }

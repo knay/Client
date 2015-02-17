@@ -8,41 +8,41 @@
         <link rel="stylesheet" href="{{ asset('../vendor/components/font-awesome/css/font-awesome.css') }}"/>
         <link rel="stylesheet" href="{{ asset('../src/Imerir/NoyauBundle/Resources/public/css/cssDefault.css') }}"/>
         <script src="{{ asset('../vendor/components/jquery/jquery.js') }}"></script>
+        <script src="{{ asset('../vendor/components/jqueryui/jquery-ui.js') }}"></script>
     </head>
     <body>
+    	
     	<div id="header">
     		<i id="logo_logiciel" class="fa fa-laptop fa-3x"></i>
     		<h1>ALBA</h1>
     		<div id="identifiant">
     			<i class="fa fa-user" ></i>
-	    		<p id="nom_utilisateur">{{ utilisateur }}-{{ groupe }}</p>
+	    		<p id="nom_utilisateur">{{ app.security.getToken().getUser() }}-{{ app.security.getToken().getRoles().0.role }}</p>
 	    		<a href="{{ path('imerir_noyau_homepage') }}" <i class="fa fa-sign-out"></i></a>
     		</div>
     	</div>
     
     	<div id="contenu">
 	        <div id="div_menu">
-				{% for i in 'a'..'g' %}
-					<ul id="menu">
-		            	<a href="#">
-		            		<li>
-		            			<i class="fa fa-cloud"></i>
-		            			<p>{{ i }}</p>
-		            		</li>
-		            	</a>
-		            </ul>
-				{% endfor %}
+	        	<ul id="menu">
+					{% for i in 'a'..'g' %}
+	            		<li id="{{ i }}">
+	            			<i class="fa fa-cloud"></i>
+	            			<p>{{ i }}</p>
+	            		</li>
+					{% endfor %}
+				</ul>
 			</div>
 			
-			<div id="sousMenu">
+			<div id="sousMenu" style="display: none">
 				{% block sousMenu %}{% endblock %}
     		</div>
 	        
 	        <div id="affichage">
 				{% block affichage %}{% endblock %}
     		</div>
-    		
-       		{% block javascripts %}{% endblock %}
     	</div>
+    	
+    	{% block javascripts %}{% endblock %}
     </body>
 </html>

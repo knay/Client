@@ -20,8 +20,8 @@ security:
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, role: ROLE_USER }
-        - { path: ^/produits/attribut$, role: ROLE_EMPLOYE }
+        - { path: ^/produits/attribut$, role: ROLE_GERANT }
 
     role_hierarchy:
-        ROLE_GERANT:       [ROLE_GERANT,ROLE_EMPLOYE] 
+        ROLE_GERANT:       ROLE_GERANT
         ROLE_EMPLOYE:      ROLE_EMPLOYE

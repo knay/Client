@@ -1,5 +1,8 @@
 {% extends "::baseAffichage.html.twig" %}
 
+{% set nbAttribut = 0 %}
+{% set nbLigneProduit = 0 %}
+
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}"/>
 {% endblock %}
@@ -8,11 +11,24 @@
 <form action="{{ path('imerir_produit_save_attributs') }}" method="post">
 	<div id="divNom">
 		<label for="nom">Nom : </label>
+		{% if detail_attribut.nom is defined %} 
+		<input type="text" name="nom" value="{{ detail_attribut.nom }}"/>
+		{% else %}
 		<input type="text" name="nom"/>
+		{% endif %}
 		<input type="submit">
 	</div>
 	<div id="lst_attribut">
 		<p class="titre_lst">Liste des valeurs possibles</p>
+		{% if detail_attribut.attribut is defined %}
+			{% for i in detail_attribut.attribut %}
+				<p>
+					<input type="text" name="attribut{{ nbAttribut }}" value="{{ i.valeurAttr }}"/>
+					<i class="fa fa-minus-square supprimer"></i>
+				</p>
+				{% set nbAttribut = nbAttribut + 1 %}
+			{% endfor %}
+		{% endif %}
 		<p class="last">
 			<input type="text" name="attribut1"/>
 			<i class="fa fa-plus-square ajout ajouterBtn"></i>
@@ -20,14 +36,32 @@
 	</div>
 	<div id="lst_ligne_produit">
 		<p class="titre_lst">Lignes de produits concernées</p>
-		<p class="last">
-			<select name="lg_produit1">
-				{% for i in ligne_produit %}
-				<option>{{ i }}</option>
-				{% endfor %}
-			</select>
-			<i class="fa fa-plus-square ajout ajouterBtn"></i>
-		</p>
+		{% set lastProduitSelected = 0 %}
+		{% if detail_attribut.ligneProduit is defined %}
+			{% for i in detail_attribut.ligneProduit %}
+				<p class="{% if loop.last %}last{% endif %}">
+					<select name="lg_produit{{ nbLigneProduit }}">
+						{% for j in ligne_produit %}
+							{% if j == i.nomLigneProduit %}
+								{% if nbLigneProduit > lastProduitSelected %}
+									<option selected>{{ j }}</option>
+								{% else %}
+									<option>{{ j }}</option>
+								{% endif %}
+							{% else %}
+								<option>{{ j }}</option>
+							{% endif %}
+						{% endfor %}
+						{% set nbLigneProduit = nbLigneProduit + 1 %}
+					</select>
+					{% if loop.last %}
+						<i class="fa fa-plus-square ajout ajouterBtn"></i>
+					{% else %}
+						<i class="fa fa-minus-square supprimer"></i>
+					{% endif %}
+				</p>
+			{% endfor %}
+		{% endif %}
 	</div>
 </form>
 {% endblock %}
@@ -35,14 +69,16 @@
 {% block table %}
 	<tr class="titre_lst"><td>Nom</td></tr>
 {% for i in lst_attribut %}
-	<tr><td>{{ i }}</td></tr>
+	<tr><td>{{ i.nom }}</td></tr>
 {% endfor %}
 {% endblock %}
 
 {% block javascripts %}
 <script>
-	var numAttribut = 2;
-	var numLigne = 2;
+	var numAttribut = {{ nbAttribut }};
+	var numLigne = {{ nbLigneProduit }};
+
+	var selectCourant = 0;
 	
 	/**
 	 * Fonction permettant de réagir lors du click sur ajouter un élément.

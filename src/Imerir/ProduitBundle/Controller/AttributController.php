@@ -20,6 +20,19 @@ class AttributController extends Controller
     	$ret = $soap->call('getAttribut', $args);
     	$jsonValeurAttribut = json_decode($ret);
     	
+    	// TODO REUSSIR A FAIRE CA
+    	//$ret = $soap->call('fault', array('nom' => 'dd'));
+    	
+    	$args = array(
+    			'idLigneProduit' => 0,
+    			'idAttribut' => 15,
+    			'avecValeurAttribut' => true,
+    			'avecLigneProduit' => true
+    	);
+    	$ret = $soap->call('getAttribut', $args);
+    	
+    	$jsonValeurAttributAll = json_decode($ret);
+    	
     	$args = array(
     			'count' => 0,
     			'offset' => 0,
@@ -28,7 +41,9 @@ class AttributController extends Controller
     	$return = $soap->call('getLigneProduit', $args);
     	$jsonLigneProduit = json_decode($return);
     	
-        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 'lst_attribut' => $jsonValeurAttribut));
+        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 
+        		                                                                   'lst_attribut' => $jsonValeurAttribut,
+        		                                                                   'detail_attribut' => $jsonValeurAttributAll));
     }
     
     public function saveAttributAction()
@@ -55,7 +70,11 @@ class AttributController extends Controller
 				'attributs' => json_encode($attributs),
 				'id' => 0
 		);
-		$ret = $soap->call('setAttribut', $args);
+		try {
+			$ret = $soap->call('setAttribut', $args);
+		} catch (SoapFault $fault) {
+			echo 'ereur';
+		}
 		
 		$args = array(
 				'idLigneProduit' => 0,

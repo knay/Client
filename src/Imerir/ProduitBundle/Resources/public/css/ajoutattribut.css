@@ -5,8 +5,8 @@
 
 #divNom input[type="text"] {
 	width: 200px;
-	height: 33px;
-	font-size: 13pt;
+	height: 15px;
+	font-size: 10pt;
 }
 
 #divNom input[type="submit"] {
@@ -46,13 +46,16 @@
 	margin: 0;
 	padding-left: 10px;
 	padding-right: 10px;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
 	vertical-align: middle;
 }
-#lst_attribut p input{
-	width: 95%;
-	height: 27px;
+#lst_attribut p input {
+	width: 93%;
+	height: 15px;
+	font-size: 10pt;
+	padding-left: 7px;
+	padding-right: 7px;
 }
 
 #lst_attribut p span {
@@ -74,8 +77,8 @@
 	margin: 0;
 	padding-left: 10px;
 	padding-right: 10px;
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 3px;
+	padding-bottom: 3px;
 	vertical-align: middle;
 }
 
@@ -106,5 +109,5 @@
 select {
 	padding: 0;
 	width: 90%;
-	height: 27px;
+	height: 25px;
 }

@@ -24,7 +24,7 @@ class LigneProduitController extends Controller
         $return = $soap->call('ajoutLigneProduit',array('nom' => $nom));
 
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
-        return $this->render('ImerirProduitBundle::AjoutLigneProduit.html.twig', array('utilisateur' => 'jojo','groupe' => 'toto'));
+        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('utilisateur' => 'jojo','groupe' => 'toto'));
     }
 
 }

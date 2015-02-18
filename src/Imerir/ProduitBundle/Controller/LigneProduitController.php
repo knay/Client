@@ -18,7 +18,7 @@ class LigneProduitController extends Controller
 
         $query = $this->get('request');
         $nom = $query->request->get('nom');
-        
+
         $soap = $this->get('noyau_soap');
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
         $return = $soap->call('ajoutLigneProduit',array('nom' => $nom));

@@ -10,6 +10,21 @@ Index
 
 {% block javascripts %}
 <script>
+	$( document ).ready(function() {
+	    resize();
+	});
+
+	function resize()
+	{
+		var hauteur_ecran = parseInt($("body").css("height").replace("px",""));
+		var hauteur_header = parseInt($("#header").css("height").replace("px",""));
+		var largeur_ecran = parseInt($("body").css("width").replace("px",""));
+		var largeur_menu = parseInt($("#menu").css("width").replace("px",""));
+// 		alert(taille_header);
+		$('#contenu').css("height",(hauteur_ecran - hauteur_header) + "px");
+		$('#affichage').css("width",(largeur_ecran - largeur_menu ) + "px");
+	}
+
 	/**
 	 * Fonction permettant de réagir lors du click sur un
 	 * élément du menu. Un effet fait apparaitre le sous 
@@ -94,22 +109,22 @@ Index
 			$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
 			break;
 		case "b":
-			$( "#sousMenu:visible" ).removeAttr( "style" ).fadeOut();
+			$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
 			break;
 		case "c":
-			$( "#sousMenu:visible" ).removeAttr( "style" ).fadeOut();
+			$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
 			break;
 		case "d":
-			$( "#sousMenu:visible" ).removeAttr( "style" ).fadeOut();
+			$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
 			break;
 		case "e":
-			$( "#sousMenu:visible" ).removeAttr( "style" ).fadeOut();
+			$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
 			break;
 		case "f":
-			$( "#sousMenu:visible" ).removeAttr( "style" ).fadeOut();
+			$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
 			break;
 		case "g":
-			$( "#sousMenu:visible" ).removeAttr( "style" ).fadeOut();
+			$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
 			break;
 		}
 	}

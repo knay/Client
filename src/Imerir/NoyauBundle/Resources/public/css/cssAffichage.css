@@ -1,9 +1,12 @@
 
-#affichage {
-	position: relative;
-	/*padding: 100px;*/
-	width: 100%;
-	background-color: red;
+#affichage {	
+	display: inline-block;
+	position: absolute;
+	top: 0px;
+	left: 55px;
+	z-index: 1;
+	height: 100%;
+	background-color: ;
 }
 
 #fieldset_ajout {

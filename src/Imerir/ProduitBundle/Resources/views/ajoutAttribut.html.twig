@@ -22,8 +22,9 @@
 		<p class="titre_lst">Lignes de produits concernées</p>
 		<p class="last">
 			<select>
-				<option>String</option>
-				<option>Soutient-gorge</option>
+				{% for i in ligne_produit %}
+				<option>{{ i }}</option>
+				{% endfor %}
 			</select>
 			<i class="fa fa-plus-square ajout ajouterBtn"></i>
 		</p>
@@ -48,7 +49,7 @@
 			}
 			else {
 				$("#lst_attribut").append('<p class="last"><input type="text"/><i class="fa fa-plus-square ajout ajouterBtn"></i></p>');
-				
+
 				last.children("i").toggleClass("ajout");
 				last.children("i").toggleClass("supprimer");
 				last.children("i").toggleClass("fa-plus-square");
@@ -82,20 +83,14 @@
 		function ajoutLigne() {
 			var last = $("#lst_ligne_produit").children('.last').last();
 
+			clone = last.clone().appendTo("#lst_ligne_produit");
+			
 			last.children("i").toggleClass("ajout");
 			last.children("i").toggleClass("supprimer");
 			last.children("i").toggleClass("fa-plus-square");
 			last.children("i").toggleClass("fa-minus-square");
 			last.children("i").toggleClass("ajouterBtn");
 			last.toggleClass("last");
-
-			$("#lst_ligne_produit").append('<p class="last">'+
-					"<select>"+
-						'<option>String</option>'+
-						'<option>Soutient-gorge</option>'+
-					'</select>'+
-					'<i class="fa fa-plus-square ajout ajouterBtn"></i>'+
-				'</p>');
 
 			$(this).unbind('click');
 			$("#lst_ligne_produit").children('p').children('.ajouterBtn').click(ajoutLigne);

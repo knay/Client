@@ -22,7 +22,8 @@ class DefaultController extends Controller
     {
     	return $this->render('ImerirNoyauBundle:Default:test.html.twig');
     }
-    
+
+
     public function getindexAction()
     {
     	$query = $this->getRequest();

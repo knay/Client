@@ -26,6 +26,7 @@
 	<buildpathentry kind="src" path="vendor/doctrine/common/lib"/>
 	<buildpathentry kind="src" path="vendor/composer"/>
 	<buildpathentry kind="src" path="vendor/doctrine/dbal/lib"/>
+	<buildpathentry kind="src" path="vendor/friendsofsymfony/user-bundle"/>
 	<buildpathentry kind="src" path="src"/>
 	<buildpathentry kind="src" path="vendor/incenteev/composer-parameter-handler"/>
 	<buildpathentry kind="con" path="org.eclipse.php.core.LANGUAGE"/>

@@ -57,15 +57,23 @@ class AttributController extends Controller
 		);
 		$ret = $soap->call('setAttribut', $args);
 		
+		$args = array(
+				'idLigneProduit' => 0,
+				'idAttribut' => 0,
+				'avecValeurAttribut' => false,
+				'avecLigneProduit' => false
+		);
+		$ret = $soap->call('getAttribut', $args);
+		$jsonValeurAttribut = json_decode($ret);
+		
     	$args = array(
     			'count' => 0,
     			'offset' => 0,
     			'nom' => ''
     	);
-    	
     	$return = $soap->call('getLigneProduit', $args);
     	$jsonLigneProduit = json_decode($return);
     	
-    	return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit));
+    	return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 'lst_attribut' => $jsonValeurAttribut));
     }
 }

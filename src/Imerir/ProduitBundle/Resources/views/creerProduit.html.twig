@@ -1,32 +1,28 @@
 {% extends "::base.html.twig" %}
 
 {% block stylesheets %}
-    <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/creerproduit.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>
 {% endblock %}
 
 {% block affichage %}
-    <form action="">
-        <div id="divNom">
-            <label for="nom">Nom : </label>
-            <input type="text"/>
-            <input type="submit">
-        </div>
-        <div id="lst_attribut">
-            <p class="titre_lst">Liste des valeurs possibles</p>
-            <p class="last">
-                <input type="text"/>
-                <i class="fa fa-plus-square ajout ajouterBtn"></i>
-            </p>
-        </div>
+    <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
         <div id="lst_ligne_produit">
-            <p class="titre_lst">Lignes de produits concernées</p>
-            <p class="last">
-                <select>
-                    <option>String</option>
-                    <option>Soutient-gorge</option>
+            <p class="liste_lp">Ligne produit</p>
+            <p class="liste_lp_val">
+                <select name="nomLigneProduit">
+                    {% for i in ligne_produit %}
+                        <option>{{ i }}</option>
+                    {% endfor %}
                 </select>
-                <i class="fa fa-plus-square ajout ajouterBtn"></i>
             </p>
+        </div>
+        <div id="divNomProduit">
+            <label for="référence du produit">Référence produit: </label>
+            <input type="text" name="nomProduit"/>
+            <input type="submit" value="Ajouter">
         </div>
     </form>
+    {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_ligne_produit' %}
+        <p class="validation_message">Le produit a bien été ajouté</p>
+    {% endif %}
 {% endblock %}

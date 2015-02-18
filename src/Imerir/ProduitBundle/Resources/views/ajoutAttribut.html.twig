@@ -1,27 +1,27 @@
-{% extends "::base.html.twig" %}
+{% extends "::baseAffichage.html.twig" %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}"/>
 {% endblock %}
 
-{% block affichage %}
-<form action="">
+{% block ajout %}
+<form action="{{ path('imerir_produit_save_attributs') }}" method="post">
 	<div id="divNom">
 		<label for="nom">Nom : </label>
-		<input type="text"/>
+		<input type="text" name="nom"/>
 		<input type="submit">
 	</div>
 	<div id="lst_attribut">
 		<p class="titre_lst">Liste des valeurs possibles</p>
 		<p class="last">
-			<input type="text"/>
+			<input type="text" name="attribut1"/>
 			<i class="fa fa-plus-square ajout ajouterBtn"></i>
 		</p>
 	</div>
 	<div id="lst_ligne_produit">
 		<p class="titre_lst">Lignes de produits concernées</p>
 		<p class="last">
-			<select>
+			<select name="lg_produit1">
 				{% for i in ligne_produit %}
 				<option>{{ i }}</option>
 				{% endfor %}
@@ -32,8 +32,18 @@
 </form>
 {% endblock %}
 
+{% block table %}
+	<tr class="titre_lst"><td>Nom</td></tr>
+{% for i in lst_attribut %}
+	<tr><td>{{ i }}</td></tr>
+{% endfor %}
+{% endblock %}
+
 {% block javascripts %}
 <script>
+	var numAttribut = 2;
+	var numLigne = 2;
+	
 	/**
 	 * Fonction permettant de réagir lors du click sur ajouter un élément.
 	 * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
@@ -48,7 +58,7 @@
 				input.select();
 			}
 			else {
-				$("#lst_attribut").append('<p class="last"><input type="text"/><i class="fa fa-plus-square ajout ajouterBtn"></i></p>');
+				$("#lst_attribut").append('<p class="last"><input type="text" name="attribut'+numAttribut+'"/><i class="fa fa-plus-square ajout ajouterBtn"></i></p>');
 
 				last.children("i").toggleClass("ajout");
 				last.children("i").toggleClass("supprimer");
@@ -57,11 +67,11 @@
 				last.children("i").toggleClass("ajouterBtn");
 				last.toggleClass("last");
 
-				input.prop("disabled", true);
-
 				$(this).unbind('click');
 				$("#lst_attribut").children('p').children('.ajouterBtn').click(ajoutItem);
 				$("#lst_attribut").children('p').children('.supprimer').click(supprimerItem);
+
+				numAttribut++;
 			}
 		}
 	);
@@ -84,6 +94,7 @@
 			var last = $("#lst_ligne_produit").children('.last').last();
 
 			clone = last.clone().appendTo("#lst_ligne_produit");
+			clone.children('select').attr("name", "lg_produit"+numLigne);
 			
 			last.children("i").toggleClass("ajout");
 			last.children("i").toggleClass("supprimer");
@@ -91,6 +102,8 @@
 			last.children("i").toggleClass("fa-minus-square");
 			last.children("i").toggleClass("ajouterBtn");
 			last.toggleClass("last");
+
+			numLigne++;
 
 			$(this).unbind('click');
 			$("#lst_ligne_produit").children('p').children('.ajouterBtn').click(ajoutLigne);

@@ -100,11 +100,11 @@ h1 {
 	margin: 0px;
 	padding: 0px;
 	width: 100%;
+	color: white;
 }
 
 #menu li {
 	height: 50px;
-	color: white;
 	padding-bottom: 10px;
 /* 	background: linear-gradient(to bottom, #0099CC 60%, #33B5E5); */
 /* 	border: 1px solid yellow; */
@@ -120,6 +120,12 @@ h1 {
 #menu li:hover {
 	background-color: white;
 	color: orange;
+}
+
+ .selected  {
+	background-color: white;
+	color: orange;
+/* 	border-right: 3px solid #33B5E5; */
 }
 
 #menu li i {
@@ -148,6 +154,7 @@ a{
 
 #affichage {
 	position: relative;
+	/*padding: 100px;*/
 	width: 100%;
 	background-color: white;
 }

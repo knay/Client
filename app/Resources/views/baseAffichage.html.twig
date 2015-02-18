@@ -1,0 +1,18 @@
+{% extends "::base.html.twig" %}
+
+{% block affichage %}
+<fieldset id="fieldset_ajout">
+	<legend>{% block title %}ajout{% endblock %}</legend>    
+	{% block ajout %}{% endblock %}
+</fieldset>
+
+<fieldset id="fieldset_recherche">
+	<legend>{% block title %}recherche{% endblock %}</legend>    
+	{% block recherche %}
+		<table>
+			{% block table %}
+			{% endblock %}
+		</table>
+	{% endblock %}
+</fieldset>
+{% endblock %}

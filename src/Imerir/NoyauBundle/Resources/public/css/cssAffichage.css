@@ -1,0 +1,16 @@
+
+#affichage {
+	position: relative;
+	/*padding: 100px;*/
+	width: 100%;
+	background-color: red;
+}
+
+#fieldset_ajout {
+	width: 100%;
+}
+
+#fieldset_recherche {
+	width: 100%;
+	height: 100%;
+}

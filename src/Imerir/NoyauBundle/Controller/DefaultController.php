@@ -25,15 +25,32 @@ class DefaultController extends Controller
     
     public function getindexAction()
     {
-    	$query = $this->getRequest();
-    	$nom = $query->get('utilisateur');
-    	$mot_de_passe = $query->get('mot_de_passe');
+//     	$user_connect = $this->getUser();
     	
-    	// Récupération du service soap et demande de login
-    	// TODO gérer les soapfault
-    	$soap = $this->get('noyau_soap');
-		$soap->login($nom, $mot_de_passe);
-		
+//     	if(empty($user_connect)){
+//     		$query = $this->getRequest();
+//     		$nom = $query->get('utilisateur');
+//     		$mot_de_passe = $query->get('mot_de_passe');
+    		
+//     		// Récupération du service soap et demande de login
+//     		// TODO gérer les soapfault
+//     		$soap = $this->get('noyau_soap');
+//     		$soap->login($nom, $mot_de_passe);
+//     	}
     	return $this->render('ImerirNoyauBundle:Default:index.html.twig');
     }
+    public function checkLoginAction()
+    {
+    		$query = $this->getRequest();
+    		$nom = $query->get('utilisateur');
+    		$mot_de_passe = $query->get('mot_de_passe');
+    
+    		// Récupération du service soap et demande de login
+    		// TODO gérer les soapfault
+    		$soap = $this->get('noyau_soap');
+    		$soap->login($nom, $mot_de_passe);
+    	
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig');
+    }
+    
 }

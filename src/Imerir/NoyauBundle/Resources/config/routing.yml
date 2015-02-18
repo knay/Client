@@ -3,5 +3,10 @@ imerir_noyau_homepage:
     defaults: { _controller: ImerirNoyauBundle:Default:authentification }
     
 imerir_noyau_index:
-    path:     /index/
+    path:     /
     defaults: { _controller: ImerirNoyauBundle:Default:getindex }
+    
+imerir_noyau_check:
+    path:     /check_login
+    defaults: { _controller: ImerirNoyauBundle:Default:checkLogin }
+    

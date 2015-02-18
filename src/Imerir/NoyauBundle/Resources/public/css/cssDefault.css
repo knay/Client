@@ -41,7 +41,7 @@ h1 {
 	margin-left: auto;
 	margin-right: 0px;
 	margin-top: 2px;
-	margin-bottom: 2px;
+	padding-top: 0.5%;
 	padding-left: 30px;
  	display: flex; 
  	display: -webkit-flex;
@@ -85,7 +85,6 @@ h1 {
 	position: relative;
 	margin: 0px;
 	padding: 0px;
-	height: 100%;
 	width: 55px;
 	background-color: #0099CC;
 	
@@ -150,11 +149,4 @@ a{
 	position: relative;
 	width: 155px;
 	background-color: #33B5E5;
-}
-
-#affichage {
-	position: relative;
-	/*padding: 100px;*/
-	width: 100%;
-	background-color: white;
 }

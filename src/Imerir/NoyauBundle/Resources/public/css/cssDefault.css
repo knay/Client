@@ -124,6 +124,7 @@ h1 {
 #menu li:hover {
 	background-color: white;
 	color: orange;
+	cursor:  pointer;
 }
 
  .selected  {

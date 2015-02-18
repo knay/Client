@@ -7,6 +7,5 @@ imerir_noyau_index:
     defaults: { _controller: ImerirNoyauBundle:Default:getindex }
     
 imerir_noyau_check:
-    path:     /check_login
+    path:     /check_login/
     defaults: { _controller: ImerirNoyauBundle:Default:checkLogin }
-    

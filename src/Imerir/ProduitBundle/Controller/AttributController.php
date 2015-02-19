@@ -23,13 +23,13 @@ class AttributController extends Controller
     	// TODO REUSSIR A FAIRE CA
     	//$ret = $soap->call('fault', array('nom' => 'dd'));
     	
-    	$args = array(
+    	/*$args = array(
     			'idLigneProduit' => 0,
     			'idAttribut' => 15,
     			'avecValeurAttribut' => true,
     			'avecLigneProduit' => true
     	);
-    	$ret = $soap->call('getAttribut', $args);
+    	$ret = $soap->call('getAttribut', $args);*/
     	
     	$jsonValeurAttributAll = json_decode($ret);
     	

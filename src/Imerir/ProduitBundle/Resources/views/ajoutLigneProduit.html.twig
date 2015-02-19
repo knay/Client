@@ -16,3 +16,9 @@
         <p class="validation_message">La ligne produit a bien été ajouté</p>
     {% endif %}
 {% endblock %}
+{% block table %}
+    <tr class="liste_ligne_produit"><th>Nom ligne produit</th></tr>
+    {% for i in liste_ligne_produit %}
+        <tr><td>{{ i }}</td></tr>
+    {% endfor %}
+{% endblock %}

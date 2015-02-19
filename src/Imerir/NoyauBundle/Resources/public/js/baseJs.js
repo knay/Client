@@ -26,40 +26,43 @@ $id_select = "";
 //lorsqu'un element est selectionne dans le menu
 $( "#menu" ).children( "li" ).click(function () {
 
-//on check si on a deja cliquer sur un element avant
-//oui
-if($id_select != ""){
-	//alert('oui');
-	//on compare l'element selectionner au dernier selectioner
-	//si c'est le meme on referme sinon on ouvre le sous menu
-	$id_select_back = $id_select;
-	$id_select_now = $(this).attr("id");
-	
-	if($id_select_now == $id_select_back ){
-		//alert('meme');
-		cacherSousMenu($id_select_now);
-		$( this ).toggleClass( "selected" );
-		$id_select = "";
+	//on check si on a deja cliquer sur un element avant
+	//oui
+	if($id_select != ""){
+		//alert('oui');
+		//on compare l'element selectionner au dernier selectioner
+		//si c'est le meme on referme sinon on ouvre le sous menu
+		$id_select_back = $id_select;
+		$id_select_now = $(this).attr("id");
+		
+		if($id_select_now == $id_select_back ){
+			//alert('meme');
+			cacherSousMenu($id_select_now);
+			$( this ).toggleClass( "selected" );
+			$id_select = "";
+		}
+		else {
+			//alert('pas meme');
+			chercherToutToggleClass();
+			cacherSousMenu($id_select_back);
+			$( this ).toggleClass( "selected" );
+			afficheSousMenu($id_select_now);
+			$id_select = $id_select_now;
+		}
 	}
+	//non
 	else {
-		//alert('pas meme');
-		chercherToutToggleClass();
-		cacherSousMenu($id_select_back);
 		$( this ).toggleClass( "selected" );
-		afficheSousMenu($id_select_now);
-		$id_select = $id_select_now;
-	}
-}
-//non
-else {
-	$( this ).toggleClass( "selected" );
-	//alert('non');
-	//on recupere l'id selectionner
-	$id_select = $(this).attr("id");
-	//appel fonction affiche le sous menu en fonction de l'id
-		afficheSousMenu($id_select);
+		//alert('non');
+		//on recupere l'id selectionner
+		$id_select = $(this).attr("id");
+		//appel fonction affiche le sous menu en fonction de l'id
+			afficheSousMenu($id_select);
 	}
 	
+});
+
+$("body").click(function (){
 });
 
 function chercherToutToggleClass(){
@@ -97,25 +100,25 @@ function afficheSousMenu($id_menu_select){
 function cacherSousMenu($id_menu_cacher){
 	switch($id_menu_cacher){
 	case "a":
-		$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
+		$( "#sousMenu:visible" ).hide( "slide" );
 		break;
 	case "b":
-		$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
+		$( "#sousMenu:visible" ).hide( "slide" );
 		break;
 	case "c":
-		$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
+		$( "#sousMenu:visible" ).hide( "slide" );
 		break;
 	case "d":
-		$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
+		$( "#sousMenu:visible" ).hide( "slide" );
 		break;
 	case "e":
-		$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
+		$( "#sousMenu:visible" ).hide( "slide" );
 		break;
 	case "f":
-		$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
+		$( "#sousMenu:visible" ).hide( "slide" );
 		break;
 	case "g":
-		$( "#sousMenu:visible" ).removeAttr( "slide" ).fadeOut();
+		$( "#sousMenu:visible" ).hide( "slide" );
 			break;
 		}
 }

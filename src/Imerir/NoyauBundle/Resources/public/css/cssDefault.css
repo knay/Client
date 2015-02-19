@@ -30,10 +30,10 @@ h1 {
 	height: 50px;
 	display: flex;
 	display: -webkit-flex;
-	-moz-box-shadow: inset 0px -10px 20px -10px #9b9b9b;
-	-webkit-box-shadow: inset 0px -10px 20px -10px RGB(180,180,180);
-	-o-box-shadow: inset 0px -10px 20px -10px #9b9b9b;
-	box-shadow: inset 0px -10px 20px -10px #9b9b9b;
+	-moz-box-shadow: inset 0px -10px 25px -10px RGB(180,180,180);
+	-webkit-box-shadow: inset 0px -10px 25px -10px RGB(180,180,180);
+	-o-box-shadow: inset 0px -10px 25px -10px RGB(180,180,180);
+	box-shadow: inset 0px -10px 25px -10px RGB(180,180,180);
 /* 	border-bottom: 2px solid white; */
 	background-color: RGB(50,50,50);
 }

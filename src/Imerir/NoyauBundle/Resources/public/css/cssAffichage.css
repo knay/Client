@@ -33,7 +33,31 @@
 /* 	border-radius: 5px; */
 /* } */
 
-
 #table_recherche {
+	background: RGB(220,220,220);
+	border-radius: 5px;
+	width: 50%;
+	heigth: auto;
+	padding: 5px;
+}
+
+#table_recherche th {
+	background: #0099CC;
+	border-radius: 5px 5px 0 0;
+	width: 50%;
+	color: RGB(249,249,249);
+/* 	border: 1px solid red; */
+}
+
+#table_recherche td {
+	margin-top: 5px;
 	cursor: pointer;
+	border-radius: 2px;
+	background-color: RGB(249,249,249);
+	padding-left: 10px;
+/* 	border: 1px solid green; */
+}
+
+#table_recherche td:hover {
+	color: #669900;
 }

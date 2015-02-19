@@ -20,9 +20,14 @@
                 </select>
             </p>
         </div>
-
     </form>
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_ligne_produit' %}
         <p class="validation_message">Le produit a bien été ajouté</p>
     {% endif %}
+{% endblock %}
+{% block table %}
+    <tr class="produits"><th>Nom ligne produit</th><th>Nom produit</th></tr>
+    {% for i in produits %}
+        <tr><td>{{ i.lp }}</td><td>{{ i.p }}</td></tr>
+    {% endfor %}
 {% endblock %}

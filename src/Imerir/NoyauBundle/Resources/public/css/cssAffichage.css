@@ -5,15 +5,24 @@
 	top: 0px;
 	left: 55px;
 	z-index: 1;
- 	background-color: #FAFAFA;
- 	border: 1px solid red;
-/*  	padding: 10px; */
+ 	background-color: RGB(230,230,230);
+/*  	border: 1px solid red; */
+	overflow: scroll;
 }
 
 #fieldset_ajout, #fieldset_recherche {
 	margin: 20px;
 	border-radius: 5px;
 	background-color: white;
+	border: 1px solid RGB(150,150,150);
+}
+
+#titre_fieldset {
+	background-color: RGB(220,220,220);
+	border: 1px solid RGB(150,150,150);
+	border-radius: 5px;
+	color: RGB(100,100,100);
+	padding: 2px 5px 2px 5px;
 }
 
 /* #fieldset_recherche { */

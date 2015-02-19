@@ -2,12 +2,12 @@
 
 {% block affichage %}
 <fieldset id="fieldset_ajout">
-	<legend>{% block title_ajout %}AJOUT{% endblock %}</legend>    
+	<legend id="titre_fieldset" >{% block title_ajout %}AJOUT{% endblock %}</legend>    
 	{% block ajout %}{% endblock %}
 </fieldset>
 
 <fieldset id="fieldset_recherche">
-	<legend>{% block title_recherche %}RECHERCHE{% endblock %}</legend> 
+	<legend id="titre_fieldset" >{% block title_recherche %}RECHERCHE{% endblock %}</legend> 
 	{% block recherche %}{% endblock %}
 	{% block tableaux %}
 		<table>

@@ -23,13 +23,16 @@ class AttributController extends Controller
     	// TODO REUSSIR A FAIRE CA
     	//$ret = $soap->call('fault', array('nom' => 'dd'));
     	
-    	/*$args = array(
-    			'idLigneProduit' => 0,
-    			'idAttribut' => 15,
-    			'avecValeurAttribut' => true,
-    			'avecLigneProduit' => true
-    	);
-    	$ret = $soap->call('getAttribut', $args);*/
+    	$id = $this->getRequest()->request->get('id');
+    	if ($id !== null) {
+	    	$args = array(
+	    			'idLigneProduit' => 0,
+	    			'idAttribut' => (int)$id,
+	    			'avecValeurAttribut' => true,
+	    			'avecLigneProduit' => true
+	    	);
+	    	$ret = $soap->call('getAttribut', $args); 
+    	}
     	
     	$jsonValeurAttributAll = json_decode($ret);
     	
@@ -52,6 +55,10 @@ class AttributController extends Controller
     	$req = $this->getRequest()->request;
     	
     	$nom = $req->get('nom');
+    	if (null !== $req->get('id'))
+    		$id = $req->get('id');
+    	else 
+    		$id = 0;
     	$attributs = array();
     	$ligneProduit = array();
     	
@@ -68,7 +75,7 @@ class AttributController extends Controller
 				'nom' => $nom,
 				'lignesProduits' => json_encode($ligneProduit),
 				'attributs' => json_encode($attributs),
-				'id' => 0
+				'id' => $id
 		);
 		try {
 			$ret = $soap->call('setAttribut', $args);

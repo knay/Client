@@ -1,7 +1,7 @@
 {% extends "::baseAffichage.html.twig" %}
 
-{% set nbAttribut = 0 %}
-{% set nbLigneProduit = 0 %}
+{% set nbAttribut = 2 %}
+{% set nbLigneProduit = 2 %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}"/>
@@ -61,6 +61,15 @@
 					{% endif %}
 				</p>
 			{% endfor %}
+		{% else %}
+			<p class="last">
+				<select name="lg_produit1">
+				{% for j in ligne_produit %}
+					<option>{{ j }}</option>
+				{% endfor %}
+				</select>
+				<i class="fa fa-plus-square ajout ajouterBtn"></i>
+			</p>
 		{% endif %}
 	</div>
 </form>

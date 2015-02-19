@@ -16,6 +16,9 @@
 		{% else %}
 		<input type="text" name="nom"/>
 		{% endif %}
+		{% if detail_attribut.id is defined %}
+		<input type="hidden" name="id" value="{{ detail_attribut.id }}">
+		{% endif %}
 		<input type="submit">
 	</div>
 	<div id="lst_attribut">
@@ -44,12 +47,12 @@
 						{% for j in ligne_produit %}
 							{% if j == i.nomLigneProduit %}
 								{% if nbLigneProduit > lastProduitSelected %}
-									<option selected>{{ j }}</option>
+									<option selected>{{ j.nom }}</option>
 								{% else %}
-									<option>{{ j }}</option>
+									<option>{{ j.nom }}</option>
 								{% endif %}
 							{% else %}
-								<option>{{ j }}</option>
+								<option>{{ j.nom }}</option>
 							{% endif %}
 						{% endfor %}
 						{% set nbLigneProduit = nbLigneProduit + 1 %}
@@ -65,7 +68,7 @@
 			<p class="last">
 				<select name="lg_produit1">
 				{% for j in ligne_produit %}
-					<option>{{ j }}</option>
+					<option>{{ j.nom }}</option>
 				{% endfor %}
 				</select>
 				<i class="fa fa-plus-square ajout ajouterBtn"></i>
@@ -76,9 +79,16 @@
 {% endblock %}
 
 {% block table %}
-	<tr class="titre_lst"><td>Nom</td></tr>
+	<tr><th>Nom</th></tr>
 {% for i in lst_attribut %}
-	<tr><td>{{ i.nom }}</td></tr>
+	<tr>
+		<td>
+			<form method="post" action="{{ path('imerir_produit_modif_attributs') }}" style="display: none">
+				<input type="hidden" name="id" value="{{ i.id }}">
+			</form>
+			{{ i.nom }}
+		</td>
+	</tr>
 {% endfor %}
 {% endblock %}
 
@@ -88,6 +98,10 @@
 	var numLigne = {{ nbLigneProduit }};
 
 	var selectCourant = 0;
+
+	$('tr').click(function () {
+		$(this).children('td').children('form').submit();
+	});
 	
 	/**
 	 * Fonction permettant de réagir lors du click sur ajouter un élément.

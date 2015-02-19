@@ -10,6 +10,10 @@ function resize()
 	var largeur_menu = parseInt($("#menu").css("width").replace("px",""));
 	$('#contenu').css("height",(hauteur_ecran - hauteur_header) + "px");
 	$('#affichage').css("width",(largeur_ecran - largeur_menu ) + "px");
+	$('#affichage').css("height",(hauteur_ecran - hauteur_header ) + "px");
+	
+	$(fieldset).css("width",(largeur_ecran - largeur_menu ) + "px");
+	
 }
 
 /**

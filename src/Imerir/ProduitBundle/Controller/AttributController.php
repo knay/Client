@@ -11,7 +11,12 @@ class AttributController extends Controller
     {
     	$soap = $this->get('noyau_soap');
     	
+    	$nomRech = $this->getRequest()->request->get('rechNom');
+    	if (null === $nomRech)
+    		$nomRech = '';
+    	
     	$args = array(
+    			'nom' => $nomRech,
     			'idLigneProduit' => 0,
     			'idAttribut' => 0,
     			'avecValeurAttribut' => false,
@@ -26,6 +31,7 @@ class AttributController extends Controller
     	$id = $this->getRequest()->request->get('id');
     	if ($id !== null) {
 	    	$args = array(
+	    			'nom' => '',
 	    			'idLigneProduit' => 0,
 	    			'idAttribut' => (int)$id,
 	    			'avecValeurAttribut' => true,
@@ -84,6 +90,7 @@ class AttributController extends Controller
 		}
 		
 		$args = array(
+				'nom' => '',
 				'idLigneProduit' => 0,
 				'idAttribut' => 0,
 				'avecValeurAttribut' => false,

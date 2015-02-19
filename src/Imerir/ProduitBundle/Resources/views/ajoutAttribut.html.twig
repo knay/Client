@@ -1,7 +1,7 @@
 {% extends "::baseAffichage.html.twig" %}
 
-{% set nbAttribut = 2 %}
-{% set nbLigneProduit = 2 %}
+{% set nbAttribut = 0 %}
+{% set nbLigneProduit = 0 %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}"/>
@@ -33,7 +33,7 @@
 			{% endfor %}
 		{% endif %}
 		<p class="last">
-			<input type="text" name="attribut1"/>
+			<input type="text" name="attribut{{ nbAttribut }}"/>
 			<i class="fa fa-plus-square ajout ajouterBtn"></i>
 		</p>
 	</div>
@@ -45,9 +45,10 @@
 				<p class="{% if loop.last %}last{% endif %}">
 					<select name="lg_produit{{ nbLigneProduit }}">
 						{% for j in ligne_produit %}
-							{% if j == i.nomLigneProduit %}
+							{% if j.nom == i.nomLigneProduit %}
 								{% if nbLigneProduit > lastProduitSelected %}
 									<option selected>{{ j.nom }}</option>
+									{% set lastProduitSelected = nbLigneProduit %}
 								{% else %}
 									<option>{{ j.nom }}</option>
 								{% endif %}
@@ -78,6 +79,13 @@
 </form>
 {% endblock %}
 
+{% block recherche %}
+<form action="{{ path('imerir_produit_modif_attributs') }}" method="post">
+	<label for="rechNom">Nom :</label><input type="text" name="rechNom">
+	<input type="submit">
+</form>
+{% endblock %}
+
 {% block table %}
 	<tr><th>Nom</th></tr>
 {% for i in lst_attribut %}
@@ -94,8 +102,8 @@
 
 {% block javascripts %}
 <script>
-	var numAttribut = {{ nbAttribut }};
-	var numLigne = {{ nbLigneProduit }};
+	var numAttribut = 200;
+	var numLigne = 200;
 
 	var selectCourant = 0;
 

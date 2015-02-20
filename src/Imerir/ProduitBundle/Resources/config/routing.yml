@@ -21,3 +21,11 @@ imerir_produit_creation_ligne_produit:
 imerir_produit_validation_creation_ligne_produit:
     path:     /ligne_produits/creation/validation
     defaults: { _controller: ImerirProduitBundle:LigneProduit:execAjoutLigneProduit }
+
+imerir_produit_modification_ligne_produit:
+    path:     /ligne_produits/modification
+    defaults: { _controller: ImerirProduitBundle:LigneProduit:modifLigneProduit }
+
+imerir_produit_validation_modification_ligne_produit:
+    path:     /ligne_produits/modification/validation
+    defaults: { _controller: ImerirProduitBundle:LigneProduit:execModifLigneProduit }

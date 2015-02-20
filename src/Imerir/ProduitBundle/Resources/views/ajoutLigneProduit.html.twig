@@ -19,6 +19,6 @@
 {% block table %}
     <tr class="liste_ligne_produit"><th>Nom ligne produit</th></tr>
     {% for i in liste_ligne_produit %}
-        <tr><td>{{ i }}</td></tr>
+        <tr><td>{{ i.nom }}</td></tr>
     {% endfor %}
 {% endblock %}

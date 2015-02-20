@@ -29,48 +29,66 @@ $( "#menu" ).children( "li" ).click(function () {
 	//on check si on a deja cliquer sur un element avant
 	//oui
 	if($id_select != ""){
-		//alert('oui');
 		//on compare l'element selectionner au dernier selectioner
 		//si c'est le meme on referme sinon on ouvre le sous menu
 		$id_select_back = $id_select;
 		$id_select_now = $(this).attr("id");
-		
+		//meme
 		if($id_select_now == $id_select_back ){
-			//alert('meme');
+			//on cache le sous menu.
 			cacherSousMenu($id_select_now);
+			//plus de selected
 			$( this ).toggleClass( "selected" );
+			//init de la variable select
 			$id_select = "";
 		}
+		//differrent
 		else {
-			//alert('pas meme');
 			chercherToutToggleClass();
+			//cacher l'ancien menu selected
 			cacherSousMenu($id_select_back);
 			$( this ).toggleClass( "selected" );
+			//affiche le new sous menu
 			afficheSousMenu($id_select_now);
+			//id_select devient la nouvelle valeur selected.
 			$id_select = $id_select_now;
 		}
 	}
 	//non
 	else {
+		//passe l'element en selected pour Css
 		$( this ).toggleClass( "selected" );
-		//alert('non');
 		//on recupere l'id selectionner
 		$id_select = $(this).attr("id");
 		//appel fonction affiche le sous menu en fonction de l'id
-			afficheSousMenu($id_select);
+		afficheSousMenu($id_select);
 	}
 	
 });
 
-$("body").click(function (){
+$("#header").click(function (){
+	cacherSousMenu($id_select);
+	
 });
 
+$('#affichage').click(function (){
+	cacherSousMenu($id_select);
+});
+
+/**
+ * Cette fonction permet de rechercher tous les
+ * element du menu qui sont selected, et de les enlever
+ */
 function chercherToutToggleClass(){
 	$(".selected").each( function() {
 	$( this ).toggleClass( "selected" );
 	});
 }
 
+/**
+ * 
+ * @param $id_menu_select
+ */
 function afficheSousMenu($id_menu_select){
 	switch($id_menu_select){
 	case "a":

@@ -15,7 +15,7 @@
             <p class="liste_lp">Ligne produit
                 <select name="nomLigneProduit">
                     {% for i in ligne_produit %}
-                        <option>{{ i }}</option>
+                        <option>{{ i.nom }}</option>
                     {% endfor %}
                 </select>
             </p>

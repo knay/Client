@@ -14,6 +14,14 @@ imerir_produit_validation_creation_produit:
     path:     /produits/creation/validation
     defaults: { _controller: ImerirProduitBundle:Default:execAjoutProduit }
 
+imerir_produit_modification_produit:
+    path:     /produits/modification
+    defaults: { _controller: ImerirProduitBundle:Default:modifProduit }
+
+imerir_produit_validation_modification_produit:
+    path:     /produits/modification/validation
+    defaults: { _controller: ImerirProduitBundle:Default:execModifProduit }
+
 imerir_produit_creation_ligne_produit:
     path:     /ligne_produits/creation
     defaults: { _controller: ImerirProduitBundle:LigneProduit:ajoutLigneProduit }

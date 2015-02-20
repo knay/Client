@@ -12,7 +12,7 @@ function resize()
 	$('#affichage').css("width",(largeur_ecran - largeur_menu ) + "px");
 	$('#affichage').css("height",(hauteur_ecran - hauteur_header ) + "px");
 	
-	$(fieldset).css("width",(largeur_ecran - largeur_menu ) + "px");
+	$("fieldset").css("width",(largeur_ecran - largeur_menu ) + "px");
 	
 }
 
@@ -25,16 +25,18 @@ function resize()
 $id_select = "";
 //lorsqu'un element est selectionne dans le menu
 $( "#menu" ).children( "li" ).click(function () {
-
+//	alert('click menu');
 	//on check si on a deja cliquer sur un element avant
 	//oui
 	if($id_select != ""){
+//		alert('oui');
 		//on compare l'element selectionner au dernier selectioner
 		//si c'est le meme on referme sinon on ouvre le sous menu
 		$id_select_back = $id_select;
 		$id_select_now = $(this).attr("id");
 		//meme
 		if($id_select_now == $id_select_back ){
+//			alert('meme');
 			//on cache le sous menu.
 			cacherSousMenu($id_select_now);
 			//plus de selected
@@ -44,6 +46,7 @@ $( "#menu" ).children( "li" ).click(function () {
 		}
 		//differrent
 		else {
+//			alert('pas meme');
 			chercherToutToggleClass();
 			//cacher l'ancien menu selected
 			cacherSousMenu($id_select_back);
@@ -56,6 +59,7 @@ $( "#menu" ).children( "li" ).click(function () {
 	}
 	//non
 	else {
+//		alert('non');
 		//passe l'element en selected pour Css
 		$( this ).toggleClass( "selected" );
 		//on recupere l'id selectionner
@@ -66,14 +70,27 @@ $( "#menu" ).children( "li" ).click(function () {
 	
 });
 
+/**
+ * Evenement qui ce produit lorsque l'utilisateur click
+ * sur le header ou sur l'affichage.
+ */
 $("#header").click(function (){
-	cacherSousMenu($id_select);
-	
+	cacher_menu_nimporte_ou();
 });
 
 $('#affichage').click(function (){
-	cacherSousMenu($id_select);
+	cacher_menu_nimporte_ou();
 });
+
+/**
+ * Cette fonction permet de cacher
+ * le sous menu qui est actuellement ouvert
+ */
+function cacher_menu_nimporte_ou(){
+	chercherToutToggleClass();
+	cacherSousMenu($id_select);
+	$id_select = "";
+}
 
 /**
  * Cette fonction permet de rechercher tous les
@@ -81,7 +98,7 @@ $('#affichage').click(function (){
  */
 function chercherToutToggleClass(){
 	$(".selected").each( function() {
-	$( this ).toggleClass( "selected" );
+		$( this ).toggleClass( "selected" );
 	});
 }
 
@@ -116,6 +133,7 @@ function afficheSousMenu($id_menu_select){
 };
 
 function cacherSousMenu($id_menu_cacher){
+	
 	switch($id_menu_cacher){
 	case "a":
 		$( "#sousMenu:visible" ).hide( "slide" );

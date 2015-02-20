@@ -13,8 +13,14 @@
         </div>
     </form>
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_ligne_produit' %}
-        <p class="validation_message">La ligne produit a bien été ajouté</p>
+        <p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajouté</p>
     {% endif %}
+{% endblock %}
+{% block recherche %}
+    <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="post">
+        <label for="recherche_lp">Nom :</label><input type="text" name="recherche_lp">
+        <input type="submit">
+    </form>
 {% endblock %}
 {% block table %}
     <tr class="liste_ligne_produit"><th>Nom ligne produit</th></tr>

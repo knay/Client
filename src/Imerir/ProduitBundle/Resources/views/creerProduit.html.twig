@@ -22,8 +22,20 @@
         </div>
     </form>
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_produit' %}
-        <p class="validation_message">Le produit a bien été ajouté</p>
+        <p class="validation_message">Le produit "{{ produit_add }}" a bien été ajouté pour la ligne produit "{{ lp_produit_add }}"</p>
     {% endif %}
+{% endblock %}
+{% block recherche %}
+    <form action="{{ path('imerir_produit_creation_produit') }}" method="post">
+        <select name="rechLp">
+            <option></option>
+            {% for i in ligne_produit %}
+                <option>{{ i.nom }}</option>
+            {% endfor %}
+        </select>
+        <label for="rechProduit">Produit</label><input type="text" name="rechProduit">
+        <input type="submit">
+    </form>
 {% endblock %}
 {% block table %}
     <tr class="produits"><th>Nom ligne produit</th><th>Nom produit</th></tr>

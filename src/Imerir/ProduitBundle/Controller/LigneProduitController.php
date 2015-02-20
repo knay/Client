@@ -9,7 +9,16 @@ class LigneProduitController extends Controller
     public function ajoutLigneProduitAction()
     {
         $soap = $this->get('noyau_soap');
-        $return = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => ''));
+
+        $query = $this->get('request');
+        $recherche_lp = $query->request->get('recherche_lp');
+
+        if($recherche_lp===null)
+            $nom='';
+        else
+            $nom=$recherche_lp;
+
+        $return = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => $nom));
         $liste_ligne_produit = json_decode($return);
         return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit));
     }
@@ -27,6 +36,6 @@ class LigneProduitController extends Controller
 
         $return_lp = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => ''));
         $liste_ligne_produit = json_decode($return_lp);
-        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit));
+        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit,'nom_lp_add'=>$nom));
     }
 }

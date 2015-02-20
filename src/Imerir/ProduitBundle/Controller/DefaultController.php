@@ -20,12 +20,26 @@ class DefaultController extends Controller
     public function ajoutProduitAction()
     {
         $soap = $this->get('noyau_soap');
+
+        $query = $this->get('request');
+        $nomRech = $query->request->get('rechProduit');
+        $ligneProduitRech = $query->request->get('rechLp');
+
+        if($nomRech === null)
+            $nomRechVal = '';
+        else
+            $nomRechVal=$nomRech;
+        if($ligneProduitRech === null)
+            $lpRechVal = '';
+        else
+            $lpRechVal = $ligneProduitRech;
+
         //on récupère toutes les lignes produits
-        $return_lp = $soap->call('getLigneProduit', array('count' => 0,'offset' => 0, 'nom' => ''));
+        $return_lp = $soap->call('getLigneProduit', array('count' => 0,'offset' => 0, 'nom' =>''));
         $lignesProduitsretour = json_decode($return_lp);
 
         //on récupère tous les produits
-        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
+        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal));
         $produitsRetour = json_decode($return_produits);
 
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
@@ -52,7 +66,7 @@ class DefaultController extends Controller
         $produitsRetour = json_decode($return_produits);
 
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
-        return $this->render('ImerirProduitBundle::creerProduit.html.twig', array('ligne_produit' => $lignesProduitsretour,'produits'=>$produitsRetour));
+        return $this->render('ImerirProduitBundle::creerProduit.html.twig', array('ligne_produit' => $lignesProduitsretour,'produits'=>$produitsRetour,'produit_add'=>$nom,'lp_produit_add'=>$ligneProduit));
 
 
     }

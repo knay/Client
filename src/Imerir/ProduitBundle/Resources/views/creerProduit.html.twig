@@ -4,30 +4,139 @@
     <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>
 {% endblock %}
 
-{% block ajout %}
-    <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
-        <div id="divNomProduit">
-            <label for="référence du produit">Référence produit: </label>
-            <input type="text" name="nomProduit"/>
-            <input type="submit" value="Ajouter">
-        </div>
-        <div id="lst_ligne_produit">
-            <p class="liste_lp">Ligne produit
-                <select name="nomLigneProduit">
-                    {% for i in ligne_produit %}
-                        <option>{{ i.nom }}</option>
-                    {% endfor %}
-                </select>
-            </p>
-        </div>
-    </form>
-    {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_produit' %}
-        <p class="validation_message">Le produit a bien été ajouté</p>
+{% block title_ajout %}
+    {% if app.request.attributes.get('_route')=='imerir_produit_modification_produit' %}
+        MODIFICATION
+    {% else %}
+        AJOUT
     {% endif %}
 {% endblock %}
+
+{% block ajout %}
+    {% if app.request.attributes.get('_route')=='imerir_produit_creation_produit' %}
+        <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
+            <div id="divNomProduit">
+                <label for="référence du produit">Référence produit: </label>
+                <input type="text" name="nomProduit"/>
+                <input type="submit" value="Ajouter">
+            </div>
+            <div id="lst_ligne_produit">
+                <p class="liste_lp">Ligne produit
+                    <select name="nomLigneProduit">
+                        {% for i in ligne_produit %}
+                            <option>{{ i.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+            </div>
+        </form>
+    {% endif %}
+
+    {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_produit' %}
+        <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
+            <div id="divNomProduit">
+                <label for="référence du produit">Référence produit: </label>
+                <input type="text" name="nomProduit"/>
+                <input type="submit" value="Ajouter">
+            </div>
+            <div id="lst_ligne_produit">
+                <p class="liste_lp">Ligne produit
+                    <select name="nomLigneProduit">
+                        {% for i in ligne_produit %}
+                            <option>{{ i.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+            </div>
+        </form>
+        <p class="validation_message">Le produit "{{ produit_add }}" a bien été ajouté pour la ligne produit "{{ lp_produit_add }}"</p>
+    {% endif %}
+
+    {% if app.request.attributes.get('_route')=='imerir_produit_modification_produit' %}
+        <form action="{{ path('imerir_produit_validation_modification_produit') }}" method="post" id="formulaire_creation_produit">
+            <div id="divNomProduit">
+                <label for="référence du produit">Référence produit: </label>
+                <input type="text" name="nom_modif_p" value="{{ nom_modif_p }}"/>
+                <input type="hidden" name="old_nom_modif_p" value="{{ nom_modif_p }}"/>
+                <input type="hidden" name="nom_modif_lp" value="{{ nom_modif_lp }}"/>
+                <input type="hidden" name="id_modif_p" value="{{ id_modif_p }}"/>
+                <input type="submit" value="Modifier">
+            </div>
+            <div id="lst_ligne_produit">
+                <p class="liste_lp">Ligne produit
+                    <select name="nomLigneProduit">
+                        {% for i in ligne_produit %}
+                            {% if i.nom == nom_modif_lp %}
+                                <option selected>{{ i.nom }}</option>
+                            {% else %}
+                                <option>{{ i.nom }}</option>
+                            {% endif %}
+                        {% endfor %}
+                    </select>
+                </p>
+            </div>
+        </form>
+    {% endif %}
+
+    {% if app.request.attributes.get('_route')=='imerir_produit_validation_modification_produit' %}
+        <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
+            <div id="divNomProduit">
+                <label for="référence du produit">Référence produit: </label>
+                <input type="text" name="nomProduit"/>
+                <input type="submit" value="Ajouter">
+            </div>
+            <div id="lst_ligne_produit">
+                <p class="liste_lp">Ligne produit
+                    <select name="nomLigneProduit">
+                        {% for i in ligne_produit %}
+                            <option>{{ i.nom }}</option>
+                        {% endfor %}
+                    </select>
+                </p>
+            </div>
+        </form>
+        <p class="validation_message">Le produit "{{ old_p }}" a bien été modifié en produit "{{ new_p }}" pour la ligne produit "{{ new_lp }}"</p>
+    {% endif %}
+
+{% endblock %}
+
+
+{% block recherche %}
+    <form action="{{ path('imerir_produit_creation_produit') }}" method="post">
+        <select name="rechLp">
+            <option></option>
+            {% for i in ligne_produit %}
+                <option>{{ i.nom }}</option>
+            {% endfor %}
+        </select>
+        <label for="rechProduit">Produit</label><input type="text" name="rechProduit">
+        <input type="submit">
+    </form>
+{% endblock %}
+
+
+
 {% block table %}
     <tr class="produits"><th>Nom ligne produit</th><th>Nom produit</th></tr>
     {% for i in produits %}
-        <tr><td>{{ i.lp }}</td><td>{{ i.p }}</td></tr>
+        <tr><td>{{ i.lp }}</td>
+            <td>{{ i.p }}
+                <form method="post" action="{{ path('imerir_produit_modification_produit') }}" style="display: none">
+                    <input type="hidden" name="nom_lp" value="{{ i.lp}}">
+                    <input type="hidden" name="id_p" value="{{ i.p_id}}">
+                    <input type="hidden" name="nom_p" value="{{ i.p }}">
+                </form>
+            </td></tr>
     {% endfor %}
+{% endblock %}
+
+
+
+
+{% block javascripts %}
+    <script>
+        $('tr').click(function () {
+            $(this).children('td').children('form').submit();
+        });
+    </script>
 {% endblock %}

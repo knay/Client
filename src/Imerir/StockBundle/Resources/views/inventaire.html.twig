@@ -1,0 +1,99 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block stylesheets %}
+    <!-- <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>  -->
+{% endblock %}
+
+{% block ajout %}
+<table id="table_code_barre">
+	<tr>
+		<th>Produit</th>
+		<th>Code barre</th>
+		<th>Quantité</th>
+		<th>Caractèristiques</th>
+	</tr>
+	<tr>
+		<td>
+			<select name="produit0">
+				{% for j in produit %}
+					<option>{{ j.p }}</option>
+				{% endfor %}
+			</select>
+		</td>
+		<td><input type="text" name="code0" class="valeurCodeBarre" readonly="readonly"></td>
+		<td>x<input type="number" name="quantite0" min="1" value="1" class="quantite"></td>
+		<td>
+			{% for j in attributs %}
+				<label for="caract1">{{ j.nom }}</label>
+				<select>
+				{% for i in j.valeurs %}
+					<option>{{ i }}</option>
+				{% endfor %}
+				</select>
+			{% endfor %}
+		</td>
+	</tr>
+</table>
+{% endblock %}
+    
+{% block table %}
+<tr><th>Stock</th></tr>
+<tr><td>ici on affichera le stock actuel</td></tr>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+scanned = false;
+var nbCodeBarre = 1;
+var tableau = $("#table_code_barre");
+
+$(document).keypress(function(e) {
+	var input = $(".valeurCodeBarre").last();
+	var elementfocus = $('input:focus').blur();
+
+	if (input.val().length == 1) {
+		setTimeout (function () {
+			nbCodeBarre++;
+			
+			var ligne = tableau.children("tbody").children("tr").last().clone();
+			cellule = ligne.children('td');
+			cellule.children(".quantite").attr('name', 'quantite'+nbCodeBarre)
+			cellule.children(".valeurCodeBarre").attr('name', 'code'+nbCodeBarre);
+			cellule.children("select").attr('name', 'produit'+nbCodeBarre);
+			cellule.children(".valeurCodeBarre").val('');
+			tableau.append(ligne);
+			$('select').change(onChangeSelect);
+		}, 220);
+	}
+
+    input.val(input.val()+ String.fromCharCode(e.which));
+    return false;
+});
+
+$('select').change(onChangeSelect);
+
+function onChangeSelect() {
+	var ligne = $(this).parent().parent(); // On recup le TR
+	$.ajax({
+		   url: '{{ path('imerir_ajax_inventaire_get_attribut') }}',
+		   data: {
+		      nom: $(this).val()
+		   },
+		   success: function(data) {
+			   objJson = JSON.parse(data);
+			   var celulle = ligne.children('td').last();
+			   celulle.html('');
+			   objJson.forEach(function (attr) {
+				   celulle.append('<label for="caract1">'+attr.nom+'</label>');
+				   celulle.append('<select></select>');
+				   var select = celulle.children('select');
+				   for (valAttr in attr.valeurs) {
+					   select.append('<option>'+attr.valeurs[valAttr]+'</option>');
+				   }
+			   });
+		   },
+		   type: 'POST'
+	});
+}
+</script>
+{% endblock %}

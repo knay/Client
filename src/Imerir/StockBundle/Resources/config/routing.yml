@@ -1,0 +1,7 @@
+imerir_stock_homepage:
+    path:     /inventaire
+    defaults: { _controller: ImerirStockBundle:Inventaire:index }
+    
+imerir_ajax_inventaire_get_attribut:
+    path:     /ajax/inventaireGetAttribut
+    defaults: { _controller: ImerirStockBundle:AjaxInventaire:getAttributs }

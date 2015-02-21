@@ -21,7 +21,8 @@ security:
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/$, role: ROLE_GERANT }
         - { path: ^/produits/attribut$, role: ROLE_GERANT }
+        - { path: ^/inventaire$, role: ROLE_EMPLOYE }
 
     role_hierarchy:
-        ROLE_GERANT:       ROLE_GERANT
+        ROLE_GERANT:       [ ROLE_GERANT, ROLE_EMPLOYE ]
         ROLE_EMPLOYE:      ROLE_EMPLOYE

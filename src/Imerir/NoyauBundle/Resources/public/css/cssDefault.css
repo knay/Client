@@ -128,7 +128,7 @@ h1 {
 	cursor:  pointer;
 }
 
- .selected  {
+.selected  {
 	background-color: white;
 	color: orange;
 /* 	border-right: 3px solid #33B5E5; */
@@ -152,7 +152,7 @@ a{
 	text-decoration: none;
 }
 
-#sousMenu {
+#menu li ul{
 	display: none;
 	position:absolute;
 	opacity: 0.8;
@@ -162,5 +162,16 @@ a{
 	width: 180px;
 	height: 100%;
 	background-color: #33B5E5;
-	
 }
+/*
+#caisse {
+	display: none;
+	position:absolute;
+	opacity: 0.8;
+	top:0px;
+	left:55px;
+	z-index: 2;
+	width: 180px;
+	height: 100%;
+	background-color: #33B5E5;
+}*/

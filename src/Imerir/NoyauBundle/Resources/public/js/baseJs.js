@@ -108,53 +108,46 @@ function chercherToutToggleClass(){
  */
 function afficheSousMenu($id_menu_select){
 	switch($id_menu_select){
-	case "a":
-		$( "#sousMenu" ).show( "slide" );
+	case 'caisse':
+		$( '#1' ).show( "slide" );
 		break;
-	case "b":
-		$( "#sousMenu" ).show( "slide" );
+	case 'client':
+		$( '#2' ).show( "slide" );
 		break;
-	case "c":
-		$( "#sousMenu" ).show( "slide" );
+	case 'evenement':
+		$( '#3' ).show( "slide" );
 		break;
-	case "d":
-		$( "#sousMenu" ).show( "slide" );
+	case 'fournisseur':
+		$( '#4' ).show( "slide" );
 		break;
-	case "e":
-		$( "#sousMenu" ).show( "slide" );
+	case 'produit':
+		$( '#5' ).show( "slide" );
 		break;
-	case "f":
-		$( "#sousMenu" ).show( "slide" );
+	case 'vente':
+		$( '#6' ).show( "slide" );
 		break;
-	case "g":
-		$( "#sousMenu" ).show( "slide" );
-			break;
 	}
 };
 
 function cacherSousMenu($id_menu_cacher){
-	
 	switch($id_menu_cacher){
-	case "a":
-		$( "#sousMenu:visible" ).hide( "slide" );
+	case 'caisse':
+		$( "#1:visible" ).hide( "slide" );
 		break;
-	case "b":
-		$( "#sousMenu:visible" ).hide( "slide" );
+	case 'client':
+		$( "#2:visible" ).hide( "slide" );
 		break;
-	case "c":
-		$( "#sousMenu:visible" ).hide( "slide" );
+	case 'evenement':
+		$( "#3:visible" ).hide( "slide" );
 		break;
-	case "d":
-		$( "#sousMenu:visible" ).hide( "slide" );
+	case 'fournisseur':
+		$( "#4:visible" ).hide( "slide" );
 		break;
-	case "e":
-		$( "#sousMenu:visible" ).hide( "slide" );
+	case 'produit':
+		$( "#5:visible" ).hide( "slide" );
 		break;
-	case "f":
-		$( "#sousMenu:visible" ).hide( "slide" );
+	case 'vente':
+		$( "#6:visible" ).hide( "slide" );
 		break;
-	case "g":
-		$( "#sousMenu:visible" ).hide( "slide" );
-			break;
-		}
+	}
 }

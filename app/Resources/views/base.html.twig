@@ -27,24 +27,99 @@
     	<div id="contenu">
 	        <div id="div_menu">
 	        	<ul id="menu">
-					{% for i in 'a'..'g' %}
-	            		<li id="{{ i }}">
-	            			<i class="fa fa-cloud"></i>
-	            			<p>{{ i }}</p>
-	            		</li>
+		        	{% for i in result %}
+		        		{%  if i.menu == "caisse" %}
+		        			<li id="{{ i.menu }}">
+ 						    	<i class="fa fa-calculator"></i>
+ 						    	<ul id="1">
+ 						    		{% for j in i.sous_menu %}
+ 						    			{% if j != null %}
+	 						    			<a href="">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+									{% endfor %}
+ 						    	</ul>
+ 						    </li>
+		        		{% endif %}
+		        		{%  if i.menu == "client" %}
+		        			<li id="{{ i.menu }}">
+						   		<i class="fa fa-users"></i>
+						   		<ul id="2">
+ 						    		{% for j in i.sous_menu %}
+ 						    			{% if j != null %}
+	 						    			<a href="">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+									{% endfor %}
+ 						    	</ul>
+						   	</li>
+		        		{% endif %}
+		        		{%  if i.menu == "evenement" %}
+		        			<li id="{{ i.menu }}">
+						    	<i class="fa fa-calendar"></i>
+						    	<ul id="3">
+ 						    		{% for j in i.sous_menu %}
+ 						    			{% if j != null %}
+	 						    			<a href="">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+									{% endfor %}
+ 						    	</ul>
+						    </li>
+		        		{% endif %}
+		        		{%  if i.menu == "fournisseur" %}
+		        			<li id="{{ i.menu }}">
+							    <i class="fa fa-truck"></i>
+							    <ul id="4">
+ 						    		{% for j in i.sous_menu %}
+ 						    			{% if j != null %}
+	 						    			<a href="">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+									{% endfor %}
+ 						    	</ul>
+						    </li>
+		        		{% endif %}
+		        		{%  if i.menu == "produit" %}
+		        			<li id="{{ i.menu }}">
+						    	<i class="fa fa-cloud"></i>
+						    	<ul id="5">
+ 						    		{% for j in i.sous_menu %}
+ 						    			{% if j != null %}
+	 						    			<a href="">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+									{% endfor %}
+ 						    	</ul>
+						    </li>
+		        		{% endif %}
+		        		{%  if i.menu == "vente" %}
+		        			<li id="{{ i.menu }}">
+						 		<i class="fa fa-credit-card"></i>
+						 		<ul id="6">
+ 						    		{% for j in i.sous_menu %}
+ 						    			{% if j != null %}
+	 						    			<a href="">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+									{% endfor %}
+ 						    	</ul>
+						 	</li>
+		        		{% endif %}
 					{% endfor %}
 				</ul>
 			</div>
 			
-			<div id="sousMenu">
-				{% block sousMenu %}{% endblock %}
-    		</div>
-	        
 	        <div id="affichage">
 				{% block affichage %}{% endblock %}
     		</div>
     	</div>
-    	
     	<script type="text/javascript" src="{{ asset('bundles/imerirnoyau/js/baseJs.js') }}"></script>
 		{% block javascripts %}{% endblock %}
     </body>

@@ -20,7 +20,10 @@ class DefaultController extends Controller
     
     public function getindexAction()
     {
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig');
+    	$soap = $this->get('noyau_soap');
+    	$return = $soap->call('getMenu', array());
+    	$tableau = json_decode($return);
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result' => $tableau));
     }
     
     public function checkLoginAction()

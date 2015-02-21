@@ -29,18 +29,20 @@
 	        	<ul id="menu">
 		        	{% for i in result %}
 		        		{%  if i.menu == "caisse" %}
-		        			<li id="{{ i.menu }}">
- 						    	<i class="fa fa-calculator"></i>
- 						    	<ul id="1">
- 						    		{% for j in i.sous_menu %}
- 						    			{% if j != null %}
-	 						    			<a href="">
-												<li>{{ j }}</li>
-											</a>
-										{% endif %}
-									{% endfor %}
- 						    	</ul>
- 						    </li>
+		        			<a href="">
+			        			<li id="{{ i.menu }}">
+	 						    	<i class="fa fa-calculator"></i>
+	 						    	<ul id="1">
+	 						    		{% for j in i.sous_menu %}
+	 						    			{% if j != null %}
+		 						    			<a href="">
+													<li>{{ j }}</li>
+												</a>
+											{% endif %}
+										{% endfor %}
+	 						    	</ul>
+	 						    </li>
+ 						    </a>
 		        		{% endif %}
 		        		{%  if i.menu == "client" %}
 		        			<li id="{{ i.menu }}">
@@ -57,18 +59,20 @@
 						   	</li>
 		        		{% endif %}
 		        		{%  if i.menu == "evenement" %}
-		        			<li id="{{ i.menu }}">
-						    	<i class="fa fa-calendar"></i>
-						    	<ul id="3">
- 						    		{% for j in i.sous_menu %}
- 						    			{% if j != null %}
-	 						    			<a href="">
-												<li>{{ j }}</li>
-											</a>
-										{% endif %}
-									{% endfor %}
- 						    	</ul>
-						    </li>
+			        		<a href="">
+			        			<li id="{{ i.menu }}">
+							    	<i class="fa fa-calendar"></i>
+							    	<ul id="3">
+	 						    		{% for j in i.sous_menu %}
+	 						    			{% if j != null %}
+		 						    			<a href="">
+													<li>{{ j }}</li>
+												</a>
+											{% endif %}
+										{% endfor %}
+	 						    	</ul>
+							    </li>
+						    </a>
 		        		{% endif %}
 		        		{%  if i.menu == "fournisseur" %}
 		        			<li id="{{ i.menu }}">

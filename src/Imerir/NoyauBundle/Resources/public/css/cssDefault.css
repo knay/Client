@@ -100,10 +100,8 @@ h1 {
 	padding: 0px;
 	width: 100%;
 	color: white;
-	
 	display: flex;
 	display: -webkit-flex;
-	
 	flex-direction: column;
 	-webkit-flex-direction: column;
 }
@@ -111,29 +109,33 @@ h1 {
 #menu li {
 	height: 50px;
 	padding-bottom: 10px;
-/* 	background: linear-gradient(to bottom, #0099CC 60%, #33B5E5); */
-/* 	border: 1px solid yellow; */
 	list-style-type: none;
-	
 	display: flex;
 	display: -webkit-flex;
-	
 	flex-direction: column;
 	-webkit-flex-direction: column;
 }
 
+/* lorsqu'on passe sur un element du menu*/
 #menu li:hover {
 	background-color: white;
 	color: orange;
 	cursor:  pointer;
 }
 
+/* lorsqu'un element du menu est selectionne */
 .selected  {
 	background-color: white;
 	color: orange;
-/* 	border-right: 3px solid #33B5E5; */
 }
 
+/* lien situé dans le menu */
+#menu a {
+	text-decoration: none;
+	color: white;
+}
+
+/* icone du menu */
 #menu li i {
 	margin-left: auto;
     margin-right: auto;
@@ -141,17 +143,7 @@ h1 {
 	padding-top: 10px;
 }
 
-#menu li p {
-	margin-left: auto;
-    margin-right: auto;
-	text-align: center;
-	padding-bottom: 10px;
-}
-
-a{
-	text-decoration: none;
-}
-
+/* Sous menu */
 #menu li ul{
 	display: none;
 	position:absolute;
@@ -162,16 +154,21 @@ a{
 	width: 180px;
 	height: 100%;
 	background-color: #33B5E5;
+	border: 2px solid red;
 }
-/*
-#caisse {
-	display: none;
-	position:absolute;
-	opacity: 0.8;
-	top:0px;
-	left:55px;
-	z-index: 2;
-	width: 180px;
-	height: 100%;
-	background-color: #33B5E5;
-}*/
+
+/* element du sous menu */
+#menu li ul li {
+/* 	position: relative; */
+/* 	top: 0px; */
+/* 	left: 0px; */
+	height: 25px;
+	width: 100%;
+	border-bottom: 1px solid white;
+	color: black;
+} 
+
+/* Lien du sous menu*/
+#menu li a {
+	text-decoration: none;
+}

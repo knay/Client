@@ -28,6 +28,7 @@ $( "#menu" ).children( "li" ).click(function () {
 //	alert('click menu');
 	//on check si on a deja cliquer sur un element avant
 	//oui
+	
 	if($id_select != ""){
 //		alert('oui');
 		//on compare l'element selectionner au dernier selectioner
@@ -108,14 +109,8 @@ function chercherToutToggleClass(){
  */
 function afficheSousMenu($id_menu_select){
 	switch($id_menu_select){
-	case 'caisse':
-		$( '#1' ).show( "slide" );
-		break;
 	case 'client':
 		$( '#2' ).show( "slide" );
-		break;
-	case 'evenement':
-		$( '#3' ).show( "slide" );
 		break;
 	case 'fournisseur':
 		$( '#4' ).show( "slide" );
@@ -131,14 +126,8 @@ function afficheSousMenu($id_menu_select){
 
 function cacherSousMenu($id_menu_cacher){
 	switch($id_menu_cacher){
-	case 'caisse':
-		$( "#1:visible" ).hide( "slide" );
-		break;
 	case 'client':
 		$( "#2:visible" ).hide( "slide" );
-		break;
-	case 'evenement':
-		$( "#3:visible" ).hide( "slide" );
 		break;
 	case 'fournisseur':
 		$( "#4:visible" ).hide( "slide" );

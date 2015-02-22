@@ -158,11 +158,16 @@ h1 {
 /* element du sous menu */
 #menu li ul a li {
 	display: block;
+	opacity: 1;
 	padding: 10px 10px 10px 10px;
 	height: 25px;
 	border-bottom: 1px solid white;
+	background-color: #33B5E5;
 	color: white;
 } 
+#menu li ul a li:hover {
+	opacity: 1;
+}
 
 /* Lien du sous menu*/
 #menu li a {

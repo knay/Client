@@ -14,7 +14,13 @@ class DefaultController extends Controller
         $client->__setCookie('PHPSESSID', uniqid());
         $result = $client->__soapCall('login', array('username'=>'alba','passwd'=>'alba'));
         echo $result;
-        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig');
+        
+        //on recupere le menu et sous menu
+        $soap = $this->get('noyau_soap');
+        $return_menu = $soap->call('getMenu', array());
+        $menu_sous_menu = json_decode($return_menu);
+        
+        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('result_menu' => $menu_sous_menu));
     }
 
     public function ajoutProduitAction()
@@ -42,8 +48,15 @@ class DefaultController extends Controller
         $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal));
         $produitsRetour = json_decode($return_produits);
 
+        //on recupere le menu et sous menu
+        $return_menu = $soap->call('getMenu', array());
+        $menu_sous_menu = json_decode($return_menu);
+        
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
-        return $this->render('ImerirProduitBundle::creerProduit.html.twig', array('ligne_produit' => $lignesProduitsretour,'produits'=>$produitsRetour));
+        return $this->render('ImerirProduitBundle::creerProduit.html.twig', array('ligne_produit' => $lignesProduitsretour,
+        		'produits'=>$produitsRetour,
+        		'result_menu' => $menu_sous_menu
+        ));
     }
 
     public function execAjoutProduitAction()
@@ -65,8 +78,17 @@ class DefaultController extends Controller
         $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
         $produitsRetour = json_decode($return_produits);
 
+        //on recupere le menu et sous menu
+        $return_menu = $soap->call('getMenu', array());
+        $menu_sous_menu = json_decode($return_menu);
+        
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
-        return $this->render('ImerirProduitBundle::creerProduit.html.twig', array('ligne_produit' => $lignesProduitsretour,'produits'=>$produitsRetour,'produit_add'=>$nom,'lp_produit_add'=>$ligneProduit));
+        return $this->render('ImerirProduitBundle::creerProduit.html.twig', array('ligne_produit' => $lignesProduitsretour,
+        		'produits'=>$produitsRetour,
+        		'produit_add'=>$nom,
+        		'lp_produit_add'=>$ligneProduit,
+        		'result_menu' => $menu_sous_menu
+        ));
 
 
     }
@@ -100,10 +122,14 @@ class DefaultController extends Controller
         $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal));
         $produitsRetour = json_decode($return_produits);
 
+        //on recupere le menu et sous menu
+        $return_menu = $soap->call('getMenu', array());
+        $menu_sous_menu = json_decode($return_menu);
+        
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
         return $this->render('ImerirProduitBundle::creerProduit.html.twig',
             array('ligne_produit' => $lignesProduitsretour,'produits'=>$produitsRetour,
-                'nom_modif_lp'=>$nom_modif_lp,'nom_modif_p'=>$nom_modif_p,'id_modif_p'=>$id_modif_p));
+                'nom_modif_lp'=>$nom_modif_lp,'nom_modif_p'=>$nom_modif_p,'id_modif_p'=>$id_modif_p,'result_menu' => $menu_sous_menu));
     }
 
     public function execModifProduitAction()
@@ -128,10 +154,14 @@ class DefaultController extends Controller
         $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
         $produitsRetour = json_decode($return_produits);
 
+        //on recupere le menu et sous menu
+        $return_menu = $soap->call('getMenu', array());
+        $menu_sous_menu = json_decode($return_menu);
+        
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
         return $this->render('ImerirProduitBundle::creerProduit.html.twig',
             array('ligne_produit' => $lignesProduitsretour,
-                'produits'=>$produitsRetour,'old_p'=>$old_nom_modif_p,'new_p'=>$nom_modif_p,'new_lp'=>$nom_modif_lp));
+                'produits'=>$produitsRetour,'old_p'=>$old_nom_modif_p,'new_p'=>$nom_modif_p,'new_lp'=>$nom_modif_lp,'result_menu' => $menu_sous_menu));
 
 
     }

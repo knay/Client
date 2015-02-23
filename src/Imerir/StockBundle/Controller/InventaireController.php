@@ -16,9 +16,13 @@ class InventaireController extends Controller
     	
     	$attributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
 
+    	$return_menu = $soap->call('getMenu', array());
+    	$menu_sous_menu = json_decode($return_menu);
+    	
         return $this->render('ImerirStockBundle::inventaire.html.twig', 
         	   array('produit'=>$produitsRetour,
-        			 'attributs'=>json_decode($attributs)
+        			 'attributs'=>json_decode($attributs),
+        	   		'result_menu' => $menu_sous_menu
                ));
     }
     

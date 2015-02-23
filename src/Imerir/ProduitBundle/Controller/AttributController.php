@@ -50,9 +50,14 @@ class AttributController extends Controller
     	$return = $soap->call('getLigneProduit', $args);
     	$jsonLigneProduit = json_decode($return);
     	
+    	$return_menu = $soap->call('getMenu', array());
+    	$menu_sous_menu = json_decode($return_menu);
+    	
         return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 
         		                                                                   'lst_attribut' => $jsonValeurAttribut,
-        		                                                                   'detail_attribut' => $jsonValeurAttributAll));
+        		                                                                   'detail_attribut' => $jsonValeurAttributAll,
+        																			'result_menu' => $menu_sous_menu
+        ));
     }
     
     public function saveAttributAction()
@@ -107,6 +112,12 @@ class AttributController extends Controller
     	$return = $soap->call('getLigneProduit', $args);
     	$jsonLigneProduit = json_decode($return);
     	
-    	return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 'lst_attribut' => $jsonValeurAttribut));
+    	$return_menu = $soap->call('getMenu', array());
+    	$menu_sous_menu = json_decode($return_menu);
+    	
+    	return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit,
+    			 'lst_attribut' => $jsonValeurAttribut,
+    			 'result_menu' => $menu_sous_menu
+    	));
     }
 }

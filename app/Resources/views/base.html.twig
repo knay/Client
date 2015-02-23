@@ -27,7 +27,7 @@
     	<div id="contenu">
 	        <div id="div_menu">
 	        	<ul id="menu">
-		        	{% for i in result %}
+		        	{% for i in result_menu %}
 		        		{%  if i.menu == "caisse" %}
 		        			<a href="">
 			        			<li id="{{ i.menu }}">
@@ -90,7 +90,7 @@
 		        		{% endif %}
 		        		{%  if i.menu == "produit" %}
 		        			<li id="{{ i.menu }}">
-						    	<i class="fa fa-cloud"></i>
+						    	<i class="fa fa-diamond"></i>
 						    	<ul id="5">
  						    		{% for j in i.sous_menu %}
  						    			{% if j != null %}
@@ -104,7 +104,8 @@
 		        		{% endif %}
 		        		{%  if i.menu == "vente" %}
 		        			<li id="{{ i.menu }}">
-						 		<i class="fa fa-credit-card"></i>
+{# 						 		<i class="fa fa-credit-card"></i>#}
+						 		<i class="fa fa-money"></i>
 						 		<ul id="6">
  						    		{% for j in i.sous_menu %}
  						    			{% if j != null %}

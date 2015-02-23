@@ -21,9 +21,9 @@ class DefaultController extends Controller
     public function getindexAction()
     {
     	$soap = $this->get('noyau_soap');
-    	$return = $soap->call('getMenu', array());
-    	$tableau = json_decode($return);
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result' => $tableau));
+    	$return_menu = $soap->call('getMenu', array());
+    	$menu_sous_menu = json_decode($return_menu);
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu));
     }
     
     public function checkLoginAction()
@@ -36,8 +36,11 @@ class DefaultController extends Controller
     		// TODO gérer les soapfault
     		$soap = $this->get('noyau_soap');
     		$soap->login($nom, $mot_de_passe);
+    		
+    		$return_menu = $soap->call('getMenu', array());
+    		$menu_sous_menu = json_decode($return_menu);
     	
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig');
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu));
     }
     
 }

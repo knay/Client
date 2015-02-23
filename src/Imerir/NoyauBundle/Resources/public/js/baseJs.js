@@ -11,8 +11,8 @@ function resize()
 	$('#contenu').css("height",(hauteur_ecran - hauteur_header) + "px");
 	$('#affichage').css("width",(largeur_ecran - largeur_menu ) + "px");
 	$('#affichage').css("height",(hauteur_ecran - hauteur_header ) + "px");
-	
-	$("fieldset").css("width",(largeur_ecran - largeur_menu ) + "px");
+	$("#fieldset_ajout").css("width",(largeur_ecran - largeur_menu ) + "px");
+	$("#fieldset_recherche").css("width",(largeur_ecran - largeur_menu ) + "px");
 	
 }
 

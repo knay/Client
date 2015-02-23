@@ -1,11 +1,151 @@
 {% extends "::base.html.twig" %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
+{% endblock %}
+
 {% block title %}
-Index
+Votre caisse
 {% endblock %}
 
-{% block sousMenu %}
-    
+{% block affichage %}
+<fieldset id="fieldset_ajout">
+	<legend id="titre_fieldset" >VOTRE CAISSE</legend>
+	<div id="contenneurCaisse" style="display:none;">
+		<div id="enTete">Client <span id="dateSpan">{{ "now"|date("d/m/Y") }}</span></div>
+		<h2>LISTE DES ARTICLES</h2>
+		<table id="tableauCaisse">
+			<tr>
+				<th></th>
+				<th>Code article</th>
+				<th>Quantité</th>
+				<th>Prix unitaire</th>
+				<th>Promotion</th>
+			</tr>
+			<tr style="display:none">
+				<td><i class="fa fa-minus-square supprimer"></i></td>
+				<td class="tdCodeBarre">
+					<input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly">
+				</td>
+				<td class="tdQuantite">
+					x<input type="number" name="quantite_0" min="1" value="1" class="quantite">
+				</td>
+				<td class="tdPrix">
+					<input type="number" name="prix_0" min="0" value="0" class="prix" step="any">€
+				</td>
+				<td class="tdPromo">
+					<input type="number" name="promo_0" min="0" max="100" value="0" class="promo">%
+				</td>
+			</tr>
+		</table>
+		<h2>TOTAL À PAYER : <span id="prixTotal">200.0</span></h2>
+	</div>
+	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
+	<div id="messageAccueil">
+		<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
+	</div>
+</fieldset>
 {% endblock %}
 
-{% block affichage %}{% endblock %}
+{% block javascripts %}
+<script>
+var tableau = $('#tableauCaisse'); //< Le tableau représentant les éléments scanné à la caisse
+var nbCodeBarre = 0; //< Le nombre d'article scanné. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
+
+/**
+ * Fonction permettant de calculer le prix total à partir des prix unitaires, 
+ * des promos et de la quantité de chaque produit scanné.
+ */
+function calculerPrixTotal() {
+	var lignes = $(tableau).children("tbody").children("tr");
+	var prixTotal = 0;
+
+	lignes.each(function(e) {
+		if (e == 0) // Si c'est la première ligne on en tien pas compte (c'est le header du tableau)
+			return;
+
+		var prix = $(this).children('td').children('.prix').val();
+		var promo = $(this).children('td').children('.promo').val();
+		var quantite = $(this).children('td').children('.quantite').val();
+
+		prixTotal+=((prix - (prix*promo/100))*quantite); // Calcul du prix total
+	});
+
+	$("#prixTotal").html(prixTotal+" €");
+}
+
+/**
+ * Fonction appelé automatique au chargement de la page.
+ * Elle permet de vider tout les champs texte qui, sinon, pourrait avoir 
+ * des trâces en cas de refresh de la page web.
+ */
+$(document).ready(function (e) {
+	$('input[type="text"]').val('');
+});
+
+/**
+ * Fonction clef du scan, permet de detecter lorsque l'on presse une touche,
+ * la douchette agissant comme un clavier, cette methode est appelé lors d'un 
+ * scan de produit.
+ */
+$(document).keypress(function(e) {
+	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
+	// n'est plus la douchette qui est maître
+	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
+		return true;
+	
+	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
+	var elementfocus = $('input:focus').blur(); // On défocus tout autre input, il ne devrait y avoir que les trois du dessus
+	
+	if ($("#contenneurCaisse").is(":visible") == false) { // On cache le message d'accueil
+		$("#contenneurCaisse").show();
+		$("#messageAccueil").hide();
+	}
+
+	$("#inputSubmit").attr("disabled", true); // On grise le boutton submit le temps du traitement
+
+	if (input.val().length == 1) { // Si c'est le premier caractère taper on lance un timeout (pour le temps de lecture d'un code barre)
+		setTimeout (function () {
+			var existeDeja = false; // Permettra de savoir si on a déjà scané cet article ou non
+			var lignes = tableau.children("tbody").children("tr");
+
+			nbCodeBarre++;
+
+			var ligneCur = lignes.last(); // On récupère la ligne de tableau sur laquelle on va travailler
+
+			lignes.each(function (e) { // On regarde dans toutes les lignes pour savoir si l'article à déjà été scanné
+				if (e === lignes.length - 1) // si c'est la ligne en cours, aucun interet on arrete la boucle
+					return; 
+
+				// Si c'est la même valeur de code barre c'est que l'article à déjà été scanné, on incrémente la quantité
+				if ($(this).children('td').children(".valeurCodeBarre").val() == ligneCur.children('td').children(".valeurCodeBarre").val()) {
+					existeDeja = true;
+					var qt = parseInt($(this).children('td').children(".quantite").val())+1;
+					$(this).children('td').children(".quantite").val(""+qt);
+					ligneCur.children('td').children(".valeurCodeBarre").val('');
+				}
+			});
+			
+			if (existeDeja === false) { // Si on a pas trouvé d'article correspondant, il faut l'ajouter
+				var ligne = ligneCur.clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
+				var cellule = ligne.children('td');
+				cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
+				cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
+				cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
+				cellule.children(".valeurCodeBarre").val(''); // C'est un nouveau produit, plus de code barre
+
+				ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
+				ligneCur.show(); // On affiche l'article qu'on vient de scanner
+				tableau.append(ligne);
+			}
+
+			$('input').change(calculerPrixTotal);
+			calculerPrixTotal(); // On recalcul le prix total, narmol
+		}, 220);
+	}
+
+    input.val(input.val()+ String.fromCharCode(e.which));
+    return false; // false, pour empecher d'écrire dans un champs si jamais le curseur est tout de même mal placé
+});
+</script>
+{% endblock %}

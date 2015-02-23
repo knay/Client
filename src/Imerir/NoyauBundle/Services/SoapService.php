@@ -39,8 +39,7 @@ class SoapService
      * @return mixed La reponse SOAP.
      */
     public function call($methode, $args) {
-    	$session = $this->container->get('request')->getSession();
-    	$token = $session->get('token');
+    	$token = $this->container->get('request')->getSession()->get('token');
     	
     	if (isset($token))
     		$this->client->__setCookie('PHPSESSID', $token);

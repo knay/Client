@@ -1,39 +1,50 @@
 {% extends "::baseAffichage.html.twig" %}
 
+{% block title_ajout %}
+INVENTAIRE
+{% endblock %}
+
 {% block stylesheets %}
-    <!-- <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>  -->
+    <link rel="stylesheet" href="{{ asset('bundles/imerirstock/css/inventaire.css') }}"/> 
 {% endblock %}
 
 {% block ajout %}
-<table id="table_code_barre">
-	<tr>
-		<th>Produit</th>
-		<th>Code barre</th>
-		<th>Quantité</th>
-		<th>Caractèristiques</th>
-	</tr>
-	<tr>
-		<td>
-			<select name="produit0">
-				{% for j in produit %}
-					<option>{{ j.p }}</option>
-				{% endfor %}
-			</select>
-		</td>
-		<td><input type="text" name="code0" class="valeurCodeBarre" readonly="readonly"></td>
-		<td>x<input type="number" name="quantite0" min="1" value="1" class="quantite"></td>
-		<td>
-			{% for j in attributs %}
-				<label for="caract1">{{ j.nom }}</label>
-				<select>
-				{% for i in j.valeurs %}
-					<option>{{ i }}</option>
-				{% endfor %}
+<form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
+	<input type="submit" id="inputSubmit">
+	<table id="table_code_barre" >
+		<tr>
+			<th></th>
+			<th>Produit</th>
+			<th>Code barre</th>
+			<th>Quantité</th>
+			<th>Caractèristiques</th>
+		</tr>
+		<tr>
+			<td><i class="fa fa-minus-square supprimer"></i></td>
+			<td>
+				<select name="produit_0" class="selectProduit">
+					{% for j in produit %}
+						<option>{{ j.p }}</option>
+					{% endfor %}
 				</select>
-			{% endfor %}
-		</td>
-	</tr>
-</table>
+			</td>
+			<td><input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly"></td>
+			<td>x<input type="number" name="quantite_0" min="1" value="1" class="quantite"></td>
+			<td>
+				{% set nbCarac = 0 %}
+				{% for j in attributs %}
+					<label for="caract_0_{{ nbCarac }}">{{ j.nom }}</label>
+					<select name="caract_0_{{ nbCarac }}" class="valAttribut">
+					{% for i in j.valeurs %}
+						<option value="{{ j.nom }}_{{ i }}">{{ i }}</option>
+					{% endfor %}
+					</select>
+					{% set nbCarac = nbCarac + 1 %}
+				{% endfor %}
+			</td>
+		</tr>
+	</table>
+</form>
 {% endblock %}
     
 {% block table %}
@@ -43,26 +54,52 @@
 
 {% block javascripts %}
 <script>
-scanned = false;
-var nbCodeBarre = 1;
+var nbCodeBarre = 0;
 var tableau = $("#table_code_barre");
+var valeurCaracteristique = '';
+
+
+function supprimerLigne () {
+	if (tableau.children("tbody").children("tr").length > 2)
+		$(this).parent().parent().remove();
+}
+
+$('.supprimer').click(supprimerLigne);
+
+$(document).ready(function (e) {
+	$('input[type="text"]').val('');
+});
 
 $(document).keypress(function(e) {
 	var input = $(".valeurCodeBarre").last();
 	var elementfocus = $('input:focus').blur();
+
+	$("#inputSubmit").attr("disabled", true);
 
 	if (input.val().length == 1) {
 		setTimeout (function () {
 			nbCodeBarre++;
 			
 			var ligne = tableau.children("tbody").children("tr").last().clone();
-			cellule = ligne.children('td');
-			cellule.children(".quantite").attr('name', 'quantite'+nbCodeBarre)
-			cellule.children(".valeurCodeBarre").attr('name', 'code'+nbCodeBarre);
-			cellule.children("select").attr('name', 'produit'+nbCodeBarre);
+			var cellule = ligne.children('td');
+			cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
+			cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
+			cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
+			var nbCaract = 0;
+			cellule.children(".valAttribut").each(function (e) {
+				$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
+				nbCaract++;
+			});
 			cellule.children(".valeurCodeBarre").val('');
 			tableau.append(ligne);
-			$('select').change(onChangeSelect);
+
+			$('.supprimer').unbind('click');
+			$('.supprimer').click(supprimerLigne);
+			$('.selectProduit').unbind('change');
+			$('.selectProduit').change(onChangeSelect);
+			
+			$("#inputSubmit").attr("disabled", false);
+			getArticleFromSoap(input.parent().parent());
 		}, 220);
 	}
 
@@ -70,10 +107,38 @@ $(document).keypress(function(e) {
     return false;
 });
 
-$('select').change(onChangeSelect);
+function getArticleFromSoap(ligne) {
+	var cellule = ligne.children('td');
+	var codeBarre = cellule.children(".valeurCodeBarre").val();
+
+	$("#inputSubmit").attr("disabled", true);
+	$.ajax({
+		   url: '{{ path('imerir_ajax_inventaire_get_article_from_code_barre') }}',
+		   data: {
+		      codeBarre: codeBarre
+		   },
+		   success: function(data) {
+			   objJson = JSON.parse(data);
+			   var nomProduit = cellule.children(".selectProduit").children('option');
+			   nomProduit.each(function (e) {
+				   if ($(this).html() === objJson['nomProduit'])
+					   $(this).attr("selected", true);
+			   });
+
+			   valeurCaracteristique = objJson.attributs;
+
+			   cellule.children(".selectProduit").trigger('change');
+		   },
+		   type: 'POST'
+	});
+}
+
+$('.selectProduit').change(onChangeSelect);
 
 function onChangeSelect() {
 	var ligne = $(this).parent().parent(); // On recup le TR
+	$("#inputSubmit").attr("disabled", true);
+	
 	$.ajax({
 		   url: '{{ path('imerir_ajax_inventaire_get_attribut') }}',
 		   data: {
@@ -82,18 +147,31 @@ function onChangeSelect() {
 		   success: function(data) {
 			   objJson = JSON.parse(data);
 			   var celulle = ligne.children('td').last();
+			   var numLigne = ligne.children('td').children('input').first().attr('name').split('_')[1];
+			   
 			   celulle.html('');
+			   var numValAttribut = 0;
+			   
 			   objJson.forEach(function (attr) {
-				   celulle.append('<label for="caract1">'+attr.nom+'</label>');
-				   celulle.append('<select></select>');
-				   var select = celulle.children('select');
+				   celulle.append('<label for="caract_'+numLigne+'_'+numValAttribut+'">'+attr.nom+'</label> ');
+				   celulle.append('<select name="caract_'+numLigne+'_'+numValAttribut+'"></select> ');
+				   var select = celulle.children('select').last();
 				   for (valAttr in attr.valeurs) {
-					   select.append('<option>'+attr.valeurs[valAttr]+'</option>');
+					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] === attr.valeurs[valAttr])
+					   	  select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
+					   else 
+						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 				   }
+				   numValAttribut++;
 			   });
+
+			   valeurCaracteristique = null;
+			   $("#inputSubmit").attr("disabled", false);
 		   },
 		   type: 'POST'
 	});
 }
+
+$("#inputSubmit").attr("disabled", false);
 </script>
 {% endblock %}

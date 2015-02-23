@@ -93,7 +93,32 @@
 						    	<i class="fa fa-diamond"></i>
 						    	<ul id="5">
  						    		{% for j in i.sous_menu %}
- 						    			{% if j != null %}
+ 						    			{% if j == "Attribut" %}
+	 						    			<a href="{{ path('imerir_produit_modif_attributs') }}">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+										{% if j == "Inventaire" %}
+	 						    			<a href="{{ path('imerir_stock_inventaire') }}">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+										{% if j == "Ligne produit" %}
+	 						    			<a href="{{ path('imerir_produit_creation_ligne_produit') }}">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+										{% if j == "Produit" %}
+	 						    			<a href="{{ path('imerir_produit_creation_produit') }}">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+										{% if j == "Reception" %}
+	 						    			<a href="">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
+										{% if j == "Stock" %}
 	 						    			<a href="">
 												<li>{{ j }}</li>
 											</a>

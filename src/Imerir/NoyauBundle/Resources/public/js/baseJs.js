@@ -1,8 +1,8 @@
-$( document ).ready(function() {
-    resize();
+$( window ).resize(function() {
+    resize_element();
 });
 
-function resize()
+function resize_element()
 {
 	var hauteur_ecran = parseInt($("body").css("height").replace("px",""));
 	var hauteur_header = parseInt($("#header").css("height").replace("px",""));

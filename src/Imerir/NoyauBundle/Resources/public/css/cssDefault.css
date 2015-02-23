@@ -60,6 +60,7 @@ h1 {
 
 #identifiant a {
 	color: red;
+	text-decoration: none;
 	margin-right: 1rem;
 	height: 20px;
 	margin-top: 10px;

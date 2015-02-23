@@ -36,11 +36,8 @@ class DefaultController extends Controller
     		// TODO gérer les soapfault
     		$soap = $this->get('noyau_soap');
     		$soap->login($nom, $mot_de_passe);
-    		
-    		$return_menu = $soap->call('getMenu', array());
-    		$menu_sous_menu = json_decode($return_menu);
-    	
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu));
+    		return $this->redirect($this->generateUrl('imerir_noyau_index'));
+//     	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu));
     }
     
 }

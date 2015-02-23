@@ -13,16 +13,19 @@ class InventaireController extends Controller
     	//on récupère tous les produits
     	$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
     	$produitsRetour = json_decode($return_produits);
-    	
-    	$attributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
 
+    	if (isset($produitsRetour[0]->p))
+    		$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    	else
+    		$retSoapAttributs = '';
+    	
     	$return_menu = $soap->call('getMenu', array());
     	$menu_sous_menu = json_decode($return_menu);
     	
         return $this->render('ImerirStockBundle::inventaire.html.twig', 
         	   array('produit'=>$produitsRetour,
-        			 'attributs'=>json_decode($attributs),
-        	   		'result_menu' => $menu_sous_menu
+        			 'attributs'=>json_decode($retSoapAttributs),
+        	   		 'result_menu' => $menu_sous_menu
                ));
     }
     
@@ -35,7 +38,10 @@ class InventaireController extends Controller
     	$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
     	$produitsRetour = json_decode($return_produits);
     	
-    	$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    	if (isset($produitsRetour[0]->p))	
+	    	$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    	else 
+    		$retSoapAttributs = '';
     	
     	// On va parser la request pour former un tableau avec les articles de l'inventaire propre
     	foreach ($req as $key => $value) {
@@ -55,6 +61,9 @@ class InventaireController extends Controller
     		}
     	}
     	$resultat = $soap->call('faireInventaire', array('articles'=> json_encode($tabArticle)));
+    	
+    	$return_menu = $soap->call('getMenu', array());
+    	$menu_sous_menu = json_decode($return_menu);
     	
     	return $this->render('ImerirStockBundle::inventaire.html.twig',
     			array('produit'=>$produitsRetour,

@@ -1,6 +1,9 @@
 $( window ).resize(function() {
     resize_element();
 });
+$( document ).ready(function() {
+    resize_element();
+});
 
 function resize_element()
 {
@@ -11,8 +14,8 @@ function resize_element()
 	$('#contenu').css("height",(hauteur_ecran - hauteur_header) + "px");
 	$('#affichage').css("width",(largeur_ecran - largeur_menu ) + "px");
 	$('#affichage').css("height",(hauteur_ecran - hauteur_header ) + "px");
-	$("#fieldset_ajout").css("width",(largeur_ecran - largeur_menu ) + "px");
-	$("#fieldset_recherche").css("width",(largeur_ecran - largeur_menu ) + "px");
+	$("#fieldset_ajout").css("width",(largeur_ecran - largeur_menu - 60) + "px");
+	$("#fieldset_recherche").css("width",(largeur_ecran - largeur_menu  - 60) + "px");
 	
 }
 

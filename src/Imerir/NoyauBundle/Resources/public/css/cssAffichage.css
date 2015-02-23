@@ -7,7 +7,7 @@
 	z-index: 1;
  	background-color: RGB(230,230,230);
 /* 	overflow: scroll; */
-	border: 2px solid red;
+/* 	border: 2px solid red; */
 }
 
 #fieldset_ajout, #fieldset_recherche {

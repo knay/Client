@@ -7,23 +7,9 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 
 class DefaultController extends Controller
 {
-    public function indexAction()
-    {
-    	
-        return $this->render('ImerirNoyauBundle:Default:index.html.twig');
-    }
-    
     public function authentificationAction()
     {
     	return $this->render('ImerirNoyauBundle:Default:authentification.html.twig');
-    }
-    
-    public function getindexAction()
-    {
-    	$soap = $this->get('noyau_soap');
-    	$return_menu = $soap->call('getMenu', array());
-    	$menu_sous_menu = json_decode($return_menu);
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu));
     }
     
     public function checkLoginAction()

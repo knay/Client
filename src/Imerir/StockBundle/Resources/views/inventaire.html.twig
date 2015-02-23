@@ -32,7 +32,10 @@ INVENTAIRE
 			<td>x<input type="number" name="quantite_0" min="1" value="1" class="quantite"></td>
 			<td>
 				{% set nbCarac = 0 %}
-				{% for j in attributs %}
+				
+				{# On affiche tous les attributs dans des selects, et toutes les valeurs 
+				   liées à cet attribut dans les options de ce select #}
+				{% for j in attributs %} 
 					<label for="caract_0_{{ nbCarac }}">{{ j.nom }}</label>
 					<select name="caract_0_{{ nbCarac }}" class="valAttribut">
 					{% for i in j.valeurs %}
@@ -54,38 +57,54 @@ INVENTAIRE
 
 {% block javascripts %}
 <script>
-var nbCodeBarre = 0;
-var tableau = $("#table_code_barre");
-var valeurCaracteristique = '';
+var nbCodeBarre = 0;  //< Le nombre d'article scanné. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
+var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
+var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problèmes de concurences avec AJAX... Elle permet de stocké des donnée le temps qu'une requete soit passée
 
-
+/**
+ * Permet d'effacer une ligne d'inventaire en cas d'erreur de l'utilisateur.
+ * Cette fonction est appéelé lorsque l'on clic sur le bouton moins.
+ */
 function supprimerLigne () {
 	if (tableau.children("tbody").children("tr").length > 2)
 		$(this).parent().parent().remove();
 }
 
-$('.supprimer').click(supprimerLigne);
+$('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
 
+/**
+ * Fonction appelé automatique au chargement de la page.
+ * Elle permet de vider tout les champs texte qui, sinon, pourrait avoir 
+ * des trâces en cas de refresh de la page web.
+ */
 $(document).ready(function (e) {
 	$('input[type="text"]').val('');
 });
 
+/**
+ * Fonction clef du scan, permet de detecter lorsque l'on presse une touche,
+ * la douchette agissant comme un clavier, cette methode est appelé lors d'un 
+ * scan de produit.
+ *
+ * TODO : permettre d'écrire dans un champ type int.... la base quoi..
+ * TODO : s'inspiré de la caisse pour faire un truc plus propre au niveau de l'affichage d'un champs qui sera vide au depart..
+ */
 $(document).keypress(function(e) {
-	var input = $(".valeurCodeBarre").last();
-	var elementfocus = $('input:focus').blur();
+	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
+	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette
 
-	$("#inputSubmit").attr("disabled", true);
+	$("#inputSubmit").attr("disabled", true);  // On grise le boutton submit le temps du traitement
 
-	if (input.val().length == 1) {
+	if (input.val().length == 1) { // Si c'est le premier caractère taper on lance un timeout (pour le temps de lecture d'un code barre)
 		setTimeout (function () {
 			nbCodeBarre++;
 			
-			var ligne = tableau.children("tbody").children("tr").last().clone();
+			var ligne = tableau.children("tbody").children("tr").last().clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
 			var cellule = ligne.children('td');
+			var nbCaract = 0;
 			cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
 			cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
 			cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
-			var nbCaract = 0;
 			cellule.children(".valAttribut").each(function (e) {
 				$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
 				nbCaract++;
@@ -98,8 +117,8 @@ $(document).keypress(function(e) {
 			$('.selectProduit').unbind('change');
 			$('.selectProduit').change(onChangeSelect);
 			
-			$("#inputSubmit").attr("disabled", false);
-			getArticleFromSoap(input.parent().parent());
+			$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
+			getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
 		}, 220);
 	}
 
@@ -107,37 +126,44 @@ $(document).keypress(function(e) {
     return false;
 });
 
+/**
+ * Permet de récupèrer un article complet depuis le SOAP.
+ * @param ligne La ligne du tableau dont on veut les informations sur l'article.
+ */
 function getArticleFromSoap(ligne) {
 	var cellule = ligne.children('td');
 	var codeBarre = cellule.children(".valeurCodeBarre").val();
 
-	$("#inputSubmit").attr("disabled", true);
+	$("#inputSubmit").attr("disabled", true); // Le temps du traitement on grise le bouton submit
 	$.ajax({
 		   url: '{{ path('imerir_ajax_inventaire_get_article_from_code_barre') }}',
 		   data: {
 		      codeBarre: codeBarre
 		   },
 		   success: function(data) {
-			   objJson = JSON.parse(data);
+			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
 			   var nomProduit = cellule.children(".selectProduit").children('option');
 			   nomProduit.each(function (e) {
 				   if ($(this).html() === objJson['nomProduit'])
 					   $(this).attr("selected", true);
 			   });
 
-			   valeurCaracteristique = objJson.attributs;
+			   valeurCaracteristique = objJson.attributs; // Pour problème de concurences AJAX. Pour passer une variable à la fonction 'onChangeSelect' 
 
-			   cellule.children(".selectProduit").trigger('change');
+			   cellule.children(".selectProduit").trigger('change'); // On simule le fait que l'on veuille changer de produit pour mettre à jour les attributs
 		   },
 		   type: 'POST'
 	});
 }
 
-$('.selectProduit').change(onChangeSelect);
+$('.selectProduit').change(onChangeSelect); // Lorsqu'on change de produit, il faut mettre à jour les attributs
 
+/**
+ * Permet de mettre à jour les attributs lorsque l'on change le produit.
+ */
 function onChangeSelect() {
 	var ligne = $(this).parent().parent(); // On recup le TR
-	$("#inputSubmit").attr("disabled", true);
+	$("#inputSubmit").attr("disabled", true); // On grise le boutton submit le temps du traitement
 	
 	$.ajax({
 		   url: '{{ path('imerir_ajax_inventaire_get_attribut') }}',
@@ -145,12 +171,12 @@ function onChangeSelect() {
 		      nom: $(this).val()
 		   },
 		   success: function(data) {
-			   objJson = JSON.parse(data);
+			   var objJson = JSON.parse(data); // On parse les data puis on affiche les attributs et les valeurs atribut correctement.
 			   var celulle = ligne.children('td').last();
 			   var numLigne = ligne.children('td').children('input').first().attr('name').split('_')[1];
+			   var numValAttribut = 0; //< Le nombre de valeur attribut. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
 			   
 			   celulle.html('');
-			   var numValAttribut = 0;
 			   
 			   objJson.forEach(function (attr) {
 				   celulle.append('<label for="caract_'+numLigne+'_'+numValAttribut+'">'+attr.nom+'</label> ');
@@ -172,6 +198,6 @@ function onChangeSelect() {
 	});
 }
 
-$("#inputSubmit").attr("disabled", false);
+$("#inputSubmit").attr("disabled", false); // Par défaut le bouton submit et accessible
 </script>
 {% endblock %}

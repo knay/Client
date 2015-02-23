@@ -59,6 +59,7 @@
 						{% set nbLigneProduit = nbLigneProduit + 1 %}
 					</select>
 					{% if loop.last %}
+						{# Le dernier c'est un boutton ajouter et pas supprimer qu'il faut mettre #}
 						<i class="fa fa-plus-square ajout ajouterBtn"></i>
 					{% else %}
 						<i class="fa fa-minus-square supprimer"></i>
@@ -104,7 +105,6 @@
 <script>
 	var numAttribut = 200;
 	var numLigne = 200;
-
 	var selectCourant = 0;
 
 	$('tr').click(function () {
@@ -115,7 +115,6 @@
 	 * Fonction permettant de réagir lors du click sur ajouter un élément.
 	 * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
 	 * un élément.
-	 * TODO injection XSS
 	 */
 	 $("#lst_attribut").children('p').children('.ajouterBtn').click(
 		function ajoutItem() {
@@ -143,10 +142,13 @@
 		}
 	);
 
-	/**
-	 * Cette fonction permet de supprimer une valeur d'attribut.
-	 */
-	 $("#lst_attribut").children('p').children('.supprimer').click(supprimerItem);
+	
+	 $("#lst_attribut").children('p').children('.supprimer').click(supprimerItem); // On bind le click sur le boutton moins avec la fonction de suppression de ligne
+	 
+	 /**
+	  * Cette fonction permet de supprimer une valeur d'attribut.
+	  * Elle est appelée lorsque l'on clic sur le boutton moins.
+	  */
 	 function supprimerItem() {
 	 	 $(this).parent().remove();
 	 }

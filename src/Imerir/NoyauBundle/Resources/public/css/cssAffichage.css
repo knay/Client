@@ -81,7 +81,7 @@ table tr:hover {
 	box-shadow: inset 0px -10px 30px -10px RGB(180,180,180);
 }
 
-#divNom input[type="submit"] {
+input[type="submit"] {
 	float: right;
 	width: 100px;
 	margin-left: 30px;
@@ -95,6 +95,18 @@ table tr:hover {
 	cursor: pointer;
 }
 
-#divNom input[type="submit"]:hover {
+input[type="submit"]:hover {
 	background-color: #00AADD;
+}
+
+.ajout {
+	color: green;
+	float: right;
+	cursor: pointer;
+	margin-top: 4px;
+}
+
+.supprimer {
+	color: red;
+	cursor: pointer;
 }

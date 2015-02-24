@@ -34,31 +34,37 @@
 /* 	border-radius: 5px; */
 /* } */
 
-#table_recherche {
+table {
 	background: RGB(220,220,220);
 	border-radius: 5px;
-	width: 20%;
 	heigth: auto;
-	padding: 5px;
+	padding: 1%;
+	margin: 2%;
 }
 
-#table_recherche th {
+table th {
 	background: #0099CC;
 	border-radius: 5px 5px 0 0;
 	color: RGB(249,249,249);
+	padding-left: auto;
+	padding-right: auto;
 /* 	border: 1px solid red; */
 }
 
-#table_recherche td {
-	margin-top: 5px;
-	cursor: pointer;
+table td {
 	border-radius: 2px;
 	background-color: RGB(249,249,249);
-	padding-left: 10px;
+	width: auto;
+	height: auto;
+	padding-left: 1%;
 /* 	border: 1px solid green; */
 }
 
-#table_recherche td:hover {
+table tr {
+	cursor: pointer;
+}
+
+table tr:hover {
 	color: #669900;
 }
 

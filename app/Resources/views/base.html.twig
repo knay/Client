@@ -85,7 +85,7 @@
 							    <ul id="4">
  						    		{% for j in i.sous_menu %}
 										{% if j == "Fournisseur" %}
-	 						    			<a href="">
+	 						    			<a href="{{ path('imerir_creation_fournisseur') }}">
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}

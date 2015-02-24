@@ -61,3 +61,16 @@
 #table_recherche td:hover {
 	color: #669900;
 }
+
+#title_page {
+	text-align: center;
+	margin: 10px;
+	padding: 5px;
+	background-color: #669900;
+	border-radius: 5px 5px 5px 5px;
+	color: white;
+	-moz-box-shadow: inset 0px -10px 30px -10px RGB(180,180,180);
+	-webkit-box-shadow: inset 0px -30px 25px -10px RGB(180,180,180);
+	-o-box-shadow: inset 0px -10px 30px -10px RGB(180,180,180);
+	box-shadow: inset 0px -10px 30px -10px RGB(180,180,180);
+}

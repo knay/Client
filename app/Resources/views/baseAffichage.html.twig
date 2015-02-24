@@ -1,6 +1,10 @@
 {% extends "::base.html.twig" %}
 
+{% block title_page %}
+{% endblock %}
+
 {% block affichage %}
+
 <fieldset id="fieldset_ajout">
 	<legend id="titre_fieldset" >{% block title_ajout %}AJOUT{% endblock %}</legend>    
 	{% block ajout %}{% endblock %}
@@ -10,7 +14,7 @@
 	<legend id="titre_fieldset" >{% block title_recherche %}RECHERCHE{% endblock %}</legend> 
 	{% block recherche %}{% endblock %}
 	{% block tableaux %}
-		<table id="table_recherche">
+		<table>
 			{% block table %}
 			{% endblock %}
 		</table>
@@ -18,3 +22,4 @@
 	{% block bouton_export %}{% endblock %}
 </fieldset>
 {% endblock %}
+

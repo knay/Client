@@ -6,6 +6,14 @@ imerir_stock_inventaire_save:
     path:     /inventaire/save
     defaults: { _controller: ImerirStockBundle:Inventaire:save }
     
+imerir_stock_inventaire_dev:
+    path:     /inventaire/dev/alba
+    defaults: { _controller: ImerirStockBundle:InventaireDev:index }
+    
+imerir_stock_inventaire_dev_save:
+    path:     /inventaire/dev/alba/save
+    defaults: { _controller: ImerirStockBundle:InventaireDev:save }
+    
 imerir_ajax_inventaire_get_attribut:
     path:     /ajax/inventaireGetAttribut
     defaults: { _controller: ImerirStockBundle:AjaxInventaire:getAttributs }
@@ -13,6 +21,3 @@ imerir_ajax_inventaire_get_attribut:
 imerir_ajax_inventaire_get_article_from_code_barre:
     path:     /ajax/inventaireGetArticleFromCodeBarre
     defaults: { _controller: ImerirStockBundle:AjaxInventaire:getArticleFromCodeBarre }   
-    
-    
-    

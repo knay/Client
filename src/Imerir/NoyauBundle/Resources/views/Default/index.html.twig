@@ -143,8 +143,20 @@ $(document).keypress(function(e) {
 				tableau.append(ligne);
 			}
 
+			$.ajax({
+				   url: '{{ path('imerir_noyau_ajax_getPrixFromCodeBarre_caisse') }}',
+				   data: {
+				      codeBarre: ligneCur.children('td').children(".valeurCodeBarre").val()
+				   },
+				   success: function(data) {
+					   var prix = data.prix;
+					   ligneCur.children('td').children('.prix').val(prix);
+					   calculerPrixTotal(); // On recalcul le prix total, narmol
+				   },
+				   type: 'POST'
+			});
+
 			$('input').change(calculerPrixTotal);
-			calculerPrixTotal(); // On recalcul le prix total, narmol
 		}, 220);
 	}
 

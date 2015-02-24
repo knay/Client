@@ -5,11 +5,11 @@ INVENTAIRE
 {% endblock %}
 
 {% block title_page %}
-Inventaire
+Inventaire complet
 {% endblock %}
 
 {% block title %}
-ALBA - Inventaire
+ALBA - Iventaire complet
 {% endblock %}
 
 {% block stylesheets %}
@@ -17,7 +17,7 @@ ALBA - Inventaire
 {% endblock %}
 
 {% block ajout %}
-<form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
+<form action="{{ path('imerir_stock_inventaire_dev_save') }}" method="post">
 	<input type="submit" id="inputSubmit">
 	<table id="table_code_barre" >
 		<tr>
@@ -25,6 +25,7 @@ ALBA - Inventaire
 			<th>Produit</th>
 			<th>Code barre</th>
 			<th>Quantité</th>
+			<th>Prix article</th>
 			<th>Caractèristiques</th>
 		</tr>
 		<tr>
@@ -38,6 +39,7 @@ ALBA - Inventaire
 			</td>
 			<td><input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly"></td>
 			<td>x<input type="number" name="quantite_0" min="1" value="1" class="quantite"></td>
+			<td><input type="number" name="prix_0" class="prix"> €</td>
 			<td>
 				{% set nbCarac = 0 %}
 				
@@ -98,6 +100,11 @@ $(document).ready(function (e) {
  * TODO : s'inspiré de la caisse pour faire un truc plus propre au niveau de l'affichage d'un champs qui sera vide au depart..
  */
 $(document).keypress(function(e) {
+	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
+	// n'est plus la douchette qui est maître
+	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
+		return true;
+	
 	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette
 
@@ -113,6 +120,7 @@ $(document).keypress(function(e) {
 			cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
 			cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
 			cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
+			cellule.children(".prix").attr('name', 'prix_'+nbCodeBarre);
 			cellule.children(".valAttribut").each(function (e) {
 				$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
 				nbCaract++;

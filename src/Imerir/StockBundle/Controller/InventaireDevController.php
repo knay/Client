@@ -11,7 +11,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
  * ROUTES : /inventaire
  *          /inventaire/save
  */
-class InventaireController extends Controller
+class InventaireDevController extends Controller
 {
 	/**
 	 * Action permettant de réagir lorsque l'utilisateur accède à la page d'inventaire.
@@ -35,7 +35,7 @@ class InventaireController extends Controller
     	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
     	$menu_sous_menu = json_decode($return_menu); 
     	
-        return $this->render('ImerirStockBundle::inventaire.html.twig', 
+        return $this->render('ImerirStockBundle::inventaireDev.html.twig', 
         	                  array('produit'     => $produitsRetour,
         			                'attributs'   => json_decode($retSoapAttributs),
         	   		                'result_menu' => $menu_sous_menu));
@@ -64,7 +64,6 @@ class InventaireController extends Controller
     	// On va parser la request pour former un tableau avec les articles de l'inventaire propre
     	foreach ($req as $key => $value) {
     		$clef = explode('_', $key);
-    		$tabArticle[intval($clef[1])]['attributs'] = array();
     		if ($clef[0] === 'produit') { // Si c'est le nom du produit concerné
     			$tabArticle[intval($clef[1])]['produit'] = $value;
     		}
@@ -78,14 +77,17 @@ class InventaireController extends Controller
     			$attributs = explode('_', $value);
     			$tabArticle[intval($clef[1])]['attributs'][$attributs[0]] = $attributs[1];
     		}
+    		else if ($clef[0] === 'prix') { // Si c'est une valeur d'attribut
+    			$tabArticle[intval($clef[1])]['prix'] = intval($value);
+    		}
     	}
     	 
-    	$soap->call('faireInventaire', array('articles'=> json_encode($tabArticle), 'avecPrix'=>false)); // On enregistre toutes les données de l'inventaire
+    	$soap->call('faireInventaire', array('articles'=> json_encode($tabArticle), 'avecPrix'=>true)); // On enregistre toutes les données de l'inventaire
     	
     	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
     	$menu_sous_menu = json_decode($return_menu);
     	
-    	return $this->render('ImerirStockBundle::inventaire.html.twig',
+    	return $this->render('ImerirStockBundle::inventaireDev.html.twig',
 			    			  array('produit'     => $produitsRetour,
 			    			 	    'attributs'   => json_decode($retSoapAttributs),
 			    			 	    'result_menu' => $menu_sous_menu));

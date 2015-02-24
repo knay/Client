@@ -80,3 +80,33 @@ table tr:hover {
 	-o-box-shadow: inset 0px -10px 30px -10px RGB(180,180,180);
 	box-shadow: inset 0px -10px 30px -10px RGB(180,180,180);
 }
+
+input[type="submit"] {
+	float: right;
+	width: 100px;
+	margin-left: 30px;
+	height: 29px;
+	font-size: 11pt;
+	border: 1px solid #0088BB;
+	background-color: #0099CC;
+	border-radius: 5px;
+	color: white;
+	margin-top: 1px;
+	cursor: pointer;
+}
+
+input[type="submit"]:hover {
+	background-color: #00AADD;
+}
+
+.ajout {
+	color: green;
+	float: right;
+	cursor: pointer;
+	margin-top: 4px;
+}
+
+.supprimer {
+	color: red;
+	cursor: pointer;
+}

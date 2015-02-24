@@ -1,0 +1,98 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>
+{% endblock %}
+{% block title_ajout %}
+    {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
+        MODIFICATION
+    {% else %}
+        AJOUT
+    {% endif %}
+{% endblock %}
+{% block ajout %}
+    {% if app.request.attributes.get('_route')=='imerir_creation_fournisseur' %}
+        <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
+            <div id="divNom">
+                <label for="nom">Nom fournisseur </label>
+                <input type="text" name="nom"/>
+                <input type="submit" value="Ajouter">
+            </div>
+            <div id="divEmail">
+                <label for="email">Email </label>
+                <input type="text" name="email"/>
+            </div>
+            <div id="divTelephonePortable">
+                <label for="telephone_portable">Telephone portable </label>
+                <input type="text" name="telephone_portable"/>
+            </div>
+        </form>
+    {% endif %}
+
+    {% if app.request.attributes.get('_route')=='imerir_validation_creation_fournisseur' %}
+        <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_fournisseur">
+            <div id="divNom">
+                <label for="nom">Nom ligne produit: </label>
+                <input type="text" name="nom"/>
+                <input type="submit" value="Ajouter">
+            </div>
+        </form>
+        <p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajoutée</p>
+    {% endif %}
+
+    {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
+
+        <form action="{{ path('imerir_produit_validation_modification_ligne_produit') }}" method="post" id="formulaire_creation_fournisseur">
+            <div id="divNom">
+                <label for="nom">Nom ligne produit: </label>
+                <input type="hidden" name="id_lp" value="{{ lp_id_val }}">
+                <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
+                <input type="text" name="nom" value="{{ lp_nom_val }}"/>
+                <input type="submit" value="Modifier">
+            </div>
+        </form>
+    {% endif %}
+
+    {% if app.request.attributes.get('_route')=='imerir_validation_modification_fournisseur' %}
+        <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_fournisseur">
+            <div id="divNom">
+                <label for="nom">Nom ligne produit: </label>
+                <input type="text" name="nom"/>
+                <input type="submit" value="Ajouter">
+            </div>
+        </form>
+        <p class="validation_message">La ligne produit "{{ old_nom_lp }}" a bien été modifiée en "{{ nom_lp_add }}"</p>
+    {% endif %}
+
+{% endblock %}
+
+{% block recherche %}
+    <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="post">
+        <label for="recherche_lp">Nom :</label><input type="text" name="recherche_lp">
+        <input type="submit">
+    </form>
+{% endblock %}
+
+{% block table %}
+    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Email</th><th>Telephone portable</th></tr>
+    {% for i in liste_fournisseurs %}
+
+        <tr><td>{{ i.nom }}
+                <form method="post" action="{{ path('imerir_produit_modification_ligne_produit') }}" style="display: none">
+                    <input type="hidden" name="id_f" value="{{ i.id }}">
+                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
+                    <input type="hidden" name="email_f" value="{{ i.email }}">
+                    <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
+                </form>
+            </td></tr>
+    {% endfor %}
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+    $('tr').click(function () {
+        $(this).children('td').children('form').submit();
+    });
+</script>
+{% endblock %}

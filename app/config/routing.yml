@@ -1,3 +1,7 @@
+imerir_fournisseur:
+    resource: "@ImerirFournisseurBundle/Resources/config/routing.yml"
+    prefix:   /
+
 imerir_stock:
     resource: "@ImerirStockBundle/Resources/config/routing.yml"
     prefix:   /

@@ -1,0 +1,15 @@
+imerir_creation_fournisseur:
+    path:     /fournisseurs/creation
+    defaults: { _controller: ImerirFournisseurBundle:Default:ajoutFournisseur }
+
+imerir_validation_creation_fournisseur:
+    path:     /fournisseurs/creation
+    defaults: { _controller: ImerirFournisseurBundle:Default:ajoutFournisseur }
+
+imerir_validation_modification_fournisseur:
+    path:     /fournisseurs/creation
+    defaults: { _controller: ImerirFournisseurBundle:Default:ajoutFournisseur }
+
+imerir_modification_fournisseur:
+    path:     /fournisseurs/creation
+    defaults: { _controller: ImerirFournisseurBundle:Default:ajoutFournisseur }

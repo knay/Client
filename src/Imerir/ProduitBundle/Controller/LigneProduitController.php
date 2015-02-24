@@ -97,4 +97,26 @@ class LigneProduitController extends Controller
         return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig',
             array('liste_ligne_produit'=>$liste_ligne_produit,'nom_lp_add'=>$nom,'old_nom_lp'=>$old_nom,'result_menu' => $menu_sous_menu));
     }
+
+    public function ajoutFournisseurAction()
+    {
+        $soap = $this->get('noyau_soap');
+
+        $query = $this->get('request');
+        $recherche_lp = $query->request->get('recherche_lp');
+
+        if($recherche_lp===null)
+            $nom='';
+        else
+            $nom=$recherche_lp;
+
+        $return = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => $nom));
+        $liste_ligne_produit = json_decode($return);
+
+        //on recupere le menu et sous menu
+        $return_menu = $soap->call('getMenu', array());
+        $menu_sous_menu = json_decode($return_menu);
+
+        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit,'result_menu' => $menu_sous_menu));
+    }
 }

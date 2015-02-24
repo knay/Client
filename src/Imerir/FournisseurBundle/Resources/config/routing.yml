@@ -3,8 +3,8 @@ imerir_creation_fournisseur:
     defaults: { _controller: ImerirFournisseurBundle:Default:ajoutFournisseur }
 
 imerir_validation_creation_fournisseur:
-    path:     /fournisseurs/creation
-    defaults: { _controller: ImerirFournisseurBundle:Default:ajoutFournisseur }
+    path:     /fournisseurs/creation/validation
+    defaults: { _controller: ImerirFournisseurBundle:Default:execAjoutFournisseur }
 
 imerir_validation_modification_fournisseur:
     path:     /fournisseurs/creation

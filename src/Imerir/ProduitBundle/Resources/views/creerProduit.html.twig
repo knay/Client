@@ -3,6 +3,9 @@
 {% block stylesheets %}
 {#     <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>#}
 {% endblock %}
+{% block title_page %}
+    Produits
+{% endblock %}
 
 {% block title_ajout %}
     {% if app.request.attributes.get('_route')=='imerir_produit_modification_produit' %}

@@ -5,26 +5,8 @@
 
 #divNom input[type="text"] {
 	width: 200px;
-	height: 15px;
+	height: 18px;
 	font-size: 10pt;
-}
-
-#divNom input[type="submit"] {
-	float: right;
-	width: 100px;
-	margin-left: 30px;
-	height: 29px;
-	font-size: 11pt;
-	border: 1px solid #0088BB;
-	background-color: #0099CC;
-	border-radius: 5px;
-	color: white;
-	margin-top: 1px;
-	cursor: pointer;
-}
-
-#divNom input[type="submit"]:hover {
-	background-color: #00AADD;
 }
 
 #divNom label {
@@ -32,82 +14,33 @@
 	margin-top: 5px;
 }
 
+#lst_ligne_produit {
+	display: inline-block;
+	width: 30%;
+	vertical-align:top;
+}
+
+#lst_ligne_produit table {
+	width: 100%;
+}
+
 #lst_attribut {
-	background-color: #EDEDED;
-	margin: 10px;
 	display: inline-block;
 	width: 50%;
-	vertical-align: top;
-	border-radius: 5px;
+	vertical-align:top;
 }
 
-#lst_attribut p {
-	border-top: 1px solid #DEDEDE;
-	margin: 0;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	vertical-align: middle;
-}
-#lst_attribut p input {
-	width: 93%;
-	height: 15px;
-	font-size: 10pt;
-	padding-left: 7px;
-	padding-right: 7px;
-}
-
-#lst_attribut p span {
-	margin-top: 4px;
-	border-left: 1px solid black;
-}
-
-#lst_ligne_produit {
-	background-color: #EDEDED;
-	margin: 10px;
-	display: inline-block;
-	width: 25%;
-	border-radius: 5px;
-	vertical-align: top;
-}
-
-#lst_ligne_produit p {
-	border-top: 1px solid #DEDEDE;
-	margin: 0;
-	padding-left: 10px;
-	padding-right: 10px;
-	padding-top: 3px;
-	padding-bottom: 3px;
-	vertical-align: middle;
-}
-
-.titre_lst {
-	background-color: #0099CC;
-	color: #efefef;
-	border-radius: 5px 5px 0 0;
-	text-align: center;
-	padding: 3px 4px;
-	letter-spacing: 0.03em;
-	font-family: arial;
-}
-
-.ajout {
-	color: green;
-	float: right;
-	cursor: pointer;
-	margin-top: 4px;
-}
-
-.supprimer {
-	color: red;
-	float: right;
-	cursor: pointer;
-	margin-top: 4px;
+#lst_attribut table {
+	width: 100%;
 }
 
 select {
 	padding: 0;
-	width: 90%;
+	width: 100%;
 	height: 25px;
+}
+
+#lst_attribut input[type="text"] {
+	width: 100%;
+	heigth: 25px;
 }

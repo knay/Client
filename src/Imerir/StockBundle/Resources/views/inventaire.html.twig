@@ -13,48 +13,55 @@ ALBA - Inventaire
 {% endblock %}
 
 {% block stylesheets %}
-{#     <link rel="stylesheet" href="{{ asset('bundles/imerirstock/css/inventaire.css') }}"/> #}
+     <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
 {% endblock %}
 
 {% block ajout %}
 <form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
-	<input type="submit" id="inputSubmit">
-	<table id="table_code_barre" >
-		<tr>
-			<th></th>
-			<th>Produit</th>
-			<th>Code barre</th>
-			<th>Quantité</th>
-			<th>Caractèristiques</th>
-		</tr>
-		<tr>
-			<td><i class="fa fa-minus-square supprimer"></i></td>
-			<td>
-				<select name="produit_0" class="selectProduit">
-					{% for j in produit %}
-						<option>{{ j.p }}</option>
-					{% endfor %}
-				</select>
-			</td>
-			<td><input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly"></td>
-			<td>x<input type="number" name="quantite_0" min="1" value="1" class="quantite"></td>
-			<td>
-				{% set nbCarac = 0 %}
-				
-				{# On affiche tous les attributs dans des selects, et toutes les valeurs 
-				   liées à cet attribut dans les options de ce select #}
-				{% for j in attributs %} 
-					<label for="caract_0_{{ nbCarac }}">{{ j.nom }}</label>
-					<select name="caract_0_{{ nbCarac }}" class="valAttribut">
-					{% for i in j.valeurs %}
-						<option value="{{ j.nom }}_{{ i }}">{{ i }}</option>
-					{% endfor %}
+	<div id="contenneur_inventaire" style="display:none;">
+		<input type="submit" id="inputSubmit">
+		<table id="table_code_barre" >
+			<tr>
+				<th></th>
+				<th>Produit</th>
+				<th>Code barre</th>
+				<th>Quantité</th>
+				<th>Caractéristiques</th>
+			</tr>
+			<tr style="display: none">
+				<td><i class="fa fa-minus-square supprimer"></i></td>
+				<td>
+					<select name="produit_0" class="selectProduit">
+						{% for j in produit %}
+							<option>{{ j.p }}</option>
+						{% endfor %}
 					</select>
-					{% set nbCarac = nbCarac + 1 %}
-				{% endfor %}
-			</td>
-		</tr>
-	</table>
+				</td>
+				<td><input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly"></td>
+				<td><input type="number" name="quantite_0" min="1" value="1" class="quantite"></td>
+				<td>
+					{% set nbCarac = 0 %}
+					
+					{# On affiche tous les attributs dans des selects, et toutes les valeurs 
+					   liées à cet attribut dans les options de ce select #}
+					{% for j in attributs %} 
+						<label for="caract_0_{{ nbCarac }}">{{ j.nom }} : </label>
+						<select name="caract_0_{{ nbCarac }}" class="valAttribut">
+						{% for i in j.valeurs %}
+							<option value="{{ j.nom }}_{{ i }}">{{ i }}</option>
+						{% endfor %}
+						</select><br/>
+						{% set nbCarac = nbCarac + 1 %}
+					{% endfor %}
+				</td>
+			</tr>
+		</table>
+	</div>
+	
+	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
+	<div id="message_accueil">
+		<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
+	</div>
 </form>
 {% endblock %}
     
@@ -74,8 +81,11 @@ var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problè
  * Cette fonction est appéelé lorsque l'on clic sur le bouton moins.
  */
 function supprimerLigne () {
-	if (tableau.children("tbody").children("tr").length > 2)
-		$(this).parent().parent().remove();
+	$(this).parent().parent().remove();
+	if (tableau.children("tbody").children("tr").length == 2) {
+		$("#contenneur_inventaire").hide();
+		$("#message_accueil").show();
+	}
 }
 
 $('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
@@ -105,11 +115,23 @@ $(document).keypress(function(e) {
 
 	if (input.val().length == 1) { // Si c'est le premier caractère taper on lance un timeout (pour le temps de lecture d'un code barre)
 		setTimeout (function () {
-			nbCodeBarre++;
-			
 			var ligne = tableau.children("tbody").children("tr").last().clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
 			var cellule = ligne.children('td');
 			var nbCaract = 0;
+			var ligneCur = tableau.children("tbody").children("tr").last(); // On récupère la ligne de tableau sur laquelle on va travailler
+
+			if (input.val().length < 10) {
+				input.val('');
+				return true;
+			}
+
+			if ($("#contenneur_inventaire").is(":visible") == false) { // On cache le message d'accueil
+				$("#contenneur_inventaire").show();
+				$("#message_accueil").hide();
+			}
+			
+			nbCodeBarre++;
+			
 			cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
 			cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
 			cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
@@ -119,6 +141,9 @@ $(document).keypress(function(e) {
 			});
 			cellule.children(".valeurCodeBarre").val('');
 			tableau.append(ligne);
+
+			ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
+			ligneCur.show(); // On affiche l'article qu'on vient de scanner
 
 			$('.supprimer').unbind('click');
 			$('.supprimer').click(supprimerLigne);
@@ -187,8 +212,8 @@ function onChangeSelect() {
 			   celulle.html('');
 			   
 			   objJson.forEach(function (attr) {
-				   celulle.append('<label for="caract_'+numLigne+'_'+numValAttribut+'">'+attr.nom+'</label> ');
-				   celulle.append('<select name="caract_'+numLigne+'_'+numValAttribut+'"></select> ');
+				   celulle.append('<label for="caract_'+numLigne+'_'+numValAttribut+'">'+attr.nom+' : </label> ');
+				   celulle.append('<select name="caract_'+numLigne+'_'+numValAttribut+'"></select><br/>');
 				   var select = celulle.children('select').last();
 				   for (valAttr in attr.valeurs) {
 					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] === attr.valeurs[valAttr])
@@ -196,6 +221,12 @@ function onChangeSelect() {
 					   else 
 						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 				   }
+				   
+				   if (celulle.children('select').html() == '') {
+					   celulle.children('select').remove();
+					   celulle.last().html('AUCUNE CARACTÉRISTIQUE');
+				   }
+				   
 				   numValAttribut++;
 			   });
 

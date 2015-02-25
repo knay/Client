@@ -12,7 +12,7 @@ ALBA - Attributs
 {% endblock %}
 
 {% block stylesheets %}
-{# <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}"/>#}
+	<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}">
 {% endblock %}
 
 {% block ajout %}
@@ -30,60 +30,84 @@ ALBA - Attributs
 		<input type="submit">
 	</div>
 	<div id="lst_attribut">
-		<p class="titre_lst">Liste des valeurs possibles</p>
-		{% if detail_attribut.attribut is defined %}
-			{% for i in detail_attribut.attribut %}
-				<p>
-					<input type="text" name="attribut{{ nbAttribut }}" value="{{ i.valeurAttr }}"/>
-					<i class="fa fa-minus-square supprimer"></i>
-				</p>
-				{% set nbAttribut = nbAttribut + 1 %}
-			{% endfor %}
-		{% endif %}
-		<p class="last">
-			<input type="text" name="attribut{{ nbAttribut }}"/>
-			<i class="fa fa-plus-square ajout ajouterBtn"></i>
-		</p>
+		<table>
+			<tr>
+				<th></th>
+				<th class="titre_lst">Liste des valeurs possibles</th>
+			</tr>
+			{% if detail_attribut.attribut is defined %}
+				{% for i in detail_attribut.attribut %}
+					<tr>
+						<td>
+							<i class="fa fa-minus-square supprimer"></i>
+						</td>
+						<td>
+							<input type="text" name="attribut{{ nbAttribut }}" value="{{ i.valeurAttr }}"/>
+						</td>
+					</tr>
+					{% set nbAttribut = nbAttribut + 1 %}
+				{% endfor %}
+			{% endif %}
+			<tr class="last">
+				<td>
+					<i class="fa fa-plus-square ajout ajouter"></i>
+				</td>
+				<td>
+					<input type="text" name="attribut{{ nbAttribut }}"/>
+				</td>
+			</tr>
+		</table>
 	</div>
 	<div id="lst_ligne_produit">
-		<p class="titre_lst">Lignes de produits concernées</p>
-		{% set lastProduitSelected = 0 %}
-		{% if detail_attribut.ligneProduit is defined %}
-			{% for i in detail_attribut.ligneProduit %}
-				<p class="{% if loop.last %}last{% endif %}">
-					<select name="lg_produit{{ nbLigneProduit }}">
-						{% for j in ligne_produit %}
-							{% if j.nom == i.nomLigneProduit %}
-								{% if nbLigneProduit > lastProduitSelected %}
-									<option selected>{{ j.nom }}</option>
-									{% set lastProduitSelected = nbLigneProduit %}
-								{% else %}
-									<option>{{ j.nom }}</option>
-								{% endif %}
+		<table>
+			<tr>
+				<th></th>
+				<th class="titre_lst">Lignes de produits concernées</th>
+			</tr>
+			{% set lastProduitSelected = 0 %}
+			{% if detail_attribut.ligneProduit is defined %}
+				{% for i in detail_attribut.ligneProduit %}
+					<tr>
+						<td>
+							{% if loop.last %}
+								{# Le dernier c'est un boutton ajouter et pas supprimer qu'il faut mettre #}
+								<i class="fa fa-plus-square ajout ajouter"></i>
 							{% else %}
-								<option>{{ j.nom }}</option>
+								<i class="fa fa-minus-square supprimer"></i>
 							{% endif %}
-						{% endfor %}
-						{% set nbLigneProduit = nbLigneProduit + 1 %}
-					</select>
-					{% if loop.last %}
-						{# Le dernier c'est un boutton ajouter et pas supprimer qu'il faut mettre #}
-						<i class="fa fa-plus-square ajout ajouterBtn"></i>
-					{% else %}
-						<i class="fa fa-minus-square supprimer"></i>
-					{% endif %}
-				</p>
-			{% endfor %}
-		{% else %}
-			<p class="last">
-				<select name="lg_produit1">
-				{% for j in ligne_produit %}
-					<option>{{ j.nom }}</option>
+						</td>
+						<td class="{% if loop.last %}last{% endif %}">
+							<select name="lg_produit{{ nbLigneProduit }}">
+								{% set nbLigneProduit = nbLigneProduit + 1 %}
+								{% for j in ligne_produit %}
+									{% if j.nom == i.nomLigneProduit %}
+										{% if nbLigneProduit > lastProduitSelected %}
+											<option selected>{{ j.nom }}</option>
+											{% set lastProduitSelected = nbLigneProduit %}
+										{% else %}
+											<option>{{ j.nom }}</option>
+										{% endif %}
+									{% else %}
+										<option>{{ j.nom }}</option>
+									{% endif %}
+								{% endfor %}
+							</select>
+						</td>
+					</tr>
 				{% endfor %}
-				</select>
-				<i class="fa fa-plus-square ajout ajouterBtn"></i>
-			</p>
-		{% endif %}
+			{% else %}
+				<tr class="last">
+					<td><i class="fa fa-plus-square ajout ajouter"></i></td>
+					<td>
+						<select name="lg_produit1">
+						{% for j in ligne_produit %}
+							<option>{{ j.nom }}</option>
+						{% endfor %}
+						</select>
+					</td>
+				</tr>
+			{% endif %}
+		</table>
 	</div>
 </form>
 {% endblock %}
@@ -124,26 +148,26 @@ ALBA - Attributs
 	 * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
 	 * un élément.
 	 */
-	 $("#lst_attribut").children('p').children('.ajouterBtn').click(
+	 $("#lst_attribut").find('.ajouter').click(
 		function ajoutItem() {
-			var last = $("#lst_attribut").children('.last').last();
-			var input = $(last).children('input');
+			var last = $("#lst_attribut").find('tr').last();
+			var input = $(last).find('input');
 			if ($(input).val() === "") {
 				input.select();
 			}
 			else {
-				$("#lst_attribut").append('<p class="last"><input type="text" name="attribut'+numAttribut+'"/><i class="fa fa-plus-square ajout ajouterBtn"></i></p>');
+				$("#lst_attribut").children("table").append('<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td><td><input type="text" name="attribut'+numAttribut+'"/></td></tr>');
 
-				last.children("i").toggleClass("ajout");
-				last.children("i").toggleClass("supprimer");
-				last.children("i").toggleClass("fa-plus-square");
-				last.children("i").toggleClass("fa-minus-square");
-				last.children("i").toggleClass("ajouterBtn");
+				last.find("i").toggleClass("ajout");
+				last.find("i").toggleClass("supprimer");
+				last.find("i").toggleClass("fa-plus-square");
+				last.find("i").toggleClass("fa-minus-square");
+				last.find("i").toggleClass("ajouter");
 				last.toggleClass("last");
 
 				$(this).unbind('click');
-				$("#lst_attribut").children('p').children('.ajouterBtn').click(ajoutItem);
-				$("#lst_attribut").children('p').children('.supprimer').click(supprimerItem);
+				$("#lst_attribut").find('.ajouter').click(ajoutItem);
+				$("#lst_attribut").find('.supprimer').click(supprimerItem);
 
 				numAttribut++;
 			}
@@ -151,14 +175,14 @@ ALBA - Attributs
 	);
 
 	
-	 $("#lst_attribut").children('p').children('.supprimer').click(supprimerItem); // On bind le click sur le boutton moins avec la fonction de suppression de ligne
+	 $('.supprimer').click(supprimerItem); // On bind le click sur le boutton moins avec la fonction de suppression de ligne
 	 
 	 /**
 	  * Cette fonction permet de supprimer une valeur d'attribut.
 	  * Elle est appelée lorsque l'on clic sur le boutton moins.
 	  */
 	 function supprimerItem() {
-	 	 $(this).parent().remove();
+	 	 $(this).parent().parent().remove();
 	 }
 
 	 /**
@@ -166,25 +190,26 @@ ALBA - Attributs
 	 * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
 	 * un élément.
 	 */
-	 $("#lst_ligne_produit").children('p').children('.ajouterBtn').click(
+	 $("#lst_ligne_produit").find('.ajouter').click(
 		function ajoutLigne() {
-			var last = $("#lst_ligne_produit").children('.last').last();
-
-			clone = last.clone().appendTo("#lst_ligne_produit");
-			clone.children('select').attr("name", "lg_produit"+numLigne);
+			var last = $("#lst_ligne_produit").find('tr').last();
+			var tableau = $("#lst_ligne_produit").children("table");
 			
-			last.children("i").toggleClass("ajout");
-			last.children("i").toggleClass("supprimer");
-			last.children("i").toggleClass("fa-plus-square");
-			last.children("i").toggleClass("fa-minus-square");
-			last.children("i").toggleClass("ajouterBtn");
+			clone = last.clone().appendTo(tableau);
+			clone.find('select').attr("name", "lg_produit"+numLigne);
+			
+			last.find("i").toggleClass("ajout");
+			last.find("i").toggleClass("supprimer");
+			last.find("i").toggleClass("fa-plus-square");
+			last.find("i").toggleClass("fa-minus-square");
+			last.find("i").toggleClass("ajouter");
 			last.toggleClass("last");
 
 			numLigne++;
 
 			$(this).unbind('click');
-			$("#lst_ligne_produit").children('p').children('.ajouterBtn').click(ajoutLigne);
-			$("#lst_ligne_produit").children('p').children('.supprimer').click(supprimerItem);
+			$("#lst_ligne_produit").find('.ajouter').click(ajoutLigne);
+			$("#lst_ligne_produit").find('.supprimer').click(supprimerItem);
 		}
 	);
 

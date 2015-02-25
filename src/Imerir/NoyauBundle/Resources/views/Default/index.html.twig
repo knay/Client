@@ -1,4 +1,4 @@
-{% extends "::base.html.twig" %}
+{% extends "::baseAffichage.html.twig" %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
@@ -18,7 +18,7 @@ Votre caisse
 	<div id="contenneurCaisse" style="display:none;">
 		<div id="enTete">Client <span id="dateSpan">{{ "now"|date("d/m/Y") }}</span></div>
 		<h2>LISTE DES ARTICLES</h2>
-		<table id="tableauCaisse">
+		<table id="tableau_caisse">
 			<tr>
 				<th></th>
 				<th>Code article</th>

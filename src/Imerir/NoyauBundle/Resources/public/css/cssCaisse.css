@@ -26,3 +26,42 @@
 #dateSpan {
 	float: right;
 }
+
+#contenneurCaisse tableauCaisse {
+	border: 2px solid black;
+	background-color: orange;
+}
+
+#tableau_caisse {
+	background: green;
+	border-radius: 5px;
+	heigth: auto;
+	padding: 1%;
+	margin: 2%;
+}
+
+#tableau_caisse th {
+	background: red;
+	border-radius: 5px 5px 0 0;
+	color: RGB(249,249,249);
+	padding-left: auto;
+	padding-right: auto;
+/* 	border: 1px solid red; */
+}
+
+#tableau_caisse td {
+	border-radius: 2px;
+	background-color: RGB(249,249,249);
+	width: auto;
+	height: auto;
+/* 	padding-left: 1%; */
+/* 	border: 1px solid green; */
+}
+
+#tableau_caisse tr {
+	cursor: pointer;
+}
+
+#tableau_caisse tr:hover {
+	color: #669900;
+}

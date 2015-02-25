@@ -60,17 +60,18 @@
     {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
 
         <form action="{{ path('imerir_validation_modification_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
-            <div id="divNom">
-                <label for="nom">Nom : </label>
+            <table>
+                <tr><td><label for="nom">Nom : </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
-                <input type="hidden" name="old_nom" value="{{ modif_nom }}">
-                <input type="text" name="new_nom" value="{{ modif_nom }}"/>
-                <label for="nom">Email : </label>
-                <input type="text" name="new_email" value="{{ modif_email }}"/>
-                <label for="nom">Téléphone portable : </label>
-                <input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/>
+                <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
+                <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
                 <input type="submit" value="Modifier">
-            </div>
+                <tr><td><label for="nom">Email : </label></td>
+                <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
+                <tr><td><label for="nom">Téléphone portable : </label></td>
+                <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
+
+            </table>
         </form>
     {% endif %}
 

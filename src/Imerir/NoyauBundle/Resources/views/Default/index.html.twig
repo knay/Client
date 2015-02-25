@@ -9,13 +9,13 @@ Votre caisse
 {% endblock %}
 
 {% block title %}
-Votre caisse
+ALBA - Votre caisse
 {% endblock %}
 
 {% block affichage %}
 <fieldset id="fieldset_ajout">
 	<legend id="titre_fieldset" >VOTRE CAISSE</legend>
-	<div id="contenneurCaisse" style="display:none;">
+	<div id="contenneur_caisse" style="display:none;">
 		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post">
 			<input type="submit">
 			<div id="enTete">Client <span id="dateSpan">{{ "now"|date("d/m/Y") }}</span></div>
@@ -27,6 +27,7 @@ Votre caisse
 					<th>Quantité</th>
 					<th>Prix unitaire</th>
 					<th>Promotion</th>
+					<th>Total</th>
 				</tr>
 				<tr style="display:none">
 					<td><i class="fa fa-minus-square supprimer"></i></td>
@@ -42,13 +43,16 @@ Votre caisse
 					<td class="tdPromo">
 						<input type="number" name="promo_0" min="0" max="100" value="0" class="promo">%
 					</td>
+					<td class="tdTotal">
+						0
+					</td>
 				</tr>
 			</table>
 		</form>
 		<h2>TOTAL À PAYER : <span id="prixTotal">0.0</span></h2>
 	</div>
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
-	<div id="messageAccueil">
+	<div id="message_accueil">
 		<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
 	</div>
 </fieldset>
@@ -58,6 +62,33 @@ Votre caisse
 <script>
 var tableau = $('#tableauCaisse'); //< Le tableau représentant les éléments scanné à la caisse
 var nbCodeBarre = 0; //< Le nombre d'article scanné. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
+
+/**
+ * Permet d'effacer une ligne d'inventaire en cas d'erreur de l'utilisateur.
+ * Cette fonction est appéelé lorsque l'on clic sur le bouton moins.
+ */
+function supprimerLigne () {
+	$(this).parent().parent().remove();
+	if (tableau.children("tbody").children("tr").length == 2) {
+		$("#contenneur_caisse").hide();
+		$("#message_accueil").show();
+	}
+}
+
+$('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
+
+/**
+ * Fonction permettant de calculer le prix total d'une ligne.
+ */
+function calculerPrixLigne(ligne) {
+	var prix = ligne.children('td').children('.prix').val();
+	var promo = ligne.children('td').children('.promo').val();
+	var quantite = ligne.children('td').children('.quantite').val();
+
+	prixTotal = ((prix - (prix*promo/100))*quantite); // Calcul du prix total
+
+	ligne.children('.tdTotal').html(""+prixTotal.toFixed(2));
+}
 
 /**
  * Fonction permettant de calculer le prix total à partir des prix unitaires, 
@@ -74,11 +105,14 @@ function calculerPrixTotal() {
 		var prix = $(this).children('td').children('.prix').val();
 		var promo = $(this).children('td').children('.promo').val();
 		var quantite = $(this).children('td').children('.quantite').val();
+		var prixLigne = ((prix - (prix*promo/100))*quantite); // Calcul du prix de la ligne
 
-		prixTotal+=((prix - (prix*promo/100))*quantite); // Calcul du prix total
+		$(this).children('.tdTotal').html(''+prixLigne.toFixed(2));
+
+		prixTotal+=prixLigne; // Calcul du prix total
 	});
 
-	$("#prixTotal").html(prixTotal+" €");
+	$("#prixTotal").html(prixTotal.toFixed(2)+" €");
 }
 
 /**
@@ -104,11 +138,6 @@ $(document).keypress(function(e) {
 	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus tout autre input, il ne devrait y avoir que les trois du dessus
 	
-	if ($("#contenneurCaisse").is(":visible") == false) { // On cache le message d'accueil
-		$("#contenneurCaisse").show();
-		$("#messageAccueil").hide();
-	}
-
 	$("#inputSubmit").attr("disabled", true); // On grise le boutton submit le temps du traitement
 
 	if (input.val().length == 1) { // Si c'est le premier caractère taper on lance un timeout (pour le temps de lecture d'un code barre)
@@ -116,9 +145,19 @@ $(document).keypress(function(e) {
 			var existeDeja = false; // Permettra de savoir si on a déjà scané cet article ou non
 			var lignes = tableau.children("tbody").children("tr");
 
+			if (input.val().length < 10) {
+				input.val('');
+				return true;
+			} 
+
 			nbCodeBarre++;
 
 			var ligneCur = lignes.last(); // On récupère la ligne de tableau sur laquelle on va travailler
+
+			if ($("#contenneur_caisse").is(":visible") == false) { // On cache le message d'accueil
+				$("#contenneur_caisse").show();
+				$("#message_accueil").hide();
+			}
 
 			lignes.each(function (e) { // On regarde dans toutes les lignes pour savoir si l'article à déjà été scanné
 				if (e === lignes.length - 1) // si c'est la ligne en cours, aucun interet on arrete la boucle
@@ -155,11 +194,13 @@ $(document).keypress(function(e) {
 					   var prix = data.prix;
 					   ligneCur.children('td').children('.prix').val(prix);
 					   calculerPrixTotal(); // On recalcul le prix total, narmol
+					   calculerPrixLigne(ligneCur);
 				   },
 				   type: 'POST'
 			});
 
 			$('input').change(calculerPrixTotal);
+			$('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
 		}, 220);
 	}
 

@@ -59,26 +59,42 @@
 
     {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
 
-        <form action="{{ path('imerir_produit_validation_modification_ligne_produit') }}" method="post" id="formulaire_creation_fournisseur">
-            <div id="divNom">
-                <label for="nom">Nom ligne produit: </label>
-                <input type="hidden" name="id_lp" value="{{ lp_id_val }}">
-                <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
-                <input type="text" name="nom" value="{{ lp_nom_val }}"/>
+        <form action="{{ path('imerir_validation_modification_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
+            <table>
+                <tr><td><label for="nom">Nom : </label>
+                <input type="hidden" name="old_id" value="{{ modif_id }}">
+                <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
+                <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
                 <input type="submit" value="Modifier">
-            </div>
+                <tr><td><label for="nom">Email : </label></td>
+                <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
+                <tr><td><label for="nom">Téléphone portable : </label></td>
+                <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
+
+            </table>
         </form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_validation_modification_fournisseur' %}
-        <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_fournisseur">
-            <div id="divNom">
-                <label for="nom">Nom ligne produit: </label>
-                <input type="text" name="nom"/>
-                <input type="submit" value="Ajouter">
-            </div>
+        <form action="{{ path('imerir_modification_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
+            <table>
+                <tr>
+                    <td><label for="nom">Nom fournisseur </label></td>
+                    <td><input type="text" name="nom"/></td>
+                    <input type="submit" value="Ajouter">
+                </tr>
+                <tr>
+                    <td><label for="email">Email </label></td>
+                    <td><input type="text" name="email"/></td>
+                </tr>
+                <tr>
+                    <td><label for="telephone_portable">Telephone portable </label></td>
+                    <td><input type="text" name="telephone_portable"/></td>
+                </tr>
+            </table>
         </form>
-        <p class="validation_message">La ligne produit "{{ old_nom_lp }}" a bien été modifiée en "{{ nom_lp_add }}"</p>
+        <p class="validation_message">Le fournisseur "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
+            email "{{ new_email }}" et pour téléphone portable {{ new_telephone_portable }}</p>
     {% endif %}
 
 {% endblock %}

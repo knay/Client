@@ -64,6 +64,7 @@ class InventaireDevController extends Controller
     	// On va parser la request pour former un tableau avec les articles de l'inventaire propre
     	foreach ($req as $key => $value) {
     		$clef = explode('_', $key);
+    		$tabArticle[intval($clef[1])]['attributs'] = array();
     		if ($clef[0] === 'produit') { // Si c'est le nom du produit concerné
     			$tabArticle[intval($clef[1])]['produit'] = $value;
     		}
@@ -78,7 +79,7 @@ class InventaireDevController extends Controller
     			$tabArticle[intval($clef[1])]['attributs'][$attributs[0]] = $attributs[1];
     		}
     		else if ($clef[0] === 'prix') { // Si c'est une valeur d'attribut
-    			$tabArticle[intval($clef[1])]['prix'] = intval($value);
+    			$tabArticle[intval($clef[1])]['prix'] = floatval($value);
     		}
     	}
     	 

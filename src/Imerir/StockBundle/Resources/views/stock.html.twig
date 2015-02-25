@@ -1,0 +1,50 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block title_page %}
+STOCK
+{% endblock %}
+
+{% block title %}
+ALBA - Stock
+{% endblock %}
+
+{% block recherche %}
+    <form>
+        <select>
+            <option></option>
+            {% for i in result_stock %}
+                <option>{{ i.ligne_produit }}</option>
+            {% endfor %}
+        </select>
+        <select>
+            <option></option>
+            {% for i in result_stock %}
+                <option>{{ i.produit }}</option>
+            {% endfor %}
+        </select>
+        <select>
+            <option></option>
+            {% for i in result_stock %}
+                <option>{{ i.article }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit">
+    </form>
+{% endblock %}
+
+{% block table %}
+    <tr>
+    	<th>Nom ligne produit</th>
+    	<th>Nom produit</th>
+    	<th>Nom article</th>
+    	<th>Quantite</th>
+    </tr>
+    {% for i in result_stock %}
+     	<tr>
+     		<td>{{ i.ligne_produit }}</td>
+            <td>{{ i.produit }}</td>
+            <td>{{ i.article }}</td>
+            <td>{{ i.quantite }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}

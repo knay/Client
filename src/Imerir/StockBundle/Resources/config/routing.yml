@@ -21,3 +21,7 @@ imerir_ajax_inventaire_get_attribut:
 imerir_ajax_inventaire_get_article_from_code_barre:
     path:     /ajax/inventaireGetArticleFromCodeBarre
     defaults: { _controller: ImerirStockBundle:AjaxInventaire:getArticleFromCodeBarre }   
+    
+imerir_stock:
+    path:     /stock
+    defaults: { _controller: ImerirStockBundle:Stock:getStock}

@@ -1,4 +1,4 @@
-{% extends "::baseAffichage.html.twig" %}
+{% extends "::base.html.twig" %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
@@ -16,33 +16,36 @@ Votre caisse
 <fieldset id="fieldset_ajout">
 	<legend id="titre_fieldset" >VOTRE CAISSE</legend>
 	<div id="contenneurCaisse" style="display:none;">
-		<div id="enTete">Client <span id="dateSpan">{{ "now"|date("d/m/Y") }}</span></div>
-		<h2>LISTE DES ARTICLES</h2>
-		<table id="tableau_caisse">
-			<tr>
-				<th></th>
-				<th>Code article</th>
-				<th>Quantité</th>
-				<th>Prix unitaire</th>
-				<th>Promotion</th>
-			</tr>
-			<tr style="display:none">
-				<td><i class="fa fa-minus-square supprimer"></i></td>
-				<td class="tdCodeBarre">
-					<input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly">
-				</td>
-				<td class="tdQuantite">
-					x<input type="number" name="quantite_0" min="1" value="1" class="quantite">
-				</td>
-				<td class="tdPrix">
-					<input type="number" name="prix_0" min="0" value="0" class="prix" step="any">€
-				</td>
-				<td class="tdPromo">
-					<input type="number" name="promo_0" min="0" max="100" value="0" class="promo">%
-				</td>
-			</tr>
-		</table>
-		<h2>TOTAL À PAYER : <span id="prixTotal">200.0</span></h2>
+		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post">
+			<input type="submit">
+			<div id="enTete">Client <span id="dateSpan">{{ "now"|date("d/m/Y") }}</span></div>
+			<h2>LISTE DES ARTICLES</h2>
+			<table id="tableauCaisse">
+				<tr>
+					<th></th>
+					<th>Code article</th>
+					<th>Quantité</th>
+					<th>Prix unitaire</th>
+					<th>Promotion</th>
+				</tr>
+				<tr style="display:none">
+					<td><i class="fa fa-minus-square supprimer"></i></td>
+					<td class="tdCodeBarre">
+						<input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly">
+					</td>
+					<td class="tdQuantite">
+						x<input type="number" name="quantite_0" min="1" value="1" class="quantite">
+					</td>
+					<td class="tdPrix">
+						<input type="number" name="prix_0" min="0" value="0" class="prix" step="any">€
+					</td>
+					<td class="tdPromo">
+						<input type="number" name="promo_0" min="0" max="100" value="0" class="promo">%
+					</td>
+				</tr>
+			</table>
+		</form>
+		<h2>TOTAL À PAYER : <span id="prixTotal">0.0</span></h2>
 	</div>
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 	<div id="messageAccueil">

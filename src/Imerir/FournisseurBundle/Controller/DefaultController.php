@@ -52,23 +52,40 @@ class DefaultController extends Controller
         $recherche_fournisseur_email = $query->request->get('recherche_fournisseur_email');
         $recherche_fournisseur_telephone_portable = $query->request->get('recherche_fournisseur_telephone_portable');
 
+        $fournisseur_nom = $query->request->get('nom');
+        $fournisseur_email = $query->request->get('email');
+        $fournisseur_telephone_portable = $query->request->get('telephone_portable');
+
+        if($fournisseur_nom===null)
+            $fournisseur_nom='';
+
+        if($fournisseur_email===null)
+            $fournisseur_email='';
+
+        if($fournisseur_telephone_portable===null)
+            $fournisseur_telephone_portable===null;
 
         if($recherche_fournisseur_nom===null)
             $nom='';
         else
             $nom=$recherche_fournisseur_nom;
+
         if($recherche_fournisseur_email===null)
             $email='';
         else
             $email=$recherche_fournisseur_email;
+
         if($recherche_fournisseur_telephone_portable===null)
             $telephone_portable = '';
         else
             $telephone_portable = $recherche_fournisseur_telephone_portable;
 
+        $soap->call('ajoutFournisseur',array('nom' => $fournisseur_nom, 'email'=>$fournisseur_email, 'telephone_portable'=>$fournisseur_telephone_portable));
+
         //TODO ajouter l'action getFournisseurs qui renvoie le nom, le mail et le num de tel
         $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => $nom, 'email'=>$email, 'telephone_portable'=>$telephone_portable));
         $liste_fournisseurs = json_decode($return);
+        //insertion du fournisseur
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());

@@ -4,8 +4,8 @@ imerir_noyau_homepage:
     
 imerir_noyau_caisse:
     path:     /
-    defaults: { _controller: ImerirNoyauBundle:Caisse:Caisse }
-    
+    defaults: { _controller: ImerirNoyauBundle:Caisse:caisse }
+
 imerir_noyau_ajax_getPrixFromCodeBarre_caisse:
     path:     /ajax/getPrixFromCodeBarre
     defaults: { _controller: ImerirNoyauBundle:AjaxCaisse:getPrixFromCodeBarre }
@@ -13,3 +13,7 @@ imerir_noyau_ajax_getPrixFromCodeBarre_caisse:
 imerir_noyau_check:
     path:     /check_login/
     defaults: { _controller: ImerirNoyauBundle:Default:checkLogin }
+    
+imerir_noyau_caisse_save:
+    path:     /enregistreAchat
+    defaults: { _controller: ImerirNoyauBundle:Caisse:saveCaisse }

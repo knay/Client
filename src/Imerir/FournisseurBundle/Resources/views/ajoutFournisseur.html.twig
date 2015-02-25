@@ -3,6 +3,11 @@
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>
 {% endblock %}
+
+{% block title_page %}
+    Fournisseurs
+{% endblock %}
+
 {% block title_ajout %}
     {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
         MODIFICATION
@@ -13,31 +18,43 @@
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_creation_fournisseur' %}
         <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
-            <div id="divNom">
-                <label for="nom">Nom fournisseur </label>
-                <input type="text" name="nom"/>
+            <table>
+            <tr>
+                <td><label for="nom">Nom fournisseur </label></td>
+                <td><input type="text" name="nom"/></td>
                 <input type="submit" value="Ajouter">
-            </div>
-            <div id="divEmail">
-                <label for="email">Email </label>
-                <input type="text" name="email"/>
-            </div>
-            <div id="divTelephonePortable">
-                <label for="telephone_portable">Telephone portable </label>
-                <input type="text" name="telephone_portable"/>
-            </div>
+            </tr>
+            <tr>
+                <td><label for="email">Email </label></td>
+                <td><input type="text" name="email"/></td>
+            </tr>
+            <tr>
+                <td><label for="telephone_portable">Telephone portable </label></td>
+                <td><input type="text" name="telephone_portable"/></td>
+            </tr>
+            </table>
         </form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_validation_creation_fournisseur' %}
-        <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_fournisseur">
-            <div id="divNom">
-                <label for="nom">Nom ligne produit: </label>
-                <input type="text" name="nom"/>
-                <input type="submit" value="Ajouter">
-            </div>
+        <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
+            <table>
+                <tr>
+                    <td><label for="nom">Nom fournisseur </label></td>
+                    <td><input type="text" name="nom"/></td>
+                    <input type="submit" value="Ajouter">
+                </tr>
+                <tr>
+                    <td><label for="email">Email </label></td>
+                    <td><input type="text" name="email"/></td>
+                </tr>
+                <tr>
+                    <td><label for="telephone_portable">Telephone portable </label></td>
+                    <td><input type="text" name="telephone_portable"/></td>
+                </tr>
+            </table>
         </form>
-        <p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajoutée</p>
+        <p class="validation_message">Le fournisseur a bien été ajouté</p>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
@@ -73,7 +90,7 @@
         <label for="recherche__fournisseur_email">Email fournisseur :</label>
         <input type="text" name="recherche_fournisseur_email">
         <label for="recherche_telephone_portable">Téléphone portable :</label>
-        <input type="text" name="recherche_telephone_portable">
+        <input type="text" name="recherche_fournisseur_telephone_portable">
         <input type="submit">
 
     </form>
@@ -90,7 +107,8 @@
                     <input type="hidden" name="email_f" value="{{ i.email }}">
                     <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
                 </form>
-            </td></tr>
+            </td>
+        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td></tr>
     {% endfor %}
 {% endblock %}
 

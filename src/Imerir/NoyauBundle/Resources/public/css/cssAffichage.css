@@ -38,7 +38,7 @@ table {
 	background: RGB(220,220,220);
 	border-radius: 5px;
 	heigth: auto;
-	padding: 1%;
+	padding: 0.5%;
 	margin: 2%;
 }
 
@@ -48,24 +48,33 @@ table th {
 	color: RGB(249,249,249);
 	padding-left: auto;
 	padding-right: auto;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	/*font-family: arial;*/
 /* 	border: 1px solid red; */
 }
 
 table td {
 	border-radius: 2px;
-	background-color: RGB(249,249,249);
 	width: auto;
 	height: auto;
 /* 	padding-left: 1%; */
 /* 	border: 1px solid green; */
 }
 
-table tr {
+table tr:nth-child(even) {
 	cursor: pointer;
+	background-color: RGB(249,249,249);
+}
+
+table tr:nth-child(odd) {
+	cursor: pointer;
+	background-color: RGB(237,237,237);
 }
 
 table tr:hover {
-	color: #669900;
+	/*color: #669900;*/
+	background-color: #ddd;
 }
 
 #title_page {
@@ -85,8 +94,7 @@ input[type="submit"] {
 /* 	float: right; */
 	display: inline;
 	margin-right: 0px;
-	margin-left: auto;
-	width: 100px;
+	min-width: 100px;
 	height: 29px;
 	font-size: 11pt;
 	border: 1px solid #0088BB;
@@ -103,7 +111,6 @@ input[type="submit"]:hover {
 
 .ajout {
 	color: green;
-	float: right;
 	cursor: pointer;
 	margin-top: 4px;
 }

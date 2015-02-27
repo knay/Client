@@ -28,8 +28,8 @@ class AttributController extends Controller
     	if (null === $nomRech)
     		$nomRech = '';
     	
-    	$args = array('nom' => $nomRech, 'idLigneProduit' => 0, 'idAttribut' => 0, 'avecValeurAttribut' => false, 'avecLigneProduit' => false);
-    	$ret = $soap->call('getAttribut', $args); // On récupère tous les attributs depuis le SOAP (juste les attributs, sans leurs valeurs, pour affichage en bas d'écran)
+    	$args = array('nom' => $nomRech, 'idLigneProduit' => 0, 'idAttribut' => 0, 'avecValeurAttribut' => true, 'avecLigneProduit' => false);
+    	$ret = $soap->call('getAttribut', $args); // On récupère tous les attributs depuis le SOAP (juste les attributs, avec leurs valeurs, pour affichage en bas d'écran)
     	$jsonValeurAttribut = json_decode($ret);
     	
     	$id = $this->getRequest()->request->get('id');
@@ -90,7 +90,7 @@ class AttributController extends Controller
 		$args = array('nom' => $nom, 'lignesProduits' => json_encode($ligneProduit), 'attributs' => json_encode($attributs), 'id' => $id);
 		$ret = $soap->call('setAttribut', $args); // On modif/ajoute l'attribut sur le serveur SOAP
 		
-		$args = array('nom' => '', 'idLigneProduit' => 0, 'idAttribut' => 0, 'avecValeurAttribut' => false, 'avecLigneProduit' => false);
+		$args = array('nom' => '', 'idLigneProduit' => 0, 'idAttribut' => 0, 'avecValeurAttribut' => true, 'avecLigneProduit' => false);
 		$ret = $soap->call('getAttribut', $args); // On récup les attributs pour affichage en bas (juste le nom pas les valeurs)
 		$jsonValeurAttribut = json_decode($ret);
 		

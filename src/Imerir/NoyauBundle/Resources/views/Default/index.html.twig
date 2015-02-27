@@ -17,7 +17,6 @@ ALBA - Votre caisse
 	<legend id="titre_fieldset" >VOTRE CAISSE</legend>
 	<div id="contenneur_caisse" style="display:none;">
 		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post">
-			<input type="submit">
 			<div id="enTete">Client <span id="dateSpan">{{ "now"|date("d/m/Y") }}</span></div>
 			<h2>LISTE DES ARTICLES</h2>
 			<table id="tableauCaisse">
@@ -32,24 +31,23 @@ ALBA - Votre caisse
 				<tr style="display:none">
 					<td><i class="fa fa-minus-square supprimer"></i></td>
 					<td class="tdCodeBarre">
-						<input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly">
+						<input type="text" name="code_0" class="code_barre">
 					</td>
 					<td class="tdQuantite">
-						x<input type="number" name="quantite_0" min="1" value="1" class="quantite">
+						<input type="number" name="quantite_0" min="1" value="1" class="quantite">
 					</td>
 					<td class="tdPrix">
-						<input type="number" name="prix_0" min="0" value="0" class="prix" step="any">€
 					</td>
 					<td class="tdPromo">
 						<input type="number" name="promo_0" min="0" max="100" value="0" class="promo">%
 					</td>
 					<td class="tdTotal">
-						0
+						0 €
 					</td>
 				</tr>
 			</table>
+			<h2>TOTAL À PAYER : <input type="submit" value="Valider la facture"><span id="prixTotal">0.0 €</span></h2>
 		</form>
-		<h2>TOTAL À PAYER : <span id="prixTotal">0.0</span></h2>
 	</div>
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 	<div id="message_accueil">
@@ -81,13 +79,13 @@ $('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la f
  * Fonction permettant de calculer le prix total d'une ligne.
  */
 function calculerPrixLigne(ligne) {
-	var prix = ligne.children('td').children('.prix').val();
+	var prix = ligne.children('.tdPrix').html();
 	var promo = ligne.children('td').children('.promo').val();
 	var quantite = ligne.children('td').children('.quantite').val();
 
 	prixTotal = ((prix - (prix*promo/100))*quantite); // Calcul du prix total
 
-	ligne.children('.tdTotal').html(""+prixTotal.toFixed(2));
+	ligne.children('.tdTotal').html(""+prixTotal.toFixed(2)+" €");
 }
 
 /**
@@ -102,12 +100,12 @@ function calculerPrixTotal() {
 		if (e == 0) // Si c'est la première ligne on en tien pas compte (c'est le header du tableau)
 			return;
 
-		var prix = $(this).children('td').children('.prix').val();
+		var prix = $(this).children('.tdPrix').html();
 		var promo = $(this).children('td').children('.promo').val();
 		var quantite = $(this).children('td').children('.quantite').val();
 		var prixLigne = ((prix - (prix*promo/100))*quantite); // Calcul du prix de la ligne
 
-		$(this).children('.tdTotal').html(''+prixLigne.toFixed(2));
+		$(this).children('.tdTotal').html(''+prixLigne.toFixed(2)+" €");
 
 		prixTotal+=prixLigne; // Calcul du prix total
 	});
@@ -135,7 +133,7 @@ $(document).keypress(function(e) {
 	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
 		return true;
 	
-	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
+	var input = $(".code_barre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus tout autre input, il ne devrait y avoir que les trois du dessus
 	
 	$("#inputSubmit").attr("disabled", true); // On grise le boutton submit le temps du traitement
@@ -146,7 +144,7 @@ $(document).keypress(function(e) {
 			var lignes = tableau.children("tbody").children("tr");
 
 			if (input.val().length < 10) {
-				input.val('');
+				input.html('');
 				return true;
 			} 
 
@@ -164,11 +162,11 @@ $(document).keypress(function(e) {
 					return; 
 
 				// Si c'est la même valeur de code barre c'est que l'article à déjà été scanné, on incrémente la quantité
-				if ($(this).children('td').children(".valeurCodeBarre").val() == ligneCur.children('td').children(".valeurCodeBarre").val()) {
+				if ($(this).find(".code_barre").val() == ligneCur.find('.code_barre').val()) {
 					existeDeja = true;
 					var qt = parseInt($(this).children('td').children(".quantite").val())+1;
 					$(this).children('td').children(".quantite").val(""+qt);
-					ligneCur.children('td').children(".valeurCodeBarre").val('');
+					ligneCur.find(".code_barre").val('');
 				}
 			});
 			
@@ -177,8 +175,9 @@ $(document).keypress(function(e) {
 				var cellule = ligne.children('td');
 				cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
 				cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
-				cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
-				cellule.children(".valeurCodeBarre").val(''); // C'est un nouveau produit, plus de code barre
+				cellule.children(".promo").attr('name', 'promo_'+nbCodeBarre);
+				cellule.find(".code_barre").attr('name', 'code_'+nbCodeBarre);
+				ligne.find(".code_barre").val(''); // C'est un nouveau produit, plus de code barre
 
 				ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
 				ligneCur.show(); // On affiche l'article qu'on vient de scanner
@@ -188,11 +187,11 @@ $(document).keypress(function(e) {
 			$.ajax({
 				   url: '{{ path('imerir_noyau_ajax_getPrixFromCodeBarre_caisse') }}',
 				   data: {
-				      codeBarre: ligneCur.children('td').children(".valeurCodeBarre").val()
+				      codeBarre: ligneCur.find('.code_barre').val()
 				   },
 				   success: function(data) {
 					   var prix = data.prix;
-					   ligneCur.children('td').children('.prix').val(prix);
+					   ligneCur.children('.tdPrix').html(prix);
 					   calculerPrixTotal(); // On recalcul le prix total, narmol
 					   calculerPrixLigne(ligneCur);
 				   },

@@ -17,17 +17,20 @@
 #lst_ligne_produit {
 	display: inline-block;
 	width: 30%;
-	vertical-align:top;
+	margin-left: 50px;
+	vertical-align: top;
+	margin-top: 5px;
 }
 
 #lst_ligne_produit table {
 	width: 100%;
+	vertical-align: top;
 }
 
 #lst_attribut {
 	display: inline-block;
 	width: 50%;
-	vertical-align:top;
+	vertical-align: top;
 }
 
 #lst_attribut table {
@@ -41,6 +44,14 @@ select {
 }
 
 #lst_attribut input[type="text"] {
-	width: 100%;
+	width: 90%;
 	heigth: 25px;
+}
+
+#lst_attribut table td:first-child {
+	text-align: center;
+}
+
+#lst_ligne_produit table td:first-child {
+	text-align: center;
 }

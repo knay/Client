@@ -20,7 +20,7 @@
     		<div id="identifiant">
     			<i class="fa fa-user" ></i>
 	    		<p id="nom_utilisateur">{{ app.security.getToken().getUser() }}-{{ app.security.getToken().getRoles().0.role }}</p>
-	    		<a href="{{ path('fos_user_security_logout') }}" <i class="fa fa-sign-out"></i></a>
+	    		<a href="{{ path('fos_user_security_logout') }}" <i class="fa fa-sign-out" title="Se déconnecter"></i></a>
     		</div>
     	</div>
     

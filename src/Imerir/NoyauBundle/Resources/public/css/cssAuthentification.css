@@ -106,3 +106,11 @@ button:hover {
 	font: bold 11px Arial;
 	color: white;
 }
+
+#erreur {
+	padding: 3px 10px;
+	border: 1px solid #d40000;
+	border-radius: 5px;
+	background-color: #fd9696;
+	margin-bottom: 10px; 
+}

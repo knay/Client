@@ -190,3 +190,11 @@ h1 {
 #menu li a {
 	text-decoration: none;
 }
+
+#erreur {
+	padding: 3px 10px;
+	border: 1px solid #d40000;
+	border-radius: 5px;
+	background-color: #fd9696;
+	margin-bottom: 10px; 
+}

@@ -44,7 +44,13 @@ class SoapService
     	if (isset($token))
     		$this->client->__setCookie('PHPSESSID', $token);
     	
-    	return $this->client->__soapCall($methode, $args);
+    	try {
+    		$tab = $this->client->__soapCall($methode, $args);
+    		return $tab;
+    	}
+    	catch(\SoapFault $e) { // En cas d'erreur
+    		throw $e;
+    	}
     }
     
     /**
@@ -61,8 +67,8 @@ class SoapService
     		// On demande à se logger
     		$result = $this->client->__soapCall('login', array('username' => $usr, 'passwd' => $passwd));
     		$result_json = json_decode($result, true);
-    	} catch (Exception $e) {
-    		//TODO gérer ça 
+    	} catch (\SoapFault $e) {
+    		throw $e;
     	}
     	
     	$result_json = json_decode($result, true);

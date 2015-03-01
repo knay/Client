@@ -1,17 +1,18 @@
 html {
 	height: 100%;
-	background-color: #FAFAFA;
 }
 
 body {
 	margin: 0;
  	padding: 0;
 	height: 100%;
+	font-family: arial;
+	background-color: rgb(230,230,230);
 }
 
 h1 {
 	margin-left: 2rem;
-	color: #0099CC;
+	color: white;
 	font-size: x-large;
 }
 
@@ -23,12 +24,17 @@ h1 {
 	padding-left: 10px;
 }
 
-#header {
-	height: 7%;
+#header {	
+	color: white;
+	height: 50px;
 	display: flex;
-	display: -webkit-flex; /* Safari */
-	border-bottom: 2px solid #585858;
-	background-color: #E6E6E6;
+	display: -webkit-flex;
+	-moz-box-shadow: inset 0px -10px 25px -10px RGB(120,120,120);
+	-webkit-box-shadow: inset 0px -10px 25px -10px RGB(120,120,120);
+	-o-box-shadow: inset 0px -10px 25px -10px RGB(120,120,120);
+	box-shadow: inset 0px -10px 25px -10px RGB(120,120,120);
+/* 	border-bottom: 2px solid white; */
+	background-color: RGB(50,50,50);
 }
 
 input, textarea {
@@ -37,9 +43,16 @@ input, textarea {
 }
 
 h2 {
-	margin-left: 20%;
+	/*margin-left: 20%;*/
+	text-align: center;
 	color: #585858;
 	margin-top: 5%;
+	vertical-align: middle;
+}
+
+h2 i {
+	vertical-align: middle;
+	padding-right: 10px;
 }
 
 input {
@@ -49,14 +62,13 @@ input {
 
 label {
     display: inline-block;
-    width: 100px;
+    width: 120px;
     margin-right: 2rem;
     text-align: right;
     color: #585858;
 }
 
 #contenu {
-	height: 100%;
     background-size: 100%;
     background-repeat: no-repeat;
 }
@@ -64,7 +76,7 @@ label {
 #formulaire_authentification {
 	width: 30%;
 	padding: 4rem;
-	background-color: #F2F2F2;
+	background-color: rgb(249,249,249);
 	border-radius: 10px;
 	border: 1px solid #585858;
 	margin: 0 auto;

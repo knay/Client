@@ -12,6 +12,10 @@ Votre caisse
 ALBA - Votre caisse
 {% endblock %}
 
+{% block caisseBlock %}
+menuSelected
+{% endblock %}
+
 {% block affichage %}
 <fieldset id="fieldset_ajout">
 	<legend id="titre_fieldset" >VOTRE CAISSE</legend>
@@ -19,6 +23,10 @@ ALBA - Votre caisse
 		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post">
 			<div id="enTete">Client <span id="dateSpan">{{ "now"|date("d/m/Y") }}</span></div>
 			<h2>LISTE DES ARTICLES</h2>
+			<div id="chargement_caisse" >
+				&nbsp;
+				<span style="display: none;"><i class="fa fa-pulse fa-spinner"></i>Chargement...</span>
+			</div>
 			<table id="tableauCaisse">
 				<tr>
 					<th></th>
@@ -156,6 +164,8 @@ $(document).keypress(function(e) {
 				$("#contenneur_caisse").show();
 				$("#message_accueil").hide();
 			}
+			
+			$("#chargement_caisse").children("span").show();
 
 			lignes.each(function (e) { // On regarde dans toutes les lignes pour savoir si l'article à déjà été scanné
 				if (e === lignes.length - 1) // si c'est la ligne en cours, aucun interet on arrete la boucle
@@ -167,6 +177,9 @@ $(document).keypress(function(e) {
 					var qt = parseInt($(this).children('td').children(".quantite").val())+1;
 					$(this).children('td').children(".quantite").val(""+qt);
 					ligneCur.find(".code_barre").val('');
+					calculerPrixTotal(); // On recalcul le prix total, narmol
+					calculerPrixLigne(ligneCur);
+					$("#chargement_caisse").children("span").hide();
 				}
 			});
 			
@@ -182,21 +195,24 @@ $(document).keypress(function(e) {
 				ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
 				ligneCur.show(); // On affiche l'article qu'on vient de scanner
 				tableau.append(ligne);
-			}
+			
 
-			$.ajax({
-				   url: '{{ path('imerir_noyau_ajax_getPrixFromCodeBarre_caisse') }}',
-				   data: {
-				      codeBarre: ligneCur.find('.code_barre').val()
-				   },
-				   success: function(data) {
-					   var prix = data.prix;
-					   ligneCur.children('.tdPrix').html(prix);
-					   calculerPrixTotal(); // On recalcul le prix total, narmol
-					   calculerPrixLigne(ligneCur);
-				   },
-				   type: 'POST'
-			});
+				$.ajax({
+					   url: '{{ path('imerir_noyau_ajax_getPrixFromCodeBarre_caisse') }}',
+					   data: {
+					      codeBarre: ligneCur.find('.code_barre').val()
+					   },
+					   success: function(data) {
+						   var prix = data.prix;
+						   ligneCur.children('.tdPrix').html(prix);
+						   calculerPrixTotal(); // On recalcul le prix total, narmol
+						   calculerPrixLigne(ligneCur);
+	
+						   $("#chargement_caisse").children("span").hide();
+					   },
+					   type: 'POST'
+				});
+			}
 
 			$('input').change(calculerPrixTotal);
 			$('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression

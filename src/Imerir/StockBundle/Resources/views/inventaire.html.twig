@@ -12,6 +12,10 @@ Inventaire
 ALBA - Inventaire
 {% endblock %}
 
+{% block produitBlock %}
+menuSelected
+{% endblock %}
+
 {% block stylesheets %}
      <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
 {% endblock %}
@@ -61,6 +65,10 @@ ALBA - Inventaire
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 	<div id="message_accueil">
 		<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
+	</div>
+	
+	<div id="chargement" style="display: none;">
+		<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>
 	</div>
 </form>
 {% endblock %}
@@ -125,10 +133,9 @@ $(document).keypress(function(e) {
 				return true;
 			}
 
-			if ($("#contenneur_inventaire").is(":visible") == false) { // On cache le message d'accueil
-				$("#contenneur_inventaire").show();
-				$("#message_accueil").hide();
-			}
+			$("#chargement").show();
+			$("#contenneur_inventaire").hide();
+			$("#message_accueil").hide();
 			
 			nbCodeBarre++;
 			
@@ -230,6 +237,9 @@ function onChangeSelect() {
 				   numValAttribut++;
 			   });
 
+			   $("#contenneur_inventaire").show();
+			   $("#chargement").hide();
+			   
 			   valeurCaracteristique = null;
 			   $("#inputSubmit").attr("disabled", false);
 		   },

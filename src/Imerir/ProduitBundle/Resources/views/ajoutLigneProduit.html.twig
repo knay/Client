@@ -13,6 +13,11 @@
         AJOUT
     {% endif %}
 {% endblock %}
+
+{% block produitBlock %}
+menuSelected
+{% endblock %}
+
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_produit_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">

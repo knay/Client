@@ -30,7 +30,7 @@
 		        	{% for i in result_menu %}
 		        		{%  if i.menu == "caisse" %}
 		        			<a href="{{ path('imerir_noyau_caisse') }}" title="{{ i.menu }}">
-			        			<li id="{{ i.menu }}">
+			        			<li id="{{ i.menu }}" class="{% block caisseBlock %}{% endblock %}">
 	 						    	<i class="fa fa-calculator"></i>
 {# 	 						    	<ul id="1">#}
 {# 	 						    		{% for j in i.sous_menu %}#}
@@ -45,7 +45,7 @@
  						    </a>
 		        		{% endif %}
 		        		{%  if i.menu == "client" %}
-		        			<li id="{{ i.menu }}" title="{{ i.menu }}">
+		        			<li id="{{ i.menu }}" title="{{ i.menu }}" class="{% block clientBlock %}{% endblock %}">
 						   		<i class="fa fa-users"></i>
 						   		<ul id="2">
  						    		{% for j in i.sous_menu %}
@@ -65,7 +65,7 @@
 		        		{% endif %}
 		        		{%  if i.menu == "evenement" %}
 			        		<a href="" title="{{ i.menu }}">
-			        			<li id="{{ i.menu }}">
+			        			<li id="{{ i.menu }}" class="{% block eventBlock %}{% endblock %}">
 							    	<i class="fa fa-calendar"></i>
 {# 							    	<ul id="3">#}
 {# 	 						    		{% for j in i.sous_menu %}#}
@@ -80,7 +80,7 @@
 						    </a>
 		        		{% endif %}
 		        		{%  if i.menu == "fournisseur" %}
-		        			<li id="{{ i.menu }}" title="{{ i.menu }}">
+		        			<li id="{{ i.menu }}" title="{{ i.menu }}" class="{% block fournisseurBlock %}{% endblock %}">
 							    <i class="fa fa-truck"></i>
 							    <ul id="4">
  						    		{% for j in i.sous_menu %}
@@ -99,8 +99,8 @@
 						    </li>
 		        		{% endif %}
 		        		{%  if i.menu == "produit" %}
-		        			<li id="{{ i.menu }}" title="{{ i.menu }}">
-						    	<i class="fa fa-diamond"></i>
+		        			<li id="{{ i.menu }}" title="{{ i.menu }}" class="{% block produitBlock %}{% endblock %}">
+						    	<i class="fa fa-tags"></i>
 						    	<ul id="5">
  						    		{% for j in i.sous_menu %}
  						    			{% if j == "Attribut" %}
@@ -133,12 +133,17 @@
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}
+										{% if j == "Article" %}
+	 						    			<a href="{{ path('imerir_produit_article') }}">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
 									{% endfor %}
  						    	</ul>
 						    </li>
 		        		{% endif %}
 		        		{%  if i.menu == "vente" %}
-		        			<li id="{{ i.menu }}" title="{{ i.menu }}">
+		        			<li id="{{ i.menu }}" title="{{ i.menu }}" class="{% block venteBlock %}{% endblock %}">
 {# 						 		<i class="fa fa-credit-card"></i>#}
 						 		<i class="fa fa-money"></i>
 						 		<ul id="6">

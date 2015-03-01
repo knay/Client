@@ -1,0 +1,213 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block title_page %}
+Articles
+{% endblock %}
+
+{% block title %}
+ALBA - Article
+{% endblock %}
+
+{% block produitBlock %}
+menuSelected
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
+{% endblock %}
+
+{% block ajout %}
+<form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
+	<div id="contenneur_inventaire" style="display:none;">
+		<input type="submit" id="inputSubmit">
+		
+		<label for="code">Code barre : </label>
+		<input type="text" name="code" class="valeurCodeBarre" readonly="readonly"><br>
+		
+		<label for="produit">Produit : </label> 
+		<select name="produit" class="selectProduit">
+			{% for j in produit %}
+				<option>{{ j.p }}</option>
+			{% endfor %}
+		</select> <br>
+		
+		<label for="prix">Prix : </label>
+ 		<input type="number" name="prix" min="1" value="1" class="prix" step="any"><br>
+ 		
+ 		<label for="caract">Caractéristiques : </label>
+ 		<span class="caract"></span>
+	</div>
+	
+	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
+	<div id="message_accueil">
+		<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
+	</div>
+	
+	<div id="chargement" style="display: none;">
+		<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>
+	</div>
+</form>
+{% endblock %}
+
+{% block recherche %}
+{% endblock %}
+
+{% block table %}
+	<tr><th>Nom</th><th>Valeurs possibles</th></tr>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
+var isScanne = false;
+
+/**
+ * Fonction appelé automatique au chargement de la page.
+ * Elle permet de vider tout les champs texte qui, sinon, pourrait avoir 
+ * des trâces en cas de refresh de la page web.
+ */
+$(document).ready(function (e) {
+	$('input[type="text"]').val('');
+});
+
+/**
+ * Fonction clef du scan, permet de detecter lorsque l'on presse une touche,
+ * la douchette agissant comme un clavier, cette methode est appelé lors d'un 
+ * scan de produit.
+ *
+ * TODO : permettre d'écrire dans un champ type int.... la base quoi..
+ * TODO : s'inspiré de la caisse pour faire un truc plus propre au niveau de l'affichage d'un champs qui sera vide au depart..
+ */
+$(document).keypress(function(e) {
+	var input = $(".valeurCodeBarre"); // On récupère l'input dans lequel on va venir écrire le code barre
+	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette
+
+	$("#inputSubmit").attr("disabled", true);  // On grise le boutton submit le temps du traitement
+
+	if (isScanne === true) {
+		isScanne = false;
+		input.val('');
+	}
+
+	if (input.val().length == 1) { // Si c'est le premier caractère taper on lance un timeout (pour le temps de lecture d'un code barre)
+		setTimeout (function () {
+			if (input.val().length < 10) {
+				input.val('');
+				isScanne = false;
+				return true;
+			}
+
+			$("#chargement").show();
+			$("#message_accueil").hide();
+			$("#contenneur_inventaire").hide();
+
+			$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
+			getArticleFromSoap(); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+			getPrixFromSoap(); // On récupère le prix de l'article
+
+			isScanne = true;
+		}, 220);
+	}
+
+    input.val(input.val()+ String.fromCharCode(e.which));
+    return false;
+});
+
+
+function getPrixFromSoap() {
+	$.ajax({
+		   url: '{{ path('imerir_noyau_ajax_getPrixFromCodeBarre_caisse') }}',
+		   data: {
+		      codeBarre: $('.valeurCodeBarre').val()
+		   },
+		   success: function(data) {
+			   var prix = data.prix;
+			   $('.prix').val(prix);
+		   },
+		   type: 'POST'
+	});	
+}
+
+/**
+ * Permet de récupèrer un article complet depuis le SOAP.
+ */
+function getArticleFromSoap() {
+	var codeBarre = $(".valeurCodeBarre").val();
+
+	$("#inputSubmit").attr("disabled", true); // Le temps du traitement on grise le bouton submit
+	$.ajax({
+		   url: '{{ path('imerir_ajax_inventaire_get_article_from_code_barre') }}',
+		   data: {
+		      codeBarre: codeBarre
+		   },
+		   success: function(data) {
+			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
+			   var nomProduit = $(".selectProduit").children('option');
+			   nomProduit.each(function (e) {
+				   if ($(this).html() === objJson['nomProduit'])
+					   $(this).attr("selected", true);
+			   });
+
+			   valeurCaracteristique = objJson.attributs; // Pour problème de concurences AJAX. Pour passer une variable à la fonction 'onChangeSelect' 
+
+			   $(".selectProduit").trigger('change'); // On simule le fait que l'on veuille changer de produit pour mettre à jour les attributs
+		   },
+		   type: 'POST'
+	});
+}
+
+$('.selectProduit').change(onChangeSelect); // Lorsqu'on change de produit, il faut mettre à jour les attributs
+
+/**
+ * Permet de mettre à jour les attributs lorsque l'on change le produit.
+ */
+function onChangeSelect() {
+	var ligne = $(this).parent().parent(); // On recup le TR
+	$("#inputSubmit").attr("disabled", true); // On grise le boutton submit le temps du traitement
+	
+	$.ajax({
+		   url: '{{ path('imerir_ajax_inventaire_get_attribut') }}',
+		   data: {
+		      nom: $(this).val()
+		   },
+		   success: function(data) {
+			   var objJson = JSON.parse(data); // On parse les data puis on affiche les attributs et les valeurs atribut correctement.
+			   var span = $('.caract');
+			   var numValAttribut = 0; //< Le nombre de valeur attribut. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
+			   
+			   span.html('');
+			   
+			   objJson.forEach(function (attr) {
+				   span.append('<label for="caract_'+numValAttribut+'">'+attr.nom+' : </label> ');
+				   span.append('<select name="caract_'+numValAttribut+'"></select><br/>');
+				   var select = span.children('select').last();
+				   for (valAttr in attr.valeurs) {
+					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] === attr.valeurs[valAttr])
+					   	  select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
+					   else 
+						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
+				   }
+				   
+				   if (span.children('select').html() == '') {
+					   span.children('select').remove();
+					   span.last().html('AUCUNE CARACTÉRISTIQUE');
+				   }
+				   
+				   numValAttribut++;
+			   });
+
+			   valeurCaracteristique = null;
+			   $("#inputSubmit").attr("disabled", false);
+			   $("#contenneur_inventaire").show();
+			   $("#chargement").hide();
+		   },
+		   type: 'POST'
+	});
+}
+
+$("#inputSubmit").attr("disabled", false); // Par défaut le bouton submit et accessible
+
+
+</script>
+{% endblock %}
+

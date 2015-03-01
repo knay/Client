@@ -133,6 +133,10 @@ h1 {
 	cursor:  pointer;
 }
 
+.menuSelected {
+	background-color: #0077BB;
+}
+
 /* lorsqu'un element du menu est selectionne */
 .selected  {
 	background-color: white;

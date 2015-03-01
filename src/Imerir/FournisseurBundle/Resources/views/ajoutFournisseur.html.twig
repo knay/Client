@@ -15,6 +15,12 @@
         AJOUT
     {% endif %}
 {% endblock %}
+
+{% block fournisseurBlock %}
+menuSelected
+{% endblock %}
+
+
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_creation_fournisseur' %}
         <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">

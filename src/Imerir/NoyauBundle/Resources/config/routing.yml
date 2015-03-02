@@ -17,3 +17,7 @@ imerir_noyau_check:
 imerir_noyau_caisse_save:
     path:     /enregistreAchat
     defaults: { _controller: ImerirNoyauBundle:Caisse:saveCaisse }
+
+imerir_noyau_adresse_ajout:
+    path: /adresse/ajout
+    defaults: { _controller: ImerirNoyauBundle:Adresse:ajoutAdresse }

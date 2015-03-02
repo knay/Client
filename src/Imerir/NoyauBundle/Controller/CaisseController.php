@@ -59,7 +59,6 @@ class CaisseController extends Controller
     		}
     	}
     	
-    	print_r($tabArticle);
     	try {
     		$return_menu = $soap->call('getMenu', array()); // Récup du menu/sous-menu
     		$menu_sous_menu = json_decode($return_menu);

@@ -39,6 +39,77 @@ menuSelected
                 <td><input type="text" name="telephone_portable"/></td>
             </tr>
             </table>
+
+
+            {#champs pour l'adresse#}
+
+            <table class="tableau_adresse">
+                <tr>
+                    <th></th>
+                    <th class="titre_lst">Pays</th>
+                    <th class="titre_lst">Ville</th>
+                    <th class="titre_lst">Code postal</th>
+                    <th class="titre_lst">N° voie</th>
+                    <th class="titre_lst">Voie</th>
+                    <th class="titre_lst">N° appartement</th>
+                    <th class="titre_lst">Téléphone fixe</th>
+                </tr>
+                {#
+                {% if detail_adresse.adresse is defined %}
+                    {% for i in detail_adresse.adresse %}
+                        <tr>
+                            <td>
+                                <i class="fa fa-minus-square supprimer"></i>
+                            </td>
+                            <td>
+                                <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
+                            </td>
+                        </tr>
+                        {% set nbAdresse = nbAdresse + 1 %}
+                    {% endfor %}
+                {% endif %}
+                #}
+                <tr class="last">
+                    <td>
+                        <i class="fa fa-plus-square ajout ajouter"></i>
+                    </td>
+                    <td>
+                        {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                        <input type="text" name="pays{{ nbAdresse }}"/>
+
+                    </td>
+                    <td>
+                        {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                        <input type="text" name="ville{{ nbAdresse }}"/>
+
+                    </td>
+                    <td>
+                        {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                        <input type="text" name="code_postal{{ nbAdresse }}"/>
+
+                    </td>
+                    <td>
+                        {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                        <input type="text" name="num_voie{{ nbAdresse }}"/>
+
+                    </td>
+                    <td>
+                        {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                        <input type="text" name="voie{{ nbAdresse }}"/>
+
+                    </td>
+                    <td>
+                        {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                        <input type="text" name="num_appartement{{ nbAdresse }}"/>
+
+                    </td>
+                    <td>
+                        {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                        <input type="text" name="telephone_fixe{{ nbAdresse }}"/>
+
+                    </td>
+                </tr>
+            </table>
         </form>
     {% endif %}
 

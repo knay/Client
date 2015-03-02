@@ -29,6 +29,9 @@ class AttributController extends Controller
     	if (null === $nomRech)
     		$nomRech = '';
     	
+    	echo $nomRech;
+    	
+    	$jsonValeurAttribut = array();
     	try {
     		$args = array('nom' => $nomRech, 'idLigneProduit' => 0, 'idAttribut' => 0, 'avecValeurAttribut' => true, 'avecLigneProduit' => false);
     		$ret = $soap->call('getAttribut', $args); // On récupère tous les attributs depuis le SOAP (juste les attributs, avec leurs valeurs, pour affichage en bas d'écran)
@@ -39,11 +42,17 @@ class AttributController extends Controller
     	}
     	
     	$id = $this->getRequest()->request->get('id');
+    	$jsonValeurAttributAll = array();
     	if ($id !== null) { // Si on accéde au détail d'un attribut, on vas chercher toutes ces info
-	    	$args = array('nom' => '', 'idLigneProduit' => 0, 'idAttribut' => (int)$id, 'avecValeurAttribut' => true, 'avecLigneProduit' => true);
-	    	$ret = $soap->call('getAttribut', $args); // On récup toutes les infos de l'attributs depuis le SOAP
+    		try {
+	    		$args = array('nom' => '', 'idLigneProduit' => 0, 'idAttribut' => (int)$id, 'avecValeurAttribut' => true, 'avecLigneProduit' => true);
+	    		$ret = $soap->call('getAttribut', $args); // On récup toutes les infos de l'attributs depuis le SOAP
+	    		$jsonValeurAttributAll = json_decode($ret);
+	   		}
+	    	catch(\SoapFault $e) {
+	    		$erreur.=$e->getMessage();
+	    	}
     	}
-    	$jsonValeurAttributAll = json_decode($ret);
     	
     	try {
     		$args = array('count' => 0, 'offset' => 0, 'nom' => '');

@@ -23,15 +23,22 @@ class ArticleController extends Controller
     public function modifArticleAction()
     {
     	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
+    	$erreur = ''; // En cas d'erreur
     	
     	// On récupère tous les produits pour les afficher dans un <select>
     	$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
     	$produitsRetour = json_decode($return_produits);
     	
-    	$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu);
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+   		}
     	
         return $this->render('ImerirProduitBundle::article.html.twig', array('produit' => $produitsRetour, 
-        		                                                             'result_menu' => $menu_sous_menu));
+        		                                                             'result_menu' => $menu_sous_menu,
+        		                                                             'erreur' => $erreur));
     }
 }

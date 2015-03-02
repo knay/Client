@@ -1,7 +1,7 @@
 imerir_stock_inventaire:
     path:     /inventaire
     defaults: { _controller: ImerirStockBundle:Inventaire:index }
-    
+   
 imerir_stock_inventaire_save:
     path:     /inventaire/save
     defaults: { _controller: ImerirStockBundle:Inventaire:save }
@@ -25,3 +25,7 @@ imerir_ajax_inventaire_get_article_from_code_barre:
 imerir_stock:
     path:     /stock
     defaults: { _controller: ImerirStockBundle:Stock:getStock}
+    
+imerir_ajax_stock_get_produit:
+    path:     /ajax/stockGetProduit
+    defaults: { _controller: ImerirStockBundle:Stock:getProduitFromLigneProduit}

@@ -40,6 +40,76 @@ menuSelected
             </tr>
             </table>
         </form>
+
+        {#champs pour l'adresse#}
+        <table class="tableau_adresse">
+            <tr>
+                <th></th>
+                <th class="titre_lst">Pays</th>
+                <th class="titre_lst">Ville</th>
+                <th class="titre_lst">Code postal</th>
+                <th class="titre_lst">N° voie</th>
+                <th class="titre_lst">Voie</th>
+                <th class="titre_lst">N° appartement</th>
+                <th class="titre_lst">Téléphone fixe</th>
+            </tr>
+            {#
+            {% if detail_adresse.adresse is defined %}
+                {% for i in detail_adresse.adresse %}
+                    <tr>
+                        <td>
+                            <i class="fa fa-minus-square supprimer"></i>
+                        </td>
+                        <td>
+                            <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
+                        </td>
+                    </tr>
+                    {% set nbAdresse = nbAdresse + 1 %}
+                {% endfor %}
+            {% endif %}
+            #}
+            <tr class="last">
+                <td>
+                    <i class="fa fa-plus-square ajout ajouter"></i>
+                </td>
+                <td>
+                    {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                    <input type="text" name="pays0"/>
+
+                </td>
+                <td>
+                    {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                    <input type="text" name="ville0"/>
+
+                </td>
+                <td>
+                    {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                    <input type="text" name="code_postal0"/>
+
+                </td>
+                <td>
+                    {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                    <input type="text" name="num_voie0"/>
+
+                </td>
+                <td>
+                    {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                    <input type="text" name="voie0"/>
+
+                </td>
+                <td>
+                    {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                    <input type="text" name="num_appartement0"/>
+
+                </td>
+                <td>
+                    {#<input type="text" name="adresse{{ nbAdresse }}"/>#}
+                    <input type="text" name="telephone_fixe0"/>
+
+                </td>
+            </tr>
+        </table>
+
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_validation_creation_fournisseur' %}
@@ -120,6 +190,7 @@ menuSelected
 
 {% block table %}
     <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Email</th><th>Telephone portable</th></tr>
+    {#
     {% for i in liste_fournisseurs %}
 
         <tr><td>{{ i.nom }}
@@ -132,6 +203,7 @@ menuSelected
             </td>
         <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td></tr>
     {% endfor %}
+    #}
 {% endblock %}
 
 

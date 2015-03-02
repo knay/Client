@@ -39,6 +39,46 @@ menuSelected
                 <td><input type="text" name="telephone_portable"/></td>
             </tr>
             </table>
+
+
+            {#champs pour l'adresse#}
+            <div id="lst_adresse">
+                <table class="tableau_adresse">
+                    <tr>
+                        <th></th>
+                        <th class="titre_lst">Pays</th>
+                        <th class="titre_lst">Ville</th>
+                        <th class="titre_lst">Code postal</th>
+                        <th class="titre_lst">N° voie</th>
+                        <th class="titre_lst">Voie</th>
+                        <th class="titre_lst">N° appartement</th>
+                        <th class="titre_lst">Téléphone fixe</th>
+                    </tr>
+                    {% if detail_adresse.adresse is defined %}
+                        {% for i in detail_adresse.adresse %}
+                            <tr>
+                                <td>
+                                    <i class="fa fa-minus-square supprimer"></i>
+                                </td>
+                                <td>
+                                    <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
+                                </td>
+                            </tr>
+                            {% set nbAdresse = nbAdresse + 1 %}
+                        {% endfor %}
+                    {% endif %}
+                    <tr class="last">
+                        <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+                        <td><input type="text" name="pays{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="ville{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="voie{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
+                    </tr>
+                </table>
+            </div>
         </form>
     {% endif %}
 
@@ -137,8 +177,62 @@ menuSelected
 
 {% block javascripts %}
 <script>
+    //variables
+    var numAdresse = 200;
+    ///
     $('tr').click(function () {
         $(this).children('td').children('form').submit();
     });
+
+    /**
+    * Fonction permettant de réagir lors du click sur ajouter un élément.
+    * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
+    * un élément.
+    */
+    $("#lst_adresse").find('.ajouter').click(
+            function ajoutItem() {
+                var last = $("#lst_adresse").find('tr').last();
+                var input = $(last).find('input');
+                /*
+                if ($(input).val() === "") {
+                    input.select();
+                }
+                */
+               // else {
+                $("#lst_adresse").children("table").append(
+                        '<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td>' +
+                        '<td><input type="text" name="pays'+numAdresse+'"/></td>' +
+                        '<td><input type="text" name="ville'+numAdresse+'"/></td>' +
+                        '<td><input type="text" name="code_postal'+numAdresse+'"/></td>' +
+                        '<td><input type="text" name="num_voie'+numAdresse+'"/></td>' +
+                        '<td><input type="text" name="voie'+numAdresse+'"/></td>' +
+                        '<td><input type="text" name="num_appartement'+numAdresse+'"/></td>' +
+                        '<td><input type="text" name="telephone_fixe'+numAdresse+'"/></td>' +
+                        '</tr>');
+
+                last.find("i").toggleClass("ajout");
+                last.find("i").toggleClass("supprimer");
+                last.find("i").toggleClass("fa-plus-square");
+                last.find("i").toggleClass("fa-minus-square");
+                last.find("i").toggleClass("ajouter");
+                last.toggleClass("last");
+
+                $(this).unbind('click');
+                $("#lst_adresse").find('.ajouter').click(ajoutItem);
+                $("#lst_adresse").find('.supprimer').click(supprimerItem);
+
+                numAdresse++;
+                //}
+            }
+    );
+    $('.supprimer').click(supprimerItem); // On bind le click sur le boutton moins avec la fonction de suppression de ligne
+
+    /**
+     * Cette fonction permet de supprimer une valeur d'attribut.
+     * Elle est appelée lorsque l'on clic sur le boutton moins.
+     */
+    function supprimerItem() {
+        $(this).parent().parent().remove();
+    }
 </script>
 {% endblock %}

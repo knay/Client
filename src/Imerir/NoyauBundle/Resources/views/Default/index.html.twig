@@ -75,6 +75,7 @@ var nbCodeBarre = 0; //< Le nombre d'article scanné. Utilisé pour envoyé tout
  */
 function supprimerLigne () {
 	$(this).parent().parent().remove();
+	calculerPrixTotal();
 	if (tableau.children("tbody").children("tr").length == 2) {
 		$("#contenneur_caisse").hide();
 		$("#message_accueil").show();

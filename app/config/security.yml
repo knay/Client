@@ -22,7 +22,25 @@ security:
         - { path: ^/$, role: ROLE_GERANT }
         - { path: ^/produits/attribut$, role: ROLE_GERANT }
         - { path: ^/inventaire$, role: ROLE_EMPLOYE }
-
+        - { path: ^/produits/attribut/save$, role: ROLE_GERANT }
+        - { path: ^/produits/creation$, role: ROLE_GERANT }
+        - { path: ^/produits/creation/validation$, role: ROLE_GERANT }
+        - { path: ^/produits/modification/validation$, role: ROLE_GERANT }
+        - { path: ^/ligne_produits/creation$, role: ROLE_GERANT }
+        - { path: ^/ligne_produits/creation/validation$, role: ROLE_GERANT }
+        - { path: ^/ligne_produits/modification$, role: ROLE_EMPLOYE }
+        - { path: ^/ligne_produits/modification/validation$, role: ROLE_GERANT }
+        - { path: ^/article$, role: ROLE_GERANT }
+        - { path: ^/ajax/getPrixFromCodeBarre$, role: ROLE_EMPLOYE }
+        - { path: ^/enregistreAchat$, role: ROLE_EMPLOYE }
+        - { path: ^/inventaire$, role: ROLE_EMPLOYE }
+        - { path: ^/inventaire/save$, role: ROLE_EMPLOYE }
+        - { path: ^/inventaire/dev/alba$, role: ROLE_EMPLOYE }
+        - { path: ^/inventaire/dev/alba/save$, role: ROLE_EMPLOYE }
+        - { path: ^/ajax/inventaireGetAttribut$, role: ROLE_EMPLOYE }
+        - { path: ^/ajax/inventaireGetArticleFromCodeBarre$, role: ROLE_EMPLOYE }
+        - { path: ^/stock$, role: ROLE_EMPLOYE }
+        
     role_hierarchy:
         ROLE_GERANT:       [ ROLE_GERANT, ROLE_EMPLOYE ]
         ROLE_EMPLOYE:      ROLE_EMPLOYE

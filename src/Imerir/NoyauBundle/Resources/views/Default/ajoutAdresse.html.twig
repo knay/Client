@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title_ajout %}
-    {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
+    {% if app.request.attributes.get('_route')=='imerir_modification_adresse' %}
         MODIFICATION
     {% else %}
         AJOUT
@@ -22,8 +22,8 @@ menuSelected
 
 
 {% block ajout %}
-    {% if app.request.attributes.get('_route')=='imerir_creation_fournisseur' %}
-        <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
+    {% if app.request.attributes.get('_route')=='imerir_noyau_adresse_ajout' %}
+        <form action="{{ path('imerir_noyau_adresse_ajout') }}" method="post" id="formulaire_creation_fournisseur">
             <table>
             <tr>
                 <td><label for="nom">Nom fournisseur </label></td>

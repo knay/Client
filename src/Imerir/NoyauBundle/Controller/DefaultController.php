@@ -17,13 +17,18 @@ class DefaultController extends Controller
     		$query = $this->getRequest();
     		$nom = $query->get('utilisateur');
     		$mot_de_passe = $query->get('mot_de_passe');
+    		$erreur = '';
     
     		// Récupération du service soap et demande de login
     		// TODO gérer les soapfault
     		$soap = $this->get('noyau_soap');
-    		$soap->login($nom, $mot_de_passe);
+    		try {
+    			$soap->login($nom, $mot_de_passe);
+    		} catch (\SoapFault $e) {
+    			$erreur = $e->getMessage();
+    			return $this->render('ImerirNoyauBundle:Default:authentification.html.twig', array('erreur'=>$erreur));
+    		}
     		return $this->redirect($this->generateUrl('imerir_noyau_caisse'));
-//     	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu));
     }
     
 }

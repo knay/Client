@@ -13,8 +13,9 @@
     	</div>
     	
     	<div id="contenu">
-    		<h2>Formulaire d'identification</h2>
+    		<h2><i class="fa fa-lock fa-2x"></i>Formulaire d'identification</h2>
 	        <form action="{{ path('imerir_noyau_check') }}" method="post" id="formulaire_authentification">
+	        	{% if erreur is defined %}{% if erreur != "" %}<div id="erreur">{{ erreur }}</div>{% endif %}{% endif %}
 			    <label id="ecriture">Identifiant :</label>
 				<input type="text" name="utilisateur">
 				<br>

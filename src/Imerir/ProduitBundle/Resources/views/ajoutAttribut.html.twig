@@ -11,11 +11,16 @@ Attributs
 ALBA - Attributs
 {% endblock %}
 
+{% block produitBlock %}
+menuSelected
+{% endblock %}
+
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}">
 {% endblock %}
 
 {% block ajout %}
+
 <form action="{{ path('imerir_produit_save_attributs') }}" method="post">
 	<div id="divNom">
 		<label for="nom">Nom : </label>
@@ -30,7 +35,7 @@ ALBA - Attributs
 		<input type="submit">
 	</div>
 	<div id="lst_attribut">
-		<table>
+		<table class="tableau_attribut">
 			<tr>
 				<th></th>
 				<th class="titre_lst">Liste des valeurs possibles</th>
@@ -59,7 +64,7 @@ ALBA - Attributs
 		</table>
 	</div>
 	<div id="lst_ligne_produit">
-		<table>
+		<table class="tableau_attribut">
 			<tr>
 				<th></th>
 				<th class="titre_lst">Lignes de produits concernées</th>
@@ -120,7 +125,7 @@ ALBA - Attributs
 {% endblock %}
 
 {% block table %}
-	<tr><th>Nom</th></tr>
+	<tr><th>Nom</th><th>Valeurs possibles</th></tr>
 {% for i in lst_attribut %}
 	<tr>
 		<td>
@@ -128,6 +133,15 @@ ALBA - Attributs
 				<input type="hidden" name="id" value="{{ i.id }}">
 			</form>
 			{{ i.nom }}
+		</td>
+		<td>
+			{% for j in i.attributs %}
+				{% if not loop.last %}
+					{{ j }},
+				{% else %}
+					{{ j }}
+				{% endif %}
+			{% endfor %}
 		</td>
 	</tr>
 {% endfor %}

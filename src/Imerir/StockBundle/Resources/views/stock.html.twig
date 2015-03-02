@@ -8,6 +8,10 @@ STOCK
 ALBA - Stock
 {% endblock %}
 
+{% block produitBlock %}
+menuSelected
+{% endblock %}
+
 {% block recherche %}
     <form action= {{ path('imerir_stock') }} method="get">
     	<label>Ligne Produit</label>

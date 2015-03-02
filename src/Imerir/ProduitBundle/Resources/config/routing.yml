@@ -37,3 +37,7 @@ imerir_produit_modification_ligne_produit:
 imerir_produit_validation_modification_ligne_produit:
     path:     /ligne_produits/modification/validation
     defaults: { _controller: ImerirProduitBundle:LigneProduit:execModifLigneProduit }
+    
+imerir_produit_article:
+    path:     /article
+    defaults: { _controller: ImerirProduitBundle:Article:modifArticle }

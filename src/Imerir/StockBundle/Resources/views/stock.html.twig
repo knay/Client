@@ -12,13 +12,17 @@ ALBA - Stock
 menuSelected
 {% endblock %}
 
+{% block stylesheets %}
+     <link rel="stylesheet" href="{{ asset('bundles/imerirstock/css/stock.css') }}"/> 
+{% endblock %}
+
 {% block recherche %}
     <form action= {{ path('imerir_stock') }} method="get">
     	<label>Ligne Produit</label>
         <select id="select_ligne_produit" name="nomLigneProduit">
             <option></option>
-            {% for i in result_stock %}
-                <option>{{ i.ligne_produit }}</option>
+            {% for i in result_all_ligne_produit %}
+                <option>{{ i.nom_ligne_produit }}</option>
             {% endfor %}
         </select>
         <label>Produit</label>
@@ -36,7 +40,11 @@ menuSelected
     	<th>Quantite</th>
     </tr>
     {% for i in result_stock %}
-     	<tr>
+{#     	{% if i.quantite  %}#}
+     	<tr id="#quantite_inferieur_zero">
+{#      	{% else %}#}
+{#      	<tr>#}
+{#      	{% endif %}#}
      		<td>{{ i.ligne_produit }}</td>
             <td>{{ i.produit }}</td>
             <td>{{ i.article }}</td>
@@ -63,6 +71,10 @@ menuSelected
 				   },
 			   type: 'POST'
 		});
+	});
+
+	$(document).ready(function(){
+	
 	});
 </script>
 {% endblock %}

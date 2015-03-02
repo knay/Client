@@ -30,7 +30,12 @@ class StockController extends Controller
     	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
     	$menu_sous_menu = json_decode($return_menu);
     	
-        return $this->render('ImerirStockBundle::stock.html.twig',array('result_stock' => $stock,'result_menu' => $menu_sous_menu));
+    	$return_all_ligne_produit = $soap->call('getAllLigneProduit',array());//on recupere toutes les lignes produits
+    	$all_ligne_produit = json_decode($return_all_ligne_produit);
+    	
+        return $this->render('ImerirStockBundle::stock.html.twig',array('result_stock' => $stock,
+        		'result_menu' => $menu_sous_menu,
+        		'result_all_ligne_produit'=>$all_ligne_produit));
     }
     
     /**

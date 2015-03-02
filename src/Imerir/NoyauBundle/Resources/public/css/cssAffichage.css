@@ -80,8 +80,10 @@ table tr:hover {
 #title_page {
 	text-align: center;
 	margin: 10px;
-	padding: 5px;
+	padding: 7px 10px;
 	background-color: #669900;
+	font-size: 14pt;
+	font-variant: small-caps;
 	border-radius: 5px 5px 5px 5px;
 	color: white;
 	-moz-box-shadow: inset 0px -10px 30px -10px RGB(180,180,180);

@@ -17,7 +17,7 @@ menuSelected
 {% endblock %}
 
 {% block ajout %}
-<form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
+<form action="{{ path('imerir_produit_article_save') }}" method="post">
 	<div id="contenneur_inventaire" style="display:none;">
 		<input type="submit" id="inputSubmit">
 		
@@ -79,6 +79,11 @@ $(document).ready(function (e) {
  * TODO : s'inspiré de la caisse pour faire un truc plus propre au niveau de l'affichage d'un champs qui sera vide au depart..
  */
 $(document).keypress(function(e) {
+	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
+	// n'est plus la douchette qui est maître
+	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
+		return true;
+	
 	var input = $(".valeurCodeBarre"); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette
 

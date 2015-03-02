@@ -13,25 +13,17 @@ menuSelected
 {% endblock %}
 
 {% block recherche %}
-    <form>
-        <select>
+    <form action= {{ path('imerir_stock') }} method="get">
+    	<label>Ligne Produit</label>
+        <select id="select_ligne_produit" name="nomLigneProduit">
             <option></option>
             {% for i in result_stock %}
                 <option>{{ i.ligne_produit }}</option>
             {% endfor %}
         </select>
-        <select>
-            <option></option>
-            {% for i in result_stock %}
-                <option>{{ i.produit }}</option>
-            {% endfor %}
-        </select>
-        <select>
-            <option></option>
-            {% for i in result_stock %}
-                <option>{{ i.article }}</option>
-            {% endfor %}
-        </select>
+        <label>Produit</label>
+        <select id="select_produit" name="nomProduit"></select>
+        <label>Article</label><input type="text" name="nomArticle">
         <input type="submit">
     </form>
 {% endblock %}
@@ -51,4 +43,26 @@ menuSelected
             <td>{{ i.quantite }}</td>
         </tr>
     {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+	$( "#select_ligne_produit" ).change(function() {
+		$.ajax({
+			   url: '{{ path('imerir_ajax_stock_get_produit') }}',
+			   data: { nomLigneProduit: $(this).val() },
+			   success: function(data) {
+				   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
+// 					alert(objJson);
+				   $("#select_produit").html('');
+				   $("#select_produit").html('<option></option>');
+					for(id_produit in objJson){
+// 						alert(objJson[id_produit]['produit']);
+						 $("#select_produit").html( $("#select_produit").html()+'<option>'+objJson[id_produit]['produit']+'</option>');
+					}
+				   },
+			   type: 'POST'
+		});
+	});
+</script>
 {% endblock %}

@@ -18,11 +18,18 @@ class CaisseController extends Controller
     public function caisseAction()
     {
     	$soap = $this->get('noyau_soap');
+    	$erreur = '';
     	
-    	$return_menu = $soap->call('getMenu', array()); // Récup du menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu);
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // Récup du menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
     	
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu));
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu, 
+    			                                                                'erreur' => $erreur));
     }
     
     /**
@@ -32,6 +39,7 @@ class CaisseController extends Controller
     public function saveCaisseAction() 
     {
     	$soap = $this->get('noyau_soap');
+    	$erreur = '';
     	
     	$req = $this->getRequest()->request;
     	$tabArticle = array();
@@ -51,11 +59,24 @@ class CaisseController extends Controller
     		}
     	}
     	
-    	$return_menu = $soap->call('getMenu', array()); // Récup du menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu);
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // Récup du menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
     	
-    	$return_menu = $soap->call('enregistrerAchat', array('articles' => json_encode($tabArticle))); // On enregistre l'achat au travers de SOAP 
+    	if(count($tabArticle) !== 0) {
+	    	try {
+	    		$return_menu = $soap->call('enregistrerAchat', array('articles' => json_encode($tabArticle))); // On enregistre l'achat au travers de SOAP
+	    	}
+	    	catch(\SoapFault $e) {
+	    		$erreur.=$e->getMessage();
+	    	} 
+    	}
     	
-    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu));
+    	return $this->render('ImerirNoyauBundle:Default:index.html.twig', array('result_menu' => $menu_sous_menu, 
+    			                                                                'erreur' => $erreur));
     }
 }

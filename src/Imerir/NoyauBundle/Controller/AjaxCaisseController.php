@@ -20,9 +20,13 @@ class AjaxCaisseController extends Controller
     	$codeBarre = $this->getRequest()->request->get('codeBarre'); // On récup le nom passsé en POST
     	if (null === $codeBarre)
     		$codeBarre = '';
-    	 
-    	$soap = $this->get('noyau_soap'); // Récup module soap
-    	$prix = $soap->call('getPrixFromCodeBarre', array('codeBarre' => $codeBarre));
+    	
+    	try {
+    		$soap = $this->get('noyau_soap'); // Récup module soap
+    		$prix = $soap->call('getPrixFromCodeBarre', array('codeBarre' => $codeBarre));
+    	} catch(\SoapFault $e) {
+    		return new JsonResponse(array('erreur' => $e->getMessage())); // Une réponse JSON
+    	}
     	 
     	return new JsonResponse(array('prix' => $prix)); // Une réponse JSON
     }

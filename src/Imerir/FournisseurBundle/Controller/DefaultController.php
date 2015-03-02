@@ -98,6 +98,7 @@ class DefaultController extends Controller
                 array_push($adresse_telephone_fixe, $value);
             }
         }
+        print_r($adresse_pays);
         //PARTIE OU ON RECUPERE LA REF DU FOURNISSEUR
         $retour_ref_fournisseur = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => $fournisseur_nom,
             'email'=>$fournisseur_email, 'telephone_portable'=>$fournisseur_telephone_portable));

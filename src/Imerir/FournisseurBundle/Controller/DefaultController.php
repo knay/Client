@@ -172,6 +172,7 @@ class DefaultController extends Controller
         $new_telephone_portable = $query->request->get('new_telephone_portable');
 
         ////////////////////PARTIE ADRESSES///////////////
+        $modif_adresse_est_visible = array();
         $modif_adresse_id = array();
         $modif_adresse_pays = array();
         $modif_adresse_ville = array();
@@ -192,6 +193,9 @@ class DefaultController extends Controller
 
         foreach ($query->request as $key => $value) {
             ////PARTIE MODIFICATION
+            if (substr($key, 0, strlen('modif_est_visible')) === 'modif_est_visible') {
+                array_push($modif_adresse_est_visible, $value);
+            }
             if (substr($key, 0, strlen('modif_id')) === 'modif_id') {
                 array_push($modif_adresse_id, $value);
             }
@@ -249,7 +253,8 @@ class DefaultController extends Controller
         if(empty($adresse_pays[0]) && empty($adresse_ville[0]) && empty($adresse_code_postal[0]) && empty($adresse_voie[0]) &&
          empty($adresse_num_voie[0]) && empty($adresse_num_appartement[0]) && empty($adresse_telephone_fixe[0])){
             //MODIFICATION
-            $soap->call('modifAdresse',array('id_ad'=>json_encode($modif_adresse_id),'pays'=>json_encode($modif_adresse_pays),
+            $soap->call('modifAdresse',array('est_visible'=>json_encode($modif_adresse_est_visible),
+                'id_ad'=>json_encode($modif_adresse_id),'pays'=>json_encode($modif_adresse_pays),
                 'ville'=>json_encode($modif_adresse_ville),'voie'=>json_encode($modif_adresse_voie),
                 'num_voie'=>json_encode($modif_adresse_num_voie),
                 'code_postal'=>json_encode($modif_adresse_code_postal),

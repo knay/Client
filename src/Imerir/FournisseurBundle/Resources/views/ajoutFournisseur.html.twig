@@ -185,7 +185,9 @@ menuSelected
                     {% for i in liste_adresses_fournisseur %}
                         <tr>
                         <td><i class="fa fa-minus-square supprimer"></i>
-                            <input type="hidden" name="modif_id_{{ i.id }}" value="{{ i.id }}"/></td>
+                            <input type="hidden" name="modif_id_{{ i.id }}" value="{{ i.id }}"/>
+                            <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.id }}" value="1"/>
+                        </td>
                         <td><input type="text" name="modif_pays_{{ i.id }}" value="{{ i.pays }}"/></td>
                         <td><input type="text" name="modif_ville_{{ i.id }}" value="{{ i.ville }}"/></td>
                         <td><input type="text" name="modif_code_postal_{{ i.id }}" value="{{ i.code_postal }}"/></td>
@@ -359,7 +361,8 @@ menuSelected
      * Elle est appelée lorsque l'on clic sur le boutton moins.
      */
     function supprimerItem() {
-        $(this).parent().parent().remove();
+        $(this).parent().parent().hide();
+        $(this).parent().find('.est_visible').val('0');
     }
 </script>
 {% endblock %}

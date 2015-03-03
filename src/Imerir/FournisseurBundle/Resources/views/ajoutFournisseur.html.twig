@@ -99,6 +99,44 @@ menuSelected
                     <td><input type="text" name="telephone_portable"/></td>
                 </tr>
             </table>
+
+            <div id="lst_adresse">
+                <table class="tableau_adresse">
+                    <tr>
+                        <th></th>
+                        <th class="titre_lst">Pays</th>
+                        <th class="titre_lst">Ville</th>
+                        <th class="titre_lst">Code postal</th>
+                        <th class="titre_lst">N° voie</th>
+                        <th class="titre_lst">Voie</th>
+                        <th class="titre_lst">N° appartement</th>
+                        <th class="titre_lst">Téléphone fixe</th>
+                    </tr>
+                    {% if detail_adresse.adresse is defined %}
+                        {% for i in detail_adresse.adresse %}
+                            <tr>
+                                <td>
+                                    <i class="fa fa-minus-square supprimer"></i>
+                                </td>
+                                <td>
+                                    <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
+                                </td>
+                            </tr>
+                            {% set nbAdresse = nbAdresse + 1 %}
+                        {% endfor %}
+                    {% endif %}
+                    <tr class="last">
+                        <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+                        <td><input type="text" name="pays{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="ville{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="voie{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
+                    </tr>
+                </table>
+            </div>
         </form>
         <p class="validation_message">Le fournisseur a bien été ajouté</p>
     {% endif %}
@@ -118,6 +156,59 @@ menuSelected
                 <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
 
             </table>
+
+            <div id="lst_adresse">
+                <table class="tableau_adresse">
+                    <tr>
+                        <th></th>
+                        <th class="titre_lst">Pays</th>
+                        <th class="titre_lst">Ville</th>
+                        <th class="titre_lst">Code postal</th>
+                        <th class="titre_lst">N° voie</th>
+                        <th class="titre_lst">Voie</th>
+                        <th class="titre_lst">N° appartement</th>
+                        <th class="titre_lst">Téléphone fixe</th>
+                    </tr>
+                    {% if detail_adresse.adresse is defined %}
+                        {% for i in detail_adresse.adresse %}
+                            <tr>
+                                <td>
+                                    <i class="fa fa-minus-square supprimer"></i>
+                                </td>
+                                <td>
+                                    <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
+                                </td>
+                            </tr>
+                            {% set nbAdresse = nbAdresse + 1 %}
+                        {% endfor %}
+                    {% endif %}
+                    {% for i in liste_adresses_fournisseur %}
+                        <tr>
+                        <td><i class="fa fa-minus-square supprimer"></i>
+                            <input type="hidden" name="modif_id_{{ i.id }}" value="{{ i.id }}"/>
+                            <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.id }}" value="1"/>
+                        </td>
+                        <td><input type="text" name="modif_pays_{{ i.id }}" value="{{ i.pays }}"/></td>
+                        <td><input type="text" name="modif_ville_{{ i.id }}" value="{{ i.ville }}"/></td>
+                        <td><input type="text" name="modif_code_postal_{{ i.id }}" value="{{ i.code_postal }}"/></td>
+                        <td><input type="text" name="modif_num_voie_{{ i.id }}" value="{{ i.num_voie }}"/></td>
+                        <td><input type="text" name="modif_voie_{{ i.id }}" value="{{ i.voie }}"/></td>
+                        <td><input type="text" name="modif_num_appartement_{{ i.id }}" value="{{ i.num_appartement }}"/></td>
+                        <td><input type="text" name="modif_telephone_fixe_{{ i.id }}" value="{{ i.telephone_fixe }}"/></td>
+                        </tr>
+                    {% endfor %}
+                    <tr class="last">
+                        <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+                        <td><input type="text" name="pays{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="ville{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="voie{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
+                    </tr>
+                </table>
+            </div>
         </form>
     {% endif %}
 
@@ -138,6 +229,44 @@ menuSelected
                     <td><input type="text" name="telephone_portable"/></td>
                 </tr>
             </table>
+
+            <div id="lst_adresse">
+                <table class="tableau_adresse">
+                    <tr>
+                        <th></th>
+                        <th class="titre_lst">Pays</th>
+                        <th class="titre_lst">Ville</th>
+                        <th class="titre_lst">Code postal</th>
+                        <th class="titre_lst">N° voie</th>
+                        <th class="titre_lst">Voie</th>
+                        <th class="titre_lst">N° appartement</th>
+                        <th class="titre_lst">Téléphone fixe</th>
+                    </tr>
+                    {% if detail_adresse.adresse is defined %}
+                        {% for i in detail_adresse.adresse %}
+                            <tr>
+                                <td>
+                                    <i class="fa fa-minus-square supprimer"></i>
+                                </td>
+                                <td>
+                                    <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
+                                </td>
+                            </tr>
+                            {% set nbAdresse = nbAdresse + 1 %}
+                        {% endfor %}
+                    {% endif %}
+                    <tr class="last">
+                        <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+                        <td><input type="text" name="pays{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="ville{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="voie{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
+                        <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
+                    </tr>
+                </table>
+            </div>
         </form>
         <p class="validation_message">Le fournisseur "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
             email "{{ new_email }}" et pour téléphone portable {{ new_telephone_portable }}</p>
@@ -232,7 +361,8 @@ menuSelected
      * Elle est appelée lorsque l'on clic sur le boutton moins.
      */
     function supprimerItem() {
-        $(this).parent().parent().remove();
+        $(this).parent().parent().hide();
+        $(this).parent().find('.est_visible').val('0');
     }
 </script>
 {% endblock %}

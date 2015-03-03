@@ -19,8 +19,25 @@ class StatsController extends Controller
     	catch(\SoapFault $e) {
     		$erreur.=$e->getMessage();
     	}
+    	
+    	try {
+    		$return_moyenne = $soap->call('statsVenteMoyenneParMois', array('nbMois' => 1)); // On récupère le menu/sous-menu
+    		$stats = json_decode($return_moyenne);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    	
+    	$axeX = array();
+    	$axeY = array();
+    	foreach ($stats as $valeur) {
+    		array_push($axeX, $valeur->jour);
+    		array_push($axeY, $valeur->montant);
+    	}
     	 
     	return $this->render('ImerirVenteBundle::stats.html.twig', array('result_menu' => $menu_sous_menu,
-    		                	                                             'erreur' => $erreur));
+    			                                                         'axeX' => $axeX,
+    			                                                         'axeY' => $axeY,
+    		                	                                         'erreur' => $erreur));
     }
 }

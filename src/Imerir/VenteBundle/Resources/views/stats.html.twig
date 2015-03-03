@@ -28,26 +28,26 @@ menuSelected
 
 {% block javascripts %}
 <script>
-var data = [
-            {
-                value: 300,
-                color:"#F7464A",
-                highlight: "#FF5A5E",
-                label: "Red"
-            },
-            {
-                value: 50,
-                color: "#46BFBD",
-                highlight: "#5AD3D1",
-                label: "Green"
-            },
-            {
-                value: 100,
-                color: "#FDB45C",
-                highlight: "#FFC870",
-                label: "Yellow"
-            }
-        ];
+var buyerData = {
+        labels : [
+              {% for i in axeX %}
+                  "{{ i }}",
+              {% endfor %}
+        ],
+        datasets : [
+        {
+            fillColor : "rgba(203,54,54, 0.75)",
+            strokeColor : "#cb3636",
+            pointColor : "#fff",
+            pointStrokeColor : "#9DB86D",
+            data : [
+				{% for j in axeY %}
+				"{{ j }}",
+				{% endfor %} 
+            ]
+        }
+    ]
+    }
 var options = {
     //Boolean - Whether we should show a stroke on each segment
     segmentShowStroke : true,
@@ -68,7 +68,7 @@ var options = {
 };
 
 var ctx = $("#myChart").get(0).getContext("2d");
-var myDoughnutChart = new Chart(ctx).Doughnut(data,options);
+var myDoughnutChart = new Chart(ctx).Line(buyerData);
 
 </script>
 {% endblock %}

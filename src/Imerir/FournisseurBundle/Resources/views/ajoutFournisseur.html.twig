@@ -361,8 +361,14 @@ menuSelected
      * Elle est appelée lorsque l'on clic sur le boutton moins.
      */
     function supprimerItem() {
-        $(this).parent().parent().hide();
-        $(this).parent().find('.est_visible').val('0');
+        var est_visible = $(this).parent().find('.est_visible');
+        if(est_visible.length == 0){
+            $(this).parent().parent().remove();
+        }
+        else{
+            $(this).parent().parent().hide();
+            est_visible.val('0');
+        }
     }
 </script>
 {% endblock %}

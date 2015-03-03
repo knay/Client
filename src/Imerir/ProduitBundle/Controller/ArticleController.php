@@ -82,6 +82,7 @@ class ArticleController extends Controller
     	$produitsRetour = array();
     	$menu_sous_menu = array();
     	
+    	
     	try {
     		// On récupère tous les produits pour les afficher dans un <select>
     		$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));

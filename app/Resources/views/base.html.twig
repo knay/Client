@@ -9,8 +9,9 @@
         <link rel="stylesheet" href="{{ asset('../src/Imerir/NoyauBundle/Resources/public/css/cssDefault.css') }}"/>
         <link rel="stylesheet" href="{{ asset('../src/Imerir/NoyauBundle/Resources/public/css/cssAffichage.css') }}"/>
         
-        <script src="{{ asset('../vendor/components/jquery/jquery.js') }}"></script>
-        <script src="{{ asset('../vendor/components/jqueryui/jquery-ui.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('../vendor/components/jquery/jquery.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('../vendor/components/jqueryui/jquery-ui.js') }}"></script>
+        <script type="text/javascript" src="{{ asset('../vendor/nnnick/chartjs/Chart.js') }}"></script>
     </head>
     <body>
     	
@@ -164,7 +165,7 @@
 											</a>
 										{% endif %}
 										{% if j == "Stats" %}
-	 						    			<a href="">
+	 						    			<a href="{{ path('imerir_vente_stats') }}">
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}

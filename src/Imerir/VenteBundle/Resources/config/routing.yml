@@ -1,0 +1,3 @@
+imerir_vente_stats:
+    path:     /vente/stats
+    defaults: { _controller: ImerirVenteBundle:Stats:index }

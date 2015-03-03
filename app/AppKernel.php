@@ -21,6 +21,7 @@ class AppKernel extends Kernel
         	new FOS\UserBundle\FOSUserBundle(),
             new Imerir\StockBundle\ImerirStockBundle(),
             new Imerir\FournisseurBundle\ImerirFournisseurBundle(),
+            new Imerir\VenteBundle\ImerirVenteBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

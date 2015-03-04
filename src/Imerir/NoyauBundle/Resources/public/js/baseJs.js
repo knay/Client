@@ -16,8 +16,8 @@ function resize_element()
 	$('#affichage').css("height",(hauteur_ecran - hauteur_header ) + "px");
 	$("#fieldset_ajout").css("width",(largeur_ecran - largeur_menu - 60) + "px");
 	$("#fieldset_recherche").css("width",(largeur_ecran - largeur_menu  - 60) + "px");
-	$("table").not(".tableau_attribut").css("width",(largeur_ecran - largeur_menu  - 120) + "px");
-	
+//	$("table").not(".tableau_attribut").css("width",(largeur_ecran - largeur_menu  - 120) + "px");
+	$("#tableau").not(".tableau_attribut").css("width",(largeur_ecran - largeur_menu  - 120) + "px");
 }
 
 /**

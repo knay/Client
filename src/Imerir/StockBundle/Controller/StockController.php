@@ -51,4 +51,5 @@ class StockController extends Controller
     	
     	return new JsonResponse($produits); // Une réponse JSON
     }
+    
 }

@@ -1,7 +1,7 @@
 {% extends "::baseAffichage.html.twig" %}
 
 {% block title_page %}
-STOCK
+Stock
 {% endblock %}
 
 {% block title %}
@@ -16,6 +16,29 @@ menuSelected
      <link rel="stylesheet" href="{{ asset('bundles/imerirstock/css/stock.css') }}"/> 
 {% endblock %}
 
+{% block title_ajout %}Stats{% endblock %}
+
+{% block ajout %}
+	<label>Visualiser la difference</label>
+	<select name="visualisation_par">
+		<option></option>
+		<option>Annuelle</option>
+		<option>Entree - Sortie</option>
+	</select>
+	<label>Par</label>
+	<select name="precision_par">
+		<option></option>
+		<option>Jour</option>
+		<option>Mois</option>
+		<option>Annee</option>
+	</select>
+	<label for="de">De</label>
+	<input type="text" id="date_debut_stats" name="de" value="yy-mm-dd">
+	<label for="a">a</label>
+	<input type="text" id="date_fin_stats" name="a" value="yy-mm-dd">
+	<div><canvas id="myChart" width="600" height="200"></canvas></div>
+{% endblock %}
+
 {% block recherche %}
     <form action= {{ path('imerir_stock') }} method="get">
     	<label>Ligne Produit</label>
@@ -27,7 +50,7 @@ menuSelected
         </select>
         <label>Produit</label>
         <select id="select_produit" name="nomProduit"></select>
-        <label>Article</label><input type="text" name="nomArticle">
+        <label>Article</label><input id="article_recherche" type="text" name="nomArticle">
         <input type="submit">
     </form>
 {% endblock %}
@@ -47,14 +70,100 @@ menuSelected
 {#      	{% endif %}#}
      		<td>{{ i.ligne_produit }}</td>
             <td>{{ i.produit }}</td>
-            <td>{{ i.article }}</td>
+            <td id="article_stats">{{ i.article }}</td>
             <td>{{ i.quantite }}</td>
         </tr>
     {% endfor %}
 {% endblock %}
 
 {% block javascripts %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
 <script>
+$("#fieldset_ajout").css( "display", "none");
+// var identifiant;
+	//Gerer lorsque l'utilisateur click sur l'input de la date d'afficher le pickerdate 
+	
+// 	//format d'affichage de datepicker
+// 	var format_affichage_date = "yy-mm-dd";
+// 	$(function() {
+// 	    $( "#date_debut_stats" ).datepicker({
+// 			defaultDate: "+1w",
+// 	      	changeMonth: true,
+// 	      	numberOfMonths: 2,
+// 	      	onClose: function( selectedDate ) {
+// 	       		$( "#date_fin_stats" ).datepicker( "option", "minDate", selectedDate );
+// 	        	$( "#date_debut_stats" ).datepicker( "option", "dateFormat", format_affichage_date );
+// 	      	}
+// 	    });
+// 	    $( "#date_fin_stats" ).datepicker({
+// 	      	defaultDate: "+1w",
+// 	      	changeMonth: true,
+// 	      	numberOfMonths: 2,
+// 	     	onClose: function( selectedDate ) {
+// 	        	$( "#date_debut_stats" ).datepicker( "option", "maxDate", selectedDate );
+// 	       		$( "#date_fin_stats" ).datepicker( "option", "dateFormat", format_affichage_date );
+// 	      	}
+// 	    });
+//   	});
+	
+// 	//lorsque la page ce recharge, donc quand l'utilisateur fait une recherche sur ligne porduit,produit ou article
+// 	$(window).ready(function(){
+// 		alert('ok');
+// 		//Recupere le nombre de ligne que contient le tableau
+// 		var nombre_ligne_du_tableau = $('table tr').length;
+// 		//si elle en contient 2 alors il y a une seul ligne soit un article.
+// 		if(nombre_ligne_du_tableau == 2){
+// 			alert('oui');
+// 			//on peut afficher les stats
+// 			$("#fieldset_ajout").css( "display", "inline");
+// 			//On recuperer la valeur de l'article rechercher.
+// 			identifiant = $("#article_stats").html(); 				
+// 		}
+// 		//il y a soit plusieurs articles soit pas du tout, donc on cache les stats.
+// 		else{
+// 			alert('non');
+// 			$("#fieldset_ajout").css( "display", "none");
+// 		}
+// 	});
+
+// 	//Permet de gerer lorsque l'utilisateur click sur la date de fin
+// 	$("#date_fin_stats").click(function(){
+// 		//verification si la date debut et la date fin a ete renseigner
+// 		//si oui alors on fait la rechercher sur cette periode
+// 		if($("#date_debut_stats").val() != format_affichage_date && $("#date_fin_stats").val() != format_affichage_date){
+// 			alert('date oui '+identifiant);
+// 			//une fois que l'utilisateur a selectionner les dates on peut faire les stats sur cette periode.
+// 			//appel fonction ajax.
+			
+// 		}
+// 		//sinon on fait la recherche sur toutes l'année
+// 		else{
+// 			alert('date non');
+// 			//appel fonction ajax
+			
+// 		}
+// 	});
+
+// 	//Permet de recuperer les stats des stocks
+// 	function recuperer_les_stats(){
+// 		$.ajax({
+			   url: '{{ path('imerir_ajax_stock_get_produit') }}',
+// 			   data: { nom_article: identifiant },
+// 			   success: function(data) {
+// 				   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant √† l'article dans la liste.
+// //					alert(objJson);
+// 				   $("#select_produit").html('');
+// 				   $("#select_produit").html('<option></option>');
+// 					for(id_produit in objJson){
+// //						alert(objJson[id_produit]['produit']);
+// 						 $("#select_produit").html( $("#select_produit").html()+'<option>'+objJson[id_produit]['produit']+'</option>');
+// 					}
+// 				   },
+// 			   type: 'POST'
+// 		});
+// 	}	
+		
+	// Gestion des selects en fonction de la ligne produits selectionne
 	$( "#select_ligne_produit" ).change(function() {
 		$.ajax({
 			   url: '{{ path('imerir_ajax_stock_get_produit') }}',
@@ -73,8 +182,48 @@ menuSelected
 		});
 	});
 
-	$(document).ready(function(){
-		$("#fieldset_ajout").css( "display", "none");
-	});
+// 	//information prise en compte dans le graphique
+// 	var barData = {
+// 		labels : ["January","February","March","April","May","June"],
+// 		datasets : [
+// 		    		{
+// 		    			fillColor : "#48A497",
+// 		    			strokeColor : "#48A4D1",
+// 		    			data : [10,12,14,11,11,33]
+// 		    		},
+// 		    		{
+// 		    			fillColor : "rgba(73,188,170,0.4)",
+// 		    			strokeColor : "rgba(72,174,209,0.4)",
+// 		    			data : [14,14,25,10,25,20]
+// 		    		}
+		
+// 		    	]
+// 	}
+
+// 	// Parametrage des options du graphique
+// 	var options = {
+// 	    //Boolean - Whether we should show a stroke on each segment
+// 	    segmentShowStroke : true,
+// 	    //String - The colour of each segment stroke
+// 	    segmentStrokeColor : "#fff",
+// 	    //Number - The width of each segment stroke
+// 	    segmentStrokeWidth : 2,
+// 	    //Number - The percentage of the chart that we cut out of the middle
+// 	    percentageInnerCutout : 50, // This is 0 for Pie charts
+// 	    //Number - Amount of animation steps
+// 	    animationSteps : 20,
+// 	    //String - Animation easing effect
+// 	    animationEasing : "easeOutBounce",
+// 	    //Boolean - Whether we animate the rotation of the Doughnut
+// 	    animateRotate : true,
+// 	    //Boolean - Whether we animate scaling the Doughnut from the centre
+// 	    animateScale : false,
+// 	};
+
+// 	//Creation du graphique
+// 	var ctx = $("#myChart").get(0).getContext("2d");
+// 	var myDoughnutChart = new Chart(ctx).Bar(barData,options);
+
+	
 </script>
 {% endblock %}

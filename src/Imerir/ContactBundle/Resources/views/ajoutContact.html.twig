@@ -23,7 +23,7 @@ menuSelected
 
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_creation_client' %}
-        <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
+        <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
             <table id="tableau_input">
                 <tr>
                     <td><label for="nom">Nom </label></td>
@@ -33,6 +33,10 @@ menuSelected
                 <tr>
                     <td><label for="nom">Prenom </label></td>
                     <td><input type="text" name="prenom"/></td>
+                </tr>
+                <tr>
+                    <td><label for="nom">Date de naissance </label></td>
+                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -104,8 +108,8 @@ menuSelected
         </form>
     {% endif %}
 
-    {% if app.request.attributes.get('_route')=='imerir_validation_creation_fournisseur' %}
-        <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
+    {% if app.request.attributes.get('_route')=='imerir_validation_creation_client' %}
+        <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
             <table>
                 <tr>
                     <td><label for="nom">Nom </label></td>
@@ -115,6 +119,10 @@ menuSelected
                 <tr>
                     <td><label for="nom">Prenom </label></td>
                     <td><input type="text" name="prenom"/></td>
+                </tr>
+                <tr>
+                    <td><label for="nom">Date de naissance </label></td>
+                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -185,19 +193,68 @@ menuSelected
         <p class="validation_message">Le contact a bien été ajouté</p>
     {% endif %}
 
-    {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
+    {% if app.request.attributes.get('_route')=='imerir_modification_client' %}
 
-        <form action="{{ path('imerir_validation_modification_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
+        <form action="{{ path('imerir_validation_modification_client') }}" method="post" id="formulaire_creation_fournisseur">
             <table>
                 <tr><td><label for="nom">Nom : </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
+
                 <input type="submit" value="Modifier">
+
+                <tr><td><label for="nom">Prenom : </label>
+                        <input type="hidden" name="old_prenom" value="{{ modif_prenom }}"></td>
+                <td><input type="text" name="new_prenom" value="{{ modif_prenom }}"></td></tr>
+
+                <tr><td><label for="nom">Date de naissance : </label></td>
+                    <td><input type="text" name="new_date_naissance" value="{{ modif_date_naissance }}"/></td></tr>
+
+                <tr><td><label for="nom">Civilité : </label></td>
+                    <td>
+                        <select name="new_civilite">
+                            {% if modif_civilite == 'Mlle.' %}
+                                <option selected value="">Mlle.</option>
+                            {% else %}
+                                <option>Mlle.</option>
+                            {% endif %}
+                            {% if modif_civilite == 'Mme.' %}
+                                <option selected>Mme.</option>
+                            {% else %}
+                                <option>Mme.</option>
+                            {% endif %}
+                            {% if modif_civilite == 'M.' %}
+                                <option selected>M.</option>
+                            {% else %}
+                                <option>M.</option>
+                            {% endif %}
+                        </select>
+                    </td></tr>
+
                 <tr><td><label for="nom">Email : </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
+
                 <tr><td><label for="nom">Téléphone portable : </label></td>
                 <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
+
+                <tr><td><label for="nom">Désire des SMS : </label></td>
+                    <td>
+                        {% if modif_ok_sms == 1 %}
+                            <input type="checkbox" name="new_ok_sms" checked/>
+                        {% else %}
+                            <input type="checkbox" name="new_ok_sms"/>
+                        {% endif %}
+                    </td></tr>
+
+                <tr><td><label for="nom">Désire des e-mails : </label></td>
+                    <td>
+                        {% if modif_ok_mail == 1 %}
+                            <input type="checkbox" name="new_ok_mail" checked/>
+                        {% else %}
+                            <input type="checkbox" name="new_ok_mail"/>
+                        {% endif %}
+                    </td></tr>
 
             </table>
 
@@ -226,7 +283,7 @@ menuSelected
                             {% set nbAdresse = nbAdresse + 1 %}
                         {% endfor %}
                     {% endif %}
-                    {% for i in liste_adresses_fournisseur %}
+                    {% for i in liste_adresses_contact %}
                         <tr>
                         <td><i class="fa fa-minus-square supprimer"></i>
                             <input type="hidden" name="modif_id_{{ i.id }}" value="{{ i.id }}"/>
@@ -335,6 +392,7 @@ menuSelected
     <tr class="liste_contacts">
         <th>Nom</th>
         <th>Prénom</th>
+        <th>Date de naissance</th>
         <th>Civilité</th>
         <th>Email</th>
         <th>Telephone portable</th>
@@ -344,14 +402,20 @@ menuSelected
     {% for i in liste_contacts %}
 
         <tr><td>{{ i.nom }}
-                <form method="post" action="{{ path('imerir_modification_fournisseur') }}" style="display: none">
+                <form method="post" action="{{ path('imerir_modification_client') }}" style="display: none">
                     <input type="hidden" name="id_f" value="{{ i.id }}">
                     <input type="hidden" name="nom_f" value="{{ i.nom }}">
+                    <input type="hidden" name="prenom_f" value="{{ i.prenom }}">
+                    <input type="hidden" name="date_naissance_f" value="{{ i.date_naissance }}">
+                    <input type="hidden" name="civilite_f" value="{{ i.civilite }}">
                     <input type="hidden" name="email_f" value="{{ i.email }}">
                     <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
+                    <input type="hidden" name="ok_sms_f" value="{{ i.ok_sms }}">
+                    <input type="hidden" name="ok_mail_f" value="{{ i.ok_mail }}">
                 </form>
             </td>
             <td>{{ i.prenom }}</td>
+            <td>{{ i.date_naissance }}</td>
             <td>{{ i.civilite }}</td>
             <td>{{ i.email }}</td>
             <td>{{ i.telephone_portable }}</td>

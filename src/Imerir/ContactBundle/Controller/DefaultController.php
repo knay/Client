@@ -11,7 +11,7 @@ class DefaultController extends Controller
         $soap = $this->get('noyau_soap');
 
         $query = $this->get('request');
-        //TODO ajouter un champs post dans le twig avec recherche fournisseur
+        //TODO ajouter un champs post dans le twig avec recherche contact
         $recherche_contact_nom = $query->request->get('recherche_contact_nom');
         $recherche_contact_prenom = $query->request->get('recherche_contact_prenom');
         $recherche_contact_date_naissance = $query->request->get('recherche_contact_date_naissance');
@@ -55,7 +55,7 @@ class DefaultController extends Controller
         else
             $ok_mail=$recherche_contact_ok_mail;
 
-        //TODO ajouter l'action getFournisseurs qui renvoie le nom, le mail et le num de tel
+        //TODO ajouter l'action getContacts qui renvoie le nom, le mail et le num de tel
         $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => $nom, 'prenom'=>$prenom,
             'civilite'=>$civilite,'email'=>$email, 'telephone_portable'=>$telephone_portable,'ok_sms'=>$ok_sms,
             'ok_mail'=>$ok_mail));
@@ -69,26 +69,50 @@ class DefaultController extends Controller
         return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_contacts,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
     }
 
-    public function execAjoutFournisseurAction()
+    public function execAjoutContactAction()
     {
         $soap = $this->get('noyau_soap');
 
         $query = $this->get('request');
 
-        $fournisseur_nom = $query->request->get('nom');
-        $fournisseur_email = $query->request->get('email');
-        $fournisseur_telephone_portable = $query->request->get('telephone_portable');
+        $Contact_nom = $query->request->get('nom');
+        $Contact_email = $query->request->get('email');
+        $Contact_telephone_portable = $query->request->get('telephone_portable');
+        $Contact_prenom = $query->request->get('prenom');
+        $Contact_date_naissance = $query->request->get('date_naissance');
+        $Contact_civilite = $query->request->get('civilite');
+        $Contact_ok_sms = $query->request->get('ok_sms');
+        $Contact_ok_mail = $query->request->get('ok_mail');
 
-        if($fournisseur_nom===null)
-            $fournisseur_nom='';
+        if($Contact_nom===null)
+            $Contact_nom='';
 
-        if($fournisseur_email===null)
-            $fournisseur_email='';
+        if($Contact_email===null)
+            $Contact_email='';
 
-        if($fournisseur_telephone_portable===null)
-            $fournisseur_telephone_portable===null;
+        if($Contact_telephone_portable===null)
+            $Contact_telephone_portable===null;
 
-        $soap->call('ajoutFournisseur',array('nom' => $fournisseur_nom, 'email'=>$fournisseur_email, 'telephone_portable'=>$fournisseur_telephone_portable));
+        if($Contact_prenom===null)
+            $Contact_prenom='';
+
+        if($Contact_date_naissance===null)
+            $Contact_date_naissance='';
+
+        if($Contact_civilite===null)
+            $Contact_civilite='';
+
+        if($Contact_ok_sms===null)
+            $Contact_ok_sms='';
+
+        if($Contact_ok_mail===null)
+            $Contact_ok_mail='';
+
+        $soap->call('ajoutContact',array('nom' => $Contact_nom,'prenom'=>$Contact_prenom ,
+            'date_naissance'=>$Contact_date_naissance,'civilite'=>$Contact_civilite,
+            'email'=>$Contact_email,
+            'telephone_portable'=>$Contact_telephone_portable,
+            'ok_sms'=>$Contact_ok_sms,'ok_mail'=>$Contact_ok_mail));
         ////////////////////////////////////////////////////////////////////////////
         /**
          * PARTIE ADRESSES
@@ -126,18 +150,21 @@ class DefaultController extends Controller
             }
         }
         //print_r($adresse_pays);
-        //PARTIE OU ON RECUPERE LA REF DU FOURNISSEUR
-        $retour_ref_fournisseur = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => $fournisseur_nom,
-            'email'=>$fournisseur_email, 'telephone_portable'=>$fournisseur_telephone_portable));
+        //PARTIE OU ON RECUPERE LA REF DU Contact
+        $retour_ref_Contact = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => $Contact_nom,
+            'prenom'=>$Contact_prenom,'date_naissance'=>$Contact_date_naissance,
+            'civilite'=>$Contact_civilite,'email'=>$Contact_email, 'telephone_portable'=>$Contact_telephone_portable,
+            'ok_sms'=>$Contact_ok_sms,
+            'ok_mail'=>$Contact_ok_mail));
 
-        $ref_fournisseur = json_decode($retour_ref_fournisseur,true);
-        $ref_fournisseur_id = $ref_fournisseur[0]["id"];
-        //print_r($ref_fournisseur);
+        $ref_Contact = json_decode($retour_ref_Contact,true);
+        $ref_Contact_id = $ref_Contact[0]["id"];
+        //print_r($ref_Contact);
         if(!empty($adresse_pays[0]) || !empty($adresse_ville[0]) || !empty($adresse_code_postal[0]) || !empty($adresse_voie[0]) ||
             !empty($adresse_num_voie[0]) || !empty($adresse_num_appartement[0]) || !empty($adresse_telephone_fixe[0])) {
 
-            //$est_fournisseur,$ref_id,$pays,$ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-            $soap->call('ajoutAdresse', array('est_fournisseur' => true, 'ref_id' => $ref_fournisseur_id, 'pays' => json_encode($adresse_pays),
+            //$est_Contact,$ref_id,$pays,$ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
+            $soap->call('ajoutAdresse', array('est_fournisseur' => false, 'ref_id' => $ref_Contact_id, 'pays' => json_encode($adresse_pays),
                 'ville' => json_encode($adresse_ville), 'voie' => json_encode($adresse_voie), 'num_voie' => json_encode($adresse_num_voie),
                 'code_postal' => json_encode($adresse_code_postal), 'num_appartement' => json_encode($adresse_num_appartement),
                 'telephone_fixe' => json_encode($adresse_telephone_fixe)));
@@ -145,58 +172,75 @@ class DefaultController extends Controller
         ////////////////////////////////////////////////////////////////////////////
 
 
-        //TODO ajouter l'action getFournisseurs qui renvoie le nom, le mail et le num de tel
-        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'', 'telephone_portable'=>''));
-        $liste_fournisseurs = json_decode($return);
-        //insertion du fournisseur
+        //TODO ajouter l'action getContacts qui renvoie le nom, le mail et le num de tel
+        $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
+            'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
+            'ok_mail'=>''));
+        $liste_Contacts = json_decode($return);
+        //insertion du Contact
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
 
         //TODO invoquer le bon twig
-        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
+        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_Contacts,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
     }
 
-    public function modifFournisseurAction(){
+    public function modifContactAction(){
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
 
         $modif_id = $query->request->get('id_f');
         $modif_nom = $query->request->get('nom_f');
+        $modif_prenom = $query->request->get('prenom_f');
+        $modif_date_naissance = $query->request->get('date_naissance_f');
+        $modif_civilite = $query->request->get('civilite_f');
         $modif_email = $query->request->get('email_f');
         $modif_telephone_portable = $query->request->get('telephone_portable_f');
+        $modif_ok_sms = $query->request->get('ok_sms_f');
+        $modif_ok_mail = $query->request->get('ok_mail_f');
 
-        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'', 'telephone_portable'=>''));
-        $liste_fournisseurs = json_decode($return);
+        $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
+            'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
+            'ok_mail'=>''));
+        $liste_Contacts = json_decode($return);
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
 
-        //IL faut recuperer dans un tableau toutes les valeurs adresse pour chaque fournisseur
-        //$count, $offset,$est_fournisseur,$ref_id, $pays, $ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-        $return_adresses_fournisseur = $soap->call('getAdresses',array('count'=>0,'offset'=>0,'est_fournisseur'=>true,
+        //IL faut recuperer dans un tableau toutes les valeurs adresse pour chaque Contact
+        //$count, $offset,$est_Contact,$ref_id, $pays, $ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
+        $return_adresses_Contact = $soap->call('getAdresses',array('count'=>0,'offset'=>0,'est_Contact'=>true,
             'ref_id'=>strval($modif_id),'pays'=>'','ville'=>'','voie'=>'','num_voie'=>'',
             'code_postal'=>'','num_appartement'=>'','telephone_fixe'=>''));
-        $liste_adresses_fournisseur = json_decode($return_adresses_fournisseur);
+        $liste_adresses_Contact = json_decode($return_adresses_Contact);
 
 
 
-        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu'=>$menu_sous_menu,'modif_id'=>$modif_id,
-            'modif_nom'=>$modif_nom,'modif_email'=>$modif_email,
-            'modif_telephone_portable'=>$modif_telephone_portable,'liste_adresses_fournisseur'=>$liste_adresses_fournisseur,
+        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_Contacts,'result_menu'=>$menu_sous_menu,
+            'modif_id'=>$modif_id,
+            'modif_nom'=>$modif_nom,'modif_prenom'=>$modif_prenom,'modif_date_naissance'=>$modif_date_naissance,
+            'modif_civilite'=>$modif_civilite,
+            'modif_email'=>$modif_email,
+            'modif_telephone_portable'=>$modif_telephone_portable,
+            'modif_ok_sms'=>$modif_ok_sms,
+            'modif_ok_mail'=>$modif_ok_mail,'liste_adresses_contact'=>$liste_adresses_Contact,
             'nbAdresse'=>0));
 
     }
 
-    public function execModifFournisseurAction(){
+    public function execModifContactAction(){
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
 
         $old_id = $query->request->get('old_id');
         $old_nom = $query->request->get('old_nom');
+        $old_prenom = $query->request->get('old_prenom');
         $new_nom = $query->request->get('new_nom');
+        $new_prenom = $query->request->get('new_prenom');
+        $new_civilite = $query->request->get('new_civilite');
         $new_email = $query->request->get('new_email');
         $new_telephone_portable = $query->request->get('new_telephone_portable');
 
@@ -273,11 +317,11 @@ class DefaultController extends Controller
             }
         }
         //print_r($adresse_pays);
-        //PARTIE OU ON RECUPERE LA REF DU FOURNISSEUR
-        $ref_fournisseur_id = $old_id;
-        //print_r($ref_fournisseur);
+        //PARTIE OU ON RECUPERE LA REF DU Contact
+        $ref_contact_id = $old_id;
+        //print_r($ref_Contact);
 
-        //$est_fournisseur,$ref_id,$pays,$ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
+        //$est_Contact,$ref_id,$pays,$ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
         //on teste si il y a des valeurs à ajouter
         if(empty($adresse_pays[0]) && empty($adresse_ville[0]) && empty($adresse_code_postal[0]) && empty($adresse_voie[0]) &&
             empty($adresse_num_voie[0]) && empty($adresse_num_appartement[0]) && empty($adresse_telephone_fixe[0])){
@@ -300,24 +344,26 @@ class DefaultController extends Controller
                 'num_appartement'=>json_encode($modif_adresse_num_appartement),
                 'telephone_fixe'=>json_encode($modif_adresse_telephone_fixe)));
             //INSERTION
-            $soap->call('ajoutAdresse',array('est_fournisseur'=>true,'ref_id'=>$ref_fournisseur_id,'pays'=>json_encode($adresse_pays),
+            $soap->call('ajoutAdresse',array('est_Contact'=>true,'ref_id'=>$ref_contact_id,'pays'=>json_encode($adresse_pays),
                 'ville'=>json_encode($adresse_ville),'voie'=>json_encode($adresse_voie),'num_voie'=>json_encode($adresse_num_voie),
                 'code_postal'=>json_encode($adresse_code_postal),'num_appartement'=>json_encode($adresse_num_appartement),
                 'telephone_fixe'=>json_encode($adresse_telephone_fixe)));
         }
         //////////////////////////////////////////////////
 
-        $soap->call('modifFournisseur',array('id'=>$old_id,
+        $soap->call('modifContact',array('id'=>$old_id,
             'nom'=>$new_nom,'email'=>$new_email,'telephone_portable'=>$new_telephone_portable));
 
-        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'', 'telephone_portable'=>''));
-        $liste_fournisseurs = json_decode($return);
+        $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
+            'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
+            'ok_mail'=>''));
+        $liste_Contacts = json_decode($return);
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
 
-        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu'=>$menu_sous_menu,'old_id'=>$old_id,
+        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_Contacts'=>$liste_Contacts,'result_menu'=>$menu_sous_menu,'old_id'=>$old_id,
             'old_nom'=>$old_nom,'new_nom'=>$new_nom,'new_email'=>$new_email,
             'new_telephone_portable'=>$new_telephone_portable,'nbAdresse'=>0));
 

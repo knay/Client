@@ -16,7 +16,7 @@
     {% endif %}
 {% endblock %}
 
-{% block fournisseurBlock %}
+{% block contactBlock %}
 menuSelected
 {% endblock %}
 
@@ -313,7 +313,7 @@ menuSelected
         </form>
     {% endif %}
 
-    {% if app.request.attributes.get('_route')=='imerir_validation_modification_fournisseur' %}
+    {% if app.request.attributes.get('_route')=='imerir_validation_modification_client' %}
         <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
             <table id="tableau_input">
                 <tr>
@@ -395,14 +395,14 @@ menuSelected
                 </table>
             </div>
         </form>
-        <p class="validation_message">Le fournisseur "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
+        <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
             email "{{ new_email }}" et pour téléphone portable {{ new_telephone_portable }}</p>
     {% endif %}
 
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_creation_fournisseur') }}" method="post">
+    <form action="{{ path('imerir_creation_client') }}" method="post">
         <label for="recherche_fournisseur_nom">Nom fournisseur :</label>
         <input type="text" name="recherche_fournisseur_nom">
         <label for="recherche__fournisseur_email">Email fournisseur :</label>

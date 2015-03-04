@@ -212,7 +212,7 @@ class DefaultController extends Controller
 
         //IL faut recuperer dans un tableau toutes les valeurs adresse pour chaque Contact
         //$count, $offset,$est_Contact,$ref_id, $pays, $ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-        $return_adresses_Contact = $soap->call('getAdresses',array('count'=>0,'offset'=>0,'est_Contact'=>true,
+        $return_adresses_Contact = $soap->call('getAdresses',array('count'=>0,'offset'=>0,'est_fournisseur'=>false,
             'ref_id'=>strval($modif_id),'pays'=>'','ville'=>'','voie'=>'','num_voie'=>'',
             'code_postal'=>'','num_appartement'=>'','telephone_fixe'=>''));
         $liste_adresses_Contact = json_decode($return_adresses_Contact);
@@ -340,7 +340,8 @@ class DefaultController extends Controller
         }
         else{
             //MODIFICATION
-            $soap->call('modifAdresse',array('id_ad'=>json_encode($modif_adresse_id),'pays'=>json_encode($modif_adresse_pays),
+            $soap->call('modifAdresse',array('est_visible'=>json_encode($modif_adresse_est_visible),
+                'id_ad'=>json_encode($modif_adresse_id),'pays'=>json_encode($modif_adresse_pays),
                 'ville'=>json_encode($modif_adresse_ville),'voie'=>json_encode($modif_adresse_voie),
                 'num_voie'=>json_encode($modif_adresse_num_voie),
                 'code_postal'=>json_encode($modif_adresse_code_postal),

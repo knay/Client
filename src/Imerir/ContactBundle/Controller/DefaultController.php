@@ -56,15 +56,17 @@ class DefaultController extends Controller
             $ok_mail=$recherche_contact_ok_mail;
 
         //TODO ajouter l'action getFournisseurs qui renvoie le nom, le mail et le num de tel
-        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => $nom, 'email'=>$email, 'telephone_portable'=>$telephone_portable));
-        $liste_fournisseurs = json_decode($return);
+        $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => $nom, 'prenom'=>$prenom,
+            'civilite'=>$civilite,'email'=>$email, 'telephone_portable'=>$telephone_portable,'ok_sms'=>$ok_sms,
+            'ok_mail'=>$ok_mail));
+        $liste_contacts = json_decode($return);
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
 
         //TODO invoquer le bon twig
-        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
+        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_contacts,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
     }
 
     public function execAjoutFournisseurAction()

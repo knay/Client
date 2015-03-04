@@ -51,7 +51,7 @@
 						   		<ul id="2">
  						    		{% for j in i.sous_menu %}
 										{% if j == "Info client" %}
-	 						    			<a href="">
+	 						    			<a href="{{ path('imerir_creation_client') }}">
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}

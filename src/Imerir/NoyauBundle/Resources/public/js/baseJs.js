@@ -17,7 +17,7 @@ function resize_element()
 	$("#fieldset_ajout").css("width",(largeur_ecran - largeur_menu - 60) + "px");
 	$("#fieldset_recherche").css("width",(largeur_ecran - largeur_menu  - 60) + "px");
 //	$("table").not(".tableau_attribut").css("width",(largeur_ecran - largeur_menu  - 120) + "px");
-	$("#tableau").not(".tableau_attribut").css("width",(largeur_ecran - largeur_menu  - 120) + "px");
+	$("tableau").not(".tableau_attribut").css("width",(largeur_ecran - largeur_menu  - 120) + "px");
 }
 
 /**

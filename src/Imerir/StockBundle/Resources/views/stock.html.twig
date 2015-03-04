@@ -31,7 +31,7 @@ menuSelected
 		<option>Jour</option>
 		<option>Mois</option>
 		<option>Annee</option>
-	</select>
+	</select
 	<label for="de">De</label>
 	<input type="text" id="date_debut_stats" name="de" value="yy-mm-dd">
 	<label for="a">a</label>
@@ -41,16 +41,28 @@ menuSelected
 
 {% block recherche %}
     <form action= {{ path('imerir_stock') }} method="get">
-    	<label>Ligne Produit</label>
-        <select id="select_ligne_produit" name="nomLigneProduit">
-            <option></option>
-            {% for i in result_all_ligne_produit %}
-                <option>{{ i.nom_ligne_produit }}</option>
-            {% endfor %}
-        </select>
-        <label>Produit</label>
-        <select id="select_produit" name="nomProduit"></select>
-        <label>Article</label><input id="article_recherche" type="text" name="nomArticle">
+    	<table>
+	    	<tr>
+	    		<td><label>Ligne Produit</label></td>
+	    		
+		        <td>
+		        	<select id="select_ligne_produit" name="nomLigneProduit">
+		            	<option></option>
+		            	{% for i in result_all_ligne_produit %}
+		                	<option>{{ i.nom_ligne_produit }}</option>
+		            	{% endfor %}
+		        	</select>
+		        </td>
+	        </tr>
+	        <tr>
+	        	<td><label>Produit</label></td>
+	        	<td><select id="select_produit" name="nomProduit"></select></td>
+	        </tr>
+	        <tr>
+	        	<td><label>Article</label></td>
+	        	<td><input id="article_recherche" type="text" name="nomArticle"></td>
+	        </tr>
+        </table>
         <input type="submit">
     </form>
 {% endblock %}
@@ -136,7 +148,7 @@ $("#fieldset_ajout").css( "display", "none");
 // 			//appel fonction ajax.
 			
 // 		}
-// 		//sinon on fait la recherche sur toutes l'annŽe
+// 		//sinon on fait la recherche sur toutes l'annï¿½e
 // 		else{
 // 			alert('date non');
 // 			//appel fonction ajax

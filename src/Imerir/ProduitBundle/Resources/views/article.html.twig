@@ -18,25 +18,34 @@ menuSelected
 
 {% block ajout %}
 <form action="{{ path('imerir_produit_article_save') }}" method="post">
-	<div id="contenneur_inventaire" style="display:none;">
-		<input type="submit" id="inputSubmit">
-		
-		<label for="code">Code barre : </label>
-		<input type="text" name="code" class="valeurCodeBarre" readonly="readonly"><br>
-		
-		<label for="produit">Produit : </label> 
-		<select name="produit" class="selectProduit">
-			{% for j in produit %}
-				<option>{{ j.p }}</option>
-			{% endfor %}
-		</select> <br>
-		
-		<label for="prix">Prix : </label>
- 		<input type="number" name="prix" min="1" value="1" class="prix" step="any"><br>
- 		
- 		<label for="caract">Caractéristiques : </label>
- 		<span class="caract"></span>
-	</div>
+	<table id="contenneur_inventaire" class="tableau_input" style="display:none;">
+		<tr>
+			<td><label for="code">Code barre : </label></td>
+			<td><input type="text" name="code" class="valeurCodeBarre" readonly="readonly"></td>
+		</tr>
+		<tr>
+			<td><label for="produit">Produit : </label></td> 
+			<td>
+				<select name="produit" class="selectProduit">
+				{% for j in produit %}
+					<option>{{ j.p }}</option>
+				{% endfor %}
+				</select>
+			</td>
+		</tr>
+		<tr>
+			<td><label for="prix">Prix : </label></td>
+ 			<td><input type="number" name="prix" min="1" value="1" class="prix" step="any"></td>
+		</tr>
+ 		<tr>
+ 			<td><label for="caract">Caractéristiques : </label></td>
+ 			<td class="caract"></td>
+ 		</tr>
+ 		<tr>
+ 			<td><input type="submit"></td>
+ 		</tr>
+	</table>
+	
 	
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 	<div id="message_accueil">

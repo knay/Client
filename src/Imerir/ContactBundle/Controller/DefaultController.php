@@ -46,6 +46,14 @@ class DefaultController extends Controller
             $date_naissance = '';
         else
             $date_naissance = $recherche_contact_date_naissance;
+        if($recherche_contact_ok_sms===null)
+            $ok_sms='';
+        else
+            $ok_sms=$recherche_contact_ok_sms;
+        if($recherche_contact_ok_mail===null)
+            $ok_mail='';
+        else
+            $ok_mail=$recherche_contact_ok_mail;
 
         //TODO ajouter l'action getFournisseurs qui renvoie le nom, le mail et le num de tel
         $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => $nom, 'email'=>$email, 'telephone_portable'=>$telephone_portable));
@@ -56,7 +64,7 @@ class DefaultController extends Controller
         $menu_sous_menu = json_decode($return_menu);
 
         //TODO invoquer le bon twig
-        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
+        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
     }
 
     public function execAjoutFournisseurAction()

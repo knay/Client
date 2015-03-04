@@ -34,7 +34,7 @@
 /* 	border-radius: 5px; */
 /* } */
 
-#tableau_recherche {
+#tableau {
 	background: RGB(220,220,220);
 	border-radius: 5px;
 	heigth: auto;
@@ -42,7 +42,7 @@
 	margin: 2%;
 }
 
-#tableau_recherche th {
+#tableau th {
 	background: #0099CC;
 	border-radius: 5px 5px 0 0;
 	color: RGB(249,249,249);
@@ -54,7 +54,7 @@
 /* 	border: 1px solid red; */
 }
 
-#tableau_recherche td {
+#tableau td {
 	border-radius: 2px;
 	width: auto;
 	height: auto;
@@ -62,17 +62,17 @@
 /* 	border: 1px solid green; */
 }
 
-#tableau_recherche tr:nth-child(even) {
+#tableau tr:nth-child(even) {
 	cursor: pointer;
 	background-color: RGB(249,249,249);
 }
 
-#tableau_recherche tr:nth-child(odd) {
+#tableau tr:nth-child(odd) {
 	cursor: pointer;
 	background-color: RGB(237,237,237);
 }
 
-#tableau_recherche tr:hover {
+#tableau tr:hover {
 	/*color: #669900;*/
 	background-color: #ddd;
 }
@@ -120,4 +120,8 @@ input[type="submit"]:hover {
 .supprimer {
 	color: red;
 	cursor: pointer;
+}
+
+#table_input {
+	width: 30%;
 }

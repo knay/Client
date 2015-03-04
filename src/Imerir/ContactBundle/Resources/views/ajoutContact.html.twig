@@ -35,7 +35,7 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance </label></td>
+                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
                     <td><input type="date" name="date_naissance" value="0000-00-00"></td>
                 </tr>
                 <tr>
@@ -121,7 +121,7 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance </label></td>
+                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
                     <td><input type="date" name="date_naissance" value="0000-00-00"></td>
                 </tr>
                 <tr>
@@ -197,21 +197,21 @@ menuSelected
 
         <form action="{{ path('imerir_validation_modification_client') }}" method="post" id="formulaire_creation_client">
             <table>
-                <tr><td><label for="nom">Nom : </label>
+                <tr><td><label for="nom">Nom </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
 
                 <input type="submit" value="Modifier">
 
-                <tr><td><label for="nom">Prenom : </label>
+                <tr><td><label for="nom">Prenom </label>
                         <input type="hidden" name="old_prenom" value="{{ modif_prenom }}"></td>
                 <td><input type="text" name="new_prenom" value="{{ modif_prenom }}"></td></tr>
 
-                <tr><td><label for="nom">Date de naissance : </label></td>
+                <tr><td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
                     <td><input type="text" name="new_date_naissance" value="{{ modif_date_naissance }}"/></td></tr>
 
-                <tr><td><label for="nom">Civilité : </label></td>
+                <tr><td><label for="nom">Civilité </label></td>
                     <td>
                         <select name="new_civilite">
                             {% if modif_civilite == 'Mlle.' %}
@@ -232,13 +232,13 @@ menuSelected
                         </select>
                     </td></tr>
 
-                <tr><td><label for="nom">Email : </label></td>
+                <tr><td><label for="nom">Email </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
 
-                <tr><td><label for="nom">Téléphone portable : </label></td>
+                <tr><td><label for="nom">Téléphone portable </label></td>
                 <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
 
-                <tr><td><label for="nom">Désire des SMS : </label></td>
+                <tr><td><label for="nom">Désire des SMS </label></td>
                     <td>
                         {% if modif_ok_sms == 1 %}
                             <input type="checkbox" name="new_ok_sms" checked/>
@@ -247,7 +247,7 @@ menuSelected
                         {% endif %}
                     </td></tr>
 
-                <tr><td><label for="nom">Désire des e-mails : </label></td>
+                <tr><td><label for="nom">Désire des e-mails </label></td>
                     <td>
                         {% if modif_ok_mail == 1 %}
                             <input type="checkbox" name="new_ok_mail" checked/>
@@ -326,7 +326,7 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance </label></td>
+                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
                     <td><input type="date" name="date_naissance" value="0000-00-00"></td>
                 </tr>
                 <tr>

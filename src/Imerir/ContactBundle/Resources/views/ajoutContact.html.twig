@@ -195,7 +195,7 @@ menuSelected
 
     {% if app.request.attributes.get('_route')=='imerir_modification_client' %}
 
-        <form action="{{ path('imerir_validation_modification_client') }}" method="post" id="formulaire_creation_fournisseur">
+        <form action="{{ path('imerir_validation_modification_client') }}" method="post" id="formulaire_creation_client">
             <table>
                 <tr><td><label for="nom">Nom : </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
@@ -314,12 +314,30 @@ menuSelected
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_validation_modification_fournisseur' %}
-        <form action="{{ path('imerir_modification_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
-            <table>
+        <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
+            <table id="tableau_input">
                 <tr>
-                    <td><label for="nom">Nom fournisseur </label></td>
+                    <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
                     <input type="submit" value="Ajouter">
+                </tr>
+                <tr>
+                    <td><label for="nom">Prenom </label></td>
+                    <td><input type="text" name="prenom"/></td>
+                </tr>
+                <tr>
+                    <td><label for="nom">Date de naissance </label></td>
+                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
+                </tr>
+                <tr>
+                    <td><label for="civilite">Civilité </label></td>
+                    <td>
+                        <select name="civilite">
+                            <option value="Mlle.">Mlle.</option>
+                            <option value="Mme.">Mme.</option>
+                            <option value="M.">M.</option>
+                        </select>
+                    </td>
                 </tr>
                 <tr>
                     <td><label for="email">Email </label></td>
@@ -328,6 +346,14 @@ menuSelected
                 <tr>
                     <td><label for="telephone_portable">Telephone portable </label></td>
                     <td><input type="text" name="telephone_portable"/></td>
+                </tr>
+                <tr>
+                    <td><label for="ok_sms">Désire recevoir des SMS </label></td>
+                    <td><input type="checkbox" name="ok_sms"/></td>
+                </tr>
+                <tr>
+                    <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
+                    <td><input type="checkbox" name="ok_mail"/></td>
                 </tr>
             </table>
 

@@ -240,9 +240,12 @@ class DefaultController extends Controller
         $old_prenom = $query->request->get('old_prenom');
         $new_nom = $query->request->get('new_nom');
         $new_prenom = $query->request->get('new_prenom');
+        $new_date_naissance = $query->request->get('new_date_naissance');
         $new_civilite = $query->request->get('new_civilite');
         $new_email = $query->request->get('new_email');
         $new_telephone_portable = $query->request->get('new_telephone_portable');
+        $new_ok_sms = $query->request->get('new_ok_sms');
+        $new_ok_mail = $query->request->get('new_ok_mail');
 
         ////////////////////PARTIE ADRESSES///////////////
         $modif_adresse_est_visible = array();
@@ -344,7 +347,7 @@ class DefaultController extends Controller
                 'num_appartement'=>json_encode($modif_adresse_num_appartement),
                 'telephone_fixe'=>json_encode($modif_adresse_telephone_fixe)));
             //INSERTION
-            $soap->call('ajoutAdresse',array('est_Contact'=>true,'ref_id'=>$ref_contact_id,'pays'=>json_encode($adresse_pays),
+            $soap->call('ajoutAdresse',array('est_fournisseur'=>false,'ref_id'=>$ref_contact_id,'pays'=>json_encode($adresse_pays),
                 'ville'=>json_encode($adresse_ville),'voie'=>json_encode($adresse_voie),'num_voie'=>json_encode($adresse_num_voie),
                 'code_postal'=>json_encode($adresse_code_postal),'num_appartement'=>json_encode($adresse_num_appartement),
                 'telephone_fixe'=>json_encode($adresse_telephone_fixe)));
@@ -352,7 +355,13 @@ class DefaultController extends Controller
         //////////////////////////////////////////////////
 
         $soap->call('modifContact',array('id'=>$old_id,
-            'nom'=>$new_nom,'email'=>$new_email,'telephone_portable'=>$new_telephone_portable));
+            'nom'=>$new_nom,
+            'prenom'=>$new_prenom,
+            'date_naissance'=>$new_date_naissance,
+            'civilite'=>$new_civilite,
+            'email'=>$new_email,
+            'telephone_portable'=>$new_telephone_portable,
+            'ok_sms'=>$new_ok_sms,'ok_mail'=>$new_ok_mail));
 
         $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
             'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
@@ -363,7 +372,7 @@ class DefaultController extends Controller
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
 
-        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_Contacts'=>$liste_Contacts,'result_menu'=>$menu_sous_menu,'old_id'=>$old_id,
+        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_Contacts,'result_menu'=>$menu_sous_menu,'old_id'=>$old_id,
             'old_nom'=>$old_nom,'new_nom'=>$new_nom,'new_email'=>$new_email,
             'new_telephone_portable'=>$new_telephone_portable,'nbAdresse'=>0));
 

@@ -106,13 +106,15 @@ class DefaultController extends Controller
         $ref_fournisseur = json_decode($retour_ref_fournisseur,true);
         $ref_fournisseur_id = $ref_fournisseur[0]["id"];
         //print_r($ref_fournisseur);
+        if(!empty($adresse_pays[0]) || !empty($adresse_ville[0]) || !empty($adresse_code_postal[0]) || !empty($adresse_voie[0]) ||
+            !empty($adresse_num_voie[0]) || !empty($adresse_num_appartement[0]) || !empty($adresse_telephone_fixe[0])) {
 
-        //$est_fournisseur,$ref_id,$pays,$ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-        $soap->call('ajoutAdresse',array('est_fournisseur'=>true,'ref_id'=>$ref_fournisseur_id,'pays'=>json_encode($adresse_pays),
-            'ville'=>json_encode($adresse_ville),'voie'=>json_encode($adresse_voie),'num_voie'=>json_encode($adresse_num_voie),
-            'code_postal'=>json_encode($adresse_code_postal),'num_appartement'=>json_encode($adresse_num_appartement),
-            'telephone_fixe'=>json_encode($adresse_telephone_fixe)));
-
+            //$est_fournisseur,$ref_id,$pays,$ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
+            $soap->call('ajoutAdresse', array('est_fournisseur' => true, 'ref_id' => $ref_fournisseur_id, 'pays' => json_encode($adresse_pays),
+                'ville' => json_encode($adresse_ville), 'voie' => json_encode($adresse_voie), 'num_voie' => json_encode($adresse_num_voie),
+                'code_postal' => json_encode($adresse_code_postal), 'num_appartement' => json_encode($adresse_num_appartement),
+                'telephone_fixe' => json_encode($adresse_telephone_fixe)));
+        }
         ////////////////////////////////////////////////////////////////////////////
 
 
@@ -126,7 +128,7 @@ class DefaultController extends Controller
         $menu_sous_menu = json_decode($return_menu);
 
         //TODO invoquer le bon twig
-        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu' => $menu_sous_menu));
+        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
     }
 
     public function modifFournisseurAction(){

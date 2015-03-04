@@ -13,3 +13,7 @@ imerir_validation_modification_fournisseur:
 imerir_modification_fournisseur:
     path:     /fournisseurs/modification
     defaults: { _controller: ImerirFournisseurBundle:Default:modifFournisseur }
+
+imerir_creation_client:
+    path:     /fournisseurs/creation
+    defaults: { _controller: ImerirFournisseurBundle:Default:ajoutFournisseur }

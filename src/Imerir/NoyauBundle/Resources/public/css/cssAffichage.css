@@ -111,6 +111,34 @@ input[type="submit"]:hover {
 	background-color: #00AADD;
 }
 
+.bouton {
+/* 	float: right; */
+	display: inline-block;
+	margin-right: 0px;
+	min-width: 100px;
+	height: 29px;
+	font-size: 11pt;
+	border: 1px solid #0088BB;
+	background-color: #0099CC;
+	border-radius: 5px;
+	color: white;
+	margin-top: 5px;
+	cursor: pointer;
+	text-align: center;
+	maring-right: 5px;
+	text-decoration: none;
+	padding: 4px;
+	line-height: 29px;
+}
+
+.bouton:hover {
+	background-color: #00AADD;
+}
+
+.boutonSelected {
+	background-color: #0077BB;
+}
+
 .ajout {
 	color: green;
 	cursor: pointer;

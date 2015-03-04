@@ -1,0 +1,13 @@
+.legende li {
+	list-style: none;
+}
+
+.legende li span {
+	margin-right: 10px;
+	vertical-align: middle;
+	margin-bottom: 2px;
+}
+
+.graphiqueConteneur {
+	text-align: center;
+}

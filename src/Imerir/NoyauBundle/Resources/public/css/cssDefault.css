@@ -87,7 +87,7 @@ h1 {
 	font-family: "Lucida Sans Unicode", "Lucida Grande", sans-serif;
 	line-height: 50px;
 	vertical-align: middle;
-	font-size: 12pt;
+	font-size: 10pt;
 }
 
 #contenu {
@@ -120,7 +120,7 @@ h1 {
 
 /* menu li : element*/
 #menu li {
-	height: 50px;
+	min-height: 50px;
 	padding-bottom: 10px;
 	list-style-type: none;
 	display: flex;
@@ -180,7 +180,7 @@ h1 {
 #menu li ul a li {
 	display: block;
 	padding: 10px 10px 10px 10px;
-	height: 25px;
+	min-height: 25px;
 	border-bottom: 1px solid white;
 	background-color: #33B5E5;
 	color: white;

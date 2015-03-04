@@ -65,7 +65,7 @@ menuSelected
 
             {#champs pour l'adresse#}
             <div id="lst_adresse">
-                <table class="tableau_adresse" id="tableau">
+                <table class="tableau" id="tableau">
                     <tr>
                         <th></th>
                         <th class="titre_lst">Pays</th>
@@ -145,7 +145,7 @@ menuSelected
             </table>
 
             <div id="lst_adresse">
-                <table class="tableau_adresse" id="tableau">
+                <table class="tableau" id="tableau">
                     <tr>
                         <th></th>
                         <th class="titre_lst">Pays</th>
@@ -182,7 +182,7 @@ menuSelected
                 </table>
             </div>
         </form>
-        <p class="validation_message">Le fournisseur a bien été ajouté</p>
+        <p class="validation_message">Le contact a bien été ajouté</p>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
@@ -202,7 +202,7 @@ menuSelected
             </table>
 
             <div id="lst_adresse">
-                <table class="tableau_adresse" id="tableau">
+                <table class="tableau" id="tableau">
                     <tr>
                         <th></th>
                         <th class="titre_lst">Pays</th>
@@ -275,7 +275,7 @@ menuSelected
             </table>
 
             <div id="lst_adresse">
-                <table class="tableau_adresse" id="tableau">
+                <table class="tableau" id="tableau">
                     <tr>
                         <th></th>
                         <th class="titre_lst">Pays</th>
@@ -332,8 +332,16 @@ menuSelected
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Email</th><th>Telephone portable</th></tr>
-    {% for i in liste_fournisseurs %}
+    <tr class="liste_contacts">
+        <th>Nom</th>
+        <th>Prénom</th>
+        <th>Civilité</th>
+        <th>Email</th>
+        <th>Telephone portable</th>
+        <th>Désire des SMS</th>
+        <th>Désire des e-mails</th>
+    </tr>
+    {% for i in liste_contacts %}
 
         <tr><td>{{ i.nom }}
                 <form method="post" action="{{ path('imerir_modification_fournisseur') }}" style="display: none">
@@ -343,7 +351,21 @@ menuSelected
                     <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
                 </form>
             </td>
-        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td></tr>
+            <td>{{ i.prenom }}</td>
+            <td>{{ i.civilite }}</td>
+            <td>{{ i.email }}</td>
+            <td>{{ i.telephone_portable }}</td>
+            {% if i.ok_sms=='1' %}
+                <td>Oui</td>
+            {% else %}
+                <td>Non</td>
+            {% endif %}
+            {% if i.ok_mail=='1' %}
+                <td>Oui</td>
+            {% else %}
+                <td>Non</td>
+            {% endif %}
+        </tr>
     {% endfor %}
 {% endblock %}
 

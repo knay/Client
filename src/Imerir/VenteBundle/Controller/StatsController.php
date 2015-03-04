@@ -68,4 +68,5 @@ class StatsController extends Controller
     																			 'stats' => $stats,
 																    			 'erreur' => $erreur));
     }
+
 }

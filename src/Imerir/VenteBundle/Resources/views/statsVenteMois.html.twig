@@ -13,10 +13,31 @@ menuSelected
 {% endblock %}
 
 {% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssStats.css') }}"/> 
 {% endblock %}
 
+{% block title_ajout %}Vos statistiques{% endblock %}
+
 {% block ajout %}
-<div><canvas id="myChart" width="600" height="400"></canvas></div>
+<p>
+	Choisissez une option :<br>
+	<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats') }}">Ventes quotidiennes</a>
+	<a class="bouton" href="{{ path('imerir_vente_stats_top_vente') }}">Produits stars</a>
+	<a class="bouton" href="">Mes lignes produits</a>
+	<a class="bouton" href="">Vente et caractéristiques produits</a>
+</p>
+
+<p>Evolution des ventes (en euro) : </p>
+<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
+<div class="legende">
+	Légende : 
+	<ul>
+		<li>
+			<span style="background-color: #cb3636; display: inline-block; height: 30px; width: 30px;">&nbsp;</span>
+			Ventes par jour (en euro)
+		</li>
+	</ul>
+</div>
 {% endblock %}
 
 {% block recherche %}
@@ -28,7 +49,16 @@ menuSelected
 
 {% block javascripts %}
 <script>
-var buyerData = {
+
+/**
+ * Quand la page est chargée on enlève le fieldset de recherche qui ne sert à rien.
+ */
+$(document).ready(function (e) {
+	$('#fieldset_recherche').remove();
+});
+
+
+var data = {
         labels : [
               {% for i in axeX %}
                   "{{ i }}",
@@ -42,7 +72,7 @@ var buyerData = {
             pointStrokeColor : "#9DB86D",
             data : [
 				{% for j in axeY %}
-				"{{ j }}",
+				{{ j|number_format(2, '.', ',') }},
 				{% endfor %} 
             ]
         }
@@ -65,10 +95,19 @@ var options = {
     animateRotate : true,
     //Boolean - Whether we animate scaling the Doughnut from the centre
     animateScale : false,
+    
+    legendTemplate : '<ul>'
+        +'<% for (var i=0; i<data.datasets.length; i++) { %>'
+          +'<li>'
+          +'<span style=\"background-color:<%=data[i].fillColor%>\"></span>'
+          +'<% if (data[i].label) { %><%= data[i].label %><% } %>'
+        +'</li>'
+      +'<% } %>'
+    +'</ul>'
 };
 
 var ctx = $("#myChart").get(0).getContext("2d");
-var myDoughnutChart = new Chart(ctx).Line(buyerData);
+var graph = new Chart(ctx).Line(data);
 
 </script>
 {% endblock %}

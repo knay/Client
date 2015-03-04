@@ -34,7 +34,7 @@
 /* 	border-radius: 5px; */
 /* } */
 
-#tableau_recherche {
+table {
 	background: RGB(220,220,220);
 	border-radius: 5px;
 	heigth: auto;
@@ -42,7 +42,7 @@
 	margin: 2%;
 }
 
-#tableau_recherche th {
+table th {
 	background: #0099CC;
 	border-radius: 5px 5px 0 0;
 	color: RGB(249,249,249);
@@ -54,7 +54,7 @@
 /* 	border: 1px solid red; */
 }
 
-#tableau_recherche td {
+table td {
 	border-radius: 2px;
 	width: auto;
 	height: auto;
@@ -62,17 +62,17 @@
 /* 	border: 1px solid green; */
 }
 
-#tableau_recherche tr:nth-child(even) {
+table tr:nth-child(even) {
 	cursor: pointer;
 	background-color: RGB(249,249,249);
 }
 
-#tableau_recherche tr:nth-child(odd) {
+table tr:nth-child(odd) {
 	cursor: pointer;
 	background-color: RGB(237,237,237);
 }
 
-#tableau_recherche tr:hover {
+table tr:hover {
 	/*color: #669900;*/
 	background-color: #ddd;
 }
@@ -111,6 +111,36 @@ input[type="submit"]:hover {
 	background-color: #00AADD;
 }
 
+.bouton {
+/* 	float: right; */
+	display: inline;
+	margin-right: 20px;
+	min-width: 100px;
+	height: 29px;
+	font-size: 11pt;
+	border: 1px solid #0088BB;
+	background-color: #0099CC;
+	border-radius: 5px;
+	color: white;
+	margin-top: 1px;
+	cursor: pointer;
+	text-decoration: none;
+	display: inline-block;
+	vertical-align: middle;
+	line-height: 29px;
+	padding-left: 4px;
+	padding-right: 4px;
+	text-align: center;
+}
+
+.bouton:hover {
+	background-color: #00AADD;
+}
+
+.boutonSelected {
+	background-color: #0077BB;
+}
+
 .ajout {
 	color: green;
 	cursor: pointer;
@@ -120,4 +150,8 @@ input[type="submit"]:hover {
 .supprimer {
 	color: red;
 	cursor: pointer;
+}
+
+.graphiqueConteneur {
+	text-align: center;
 }

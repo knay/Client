@@ -1,0 +1,108 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block title_page %}
+Statistiques des ventes
+{% endblock %}
+
+{% block title %}
+ALBA - Statistiques
+{% endblock %}
+
+{% block venteBlock %}
+menuSelected
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssStats.css') }}"/> 
+{% endblock %}
+
+{% block title_ajout %}Vos statistiques{% endblock %}
+
+{% block ajout %}
+<p>
+	Choisissez une option :<br>
+	<a class="bouton" href="{{ path('imerir_vente_stats') }}">Ventes quotidiennes</a>
+	<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats_top_vente') }}">Produits stars</a>
+	<a class="bouton" href="">Mes lignes produits</a>
+	<a class="bouton" href="">Vente et caractéristiques produits</a>
+</p>
+
+<p>Produit stars (en euro) : </p>
+<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
+<div class="legende">
+Légende : 
+</div>
+{% endblock %}
+
+{% block recherche %}
+{% endblock %}
+
+{% block table %}
+	<tr><th>Nom</th><th>Valeurs possibles</th></tr>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+/**
+ * Quand la page est chargée on enlève le fieldset de recherche qui ne sert à rien.
+ */
+$(document).ready(function (e) {
+	$('#fieldset_recherche').remove();
+});
+
+
+var pieData = [ 
+               {% set num = 0 %}
+               {% for i in stats %}
+               {
+            	   value : {{ i.montant }},
+            	   label : "{{ i.produit }}",
+                   labelColor : 'white',
+                   labelFontSize : '16',
+                   labelBackground : '#FF0000',
+                   color: 
+                	   {% if num == 0 %} "#878BB6" 
+                	   {% elseif num == 1 %} "#4ACAB4"
+                	   {% elseif num == 2 %} "#FF8153"
+                	   {% else %} "#FFEA88" {% endif %}
+               }, 
+               {% set num = num+1 %}
+               {% endfor %}
+           ];
+var options = {
+    //Boolean - Whether we should show a stroke on each segment
+    segmentShowStroke : true,
+    //String - The colour of each segment stroke
+    segmentStrokeColor : "#fff",
+    //Number - The width of each segment stroke
+    segmentStrokeWidth : 2,
+    //Number - The percentage of the chart that we cut out of the middle
+    percentageInnerCutout : 50, // This is 0 for Pie charts
+    //Number - Amount of animation steps
+    animationSteps : 100,
+    //String - Animation easing effect
+    animationEasing : "easeOutBounce",
+    //Boolean - Whether we animate the rotation of the Doughnut
+    animateRotate : true,
+    //Boolean - Whether we animate scaling the Doughnut from the centre
+    animateScale : false,
+    
+    legendTemplate : '<ul>'
+        +'<% for (var i=0; i<pieData.length; i++) { %>'
+          +'<li>'
+          +'<span style=\"background-color:<%=pieData[i].color%>; display: inline-block; height: 30px; width: 30px\">&nbsp</span>'
+          +'<% if (pieData[i].label) { %><%= pieData[i].label %><% } %>'
+        +'</li>'
+      +'<% } %>'
+    +'</ul>'
+};
+
+var ctx = $("#myChart").get(0).getContext("2d");
+var donut = new Chart(ctx).Pie(pieData, options);
+var legend = donut.generateLegend();
+$(".legende").append(legend);
+
+</script>
+{% endblock %}
+

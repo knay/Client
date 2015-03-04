@@ -35,9 +35,37 @@ class StatsController extends Controller
     		array_push($axeY, $valeur->montant);
     	}
     	 
-    	return $this->render('ImerirVenteBundle::stats.html.twig', array('result_menu' => $menu_sous_menu,
+    	return $this->render('ImerirVenteBundle::statsVenteMois.html.twig', array('result_menu' => $menu_sous_menu,
     			                                                         'axeX' => $axeX,
     			                                                         'axeY' => $axeY,
     		                	                                         'erreur' => $erreur));
+    }
+    
+    public function topVenteAction()
+    {
+    	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
+    	$menu_sous_menu = array();
+    	$erreur = '';
+    	$stats = array();
+    
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    	 
+    	try {
+    		$return_moyenne = $soap->call('statsVenteTopVente', array('nbTop' => 3)); // On récupère le menu/sous-menu
+    		$stats = json_decode($return_moyenne);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    
+    	return $this->render('ImerirVenteBundle::statsTopVente.html.twig', array('result_menu' => $menu_sous_menu,
+    																			 'stats' => $stats,
+																    			 'erreur' => $erreur));
     }
 }

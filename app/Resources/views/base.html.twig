@@ -85,6 +85,11 @@
 							    <i class="fa fa-truck"></i>
 							    <ul id="4">
  						    		{% for j in i.sous_menu %}
+ 						    			{% if j == "Commandes" %}
+	 						    			<a href="{{ path('imerir_creation_fournisseur') }}">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
 										{% if j == "Fournisseurs" %}
 	 						    			<a href="{{ path('imerir_creation_fournisseur') }}">
 												<li>{{ j }}</li>
@@ -150,7 +155,7 @@
 						 		<ul id="6">
  						    		{% for j in i.sous_menu %}
 										{% if j == "Factures" %}
-	 						    			<a href="">
+	 						    			<a href="{{ path('imerir_vente_facture') }}">
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}

@@ -24,7 +24,7 @@ menuSelected
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_creation_fournisseur' %}
         <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
-            <table>
+            <table id="tableau_input">
             <tr>
                 <td><label for="nom">Nom fournisseur </label></td>
                 <td><input type="text" name="nom"/></td>
@@ -43,7 +43,7 @@ menuSelected
 
             {#champs pour l'adresse#}
             <div id="lst_adresse">
-                <table class="tableau_adresse">
+                <table class="tableau_adresse" id="tableau">
                     <tr>
                         <th></th>
                         <th class="titre_lst">Pays</th>
@@ -101,7 +101,7 @@ menuSelected
             </table>
 
             <div id="lst_adresse">
-                <table class="tableau_adresse">
+                <table class="tableau_adresse" id="tableau">
                     <tr>
                         <th></th>
                         <th class="titre_lst">Pays</th>
@@ -158,7 +158,7 @@ menuSelected
             </table>
 
             <div id="lst_adresse">
-                <table class="tableau_adresse">
+                <table class="tableau_adresse" id="tableau">
                     <tr>
                         <th></th>
                         <th class="titre_lst">Pays</th>
@@ -231,7 +231,7 @@ menuSelected
             </table>
 
             <div id="lst_adresse">
-                <table class="tableau_adresse">
+                <table class="tableau_adresse" id="tableau">
                     <tr>
                         <th></th>
                         <th class="titre_lst">Pays</th>

@@ -22,6 +22,7 @@ class AppKernel extends Kernel
             new Imerir\StockBundle\ImerirStockBundle(),
             new Imerir\FournisseurBundle\ImerirFournisseurBundle(),
             new Imerir\VenteBundle\ImerirVenteBundle(),
+            new Imerir\ContactBundle\ImerirContactBundle(),
         );
 
         if (in_array($this->getEnvironment(), array('dev', 'test'))) {

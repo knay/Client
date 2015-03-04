@@ -1,3 +1,7 @@
+imerir_contact:
+    resource: "@ImerirContactBundle/Resources/config/routing.yml"
+    prefix:   /
+
 imerir_vente:
     resource: "@ImerirVenteBundle/Resources/config/routing.yml"
     prefix:   /

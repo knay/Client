@@ -1,0 +1,3 @@
+imerir_contact_homepage:
+    path:     /hello/{name}
+    defaults: { _controller: ImerirContactBundle:Default:index }

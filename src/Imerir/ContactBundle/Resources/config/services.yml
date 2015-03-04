@@ -1,0 +1,4 @@
+services:
+#    imerir_contact.example:
+#        class: Imerir\ContactBundle\Example
+#        arguments: [@service_id, "plain_value", %parameter%]

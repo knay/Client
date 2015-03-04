@@ -6,7 +6,7 @@
 	left: 55px;
 	z-index: 1;
  	background-color: RGB(230,230,230);
-	overflow: scroll;
+	overflow: auto;
 /* 	border: 2px solid red; */
 }
 

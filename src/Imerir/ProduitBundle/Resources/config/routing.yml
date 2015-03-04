@@ -45,3 +45,7 @@ imerir_produit_article:
 imerir_produit_article_save:
     path:     /article/save
     defaults: { _controller: ImerirProduitBundle:Article:saveArticle }
+    
+imerir_produit_code_barre:
+    path:     /code_barre
+    defaults: { _controller: ImerirProduitBundle:CodeBarre:index }

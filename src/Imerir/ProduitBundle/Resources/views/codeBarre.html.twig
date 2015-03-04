@@ -1,0 +1,104 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block title_page %}
+Code barre
+{% endblock %}
+
+{% block title %}
+ALBA - Générateur de code barre
+{% endblock %}
+
+{% block produitBlock %}
+menuSelected
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+@font-face {
+	font-family: "codebar";
+	src: url("{{ asset('bundles/imerirproduit/fonts/c39hrp48dhtt.ttf') }}");
+}
+</style>
+<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/cssCodeBarre.css') }}"/> 
+{% endblock %}
+
+{% block ajout %}
+<div id="critere_code_barre">
+	<form action="{{ path('imerir_produit_code_barre') }}" method="POST" class="tableau_code_barre">
+		<table class="tableau_input tableau_code_barre">
+			<tr>
+				<td><h3>Générer un nouveau code barre :</h3></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><label for="nb_etiquette_X">Nombre d'étiquette largeur : </label></td>
+				<td><input type="number" name="nb_etiquette_X" value="{{ nbX }}"></td>
+			</tr>
+			<tr>
+				<td><label for="nb_etiquette_Y">Nombre d'étiquette hauteur : </label></td>
+				<td><input type="number" name="nb_etiquette_Y" value="{{ nbY }}"></td>
+			</tr>
+			<tr>
+				<td><label for="nb_code_barre">Nombre de code barre à générer : </label></td>
+				<td><input type="number" name="nb_code_barre" value="1"></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Générer la feuille de code barre"></td>
+				<td></td>
+			</tr>
+		</table>
+	</form>
+	<span class="ou">OU</span>
+	
+	<form action="{{ path('imerir_produit_code_barre') }}" method="POST" class="tableau_code_barre">
+		<table class="tableau_input tableau_code_barre">
+			<tr>
+				<td><h3>Générer un code barre à partir de son numéro : </h3></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><label for="num_code_barre">Numéro à générer : </label></td>
+				<td><input type="text" name="num_code_barre" ></td>
+			</tr>
+			<tr>
+				<td><label for="nb_etiquette_X">Nombre d'étiquette largeur : </label></td>
+				<td><input type="number" name="nb_etiquette_X" value="{{ nbX }}"></td>
+			</tr>
+			<tr>
+				<td><label for="nb_etiquette_Y">Nombre d'étiquette hauteur : </label></td>
+				<td><input type="number" name="nb_etiquette_Y" value="{{ nbY }}"></td>
+			</tr>
+			<tr>
+				<td><input type="submit" value="Générer la feuille de code barre"></td>
+				<td></td>
+			</tr>
+		</table>
+	</form> 
+</div>
+<a href="#" onclick="window.print()" class="bouton">Imprimer les codes barres</a>
+<div id="divCodeBarre">
+	<table class="code_barre">
+		{% for y in 1..nbY %}
+		<tr>
+			{% for x in 1..nbX %}
+			<td>*{{ code_barre }}*</td>
+			{% endfor %}
+		</tr>
+		{% endfor %}
+	</table>
+</div>
+{% endblock %}
+
+{% block recherche %}
+{% endblock %}
+
+{% block table %}
+	<tr><th>Nom</th><th>Valeurs possibles</th></tr>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+</script>
+{% endblock %}
+

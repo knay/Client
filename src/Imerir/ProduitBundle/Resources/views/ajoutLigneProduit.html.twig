@@ -22,20 +22,20 @@ menuSelected
     {% if app.request.attributes.get('_route')=='imerir_produit_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <div id="divNom">
-                <label for="nom">Nom ligne produit: </label>
+                <label for="nom">Nom ligne produit : </label>
                 <input type="text" name="nom"/>
-                <input type="submit" value="Ajouter">
             </div>
+            <input type="submit" value="Ajouter">
         </form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <div id="divNom">
-                <label for="nom">Nom ligne produit: </label>
+                <label for="nom">Nom ligne produit : </label>
                 <input type="text" name="nom"/>
-                <input type="submit" value="Ajouter">
             </div>
+            <input type="submit" value="Ajouter">
         </form>
         <p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajoutée</p>
     {% endif %}
@@ -44,22 +44,22 @@ menuSelected
 
         <form action="{{ path('imerir_produit_validation_modification_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <div id="divNom">
-                <label for="nom">Nom ligne produit: </label>
+                <label for="nom">Nom ligne produit : </label>
                 <input type="hidden" name="id_lp" value="{{ lp_id_val }}">
                 <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
                 <input type="text" name="nom" value="{{ lp_nom_val }}"/>
-                <input type="submit" value="Modifier">
             </div>
+            <input type="submit" value="Modifier">
         </form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_modification_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <div id="divNom">
-                <label for="nom">Nom ligne produit: </label>
+                <label for="nom">Nom ligne produit : </label>
                 <input type="text" name="nom"/>
-                <input type="submit" value="Ajouter">
             </div>
+            <input type="submit" value="Ajouter">
         </form>
         <p class="validation_message">La ligne produit "{{ old_nom_lp }}" a bien été modifiée en "{{ nom_lp_add }}"</p>
     {% endif %}
@@ -68,7 +68,7 @@ menuSelected
 
 {% block recherche %}
     <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="post">
-        <label for="recherche_lp">Nom :</label><input type="text" name="recherche_lp">
+        <label for="recherche_lp">Nom : </label><input type="text" name="recherche_lp">
         <input type="submit">
     </form>
 {% endblock %}

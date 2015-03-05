@@ -208,6 +208,7 @@ h1 {
 	margin-left: 2%;
 	border: 1px solid #669900;
 	background-color: rgb(249, 249, 249);
+	border-radius: 3px;
 }
 
 #aide p {

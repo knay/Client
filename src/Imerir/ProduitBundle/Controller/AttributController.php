@@ -144,6 +144,7 @@ class AttributController extends Controller
     	return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit,
     			 																   'lst_attribut' => $jsonValeurAttribut,
     			 																   'result_menu' => $menu_sous_menu, 
+    			                                                                   'modification' => false,
     			                                                                   'erreur' => $erreur));
     }
 }

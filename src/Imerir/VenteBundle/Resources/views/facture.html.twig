@@ -14,21 +14,18 @@ ALBA - Facture
 
 {% block title_ajout %}Facture{% endblock %}
 
-	
 {% block ajout %}
 	<label>Test : </label><p id="date"></p>
 {% endblock %}
 
 {% block recherche %}
-	<form method="post" action="{{ path('imerir_vente_facture_detail') }}" style="display: none">
-		<label>Date : </label><input type="text" id="date_de_recherche_facture" size="20" value="aaaa-mm-jj">
+	<form method="post" action="{{ path('imerir_vente_facture') }}">
+		<label>Date : </label><input type="text" id="date_de_recherche_facture" name="date" size="20" value="aaaa-mm-jj">
 		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
-		<label>Client : </label><input type="text" id="recherche_client" size="20">
+		<label>Client : </label><input type="text" id="recherche_client" name="client" size="20">
 		<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
 	<input type="submit">
 {% endblock %}
-
-
 
 {% block table %}
     <tr>
@@ -87,14 +84,6 @@ $("#bouton_supprimer_date").click(function(){
 $("#recherche_client").change(function(){
 	$("#bouton_supprimer_client").css("display","inline");
 });
-
-// $(window).click(function(){
-// 	//Si rien dans le champ client on marque defaut
-// 	if($("#recherche_client").val() == ''){
-// 		$("#recherche_client").val(explication_client);
-// 	}
-// });
-
 
 //Permet de gerer l'evenement sur le bouton de suppresion de la recherche client
 $("#bouton_supprimer_client").click(function(){

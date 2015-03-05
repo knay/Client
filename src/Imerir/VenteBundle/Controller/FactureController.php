@@ -20,8 +20,21 @@ class FactureController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
+    	$query = $this->get('request');
+    	//on recuperer les variables en post ici 
+    	$date = $query->request->get('date');
+    	$client = $query->request->get('client');
+    	
+    	//gestion des cas possible de retour en post a traiter avant la requete
+    	if($date == 'aaaa-mm-jj'){
+    		$date = '';
+    	}
+    	if($client == 'Nom'){
+    		$client = '';
+    	}
+    	
     	try {
-    		$return_facture = $soap->call('getAllFacture', array()); // On récupère le menu/sous-menu
+    		$return_facture = $soap->call('getAllFacture', array($date,$client)); // On récupère le menu/sous-menu
     		$facture = json_decode($return_facture);
     	}
     	catch(\SoapFault $e) {

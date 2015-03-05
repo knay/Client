@@ -8,9 +8,9 @@
 {% endblock %}
 {% block title_ajout %}
     {% if app.request.attributes.get('_route')=='imerir_produit_modification_ligne_produit' %}
-        MODIFICATION
+        Modifier une ligne produit
     {% else %}
-        AJOUT
+        Ajouter une ligne produit
     {% endif %}
 {% endblock %}
 
@@ -18,11 +18,16 @@
 menuSelected
 {% endblock %}
 
+{% block aide %}
+Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit contient plusieurs produits.
+<br><em>Exemple : </em>Une ligne de produit peut, par exemple, être "T-Shirt" ou "Jeux vidéo".
+{% endblock %}
+
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_produit_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <div id="divNom">
-                <label for="nom">Nom ligne produit : </label>
+                <label for="nom">Nom de la ligne produit : </label>
                 <input type="text" name="nom"/>
             </div>
             <input type="submit" value="Ajouter">
@@ -32,7 +37,7 @@ menuSelected
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <div id="divNom">
-                <label for="nom">Nom ligne produit : </label>
+                <label for="nom">Nom de la ligne produit : </label>
                 <input type="text" name="nom"/>
             </div>
             <input type="submit" value="Ajouter">
@@ -44,7 +49,7 @@ menuSelected
 
         <form action="{{ path('imerir_produit_validation_modification_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <div id="divNom">
-                <label for="nom">Nom ligne produit : </label>
+                <label for="nom">Nom de la ligne produit : </label>
                 <input type="hidden" name="id_lp" value="{{ lp_id_val }}">
                 <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
                 <input type="text" name="nom" value="{{ lp_nom_val }}"/>
@@ -56,7 +61,7 @@ menuSelected
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_modification_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <div id="divNom">
-                <label for="nom">Nom ligne produit : </label>
+                <label for="nom">Nom de la ligne produit : </label>
                 <input type="text" name="nom"/>
             </div>
             <input type="submit" value="Ajouter">

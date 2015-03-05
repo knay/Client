@@ -16,7 +16,7 @@
     {% endif %}
 {% endblock %}
 
-{% block clientBlock %}
+{% block fournisseurBlock %}
 menuSelected
 {% endblock %}
 
@@ -35,7 +35,7 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><label for="nom">Date de naissance </label></td>
                     <td><input type="date" name="date_naissance" value="0000-00-00"></td>
                 </tr>
                 <tr>
@@ -110,7 +110,7 @@ menuSelected
 
     {% if app.request.attributes.get('_route')=='imerir_validation_creation_client' %}
         <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
-            <table id="tableau_input">
+            <table>
                 <tr>
                     <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
@@ -121,7 +121,7 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><label for="nom">Date de naissance </label></td>
                     <td><input type="date" name="date_naissance" value="0000-00-00"></td>
                 </tr>
                 <tr>
@@ -196,22 +196,22 @@ menuSelected
     {% if app.request.attributes.get('_route')=='imerir_modification_client' %}
 
         <form action="{{ path('imerir_validation_modification_client') }}" method="post" id="formulaire_creation_client">
-            <table id="tableau_input">
-                <tr><td><label for="nom">Nom </label>
+            <table>
+                <tr><td><label for="nom">Nom : </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
 
                 <input type="submit" value="Modifier">
 
-                <tr><td><label for="nom">Prenom </label>
+                <tr><td><label for="nom">Prenom : </label>
                         <input type="hidden" name="old_prenom" value="{{ modif_prenom }}"></td>
                 <td><input type="text" name="new_prenom" value="{{ modif_prenom }}"></td></tr>
 
-                <tr><td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                <tr><td><label for="nom">Date de naissance : </label></td>
                     <td><input type="text" name="new_date_naissance" value="{{ modif_date_naissance }}"/></td></tr>
 
-                <tr><td><label for="nom">Civilité </label></td>
+                <tr><td><label for="nom">Civilité : </label></td>
                     <td>
                         <select name="new_civilite">
                             {% if modif_civilite == 'Mlle.' %}
@@ -232,13 +232,13 @@ menuSelected
                         </select>
                     </td></tr>
 
-                <tr><td><label for="nom">Email </label></td>
+                <tr><td><label for="nom">Email : </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
 
-                <tr><td><label for="nom">Téléphone portable </label></td>
+                <tr><td><label for="nom">Téléphone portable : </label></td>
                 <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
 
-                <tr><td><label for="nom">Désire des SMS </label></td>
+                <tr><td><label for="nom">Désire des SMS : </label></td>
                     <td>
                         {% if modif_ok_sms == 1 %}
                             <input type="checkbox" name="new_ok_sms" checked/>
@@ -247,7 +247,7 @@ menuSelected
                         {% endif %}
                     </td></tr>
 
-                <tr><td><label for="nom">Désire des e-mails </label></td>
+                <tr><td><label for="nom">Désire des e-mails : </label></td>
                     <td>
                         {% if modif_ok_mail == 1 %}
                             <input type="checkbox" name="new_ok_mail" checked/>
@@ -313,7 +313,7 @@ menuSelected
         </form>
     {% endif %}
 
-    {% if app.request.attributes.get('_route')=='imerir_validation_modification_client' %}
+    {% if app.request.attributes.get('_route')=='imerir_validation_modification_fournisseur' %}
         <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
             <table id="tableau_input">
                 <tr>
@@ -326,7 +326,7 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><label for="nom">Date de naissance </label></td>
                     <td><input type="date" name="date_naissance" value="0000-00-00"></td>
                 </tr>
                 <tr>
@@ -395,58 +395,22 @@ menuSelected
                 </table>
             </div>
         </form>
-        <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
+        <p class="validation_message">Le fournisseur "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
             email "{{ new_email }}" et pour téléphone portable {{ new_telephone_portable }}</p>
     {% endif %}
 
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_creation_client') }}" method="post">
-        <table id="tableau_input">
-            <tr>
+    <form action="{{ path('imerir_creation_fournisseur') }}" method="post">
+        <label for="recherche_fournisseur_nom">Nom fournisseur :</label>
+        <input type="text" name="recherche_fournisseur_nom">
+        <label for="recherche__fournisseur_email">Email fournisseur :</label>
+        <input type="text" name="recherche_fournisseur_email">
+        <label for="recherche_telephone_portable">Téléphone portable :</label>
+        <input type="text" name="recherche_fournisseur_telephone_portable">
+        <input type="submit">
 
-                <td><label for="recherche_contact_nom">Nom :</label></td>
-                <td><input type="text" name="recherche_contact_nom"></td>
-
-                <td><label for="recherche_contact_prenom">Prenom :</label></td>
-                <td><input type="text" name="recherche_contact_prenom"></td>
-
-                <td><label for="recherche_contact_date_naissance">Date de naissance :</label></td>
-                <td><input type="date" name="recherche_contact_date_naissance"></td>
-            </tr>
-            <tr>
-                <td><label for="recherche_contact_civilite">Civilité :</label></td>
-                <td><select name="recherche_contact_civilite">
-                    <option value=""></option>
-                    <option value="Mlle.">Mlle.</option>
-                    <option value="Mme.">Mme.</option>
-                    <option value="M.">M.</option>
-                </select></td>
-
-                <td><label for="recherche_contact_email">Email :</label></td>
-                <td><input type="text" name="recherche_contact_email"></td>
-
-                <td><label for="recherche_contact_telephone_portable">Téléphone portable :</label></td>
-                <td><input type="text" name="recherche_contact_telephone_portable"></td>
-            </tr>
-            <tr>
-                <td><label for="recherche_contact_ok_sms">Désire recevoir des SMS </label></td>
-                <td><select name="recherche_contact_ok_sms">
-                        <option value=""></option>
-                        <option value="Oui">Oui</option>
-                        <option value="Non">Non</option>
-                    </select></td>
-
-                <td><label for="recherche_contact_ok_mail">Désire recevoir des e-mails </label></td>
-                <td><select name="recherche_contact_ok_mail">
-                        <option value=""></option>
-                        <option value="Oui">Oui</option>
-                        <option value="Non">Non</option>
-                    </select></td>
-                <td><input type="submit"></td>
-            </tr>
-        </table>
     </form>
 {% endblock %}
 

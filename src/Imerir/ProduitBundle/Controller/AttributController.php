@@ -24,6 +24,7 @@ class AttributController extends Controller
     {
     	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
     	$erreur = ''; // En cas d'erreur
+    	$modification = false;
     	
     	$nomRech = $this->getRequest()->request->get('rechNom'); // Si on fait une recher sur le nom de l'article
     	if (null === $nomRech)
@@ -48,6 +49,7 @@ class AttributController extends Controller
 	    		$args = array('nom' => '', 'idLigneProduit' => 0, 'idAttribut' => (int)$id, 'avecValeurAttribut' => true, 'avecLigneProduit' => true);
 	    		$ret = $soap->call('getAttribut', $args); // On récup toutes les infos de l'attributs depuis le SOAP
 	    		$jsonValeurAttributAll = json_decode($ret);
+	    		$modification = true;
 	   		}
 	    	catch(\SoapFault $e) {
 	    		$erreur.=$e->getMessage();
@@ -70,6 +72,7 @@ class AttributController extends Controller
         		                                                                   'lst_attribut' => $jsonValeurAttribut,
         		                                                                   'detail_attribut' => $jsonValeurAttributAll,
         																		   'result_menu' => $menu_sous_menu,
+        		                                                                   'modification' => $modification,
         		                                                                   'erreur' => $erreur));
     }
     

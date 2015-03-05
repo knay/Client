@@ -7,6 +7,24 @@
 Caractéristiques produits
 {% endblock %}
 
+{% block title_ajout %}
+	{% if modification == true %}
+		Modifier une caractéristique produit
+	{% else %}
+		Ajouter une caractéristique produit 
+	{% endif %}
+{% endblock %}
+
+{% block aide %}
+Veuillez saisir le nom de la caractéristique produit, ainsi que les valeurs possibles pour cette caractéristique.
+<br><em>Exemple : </em>
+<ul>
+	<li>Nom de la caractéristique : Taille vêtemment</li>
+ 	<li>Valeurs possibles : S, M, L, XL</li> 
+ 	<li>Lignes produits concernées : t-shirt, pull</li>
+ </ul>  
+{% endblock %}
+
 {% block title %}
 ALBA - Caractéristiques produits
 {% endblock %}
@@ -18,8 +36,6 @@ menuSelected
 {% block stylesheets %}
 	<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}">
 {% endblock %}
-
-{% block title_ajout %}Ajouter une caractéristique produit{% endblock %}
 
 {% block ajout %}
 
@@ -34,7 +50,6 @@ menuSelected
 		{% if detail_attribut.id is defined %}
 		<input type="hidden" name="id" value="{{ detail_attribut.id }}">
 		{% endif %}
-		<input type="submit">
 	</div>
 	<div id="lst_attribut">
 		<table class="tableau_attribut tableau">
@@ -116,6 +131,8 @@ menuSelected
 			{% endif %}
 		</table>
 	</div>
+	<br>
+	<input type="submit">
 </form>
 {% endblock %}
 

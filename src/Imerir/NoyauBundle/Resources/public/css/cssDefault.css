@@ -201,3 +201,28 @@ h1 {
 	background-color: #fd9696;
 	margin-bottom: 10px; 
 }
+
+#aide {
+	display: none;
+	margin-right: 2%;
+	margin-left: 2%;
+	border: 1px solid #669900;
+	background-color: rgb(249, 249, 249);
+}
+
+#aide p {
+	padding-right: 5px;
+	padding-left: 5px;
+}
+
+#boutonAide {
+	cursor: pointer;
+}
+
+#aide #title_aide {
+	background-color: #669900;
+	text-align: center;
+	color: white;
+	padding-top: 3px;
+	padding-bottom: 3px;
+}

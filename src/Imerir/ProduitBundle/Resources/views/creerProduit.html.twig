@@ -9,14 +9,23 @@
 
 {% block title_ajout %}
     {% if app.request.attributes.get('_route')=='imerir_produit_modification_produit' %}
-        MODIFICATION
+        Modifier un produit
     {% else %}
-        AJOUT
+        Ajouter un produit
     {% endif %}
 {% endblock %}
 
 {% block produitBlock %}
 menuSelected
+{% endblock %}
+
+{% block aide %}
+Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusieurs articles.
+<br>Vous devez saisir la référence du produit, ainsi que la ligne de produit auquel il appartient.
+<br><b>La ligne de produit doit être créée avant de créer un produit.</b>
+<br>
+<br><em>Exemple 1 : </em>Un produit peut, par exemple être, "La ligne verte", pour la ligne de produit "DVD".
+<br><em>Exemple 2 : </em>Un produit peut, par exemple être, "R22B", pour la ligne de produit "Ballon".
 {% endblock %}
 
 {% block ajout %}

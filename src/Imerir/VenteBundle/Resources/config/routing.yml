@@ -9,3 +9,7 @@ imerir_vente_stats_top_vente:
 imerir_vente_facture:
     path:     /vente/facture
     defaults: { _controller: ImerirVenteBundle:Facture:index }
+
+imerir_vente_facture_detail:
+    path:     /vente/facture/detail
+    defaults: { _controller: ImerirVenteBundle:Facture:factureDetailFromLigneFacture }

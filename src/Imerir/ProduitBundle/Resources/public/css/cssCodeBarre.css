@@ -1,0 +1,66 @@
+.code_barre {
+	font-family: "codebar";
+	font-size: 90pt;
+	letter-spacing: 1px;
+	margin: 0 auto;
+	background-color: white;
+	border: 1px solid black;
+}
+
+.code_barre td{
+	padding-bottom: 10px;
+	padding-right: 10px;
+}
+
+#critere_code_barre {
+	border-bottom: 1px solid #669900;
+	padding-bottom: 10px;
+}
+
+.tableau_code_barre {
+	display: inline-block;
+	vertical-align: middle;
+}
+
+.ou {
+	font-size: 18pt;
+	vertical-align: middle;
+	margin-left: 7%;
+	margin-right: 7%;
+}
+
+/** TODO faire que ça marche pas que sur firefox... **/
+@media print {
+	#divCodeBarre {
+        background-color: white;
+        height: 100%;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        margin: 0;
+        padding: 15px;
+        font-size: 14px;
+        line-height: 18px;
+        visibility: visible;
+    }
+    
+    #divCodeBarre * {
+    	visibility: visible;
+    }
+    
+    .code_barre td{
+		height: 5.4cm;
+		width: 7cm;
+		padding-right: 2cm;
+	}
+	
+	.code_barre {
+		margin: 0;
+		border: none;
+	}
+	
+	body * {
+		visibility: hidden;
+	}
+}

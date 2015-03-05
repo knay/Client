@@ -145,14 +145,14 @@ menuSelected
 
         <form action="{{ path('imerir_validation_modification_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table id="tableau_input">
-                <tr><td><label for="nom">Nom : </label>
+                <tr><td><label for="nom">Nom fournisseur </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
                 <input type="submit" value="Modifier">
-                <tr><td><label for="nom">Email : </label></td>
+                <tr><td><label for="nom">Email </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
-                <tr><td><label for="nom">Téléphone portable : </label></td>
+                <tr><td><label for="nom">Téléphone portable </label></td>
                 <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
 
             </table>

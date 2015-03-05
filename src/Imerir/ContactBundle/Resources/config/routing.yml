@@ -1,3 +1,15 @@
 imerir_creation_client:
     path:     /contacts/creation
     defaults: { _controller: ImerirContactBundle:Default:ajoutContact }
+
+imerir_validation_creation_client:
+    path:     /contacts/creation/validation
+    defaults: { _controller: ImerirContactBundle:Default:execAjoutContact }
+
+imerir_modification_client:
+    path:     /contacts/modification
+    defaults: { _controller: ImerirContactBundle:Default:modifContact }
+
+imerir_validation_modification_client:
+    path:     /contacts/modification/validation
+    defaults: { _controller: ImerirContactBundle:Default:execModifContact }

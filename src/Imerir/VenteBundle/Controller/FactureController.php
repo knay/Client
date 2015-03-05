@@ -36,8 +36,10 @@ class FactureController extends Controller
         $query = $this->get('request');
         
         //on recuperer les variables en post ici variable 
-        $id_tableau = $query->request->get('id_select');
-        $ref_tableau = $query->request->get('ref_select');
+        $numero = $query->request->get('ligne_numero');
+        $date = $query->request->get('ligne_date');
+        $client = $query->request->get('ligne_client');
+        $montant = $query->request->get('ligne_montant');
 
         $result = array("id"=>$id_tableau,"ref"=>$ref_tableau);
         
@@ -46,7 +48,7 @@ class FactureController extends Controller
         $menu_sous_menu = json_decode($return_menu);
         
         return $this->render('ImerirVenteBundle::facture.html.twig',
-            array('result_menu' => $menu_sous_menu,'resultat'=>$result));
+            array('result_menu' => $menu_sous_menu));
    
     }
 }

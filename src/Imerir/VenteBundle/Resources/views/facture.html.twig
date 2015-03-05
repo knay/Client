@@ -14,8 +14,9 @@ ALBA - Facture
 
 {% block title_ajout %}Facture{% endblock %}
 
-{% block ajout %}
 	
+{% block ajout %}
+	<label>Test : </label><p id="date"></p>
 {% endblock %}
 
 {% block recherche %}
@@ -23,6 +24,7 @@ ALBA - Facture
 	<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
 	<label>Client : </label><input type="text" id="recherche_client" size="20">
 	<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
+	<input type="submit">
 {% endblock %}
 
 
@@ -41,10 +43,10 @@ ALBA - Facture
         	<td>{{ i.date }}</td>
             <td>{{ i.client }}</td>
             <td>{{ i.montant }}</td>
-            <input type="hidden" name="id_select" value="{{ i.numero }}">
-            <input type="hidden" name="ref_select" value="{{ i.date }}">
-            <input type="hidden" name="ref_select" value="{{ i.client }}">
-            <input type="hidden" name="ref_select" value="{{ i.montant }}">
+            <input type="hidden" name="ligne_numero" value="{{ i.numero }}">
+            <input type="hidden" name="ligne_date" value="{{ i.date }}">
+            <input type="hidden" name="ligne_client" value="{{ i.client }}">
+            <input type="hidden" name="ligne_montant" value="{{ i.montant }}">
             </form>
 		</tr>
     {% endfor %}
@@ -106,7 +108,9 @@ $("#recherche_client").click(function(){
 	}
 });
 
-$(".select_ligne").click(function(){
+//Permet de gerer lorsque l'utilisateur click sur une ligne du tableau
+$(".select_ligne").click( function(){
+	alert();
 	$("#fieldset_ajout").css("display","inline");
 });
 

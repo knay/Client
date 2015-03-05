@@ -19,8 +19,10 @@ ALBA - Facture
 {% endblock %}
 
 {% block recherche %}
-	<label>Date:</label><input type="text" id="date_de_recherche_facture" size="20" value="yy-mm-dd">
+	<label>Date : </label><input type="text" id="date_de_recherche_facture" size="20" value="aaaa-mm-jj">
 	<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
+	<label>Client : </label><input type="text" id="recherche_client" size="20">
+	<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
 {% endblock %}
 
 
@@ -48,16 +50,16 @@ ALBA - Facture
     {% endfor %}
 {% endblock %}
 
-                    
-
-
-
 {% block javascripts %}
 <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
 <script>
+var format_affichage_date = "yy-mm-dd";
+var explication_client = "Nom";
 $("#bouton_supprimer_date").css( "display", "none");
 $("#fieldset_ajout").css( "display", "none");
-var format_affichage_date = "yy-mm-dd";
+$("#bouton_supprimer_client").css("display","none");
+$("#date_de_recherche_facture").val('aaaa-mm-jj');
+$("#recherche_client").val(explication_client);
 
 //Permet de parametrer le datepicker
 $(function() {
@@ -66,6 +68,7 @@ $(function() {
 	$( "#date_de_recherche_facture" ).datepicker( "option", "dateFormat", format_affichage_date );
 });
 
+
 //Afficher l'icone de suppression lorsqu'une date est inscrite
 $("#date_de_recherche_facture").change(function(){
 	$("#bouton_supprimer_date").css("display","inline");
@@ -73,13 +76,74 @@ $("#date_de_recherche_facture").change(function(){
 
 //Permet de gerer l'evenement du bouton de suppresion  de la date
 $("#bouton_supprimer_date").click(function(){
-	$( "#date_de_recherche_facture" ).val('');
+	$( "#date_de_recherche_facture" ).val('aaaa-mm-jj');
 	$("#bouton_supprimer_date").css( "display", "none");
+});
+
+//Affiche l'icone de suppresion lorsque l'utilisateur saisie la recherche d'un client
+$("#recherche_client").change(function(){
+	$("#bouton_supprimer_client").css("display","inline");
+});
+
+// $(window).click(function(){
+// 	//Si rien dans le champ client on marque defaut
+// 	if($("#recherche_client").val() == ''){
+// 		$("#recherche_client").val(explication_client);
+// 	}
+// });
+
+
+//Permet de gerer l'evenement sur le bouton de suppresion de la recherche client
+$("#bouton_supprimer_client").click(function(){
+	$("#bouton_supprimer_client").css("display","none");
+	$("#recherche_client").val(explication_client);
+});
+
+//Permet d'effacer la valeur du champ si elle est egal a nom, donc quand on click pour la premeir fois sur le input
+$("#recherche_client").click(function(){
+	if ($("#recherche_client").val() == explication_client){
+		$("#recherche_client").val('');
+	}
 });
 
 $(".select_ligne").click(function(){
 	$("#fieldset_ajout").css("display","inline");
 });
+
+//Permet de gerer la langue du datepicker
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+		factory( jQuery.datepicker );
+	}
+	
+}(function( datepicker ) {
+	datepicker.regional['fr'] = {
+		closeText: 'Fermer',
+		prevText: 'Pr&eacutec&eacutedent',
+		nextText: 'Suivant',
+		currentText: 'Aujourd\'hui',
+		monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
+			'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
+		monthNamesShort: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin',
+			'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
+		dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+		dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+		dayNamesMin: ['D','L','M','M','J','V','S'],
+		weekHeader: 'Sem.',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	datepicker.setDefaults(datepicker.regional['fr']);
+
+	return datepicker.regional['fr'];
+
+}));
+//
 </script>
 {% endblock %}
 

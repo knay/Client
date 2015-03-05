@@ -42,6 +42,10 @@ menuSelected
                 <td><label for="reference_client">Référence client </label></td>
                 <td><input type="text" name="reference_client"/></td>
             </tr>
+            <tr>
+                <td><label for="notes">Notes </label></td>
+                <td><textarea name="notes"></textarea></td>
+            </tr>
                 <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
@@ -107,6 +111,10 @@ menuSelected
                     <td><label for="reference_client">Référence client </label></td>
                     <td><input type="text" name="reference_client"/></td>
                 </tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="notes"></textarea></td>
+                </tr>
                 <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
@@ -166,6 +174,10 @@ menuSelected
                 <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
                 <tr><td><label for="nom">Référence client </label></td>
                     <td><input type="text" name="new_reference_client" value="{{ modif_reference_client }}"/></td></tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="new_notes" >{{ modif_notes }}</textarea></td>
+                </tr>
                 <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
@@ -244,6 +256,10 @@ menuSelected
                     <td><label for="reference_client">Référence client </label></td>
                     <td><input type="text" name="reference_client"/></td>
                 </tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="notes"></textarea></td>
+                </tr>
                 <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
@@ -285,8 +301,7 @@ menuSelected
                 </table>
             </div>
         </form>
-        <p class="validation_message">Le fournisseur "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
-            email "{{ new_email }}" et pour téléphone portable {{ new_telephone_portable }}</p>
+        <p class="validation_message">Le fournisseur "{{ old_nom }}" a bien été modifié</p>
     {% endif %}
 
 {% endblock %}
@@ -307,7 +322,8 @@ menuSelected
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Email</th><th>Telephone portable</th><th>Référence client</th></tr>
+    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Email</th><th>Telephone portable</th>
+        <th>Référence client</th><th>Notes</th></tr>
     {% for i in liste_fournisseurs %}
 
         <tr><td>{{ i.nom }}
@@ -317,9 +333,10 @@ menuSelected
                     <input type="hidden" name="email_f" value="{{ i.email }}">
                     <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
                     <input type="hidden" name="reference_client_f" value="{{ i.reference_client }}">
+                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
                 </form>
             </td>
-        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td><td>{{ i.reference_client }}</td></tr>
+        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td><td>{{ i.reference_client }}</td><td>{{ i.notes }}</td></tr>
     {% endfor %}
 {% endblock %}
 

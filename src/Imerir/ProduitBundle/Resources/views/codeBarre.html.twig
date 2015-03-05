@@ -1,7 +1,7 @@
 {% extends "::baseAffichage.html.twig" %}
 
 {% block title_page %}
-Code barre
+Générateur de code barre
 {% endblock %}
 
 {% block title %}
@@ -10,6 +10,17 @@ ALBA - Générateur de code barre
 
 {% block produitBlock %}
 menuSelected
+{% endblock %}
+
+{% block title_ajout %}
+Génération d'une feuille de codes barres
+{% endblock %}
+
+{% block aide %}
+Cette page vous permet de générer des nouveau codes barres (pour des nouveaux articles par exemple), ou, de 
+réimprimmer un code barre avec un code défini (pour des articles auxquels il manque quelques étiquettes).
+<br>Le nombre d'étiquettes par ligne et par colonne correspond au nombre d'étiquettes sur votre feuille d'impression
+de code barre.
 {% endblock %}
 
 {% block stylesheets %}
@@ -31,11 +42,11 @@ menuSelected
 				<td></td>
 			</tr>
 			<tr>
-				<td><label for="nb_etiquette_X">Nombre d'étiquette largeur : </label></td>
+				<td><label for="nb_etiquette_X">Nombre d'étiquette par ligne : </label></td>
 				<td><input type="number" name="nb_etiquette_X" value="{{ nbX }}"></td>
 			</tr>
 			<tr>
-				<td><label for="nb_etiquette_Y">Nombre d'étiquette hauteur : </label></td>
+				<td><label for="nb_etiquette_Y">Nombre d'étiquette par colonne : </label></td>
 				<td><input type="number" name="nb_etiquette_Y" value="{{ nbY }}"></td>
 			</tr>
 			<tr>
@@ -61,11 +72,11 @@ menuSelected
 				<td><input type="text" name="num_code_barre" ></td>
 			</tr>
 			<tr>
-				<td><label for="nb_etiquette_X">Nombre d'étiquette largeur : </label></td>
+				<td><label for="nb_etiquette_X">Nombre d'étiquette par ligne : </label></td>
 				<td><input type="number" name="nb_etiquette_X" value="{{ nbX }}"></td>
 			</tr>
 			<tr>
-				<td><label for="nb_etiquette_Y">Nombre d'étiquette hauteur : </label></td>
+				<td><label for="nb_etiquette_Y">Nombre d'étiquette par colonne : </label></td>
 				<td><input type="number" name="nb_etiquette_Y" value="{{ nbY }}"></td>
 			</tr>
 			<tr>
@@ -75,8 +86,12 @@ menuSelected
 		</table>
 	</form> 
 </div>
-<a href="#" onclick="window.print()" class="bouton">Imprimer les codes barres</a>
 <div id="divCodeBarre">
+	<h3>Aperçu avant impression :</h3> 
+	<p>
+		Vérifiez que les codes barres sont correctement générés avec les paramètres que vous avez choisi.<br>
+		Pour imprimer cliquez sur le bouton en dessous de l'aperçu.
+	</p>
 	<table class="code_barre">
 		{% for y in 1..nbY %}
 		<tr>
@@ -86,6 +101,7 @@ menuSelected
 		</tr>
 		{% endfor %}
 	</table>
+	<a href="#" onclick="window.print()" class="bouton">Imprimer les codes barres</a>
 </div>
 {% endblock %}
 
@@ -98,6 +114,14 @@ menuSelected
 
 {% block javascripts %}
 <script>
+
+/**
+ * Quand la page est chargée on enlève le fieldset de recherche qui ne sert à rien.
+ */
+$(document).ready(function (e) {
+	$('#fieldset_recherche').remove();
+});
+
 
 </script>
 {% endblock %}

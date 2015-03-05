@@ -15,6 +15,7 @@ class DefaultController extends Controller
         $recherche_fournisseur_nom = $query->request->get('recherche_fournisseur_nom');
         $recherche_fournisseur_email = $query->request->get('recherche_fournisseur_email');
         $recherche_fournisseur_telephone_portable = $query->request->get('recherche_fournisseur_telephone_portable');
+        $recherche_fournisseur_reference_client = $query->request->get('recherche_fournisseur_reference_client');
 
 
         if($recherche_fournisseur_nom===null)
@@ -29,9 +30,14 @@ class DefaultController extends Controller
             $telephone_portable = '';
         else
             $telephone_portable = $recherche_fournisseur_telephone_portable;
+        if($recherche_fournisseur_reference_client===null)
+            $reference_client = '';
+        else
+            $reference_client = $recherche_fournisseur_reference_client;
 
         //TODO ajouter l'action getFournisseurs qui renvoie le nom, le mail et le num de tel
-        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => $nom, 'email'=>$email, 'telephone_portable'=>$telephone_portable));
+        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => $nom, 'email'=>$email,
+            'telephone_portable'=>$telephone_portable,'reference_client'=>$reference_client));
         $liste_fournisseurs = json_decode($return);
 
         //on recupere le menu et sous menu
@@ -51,6 +57,7 @@ class DefaultController extends Controller
         $fournisseur_nom = $query->request->get('nom');
         $fournisseur_email = $query->request->get('email');
         $fournisseur_telephone_portable = $query->request->get('telephone_portable');
+        $fournisseur_reference_client = $query->request->get('reference_client');
 
         if($fournisseur_nom===null)
             $fournisseur_nom='';
@@ -59,9 +66,13 @@ class DefaultController extends Controller
             $fournisseur_email='';
 
         if($fournisseur_telephone_portable===null)
-            $fournisseur_telephone_portable===null;
+            $fournisseur_telephone_portable='';
 
-        $soap->call('ajoutFournisseur',array('nom' => $fournisseur_nom, 'email'=>$fournisseur_email, 'telephone_portable'=>$fournisseur_telephone_portable));
+        if($fournisseur_reference_client===null)
+            $fournisseur_reference_client='';
+
+        $soap->call('ajoutFournisseur',array('nom' => $fournisseur_nom, 'email'=>$fournisseur_email,
+            'telephone_portable'=>$fournisseur_telephone_portable,'reference_client'=>$fournisseur_reference_client));
         ////////////////////////////////////////////////////////////////////////////
         /**
          * PARTIE ADRESSES
@@ -119,7 +130,8 @@ class DefaultController extends Controller
 
 
         //TODO ajouter l'action getFournisseurs qui renvoie le nom, le mail et le num de tel
-        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'', 'telephone_portable'=>''));
+        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'',
+            'telephone_portable'=>'','reference_fournisseur'=>''));
         $liste_fournisseurs = json_decode($return);
         //insertion du fournisseur
 
@@ -139,8 +151,10 @@ class DefaultController extends Controller
         $modif_nom = $query->request->get('nom_f');
         $modif_email = $query->request->get('email_f');
         $modif_telephone_portable = $query->request->get('telephone_portable_f');
+        $modif_reference_client = $query->request->get('reference_client_f');
 
-        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'', 'telephone_portable'=>''));
+        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'',
+            'telephone_portable'=>'','reference_client'=>''));
         $liste_fournisseurs = json_decode($return);
 
         //on recupere le menu et sous menu
@@ -158,7 +172,8 @@ class DefaultController extends Controller
 
         return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu'=>$menu_sous_menu,'modif_id'=>$modif_id,
             'modif_nom'=>$modif_nom,'modif_email'=>$modif_email,
-            'modif_telephone_portable'=>$modif_telephone_portable,'liste_adresses_fournisseur'=>$liste_adresses_fournisseur,
+            'modif_telephone_portable'=>$modif_telephone_portable,'modif_reference_client'=>$modif_reference_client,
+            'liste_adresses_fournisseur'=>$liste_adresses_fournisseur,
             'nbAdresse'=>0));
 
     }
@@ -172,6 +187,7 @@ class DefaultController extends Controller
         $new_nom = $query->request->get('new_nom');
         $new_email = $query->request->get('new_email');
         $new_telephone_portable = $query->request->get('new_telephone_portable');
+        $new_reference_client = $query->request->get('new_reference_client');
 
         ////////////////////PARTIE ADRESSES///////////////
         $modif_adresse_est_visible = array();
@@ -282,9 +298,11 @@ class DefaultController extends Controller
         //////////////////////////////////////////////////
 
         $soap->call('modifFournisseur',array('id'=>$old_id,
-            'nom'=>$new_nom,'email'=>$new_email,'telephone_portable'=>$new_telephone_portable));
+            'nom'=>$new_nom,'email'=>$new_email,'telephone_portable'=>$new_telephone_portable,
+            'reference_client'=>$new_reference_client));
 
-        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'', 'telephone_portable'=>''));
+        $return = $soap->call('getFournisseurs',array('count' => 0,'offset' => 0, 'nom' => '', 'email'=>'',
+            'telephone_portable'=>'','reference_client'=>''));
         $liste_fournisseurs = json_decode($return);
 
         //on recupere le menu et sous menu
@@ -293,7 +311,7 @@ class DefaultController extends Controller
 
         return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu'=>$menu_sous_menu,'old_id'=>$old_id,
             'old_nom'=>$old_nom,'new_nom'=>$new_nom,'new_email'=>$new_email,
-            'new_telephone_portable'=>$new_telephone_portable,'nbAdresse'=>0));
+            'new_telephone_portable'=>$new_telephone_portable,'new_reference_client'=>$new_reference_client,'nbAdresse'=>0));
 
     }
 

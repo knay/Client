@@ -28,8 +28,6 @@ class FactureController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-    	
-    	 
     	return $this->render('ImerirVenteBundle::facture.html.twig', array('result_menu' => $menu_sous_menu,'result_facture'=>$facture));
     }
     

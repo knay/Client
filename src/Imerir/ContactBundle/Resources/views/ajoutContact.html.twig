@@ -16,7 +16,7 @@
     {% endif %}
 {% endblock %}
 
-{% block fournisseurBlock %}
+{% block clientBlock %}
 menuSelected
 {% endblock %}
 
@@ -35,8 +35,8 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance </label></td>
-                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
+                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><input type="date" name="date_naissance" id="datepicker"/></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -64,6 +64,11 @@ menuSelected
                     <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
                     <td><input type="checkbox" name="ok_mail"/></td>
                 </tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="notes"></textarea></td>
+                </tr>
+                <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
 
@@ -110,7 +115,7 @@ menuSelected
 
     {% if app.request.attributes.get('_route')=='imerir_validation_creation_client' %}
         <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
-            <table>
+            <table id="tableau_input">
                 <tr>
                     <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
@@ -121,8 +126,8 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance </label></td>
-                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
+                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><input type="text" name="date_naissance" id="datepicker"></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -150,6 +155,11 @@ menuSelected
                     <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
                     <td><input type="checkbox" name="ok_mail"/></td>
                 </tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="notes"></textarea></td>
+                </tr>
+                <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
             <div id="lst_adresse">
@@ -196,22 +206,22 @@ menuSelected
     {% if app.request.attributes.get('_route')=='imerir_modification_client' %}
 
         <form action="{{ path('imerir_validation_modification_client') }}" method="post" id="formulaire_creation_client">
-            <table>
-                <tr><td><label for="nom">Nom : </label>
+            <table id="tableau_input">
+                <tr><td><label for="nom">Nom </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
 
                 <input type="submit" value="Modifier">
 
-                <tr><td><label for="nom">Prenom : </label>
+                <tr><td><label for="nom">Prenom </label>
                         <input type="hidden" name="old_prenom" value="{{ modif_prenom }}"></td>
                 <td><input type="text" name="new_prenom" value="{{ modif_prenom }}"></td></tr>
 
-                <tr><td><label for="nom">Date de naissance : </label></td>
-                    <td><input type="text" name="new_date_naissance" value="{{ modif_date_naissance }}"/></td></tr>
+                <tr><td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><input type="text" name="new_date_naissance" value="{{ modif_date_naissance }}" id="datepicker"/></td></tr>
 
-                <tr><td><label for="nom">Civilité : </label></td>
+                <tr><td><label for="nom">Civilité </label></td>
                     <td>
                         <select name="new_civilite">
                             {% if modif_civilite == 'Mlle.' %}
@@ -232,13 +242,13 @@ menuSelected
                         </select>
                     </td></tr>
 
-                <tr><td><label for="nom">Email : </label></td>
+                <tr><td><label for="nom">Email </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
 
-                <tr><td><label for="nom">Téléphone portable : </label></td>
+                <tr><td><label for="nom">Téléphone portable </label></td>
                 <td><input type="text" name="new_telephone_portable" value="{{ modif_telephone_portable }}"/></td></tr>
 
-                <tr><td><label for="nom">Désire des SMS : </label></td>
+                <tr><td><label for="nom">Désire des SMS </label></td>
                     <td>
                         {% if modif_ok_sms == 1 %}
                             <input type="checkbox" name="new_ok_sms" checked/>
@@ -247,7 +257,7 @@ menuSelected
                         {% endif %}
                     </td></tr>
 
-                <tr><td><label for="nom">Désire des e-mails : </label></td>
+                <tr><td><label for="nom">Désire des e-mails </label></td>
                     <td>
                         {% if modif_ok_mail == 1 %}
                             <input type="checkbox" name="new_ok_mail" checked/>
@@ -255,6 +265,11 @@ menuSelected
                             <input type="checkbox" name="new_ok_mail"/>
                         {% endif %}
                     </td></tr>
+                <tr>
+                    <td><label for="new_notes">Notes </label></td>
+                    <td><textarea name="new_notes"></textarea></td>
+                </tr>
+                <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
 
             </table>
 
@@ -313,7 +328,7 @@ menuSelected
         </form>
     {% endif %}
 
-    {% if app.request.attributes.get('_route')=='imerir_validation_modification_fournisseur' %}
+    {% if app.request.attributes.get('_route')=='imerir_validation_modification_client' %}
         <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
             <table id="tableau_input">
                 <tr>
@@ -326,8 +341,8 @@ menuSelected
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance </label></td>
-                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
+                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><input type="text" name="date_naissance" id="datepicker"></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -355,6 +370,11 @@ menuSelected
                     <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
                     <td><input type="checkbox" name="ok_mail"/></td>
                 </tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="notes"></textarea></td>
+                </tr>
+                <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
             <div id="lst_adresse">
@@ -395,22 +415,58 @@ menuSelected
                 </table>
             </div>
         </form>
-        <p class="validation_message">Le fournisseur "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
+        <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
             email "{{ new_email }}" et pour téléphone portable {{ new_telephone_portable }}</p>
     {% endif %}
 
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_creation_fournisseur') }}" method="post">
-        <label for="recherche_fournisseur_nom">Nom fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_nom">
-        <label for="recherche__fournisseur_email">Email fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_email">
-        <label for="recherche_telephone_portable">Téléphone portable :</label>
-        <input type="text" name="recherche_fournisseur_telephone_portable">
-        <input type="submit">
+    <form action="{{ path('imerir_creation_client') }}" method="post">
+        <table id="tableau_input">
+            <tr>
 
+                <td><label for="recherche_contact_nom">Nom :</label></td>
+                <td><input type="text" name="recherche_contact_nom"></td>
+
+                <td><label for="recherche_contact_prenom">Prenom :</label></td>
+                <td><input type="text" name="recherche_contact_prenom"></td>
+
+                <td><label for="recherche_contact_date_naissance">Date de naissance :</label></td>
+                <td><input type="text" name="recherche_contact_date_naissance" id="datepicker"></td>
+            </tr>
+            <tr>
+                <td><label for="recherche_contact_civilite">Civilité :</label></td>
+                <td><select name="recherche_contact_civilite">
+                    <option value=""></option>
+                    <option value="Mlle.">Mlle.</option>
+                    <option value="Mme.">Mme.</option>
+                    <option value="M.">M.</option>
+                </select></td>
+
+                <td><label for="recherche_contact_email">Email :</label></td>
+                <td><input type="text" name="recherche_contact_email"></td>
+
+                <td><label for="recherche_contact_telephone_portable">Téléphone portable :</label></td>
+                <td><input type="text" name="recherche_contact_telephone_portable"></td>
+            </tr>
+            <tr>
+                <td><label for="recherche_contact_ok_sms">Désire recevoir des SMS </label></td>
+                <td><select name="recherche_contact_ok_sms">
+                        <option value=""></option>
+                        <option value="Oui">Oui</option>
+                        <option value="Non">Non</option>
+                    </select></td>
+
+                <td><label for="recherche_contact_ok_mail">Désire recevoir des e-mails </label></td>
+                <td><select name="recherche_contact_ok_mail">
+                        <option value=""></option>
+                        <option value="Oui">Oui</option>
+                        <option value="Non">Non</option>
+                    </select></td>
+                <td><input type="submit"></td>
+            </tr>
+        </table>
     </form>
 {% endblock %}
 
@@ -424,6 +480,7 @@ menuSelected
         <th>Telephone portable</th>
         <th>Désire des SMS</th>
         <th>Désire des e-mails</th>
+        <th>Notes</th>
     </tr>
     {% for i in liste_contacts %}
 
@@ -438,6 +495,7 @@ menuSelected
                     <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
                     <input type="hidden" name="ok_sms_f" value="{{ i.ok_sms }}">
                     <input type="hidden" name="ok_mail_f" value="{{ i.ok_mail }}">
+                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
                 </form>
             </td>
             <td>{{ i.prenom }}</td>
@@ -455,12 +513,14 @@ menuSelected
             {% else %}
                 <td>Non</td>
             {% endif %}
+            <td>{{ i.notes }}</td>
         </tr>
     {% endfor %}
 {% endblock %}
 
 
 {% block javascripts %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
 <script>
     //variables
     var numAdresse = 200;
@@ -526,5 +586,47 @@ menuSelected
             est_visible.val('0');
         }
     }
+
+    $(function() {
+        $( "#datepicker" ).datepicker({
+
+            changeMonth: true,
+            changeYear: true
+        });
+        $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    });
+    //Permet de gerer la langue du datepicker
+    (function( factory ) {
+        if ( typeof define === "function" && define.amd ) {
+
+            define([ "../jquery.ui.datepicker" ], factory );
+        } else {
+            factory( jQuery.datepicker );
+        }
+
+    }(function( datepicker ) {
+        datepicker.regional['fr'] = {
+            closeText: 'Fermer',
+            prevText: 'Pr&eacutec&eacutedent',
+            nextText: 'Suivant',
+            currentText: 'Aujourd\'hui',
+            monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
+                'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
+            monthNamesShort: ['janv.', 'f�vr.', 'mars', 'avril', 'mai', 'juin',
+                'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
+            dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+            dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+            dayNamesMin: ['D','L','M','M','J','V','S'],
+            weekHeader: 'Sem.',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''};
+        datepicker.setDefaults(datepicker.regional['fr']);
+
+        return datepicker.regional['fr'];
+
+    }));
 </script>
 {% endblock %}

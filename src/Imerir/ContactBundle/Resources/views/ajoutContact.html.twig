@@ -219,7 +219,7 @@ menuSelected
                 <td><input type="text" name="new_prenom" value="{{ modif_prenom }}"></td></tr>
 
                 <tr><td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="text" name="new_date_naissance" value="{{ modif_date_naissance }}" id="datepicker"/></td></tr>
+                    <td><input type="text" name="new_date_naissance" id="datepicker">{{ modif_date_naissance }}</td></tr>
 
                 <tr><td><label for="nom">Civilité </label></td>
                     <td>
@@ -267,7 +267,7 @@ menuSelected
                     </td></tr>
                 <tr>
                     <td><label for="new_notes">Notes </label></td>
-                    <td><textarea name="new_notes"></textarea></td>
+                    <td><textarea name="new_notes">{{ modif_notes }}</textarea></td>
                 </tr>
                 <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
 
@@ -587,13 +587,55 @@ menuSelected
         }
     }
 
+
+
     $(function() {
+
         $( "#datepicker" ).datepicker({
 
-            changeMonth: true,
-            changeYear: true
+
+           // changeMonth: true,
+            //changeYear: true
         });
         $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+        {% if modif_date_naissance is defined %}
+            $("#datepicker").datepicker("setDate",{{ modif_date_naissance }});
+        {% else %}
+            $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+        {% endif %}
     });
+    //Permet de gerer la langue du datepicker
+    (function( factory ) {
+        if ( typeof define === "function" && define.amd ) {
+
+            define([ "../jquery.ui.datepicker" ], factory );
+        } else {
+            factory( jQuery.datepicker );
+        }
+
+    }(function( datepicker ) {
+        datepicker.regional['fr'] = {
+            closeText: 'Fermer',
+            prevText: 'Pr&eacutec&eacutedent',
+            nextText: 'Suivant',
+            currentText: 'Aujourd\'hui',
+            monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
+                'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
+            monthNamesShort: ['janv.', 'f�vr.', 'mars', 'avril', 'mai', 'juin',
+                'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
+            dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+            dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+            dayNamesMin: ['D','L','M','M','J','V','S'],
+            weekHeader: 'Sem.',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''};
+        datepicker.setDefaults(datepicker.regional['fr']);
+
+        return datepicker.regional['fr'];
+
+    }));
 </script>
 {% endblock %}

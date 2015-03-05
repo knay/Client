@@ -12,6 +12,20 @@
         <script type="text/javascript" src="{{ asset('../vendor/components/jquery/jquery.js') }}"></script>
         <script type="text/javascript" src="{{ asset('../vendor/components/jqueryui/jquery-ui.js') }}"></script>
         <script type="text/javascript" src="{{ asset('../vendor/nnnick/chartjs/Chart.js') }}"></script>
+        <script>
+	         $(function() {
+		        var aideCache = true; 
+	            $( "#boutonAide" ).click(function() {
+		            if(aideCache === true) {
+	            		$("#aide").show("slide");
+		            }
+		            else {
+		            	$("#aide").hide("slide");
+			        }
+		            aideCache = !aideCache;
+	            });
+	         });
+	    </script>
     </head>
     <body>
     	
@@ -186,9 +200,14 @@
 					{% endfor %}
 				</ul>
 			</div>
-			
 	        <div id="affichage">
-	        	<div id="title_page">{% block title_page %}{% endblock %}</div>
+	        	<div id="title_page"><i class="fa fa-question-circle" id="boutonAide"></i> {% block title_page %}{% endblock %}</div>
+	        	<div id="aide">
+	        		<div id="title_aide">Aide</div>
+	        		<p>
+	        			{% block aide %}Ceci est une aide...{% endblock %}
+	        		</p>
+        		</div>
 				{% block affichage %}{% endblock %}
     		</div>
     	</div>

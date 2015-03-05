@@ -15,20 +15,80 @@ ALBA - Facture
 {% block title_ajout %}Facture{% endblock %}
 
 {% block ajout %}
-
+	<tr>
+    	<th>N&deg;</th>
+    	<th>test_ref</th>
+    </tr>
+    {% if resultat != "" %}
+	    {% for i in resultat %}
+		    <tr>
+		    	<td>i.id</td>
+		    	<td>i.ref</td>
+		    </tr>
+		{% endfor %}
+	{% endif %}
 {% endblock %}
 
 {% block recherche %}
-	<label>Date:</label><input type="text" id="datepicker" size="20"></p>
+	<label>Date:</label><input type="text" id="date_de_recherche_facture" size="20" value="yy-mm-dd">
+	<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
 {% endblock %}
+
+
 
 {% block table %}
-	
+    <tr>
+    	<th>N&deg;</th>
+    	<th>Date</th>
+    	<th>Client</th>
+    	<th>Montant</th>
+    </tr>
+    {% for i in result_facture %}
+        <tr class="select_ligne">
+        	<form method="post" action="{{ path('imerir_vente_facture_detail') }}" style="display: none">
+        	<td>{{ i.id }}</td>
+        	<td></td>
+            <td>{{ i.ref }}</td>
+            <td></td>
+            <input type="hidden" name="id_select" value="{{ i.id }}">
+            <input type="hidden" name="ref_select" value="{{ i.ref }}">
+            </form>
+		</tr>
+    {% endfor %}
 {% endblock %}
 
-{% block javascripts %}
-<script>
+                    
 
+
+
+{% block javascripts %}
+<link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+<script>
+$("#bouton_supprimer_date").css( "display", "none");
+$("#fieldset_ajout").css( "display", "none");
+var format_affichage_date = "yy-mm-dd";
+
+//Permet de parametrer le datepicker
+$(function() {
+    $( "#date_de_recherche_facture" ).datepicker();
+	$( "#date_de_recherche_facture" ).datepicker( "option", "showAnim", "slideDown" );
+	$( "#date_de_recherche_facture" ).datepicker( "option", "dateFormat", format_affichage_date );
+});
+
+//Afficher l'icone de suppression lorsqu'une date est inscrite
+$("#date_de_recherche_facture").change(function(){
+	$("#bouton_supprimer_date").css("display","inline");
+});
+
+//Permet de gerer l'evenement du bouton de suppresion  de la date
+$("#bouton_supprimer_date").click(function(){
+	$( "#date_de_recherche_facture" ).val('');
+	$("#bouton_supprimer_date").css( "display", "none");
+});
+
+$(".select_ligne").click(function(){
+	$("#fieldset_ajout").css("display","inline");
+});
 </script>
 {% endblock %}
 

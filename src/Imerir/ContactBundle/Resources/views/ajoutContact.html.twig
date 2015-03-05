@@ -219,7 +219,7 @@ menuSelected
                 <td><input type="text" name="new_prenom" value="{{ modif_prenom }}"></td></tr>
 
                 <tr><td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="text" name="new_date_naissance" id="datepicker">{{ modif_date_naissance }}</td></tr>
+                    <td><input type="text" name="new_date_naissance" id="datepicker"></td></tr>
 
                 <tr><td><label for="nom">Civilité </label></td>
                     <td>
@@ -592,16 +592,12 @@ menuSelected
     $(function() {
 
         $( "#datepicker" ).datepicker({
-
-
-           // changeMonth: true,
-            //changeYear: true
+            changeMonth: true,
+            changeYear: true
         });
-        $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
         {% if modif_date_naissance is defined %}
-            $("#datepicker").datepicker("setDate",{{ modif_date_naissance }});
-        {% else %}
-            $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+            var date = "{{ modif_date_naissance }}";
+            $("#datepicker").datepicker("setDate",date);
         {% endif %}
     });
     //Permet de gerer la langue du datepicker
@@ -627,7 +623,7 @@ menuSelected
             dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
             dayNamesMin: ['D','L','M','M','J','V','S'],
             weekHeader: 'Sem.',
-            dateFormat: 'dd/mm/yy',
+            dateFormat: 'yy-mm-dd',
             firstDay: 1,
             isRTL: false,
             showMonthAfterYear: false,

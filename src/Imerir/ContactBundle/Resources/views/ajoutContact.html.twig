@@ -36,7 +36,7 @@ menuSelected
                 </tr>
                 <tr>
                     <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
+                    <td><input type="date" name="date_naissance" id="datepicker"/></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -64,6 +64,11 @@ menuSelected
                     <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
                     <td><input type="checkbox" name="ok_mail"/></td>
                 </tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="notes"></textarea></td>
+                </tr>
+                <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
 
@@ -122,7 +127,7 @@ menuSelected
                 </tr>
                 <tr>
                     <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
+                    <td><input type="text" name="date_naissance" id="datepicker"></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -150,6 +155,11 @@ menuSelected
                     <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
                     <td><input type="checkbox" name="ok_mail"/></td>
                 </tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="notes"></textarea></td>
+                </tr>
+                <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
             <div id="lst_adresse">
@@ -209,7 +219,7 @@ menuSelected
                 <td><input type="text" name="new_prenom" value="{{ modif_prenom }}"></td></tr>
 
                 <tr><td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="text" name="new_date_naissance" value="{{ modif_date_naissance }}"/></td></tr>
+                    <td><input type="text" name="new_date_naissance" value="{{ modif_date_naissance }}" id="datepicker"/></td></tr>
 
                 <tr><td><label for="nom">Civilité </label></td>
                     <td>
@@ -255,6 +265,11 @@ menuSelected
                             <input type="checkbox" name="new_ok_mail"/>
                         {% endif %}
                     </td></tr>
+                <tr>
+                    <td><label for="new_notes">Notes </label></td>
+                    <td><textarea name="new_notes"></textarea></td>
+                </tr>
+                <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
 
             </table>
 
@@ -327,7 +342,7 @@ menuSelected
                 </tr>
                 <tr>
                     <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="date" name="date_naissance" value="0000-00-00"></td>
+                    <td><input type="text" name="date_naissance" id="datepicker"></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -355,6 +370,11 @@ menuSelected
                     <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
                     <td><input type="checkbox" name="ok_mail"/></td>
                 </tr>
+                <tr>
+                    <td><label for="notes">Notes </label></td>
+                    <td><textarea name="notes"></textarea></td>
+                </tr>
+                <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
             </table>
 
             <div id="lst_adresse">
@@ -413,7 +433,7 @@ menuSelected
                 <td><input type="text" name="recherche_contact_prenom"></td>
 
                 <td><label for="recherche_contact_date_naissance">Date de naissance :</label></td>
-                <td><input type="date" name="recherche_contact_date_naissance"></td>
+                <td><input type="text" name="recherche_contact_date_naissance" id="datepicker"></td>
             </tr>
             <tr>
                 <td><label for="recherche_contact_civilite">Civilité :</label></td>
@@ -460,6 +480,7 @@ menuSelected
         <th>Telephone portable</th>
         <th>Désire des SMS</th>
         <th>Désire des e-mails</th>
+        <th>Notes</th>
     </tr>
     {% for i in liste_contacts %}
 
@@ -474,6 +495,7 @@ menuSelected
                     <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
                     <input type="hidden" name="ok_sms_f" value="{{ i.ok_sms }}">
                     <input type="hidden" name="ok_mail_f" value="{{ i.ok_mail }}">
+                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
                 </form>
             </td>
             <td>{{ i.prenom }}</td>
@@ -491,12 +513,14 @@ menuSelected
             {% else %}
                 <td>Non</td>
             {% endif %}
+            <td>{{ i.notes }}</td>
         </tr>
     {% endfor %}
 {% endblock %}
 
 
 {% block javascripts %}
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
 <script>
     //variables
     var numAdresse = 200;
@@ -562,5 +586,14 @@ menuSelected
             est_visible.val('0');
         }
     }
+
+    $(function() {
+        $( "#datepicker" ).datepicker({
+
+            changeMonth: true,
+            changeYear: true
+        });
+        $( "#datepicker" ).datepicker( "option", "dateFormat", "yy-mm-dd" );
+    });
 </script>
 {% endblock %}

@@ -20,7 +20,7 @@ class DefaultController extends Controller
         $recherche_contact_telephone_portable = $query->request->get('recherche_contact_telephone_portable');
         $recherche_contact_ok_sms = $query->request->get('recherche_contact_ok_sms');
         $recherche_contact_ok_mail = $query->request->get('recherche_contact_ok_mail');
-
+        $recherche_contact_notes = $query->request->get('recherche_contact_notes');
 
         if($recherche_contact_nom===null)
             $nom='';
@@ -68,12 +68,16 @@ class DefaultController extends Controller
             else
                 $int_ok_mail='';
         }
+        if($recherche_contact_notes===null)
+            $notes = '';
+        else
+            $notes = $recherche_contact_notes;
 
         //TODO ajouter l'action getContacts qui renvoie le nom, le mail et le num de tel
         $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => $nom, 'prenom'=>$prenom,
             'date_naissance'=>$date_naissance,
             'civilite'=>$civilite,'email'=>$email, 'telephone_portable'=>$telephone_portable,'ok_sms'=>$int_ok_sms,
-            'ok_mail'=>$int_ok_mail));
+            'ok_mail'=>$int_ok_mail,'notes'=>$notes));
         $liste_contacts = json_decode($return);
 
         //on recupere le menu et sous menu
@@ -98,6 +102,7 @@ class DefaultController extends Controller
         $Contact_civilite = $query->request->get('civilite');
         $Contact_ok_sms = $query->request->get('ok_sms');
         $Contact_ok_mail = $query->request->get('ok_mail');
+        $Contact_notes = $query->request->get('notes');
 
         if($Contact_nom===null)
             $Contact_nom='';
@@ -123,11 +128,14 @@ class DefaultController extends Controller
         if($Contact_ok_mail===null)
             $Contact_ok_mail='';
 
+        if($Contact_notes===null)
+            $Contact_notes='';
+
         $soap->call('ajoutContact',array('nom' => $Contact_nom,'prenom'=>$Contact_prenom ,
             'date_naissance'=>$Contact_date_naissance,'civilite'=>$Contact_civilite,
             'email'=>$Contact_email,
             'telephone_portable'=>$Contact_telephone_portable,
-            'ok_sms'=>$Contact_ok_sms,'ok_mail'=>$Contact_ok_mail));
+            'ok_sms'=>$Contact_ok_sms,'ok_mail'=>$Contact_ok_mail,'notes'=>$Contact_notes));
         ////////////////////////////////////////////////////////////////////////////
         /**
          * PARTIE ADRESSES
@@ -170,7 +178,7 @@ class DefaultController extends Controller
             'prenom'=>$Contact_prenom,'date_naissance'=>$Contact_date_naissance,
             'civilite'=>$Contact_civilite,'email'=>$Contact_email, 'telephone_portable'=>$Contact_telephone_portable,
             'ok_sms'=>$Contact_ok_sms,
-            'ok_mail'=>$Contact_ok_mail));
+            'ok_mail'=>$Contact_ok_mail,'notes'=>$Contact_notes));
 
         $ref_Contact = json_decode($retour_ref_Contact,true);
         $ref_Contact_id = $ref_Contact[0]["id"];
@@ -190,7 +198,7 @@ class DefaultController extends Controller
         //TODO ajouter l'action getContacts qui renvoie le nom, le mail et le num de tel
         $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
             'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
-            'ok_mail'=>''));
+            'ok_mail'=>'','notes'=>''));
         $liste_Contacts = json_decode($return);
         //insertion du Contact
 
@@ -215,10 +223,11 @@ class DefaultController extends Controller
         $modif_telephone_portable = $query->request->get('telephone_portable_f');
         $modif_ok_sms = $query->request->get('ok_sms_f');
         $modif_ok_mail = $query->request->get('ok_mail_f');
+        $modif_notes = $query->request->get('notes_f');
 
         $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
             'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
-            'ok_mail'=>''));
+            'ok_mail'=>'','notes'=>''));
         $liste_Contacts = json_decode($return);
 
         //on recupere le menu et sous menu
@@ -241,7 +250,7 @@ class DefaultController extends Controller
             'modif_email'=>$modif_email,
             'modif_telephone_portable'=>$modif_telephone_portable,
             'modif_ok_sms'=>$modif_ok_sms,
-            'modif_ok_mail'=>$modif_ok_mail,'liste_adresses_contact'=>$liste_adresses_Contact,
+            'modif_ok_mail'=>$modif_ok_mail,'modif_notes'=>$modif_notes,'liste_adresses_contact'=>$liste_adresses_Contact,
             'nbAdresse'=>0));
 
     }
@@ -261,6 +270,7 @@ class DefaultController extends Controller
         $new_telephone_portable = $query->request->get('new_telephone_portable');
         $new_ok_sms = $query->request->get('new_ok_sms');
         $new_ok_mail = $query->request->get('new_ok_mail');
+        $new_notes = $query->request->get('new_notes');
 
         ////////////////////PARTIE ADRESSES///////////////
         $modif_adresse_est_visible = array();
@@ -377,11 +387,11 @@ class DefaultController extends Controller
             'civilite'=>$new_civilite,
             'email'=>$new_email,
             'telephone_portable'=>$new_telephone_portable,
-            'ok_sms'=>$new_ok_sms,'ok_mail'=>$new_ok_mail));
+            'ok_sms'=>$new_ok_sms,'ok_mail'=>$new_ok_mail,'notes'=>$new_notes));
 
         $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
             'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
-            'ok_mail'=>''));
+            'ok_mail'=>'','notes'=>''));
         $liste_Contacts = json_decode($return);
 
         //on recupere le menu et sous menu

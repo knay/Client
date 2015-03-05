@@ -20,10 +20,11 @@ ALBA - Facture
 {% endblock %}
 
 {% block recherche %}
-	<label>Date : </label><input type="text" id="date_de_recherche_facture" size="20" value="aaaa-mm-jj">
-	<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
-	<label>Client : </label><input type="text" id="recherche_client" size="20">
-	<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
+	<form method="post" action="{{ path('imerir_vente_facture_detail') }}" style="display: none">
+		<label>Date : </label><input type="text" id="date_de_recherche_facture" size="20" value="aaaa-mm-jj">
+		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
+		<label>Client : </label><input type="text" id="recherche_client" size="20">
+		<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
 	<input type="submit">
 {% endblock %}
 

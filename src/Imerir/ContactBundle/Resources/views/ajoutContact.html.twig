@@ -16,7 +16,7 @@
     {% endif %}
 {% endblock %}
 
-{% block contactBlock %}
+{% block clientBlock %}
 menuSelected
 {% endblock %}
 
@@ -110,7 +110,7 @@ menuSelected
 
     {% if app.request.attributes.get('_route')=='imerir_validation_creation_client' %}
         <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
-            <table>
+            <table id="tableau_input">
                 <tr>
                     <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
@@ -196,7 +196,7 @@ menuSelected
     {% if app.request.attributes.get('_route')=='imerir_modification_client' %}
 
         <form action="{{ path('imerir_validation_modification_client') }}" method="post" id="formulaire_creation_client">
-            <table>
+            <table id="tableau_input">
                 <tr><td><label for="nom">Nom </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
@@ -403,14 +403,50 @@ menuSelected
 
 {% block recherche %}
     <form action="{{ path('imerir_creation_client') }}" method="post">
-        <label for="recherche_fournisseur_nom">Nom fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_nom">
-        <label for="recherche__fournisseur_email">Email fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_email">
-        <label for="recherche_telephone_portable">Téléphone portable :</label>
-        <input type="text" name="recherche_fournisseur_telephone_portable">
-        <input type="submit">
+        <table id="tableau_input">
+            <tr>
 
+                <td><label for="recherche_contact_nom">Nom :</label></td>
+                <td><input type="text" name="recherche_contact_nom"></td>
+
+                <td><label for="recherche_contact_prenom">Prenom :</label></td>
+                <td><input type="text" name="recherche_contact_prenom"></td>
+
+                <td><label for="recherche_contact_date_naissance">Date de naissance :</label></td>
+                <td><input type="date" name="recherche_contact_date_naissance"></td>
+            </tr>
+            <tr>
+                <td><label for="recherche_contact_civilite">Civilité :</label></td>
+                <td><select name="recherche_contact_civilite">
+                    <option value=""></option>
+                    <option value="Mlle.">Mlle.</option>
+                    <option value="Mme.">Mme.</option>
+                    <option value="M.">M.</option>
+                </select></td>
+
+                <td><label for="recherche_contact_email">Email :</label></td>
+                <td><input type="text" name="recherche_contact_email"></td>
+
+                <td><label for="recherche_contact_telephone_portable">Téléphone portable :</label></td>
+                <td><input type="text" name="recherche_contact_telephone_portable"></td>
+            </tr>
+            <tr>
+                <td><label for="recherche_contact_ok_sms">Désire recevoir des SMS </label></td>
+                <td><select name="recherche_contact_ok_sms">
+                        <option value=""></option>
+                        <option value="Oui">Oui</option>
+                        <option value="Non">Non</option>
+                    </select></td>
+
+                <td><label for="recherche_contact_ok_mail">Désire recevoir des e-mails </label></td>
+                <td><select name="recherche_contact_ok_mail">
+                        <option value=""></option>
+                        <option value="Oui">Oui</option>
+                        <option value="Non">Non</option>
+                    </select></td>
+                <td><input type="submit"></td>
+            </tr>
+        </table>
     </form>
 {% endblock %}
 

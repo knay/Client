@@ -9,24 +9,13 @@ ALBA - Facture
 {% endblock %}
 
 {% block stylesheets %}
-{# <link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/.css') }}"/> #}
+<link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssFacture.css') }}"/> 
 {% endblock %}
 
 {% block title_ajout %}Facture{% endblock %}
 
 {% block ajout %}
-	<tr>
-    	<th>N&deg;</th>
-    	<th>test_ref</th>
-    </tr>
-    {% if resultat != "" %}
-	    {% for i in resultat %}
-		    <tr>
-		    	<td>i.id</td>
-		    	<td>i.ref</td>
-		    </tr>
-		{% endfor %}
-	{% endif %}
+	
 {% endblock %}
 
 {% block recherche %}
@@ -46,12 +35,14 @@ ALBA - Facture
     {% for i in result_facture %}
         <tr class="select_ligne">
         	<form method="post" action="{{ path('imerir_vente_facture_detail') }}" style="display: none">
-        	<td>{{ i.id }}</td>
-        	<td></td>
-            <td>{{ i.ref }}</td>
-            <td></td>
-            <input type="hidden" name="id_select" value="{{ i.id }}">
-            <input type="hidden" name="ref_select" value="{{ i.ref }}">
+        	<td>{{ i.numero }}</td>
+        	<td>{{ i.date }}</td>
+            <td>{{ i.client }}</td>
+            <td>{{ i.montant }}</td>
+            <input type="hidden" name="id_select" value="{{ i.numero }}">
+            <input type="hidden" name="ref_select" value="{{ i.date }}">
+            <input type="hidden" name="ref_select" value="{{ i.client }}">
+            <input type="hidden" name="ref_select" value="{{ i.montant }}">
             </form>
 		</tr>
     {% endfor %}

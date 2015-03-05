@@ -44,7 +44,11 @@ class FactureController extends Controller
     	return $this->render('ImerirVenteBundle::facture.html.twig', array('result_menu' => $menu_sous_menu,'result_facture'=>$facture));
     }
     
-    public function factureDetailFromLigneFacture(){
+    /**
+     * Fonction ajax permet de retourner les details d'une facture
+     * @return \Imerir\VenteBundle\Controller\JsonResponse
+     */
+    public function factureDetailFromLigneFactureAction(){
     	$soap = $this->get('noyau_soap');
         $query = $this->get('request');
         
@@ -53,15 +57,24 @@ class FactureController extends Controller
         $date = $query->request->get('ligne_date');
         $client = $query->request->get('ligne_client');
         $montant = $query->request->get('ligne_montant');
-
-        $result = array("id"=>$numero,"ref"=>$date);
         
-        //on recupere le menu et sous menu
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    	
+    	try {
+    		$return_facture = $soap->call('getDetailFromOneFacture', array($numero)); // On récupère le menu/sous-menu
+    		$detail_facture = json_decode($return_facture);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
         
-        return $this->render('ImerirVenteBundle::facture.html.twig',
-            array('result_menu' => $menu_sous_menu,'resultat'=>$result));
+        return new JsonResponse($detail_facture); // Une réponse JSON
     }
     
     

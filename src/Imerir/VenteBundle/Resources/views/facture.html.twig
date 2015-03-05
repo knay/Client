@@ -15,7 +15,18 @@ ALBA - Facture
 {% block title_ajout %}Facture{% endblock %}
 
 {% block ajout %}
-	<label>Test : </label><p id="date"></p>
+	{% if detail_facture is defined %}
+		{% for detail in detail_facture %}
+			<label>numero : </label><p>{{ detail.numero_facture }}</p>
+			<label>date : </label><p>{{ detail.date_facture }}</p>
+			<label>client : </label><p>{{ detail.nom_client }}</p>
+			<label>article : </label><p>{{ detail.nom_article }}</p>
+			<label>nombre : </label><p>{{ detail.nombre_article }}</p>
+			<label>prix : </label><p>{{ detail.prix_article }}</p>
+			<label>reduction : </label><p>{{ detail.reduction_article }}</p>
+			<label>montant : </label><p>{{ detail.montant_facture }}</p>
+		{% endfor %}
+	{% endif %}
 {% endblock %}
 
 {% block recherche %}
@@ -100,7 +111,6 @@ $("#recherche_client").click(function(){
 
 //Permet de gerer lorsque l'utilisateur click sur une ligne du tableau
 $(".select_ligne").click( function(){
-	alert();
 	$("#fieldset_ajout").css("display","inline");
 });
 

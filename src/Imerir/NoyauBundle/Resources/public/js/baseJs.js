@@ -28,9 +28,9 @@ function resize_element()
 
 $id_select = "";
 //lorsqu'un element est selectionne dans le menu
-$( "#menu" ).children( "li" ).click(clicOnMenu);
+$( "#menu" ).children( "li" ).click(clickOnMenu);
 
-function clicOnMenu () {
+function clickOnMenu () {
 //	alert('click menu');
 	//on check si on a deja cliquer sur un element avant
 	//oui

@@ -106,8 +106,7 @@ function ajoutProduit() {
         dial.find("#affichage").css("left", "0");
 
         $( "#menu" ).children( "li" ).unbind("click");
-        $( "#menu" ).children( "li" ).click(clicOnMenu);
-
+        
         /**
          * Fonction permettant de traiter le clic sur le bouton submit de la fenetre, si on submit, on envoie pas 
          * le formulaire normalement, on le passe par AJAX.

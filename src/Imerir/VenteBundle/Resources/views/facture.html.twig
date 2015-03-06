@@ -15,18 +15,33 @@ ALBA - Facture
 {% block title_ajout %}Facture{% endblock %}
 
 {% block ajout %}
-	{% if detail_facture is defined %}
-		{% for detail in detail_facture %}
-			<label>numero : </label><p>{{ detail.numero_facture }}</p>
-			<label>date : </label><p>{{ detail.date_facture }}</p>
-			<label>client : </label><p>{{ detail.nom_client }}</p>
-			<label>article : </label><p>{{ detail.nom_article }}</p>
-			<label>nombre : </label><p>{{ detail.nombre_article }}</p>
-			<label>prix : </label><p>{{ detail.prix_article }}</p>
-			<label>reduction : </label><p>{{ detail.reduction_article }}</p>
-			<label>montant : </label><p>{{ detail.montant_facture }}</p>
-		{% endfor %}
+	<table class="tableau">
+		<tr>
+			<th>Article</th>
+			<th>Quantit&eacute</th>
+			<th>Prix Unitaire</th>
+			<th>Reduction</th>
+			<th>Montant</th>
+		</tr>
+	{% if detail_facture_test is defined %}
+		{% if detail_facture_test != '' %}
+			{% for i in detail_facture_test %}
+			<tr>
+{# 				<label>numero : </label><p>{{ i.numero_facture }}</p>#}
+{# 				<label>date : </label><p>{{ i.date_facture }}</p>#}
+{# 				<label>client : </label><p>{{ i.nom_client }}</p>#}
+				<td>{{ i.nom_article }}</td>
+				<td>{{ i.nombre_article }}</td>
+				<td>{{ i.prix_article }}</td>
+				<td>{{ i.reduction_article }}</td>
+				<td>{{ i.montant_facture }}</td>
+			</tr>
+			{% endfor %}
+		{% else %}
+		{% endif %}
+	{% else %}
 	{% endif %}
+	</table>
 {% endblock %}
 
 {% block recherche %}
@@ -36,6 +51,7 @@ ALBA - Facture
 		<label>Client : </label><input type="text" id="recherche_client" name="client" size="20">
 		<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
 	<input type="submit">
+	</form>
 {% endblock %}
 
 {% block table %}
@@ -45,30 +61,31 @@ ALBA - Facture
     	<th>Client</th>
     	<th>Montant</th>
     </tr>
+    
     {% for i in result_facture %}
         <tr class="select_ligne">
-        	<form method="post" action="{{ path('imerir_vente_facture_detail') }}" style="display: none">
-        	<td>{{ i.numero }}</td>
+        	<td>
+        		<form method="post" action="{{ path('imerir_vente_facture_detail') }}" >
+	        		<input type="hidden" name="ligne_numero" value="{{ i.numero }}">
+    			</form>
+    		{{ i.numero }}
+        	</td>
         	<td>{{ i.date }}</td>
             <td>{{ i.client }}</td>
             <td>{{ i.montant }}</td>
-            <input type="hidden" name="ligne_numero" value="{{ i.numero }}">
-            <input type="hidden" name="ligne_date" value="{{ i.date }}">
-            <input type="hidden" name="ligne_client" value="{{ i.client }}">
-            <input type="hidden" name="ligne_montant" value="{{ i.montant }}">
-            </form>
 		</tr>
+		
     {% endfor %}
 {% endblock %}
 
 {% block javascripts %}
-<link rel="stylesheet" href="//code.jquery.com/ui/1.11.3/themes/smoothness/jquery-ui.css">
+<link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}"/>
 <script>
 var format_affichage_date = "yy-mm-dd";
 var explication_client = "Nom";
-$("#bouton_supprimer_date").css( "display", "none");
-$("#fieldset_ajout").css( "display", "none");
-$("#bouton_supprimer_client").css("display","none");
+$("#bouton_supprimer_date").hide();
+// $("#fieldset_ajout").hide();
+$("#bouton_supprimer_client").hide();
 $("#date_de_recherche_facture").val('aaaa-mm-jj');
 $("#recherche_client").val(explication_client);
 
@@ -88,17 +105,17 @@ $("#date_de_recherche_facture").change(function(){
 //Permet de gerer l'evenement du bouton de suppresion  de la date
 $("#bouton_supprimer_date").click(function(){
 	$( "#date_de_recherche_facture" ).val('aaaa-mm-jj');
-	$("#bouton_supprimer_date").css( "display", "none");
+	$("#bouton_supprimer_date").hide();
 });
 
 //Affiche l'icone de suppresion lorsque l'utilisateur saisie la recherche d'un client
 $("#recherche_client").change(function(){
-	$("#bouton_supprimer_client").css("display","inline");
+	$("#bouton_supprimer_client").show();
 });
 
 //Permet de gerer l'evenement sur le bouton de suppresion de la recherche client
 $("#bouton_supprimer_client").click(function(){
-	$("#bouton_supprimer_client").css("display","none");
+	$("#bouton_supprimer_client").hide();
 	$("#recherche_client").val(explication_client);
 });
 
@@ -111,8 +128,9 @@ $("#recherche_client").click(function(){
 
 //Permet de gerer lorsque l'utilisateur click sur une ligne du tableau
 $(".select_ligne").click( function(){
-	$("#fieldset_ajout").css("display","inline");
+	$(this).find('form').submit();
 });
+
 
 //Permet de gerer la langue du datepicker
 (function( factory ) {

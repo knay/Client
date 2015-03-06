@@ -65,6 +65,7 @@ menuSelected
         </table>
         <input type="submit">
     </form>
+    <p class="quantite_inferieur_zero">En rouge les quantités anormales</p>
 {% endblock %}
 
 {% block table %}
@@ -75,11 +76,11 @@ menuSelected
     	<th>Quantité</th>
     </tr>
     {% for i in result_stock %}
-{#     	{% if i.quantite  %}#}
-     	<tr id="#quantite_inferieur_zero">
-{#      	{% else %}#}
-{#      	<tr>#}
-{#      	{% endif %}#}
+     	{% if i.quantite <= 0 %}
+     		<tr class="quantite_inferieur_zero">
+	    {% else %}
+	      	<tr>
+	    {% endif %}
      		<td>{{ i.ligne_produit }}</td>
             <td>{{ i.produit }}</td>
             <td id="article_stats">{{ i.article }}</td>

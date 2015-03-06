@@ -29,8 +29,11 @@ class ArticleController extends Controller
 			else if ($key === 'code') { // Si c'est le code barre
 				$tabArticle['codeBarre'] = $value;
 			}
-			else if ($key === 'prix') { // Si c'est la quantite
-				$tabArticle['prix'] = $value;
+			else if ($key === 'prixClient') { // Si c'est la quantite
+				$tabArticle['prixClient'] = $value;
+			}
+			else if ($key === 'prixFournisseur') { // Si c'est la quantite
+				$tabArticle['prixFournisseur'] = $value;
 			}
 			else if (substr($key, 0, strlen('caract')) === 'caract') { // Si c'est une valeur d'attribut
 				$attributs = explode('_', $value);
@@ -38,12 +41,13 @@ class ArticleController extends Controller
 			}
 		}
 		
-		try {
-			$return_produits = $soap->call('modifArticle', array('article'=>json_encode($tabArticle)));
-			
-		}
-		catch(\SoapFault $e) {
-			$erreur.=$e->getMessage();
+		if (isset($tabArticle['codeBarre'])) { // Si on a mit un code barre;.. c'est le minimum pour insérer
+			try {
+				$return_produits = $soap->call('modifArticle', array('article'=>json_encode($tabArticle)));
+			}
+			catch(\SoapFault $e) {
+				$erreur.=$e->getMessage();
+			}
 		}
 		
 		try {

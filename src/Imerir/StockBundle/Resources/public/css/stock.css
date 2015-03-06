@@ -1,4 +1,8 @@
-#quantite_inferieur_zero tr {
+.quantite_inferieur_zero {
 	color: red;
 }
 
+form {
+	border-bottom: 1px solid #669900;
+	padding-bottom: 5px;
+}

@@ -22,7 +22,7 @@ menuSelected
 {% endblock %}
 
 {% block ajout %}
-<div id="dialog" title="Les clients"></div>
+<div id="dialog" style="display: none"></div>
 
 <form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
 	<div id="contenneur_inventaire" style="display:none;">
@@ -95,25 +95,28 @@ function modifierAttribut() {
 	var ligne = $(this).parent().parent().parent(); // La ligne sur laquelle on a cliqué
 	var idAttr = $(this).parent().find('.id_attribut').val();
 
-	$("#dialog").dialog({
-        modal: true,
-        width: "90%",
-    	height: "400",
-    	resizable: false,
-    	draggable: false
-    });
+	$("#dialog").attr("title", "Modifier un attribut");
 
-    $("#dialog").html('<div id="chargement">'
-		+'<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>'
-	    +'</div>');
+	$("#contenneur_inventaire").hide();
+	$("#chargement").show();
 
     $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', {id : idAttr }, function () {
         var dial = $("#dialog");
+        
+        dial.dialog({
+            modal: true,
+            width: "90%",
+        	height: "450",
+        	resizable: false,
+        	draggable: false
+        });
+        
         dial.find("#div_menu").remove();
         dial.find("#header").remove();
         dial.find("#title_page").remove();
         dial.find("#fieldset_recherche").remove();
         dial.find("#affichage").css("left", "0");
+        dial.find("#affichage").css("width", "100%");
 
         $( "#menu" ).children( "li" ).unbind("click");
         
@@ -143,6 +146,8 @@ function modifierAttribut() {
      			  $('.modifierAttribut').unbind('click');
      			  $('.ajoutProduit').unbind('click');
      			  $('.modifierAttribut').unbind('click');
+     			  $("#contenneur_inventaire").show();
+  			      $("#chargement").hide();
      		   },
      		   type: 'POST'
      		});
@@ -157,25 +162,27 @@ function modifierAttribut() {
 function ajoutProduit() {
 	var ligne = $(this).parent().parent(); // La ligne sur laquelle on a cliqué
 
-	$("#dialog").dialog({
-        modal: true,
-        width: "90%",
-    	height: "400",
-    	resizable: false,
-    	draggable: false
-    });
-
-    $("#dialog").html('<div id="chargement">'
-		+'<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>'
-	    +'</div>');
-    
+	$("#dialog").attr("title", "Ajouter un nouveau produit");
+	
+	$("#contenneur_inventaire").hide();
+	$("#chargement").show();
+	   
     $("#dialog").load('{{ path('imerir_produit_creation_produit') }}', function () {
     	var dial = $("#dialog");
+    	$("#dialog").dialog({
+            modal: true,
+            width: "90%",
+        	height: "400",
+        	resizable: false,
+        	draggable: false
+        });
+        
         dial.find("#div_menu").remove();
         dial.find("#header").remove();
         dial.find("#title_page").remove();
         dial.find("#fieldset_recherche").remove();
         dial.find("#affichage").css("left", "0");
+        dial.find("#affichage").css("width", "100%");
 
         $( "#menu" ).children( "li" ).unbind("click");
         
@@ -201,13 +208,16 @@ function ajoutProduit() {
      		   success: function(data) {
      			  var select = ligne.find('.selectProduit');
      			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valProduit+'</option>');
-     			  dial.dialog("close");
+     			  $("#dialog").dialog("close");
      			  ligne.effect( "highlight", {}, "3000" );
      			  select.trigger('change');
      			  $('.ajoutProduit').unbind('click');
      			  $('.modifierAttribut').unbind('click');
      			  $('.ajoutProduit').unbind('click');
      			  $('.modifierAttribut').unbind('click');
+
+     			  $("#contenneur_inventaire").show();
+  			   	  $("#chargement").hide();
      		   },
      		   type: 'POST'
      		});
@@ -246,16 +256,10 @@ $(document).ready(function (e) {
  * Fonction clef du scan, permet de detecter lorsque l'on presse une touche,
  * la douchette agissant comme un clavier, cette methode est appelé lors d'un 
  * scan de produit.
- *
- * TODO : permettre d'écrire dans un champ type int.... la base quoi..
- * TODO : s'inspiré de la caisse pour faire un truc plus propre au niveau de l'affichage d'un champs qui sera vide au depart..
  */
 $(document).keypress(function(e) {
-	try { // Si la fenetre n'a pas encore été init il faut catché l'érreur produite, même si on l'a traite pas
-		if ($("#dialog").dialog("isOpen") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
-			return true;
-	} catch(e) {
-	}
+	if ($("#dialog").is(":visible") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
+		return true;
 	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
 	// n'est plus la douchette qui est maître

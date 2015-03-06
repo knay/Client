@@ -74,7 +74,7 @@
 
 .tableau tr:hover {
 	/*color: #669900;*/
-	background-color: #ddd;
+	background-color: #ffedca;
 }
 
 #title_page {
@@ -142,17 +142,23 @@ input[type="submit"]:hover {
 .ajout {
 	color: green;
 	cursor: pointer;
-	margin-top: 4px;
+	font-size: 15pt;
+	vertical-align: middle;
 }
 
 .supprimer {
 	color: red;
 	cursor: pointer;
+	font-size: 15pt;
+	vertical-align: middle;
 }
 
 .modifier {
 	color: orange;
 	cursor: pointer;
+	margin-left: 4px;
+	font-size: 15pt;
+	vertical-align: middle;
 }
 
 .tableau_input {

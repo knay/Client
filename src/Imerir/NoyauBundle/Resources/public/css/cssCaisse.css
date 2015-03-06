@@ -138,7 +138,7 @@
 	color: #669900;
 }
 
-input[type="submit"] {
+#btnCaisse {
 	float: right;
 	margin-left: 20px;
 }

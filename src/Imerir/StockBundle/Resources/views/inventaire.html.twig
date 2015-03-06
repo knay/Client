@@ -17,13 +17,15 @@ menuSelected
 {% endblock %}
 
 {% block stylesheets %}
+	 <link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}">
      <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
 {% endblock %}
 
 {% block ajout %}
+<div id="dialog" title="Les clients"></div>
+
 <form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
 	<div id="contenneur_inventaire" style="display:none;">
-		<input type="submit" id="inputSubmit">
 		<table id="table_code_barre" class="tableau">
 			<tr>
 				<th></th>
@@ -40,6 +42,7 @@ menuSelected
 							<option>{{ j.p }}</option>
 						{% endfor %}
 					</select>
+					<i class="fa fa-plus-square ajout ajoutProduit"></i>
 				</td>
 				<td><input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly"></td>
 				<td><input type="number" name="quantite_0" min="1" value="1" class="quantite"></td>
@@ -60,6 +63,7 @@ menuSelected
 				</td>
 			</tr>
 		</table>
+		<input type="submit" value="Valider">
 	</div>
 	
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
@@ -84,6 +88,59 @@ var nbCodeBarre = 0;  //< Le nombre d'article scanné. Utilisé pour envoyé tou
 var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
 var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problèmes de concurences avec AJAX... Elle permet de stocké des donnée le temps qu'une requete soit passée
 
+function ajoutProduit() {
+	var ligne = $(this).parent().parent(); // La ligne sur laquelle on a cliqué
+    $("#dialog").load('{{ path('imerir_produit_creation_produit') }}', function () {
+    	$("#dialog").dialog({
+            modal: true,
+            width: "90%",
+        	height: "400",
+        	resizable: false,
+        	draggable: false
+        });
+        var dial = $("#dialog");
+        dial.find("#div_menu").remove();
+        dial.find("#header").remove();
+        dial.find("#title_page").remove();
+        dial.find("#fieldset_recherche").remove();
+        dial.find("#affichage").css("left", "0");
+
+        $( "#menu" ).children( "li" ).unbind("click");
+        $( "#menu" ).children( "li" ).click(clicOnMenu);
+
+        /**
+         * Fonction permettant de traiter le clic sur le bouton submit de la fenetre, si on submit, on envoie pas 
+         * le formulaire normalement, on le passe par AJAX.
+         */
+        dial.find('form').submit (function (event){ 
+        	event.preventDefault();
+        	
+            var valProduit = dial.find('input[name=nomProduit]').val();
+            var valLigneProduit = dial.find('select[name=nomLigneProduit]').val();
+
+            $("#dialog").html('<div id="chargement">'
+            		+'<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>'
+            		+'</div>');
+        	$.ajax({
+     		   url: '{{ path('imerir_produit_validation_creation_produit') }}',
+     		   data: {
+     			  nomProduit: valProduit,
+     			  nomLigneProduit: valLigneProduit
+     		   },
+     		   success: function(data) {
+     			  var select = ligne.find('.selectProduit');
+     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valProduit+'</option>');
+     			  dial.dialog("close");
+     			  ligne.effect( "highlight", {}, "3000" );
+     			  select.trigger('change');
+     		   },
+     		   type: 'POST'
+     		});
+     		return false;
+        });
+    });
+}
+
 /**
  * Permet d'effacer une ligne d'inventaire en cas d'erreur de l'utilisateur.
  * Cette fonction est appéelé lorsque l'on clic sur le bouton moins.
@@ -97,6 +154,10 @@ function supprimerLigne () {
 }
 
 $('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
+$('.ajoutProduit').click(ajoutProduit); // On bind le clic sur bouton - avec la fonction de suppression
+
+
+
 
 /**
  * Fonction appelé automatique au chargement de la page.
@@ -116,6 +177,17 @@ $(document).ready(function (e) {
  * TODO : s'inspiré de la caisse pour faire un truc plus propre au niveau de l'affichage d'un champs qui sera vide au depart..
  */
 $(document).keypress(function(e) {
+	try { // Si la fenetre n'a pas encore été init il faut catché l'érreur produite, même si on l'a traite pas
+		if ($("#dialog").dialog("isOpen") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
+			return true;
+	} catch(e) {
+	}
+	
+	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
+	// n'est plus la douchette qui est maître
+	if ($('.selectProduit:focus').length || $('.quantite:focus').length || $(".valAttribut:focus").length) 
+		return true;
+		
 	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette
 
@@ -127,6 +199,8 @@ $(document).keypress(function(e) {
 			var cellule = ligne.children('td');
 			var nbCaract = 0;
 			var ligneCur = tableau.children("tbody").children("tr").last(); // On récupère la ligne de tableau sur laquelle on va travailler
+			var existeDeja = false; // Permettra de savoir si on a déjà scané cet article ou non
+			var lignes = tableau.find("tr");
 
 			if (input.val().length < 10) {
 				input.val('');
@@ -136,29 +210,50 @@ $(document).keypress(function(e) {
 			$("#chargement").show();
 			$("#contenneur_inventaire").hide();
 			$("#message_accueil").hide();
-			
-			nbCodeBarre++;
-			
-			cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
-			cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
-			cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
-			cellule.children(".valAttribut").each(function (e) {
-				$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
-				nbCaract++;
+
+			lignes.each(function (e) { // On regarde dans toutes les lignes pour savoir si l'article à déjà été scanné
+				if (e === lignes.length - 1) // si c'est la ligne en cours, aucun interet on arrete la boucle
+					return; 
+
+				// Si c'est la même valeur de code barre c'est que l'article à déjà été scanné, on incrémente la quantité
+				if ($(this).find(".valeurCodeBarre").val() == ligneCur.find('.valeurCodeBarre').val()) {
+					existeDeja = true;
+					var qt = parseInt($(this).children('td').children(".quantite").val())+1;
+					$(this).children('td').children(".quantite").val(""+qt);
+					ligneCur.find(".valeurCodeBarre").val('');
+					$("#chargement_caisse").children("span").hide();
+				}
 			});
-			cellule.children(".valeurCodeBarre").val('');
-			tableau.append(ligne);
-
-			ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
-			ligneCur.show(); // On affiche l'article qu'on vient de scanner
-
-			$('.supprimer').unbind('click');
-			$('.supprimer').click(supprimerLigne);
-			$('.selectProduit').unbind('change');
-			$('.selectProduit').change(onChangeSelect);
-			
-			$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
-			getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+			if (existeDeja === false) {
+				nbCodeBarre++;
+				
+				cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
+				cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
+				cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
+				cellule.children(".valAttribut").each(function (e) {
+					$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
+					nbCaract++;
+				});
+				cellule.children(".valeurCodeBarre").val('');
+				tableau.append(ligne);
+	
+				ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
+				ligneCur.show(); // On affiche l'article qu'on vient de scanner
+	
+				$('.supprimer').unbind('click');
+				$('.supprimer').click(supprimerLigne);
+				$('.selectProduit').unbind('change');
+				$('.selectProduit').change(onChangeSelect);
+				
+				$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
+	
+				getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+			}
+			else {
+				 $("#contenneur_inventaire").show();
+				 $("#chargement").hide();
+			}
+				 
 		}, 220);
 	}
 
@@ -239,6 +334,7 @@ function onChangeSelect() {
 
 			   $("#contenneur_inventaire").show();
 			   $("#chargement").hide();
+			   ligne.effect( "highlight", {}, 3000 );
 			   
 			   valeurCaracteristique = null;
 			   $("#inputSubmit").attr("disabled", false);

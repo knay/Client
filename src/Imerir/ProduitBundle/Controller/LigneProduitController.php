@@ -12,13 +12,19 @@ class LigneProduitController extends Controller
 
         $query = $this->get('request');
         $recherche_lp = $query->request->get('recherche_lp');
+        $recherche_attribut = $query->request->get('recherche_attribut');
 
         if($recherche_lp===null)
             $nom='';
         else
             $nom=$recherche_lp;
 
-        $return = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => $nom));
+        if($recherche_attribut===null)
+            $attribut='';
+        else
+            $attribut=$recherche_attribut;
+
+        $return = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => $nom,'attribut'=>$attribut));
         $liste_ligne_produit = json_decode($return);
         
         //on recupere le menu et sous menu
@@ -39,7 +45,7 @@ class LigneProduitController extends Controller
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
         $return = $soap->call('ajoutLigneProduit',array('nom' => $nom));
 
-        $return_lp = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => ''));
+        $return_lp = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => '','attribut'=>''));
         $liste_ligne_produit = json_decode($return_lp);
         
         //on recupere le menu et sous menu
@@ -57,6 +63,7 @@ class LigneProduitController extends Controller
         //on recuperer les variables en post ici variable pour filtrer le tableau
         //et variable pour modifier une ligne produit
         $recherche_lp = $query->request->get('recherche_lp');
+        $recherche_attribut = $query->request->get('recherche_attribut');
         $nom_modif_lp = $query->request->get('nom_lp');
         $id_modif_lp = $query->request->get('id_lp');
         if($recherche_lp===null)
@@ -64,7 +71,12 @@ class LigneProduitController extends Controller
         else
             $nom=$recherche_lp;
 
-        $return = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => $nom));
+        if($recherche_attribut===null)
+            $attribut='';
+        else
+            $attribut=$recherche_attribut;
+
+        $return = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => $nom,'attribut'=>$attribut));
         $liste_ligne_produit = json_decode($return);
         
         //on recupere le menu et sous menu
@@ -87,7 +99,7 @@ class LigneProduitController extends Controller
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
         $return = $soap->call('modifLigneProduit',array('id' => $id,'nom'=>$nom));
 
-        $return_lp = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => ''));
+        $return_lp = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => '','attribut'=>''));
         $liste_ligne_produit = json_decode($return_lp);
         
         //on recupere le menu et sous menu
@@ -98,25 +110,5 @@ class LigneProduitController extends Controller
             array('liste_ligne_produit'=>$liste_ligne_produit,'nom_lp_add'=>$nom,'old_nom_lp'=>$old_nom,'result_menu' => $menu_sous_menu));
     }
 
-    public function ajoutFournisseurAction()
-    {
-        $soap = $this->get('noyau_soap');
 
-        $query = $this->get('request');
-        $recherche_lp = $query->request->get('recherche_lp');
-
-        if($recherche_lp===null)
-            $nom='';
-        else
-            $nom=$recherche_lp;
-
-        $return = $soap->call('getLigneProduit',array('count' => 0,'offset' => 0, 'nom' => $nom));
-        $liste_ligne_produit = json_decode($return);
-
-        //on recupere le menu et sous menu
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
-
-        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit,'result_menu' => $menu_sous_menu));
-    }
 }

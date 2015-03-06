@@ -13,3 +13,11 @@ imerir_modification_client:
 imerir_validation_modification_client:
     path:     /contacts/modification/validation
     defaults: { _controller: ImerirContactBundle:Default:execModifContact }
+
+imerir_stats_client_sms_mail:
+    path: /contacts/stats/sms_mail
+    defaults: { _controller: ImerirContactBundle:Stats:index }
+
+imerir_stats_client_age:
+    path: /contacts/stats/age
+    defaults: { _controller: ImerirContactBundle:Stats:contactAges }

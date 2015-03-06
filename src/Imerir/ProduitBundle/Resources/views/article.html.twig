@@ -21,8 +21,9 @@ Ajouter/modifier un article
 {% endblock %}
 
 {% block ajout %}
-<form action="{{ path('imerir_produit_article_save') }}" method="post">
-	<table id="contenneur_inventaire" class="tableau_input" style="display:none;">
+<form action="{{ path('imerir_produit_article_save') }}" method="post" style="display:none;" id="contenneur_inventaire">
+	<p>Veuillez saisir les informations suivantes : </p>
+	<table class="tableau_input" >
 		<tr>
 			<td><label for="code">Code barre : </label></td>
 			<td><input type="text" name="code" class="valeurCodeBarre" readonly="readonly"></td>
@@ -38,28 +39,30 @@ Ajouter/modifier un article
 			</td>
 		</tr>
 		<tr>
-			<td><label for="prix">Prix : </label></td>
- 			<td><input type="number" name="prix" min="1" value="1" class="prix" step="any"></td>
+			<td><label for="prixClient">Prix de vente : </label></td>
+ 			<td><input type="number" name="prixClient" min="1" value="1" class="prix" step="any"></td>
+		</tr>
+		<tr>
+			<td><label for="prixFournisseur">Prix fournisseur : </label></td>
+ 			<td><input type="number" name="prixFournisseur" min="1" value="1" class="prix" step="any"></td>
 		</tr>
  		<tr>
- 			<td><label for="caract">Caractéristiques : </label></td>
+ 			<td><label for="caract">Attributs : </label></td>
  			<td class="caract"></td>
  		</tr>
  		<tr>
  			<td><input type="submit"></td>
  		</tr>
 	</table>
-	
-	
-	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
-	<div id="message_accueil">
-		<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
-	</div>
-	
-	<div id="chargement" style="display: none;">
-		<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>
-	</div>
 </form>
+<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
+<div id="message_accueil">
+	<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
+</div>
+
+<div id="chargement" style="display: none;">
+	<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>
+</div>
 {% endblock %}
 
 {% block recherche %}

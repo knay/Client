@@ -30,6 +30,7 @@ class DefaultController extends Controller
         $query = $this->get('request');
         $nomRech = $query->request->get('rechProduit');
         $ligneProduitRech = $query->request->get('rechLp');
+        $attributRech = $query->request->get('rechAttribut');
 
         if($nomRech === null)
             $nomRechVal = '';
@@ -39,13 +40,17 @@ class DefaultController extends Controller
             $lpRechVal = '';
         else
             $lpRechVal = $ligneProduitRech;
+        if($attributRech === null)
+            $attributRechVal = '';
+        else
+            $attributRechVal=$attributRech;
 
         //on récupère toutes les lignes produits
         $return_lp = $soap->call('getLigneProduit', array('count' => 0,'offset' => 0, 'nom' =>''));
         $lignesProduitsretour = json_decode($return_lp);
 
         //on récupère tous les produits
-        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal));
+        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal, 'attribut'=>$attributRechVal));
         $produitsRetour = json_decode($return_produits);
 
         //on recupere le menu et sous menu
@@ -100,6 +105,7 @@ class DefaultController extends Controller
         $query = $this->get('request');
         $nomRech = $query->request->get('rechProduit');
         $ligneProduitRech = $query->request->get('rechLp');
+        $attributRech = $query->request->get('rechAttribut');
 
         $nom_modif_lp = $query->request->get('nom_lp');
         $id_modif_p = $query->request->get('id_p');
@@ -113,13 +119,17 @@ class DefaultController extends Controller
             $lpRechVal = '';
         else
             $lpRechVal = $ligneProduitRech;
+        if($attributRech === null)
+            $attributRechVal = '';
+        else
+            $attributRechVal=$attributRech;
 
         //on récupère toutes les lignes produits
         $return_lp = $soap->call('getLigneProduit', array('count' => 0,'offset' => 0, 'nom' =>''));
         $lignesProduitsretour = json_decode($return_lp);
 
         //on récupère tous les produits
-        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal));
+        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal,'attribut'=>$attributRechVal));
         $produitsRetour = json_decode($return_produits);
 
         //on recupere le menu et sous menu

@@ -88,17 +88,89 @@ var nbCodeBarre = 0;  //< Le nombre d'article scanné. Utilisé pour envoyé tou
 var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
 var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problèmes de concurences avec AJAX... Elle permet de stocké des donnée le temps qu'une requete soit passée
 
+/**
+ * Fonction permettant d'ajouter un produit. 
+ */
+function modifierAttribut() {
+	var ligne = $(this).parent().parent().parent(); // La ligne sur laquelle on a cliqué
+	var idAttr = $(this).parent().find('.id_attribut').val();
+
+	$("#dialog").dialog({
+        modal: true,
+        width: "90%",
+    	height: "400",
+    	resizable: false,
+    	draggable: false
+    });
+
+    $("#dialog").html('<div id="chargement">'
+		+'<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>'
+	    +'</div>');
+
+    $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', {id : idAttr }, function () {
+        var dial = $("#dialog");
+        dial.find("#div_menu").remove();
+        dial.find("#header").remove();
+        dial.find("#title_page").remove();
+        dial.find("#fieldset_recherche").remove();
+        dial.find("#affichage").css("left", "0");
+
+        $( "#menu" ).children( "li" ).unbind("click");
+        
+        /**
+         * Fonction permettant de traiter le clic sur le bouton submit de la fenetre, si on submit, on envoie pas 
+         * le formulaire normalement, on le passe par AJAX.
+         */
+        dial.find('form').submit (function (event){ 
+        	event.preventDefault();
+        	
+            var valProduit = dial.find('input[name=nomProduit]').val();
+            var valLigneProduit = dial.find('select[name=nomLigneProduit]').val();
+
+            $("#dialog").html('<div id="chargement">'
+            		+'<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>'
+            		+'</div>');
+            var datas = $(this).serialize();
+        	$.ajax({
+     		   url: '{{ path('imerir_produit_save_attributs') }}',
+     		   data: datas,
+     		   success: function(data) {
+     			  var select = ligne.find('.selectProduit');
+     			  dial.dialog("close");
+     			  ligne.effect( "highlight", {}, "3000" );
+     			  select.trigger('change');
+     			  $('.ajoutProduit').unbind('click');
+     			  $('.modifierAttribut').unbind('click');
+     			  $('.ajoutProduit').unbind('click');
+     			  $('.modifierAttribut').unbind('click');
+     		   },
+     		   type: 'POST'
+     		});
+     		return false;
+        });
+    });
+}
+
+/**
+ * Fonction permettant d'ajouter un produit. 
+ */
 function ajoutProduit() {
 	var ligne = $(this).parent().parent(); // La ligne sur laquelle on a cliqué
+
+	$("#dialog").dialog({
+        modal: true,
+        width: "90%",
+    	height: "400",
+    	resizable: false,
+    	draggable: false
+    });
+
+    $("#dialog").html('<div id="chargement">'
+		+'<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>'
+	    +'</div>');
+    
     $("#dialog").load('{{ path('imerir_produit_creation_produit') }}', function () {
-    	$("#dialog").dialog({
-            modal: true,
-            width: "90%",
-        	height: "400",
-        	resizable: false,
-        	draggable: false
-        });
-        var dial = $("#dialog");
+    	var dial = $("#dialog");
         dial.find("#div_menu").remove();
         dial.find("#header").remove();
         dial.find("#title_page").remove();
@@ -132,6 +204,10 @@ function ajoutProduit() {
      			  dial.dialog("close");
      			  ligne.effect( "highlight", {}, "3000" );
      			  select.trigger('change');
+     			  $('.ajoutProduit').unbind('click');
+     			  $('.modifierAttribut').unbind('click');
+     			  $('.ajoutProduit').unbind('click');
+     			  $('.modifierAttribut').unbind('click');
      		   },
      		   type: 'POST'
      		});
@@ -154,8 +230,7 @@ function supprimerLigne () {
 
 $('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
 $('.ajoutProduit').click(ajoutProduit); // On bind le clic sur bouton - avec la fonction de suppression
-
-
+$('.modifierAttribut').click(modifierAttribut); // On bind le clic sur bouton modifer avec la modification d'attibut
 
 
 /**
@@ -314,14 +389,16 @@ function onChangeSelect() {
 			   
 			   objJson.forEach(function (attr) {
 				   celulle.append('<label for="caract_'+numLigne+'_'+numValAttribut+'">'+attr.nom+' : </label> ');
-				   celulle.append('<select name="caract_'+numLigne+'_'+numValAttribut+'"></select><br/>');
-				   var select = celulle.children('select').last();
+				   celulle.append('<div><select name="caract_'+numLigne+'_'+numValAttribut+'"></select><i class="fa fa-pencil-square modifier modifierAttribut"></i><input type="hidden" class="id_attribut" name="id" value="'+attr.id+'"></div><br/>');
+				   var select = celulle.find('select').last();
 				   for (valAttr in attr.valeurs) {
 					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] === attr.valeurs[valAttr])
 					   	  select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 					   else 
 						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 				   }
+
+				   celulle.append('<input type="hidden" class="id_attribut" name="id" value="'+attr.id+'">');
 				   
 				   if (celulle.children('select').html() == '') {
 					   celulle.children('select').remove();
@@ -331,6 +408,11 @@ function onChangeSelect() {
 				   numValAttribut++;
 			   });
 
+			   $('.ajoutProduit').unbind('click');
+			   $('.ajoutProduit').click(ajoutProduit); // On bind le clic sur bouton - avec la fonction de suppression
+			   $('.modifierAttribut').unbind('click');
+			   $('.modifierAttribut').click(modifierAttribut); // On bind le clic sur bouton modifer avec la modification d'attibut
+			   
 			   $("#contenneur_inventaire").show();
 			   $("#chargement").hide();
 			   ligne.effect( "highlight", {}, 3000 );

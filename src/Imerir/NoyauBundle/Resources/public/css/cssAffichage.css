@@ -150,6 +150,11 @@ input[type="submit"]:hover {
 	cursor: pointer;
 }
 
+.modifier {
+	color: orange;
+	cursor: pointer;
+}
+
 .tableau_input {
 /* 	width: 35%; */
 }

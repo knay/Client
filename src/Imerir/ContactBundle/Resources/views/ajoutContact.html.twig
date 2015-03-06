@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title_ajout %}
-    {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
+    {% if app.request.attributes.get('_route')=='imerir_modification_client' %}
         MODIFICATION
     {% else %}
         AJOUT
@@ -415,8 +415,7 @@ menuSelected
                 </table>
             </div>
         </form>
-        <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié et a pour nom "{{ new_nom }}",
-            email "{{ new_email }}" et pour téléphone portable {{ new_telephone_portable }}</p>
+        <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié</p>
     {% endif %}
 
 {% endblock %}

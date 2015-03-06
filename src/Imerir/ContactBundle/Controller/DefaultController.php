@@ -47,7 +47,8 @@ class DefaultController extends Controller
         else
             $date_naissance = $recherche_contact_date_naissance;
         if($recherche_contact_ok_sms===null)
-            $int_ok_sms='';
+            //$int_ok_sms='';
+            $ok_sms = '';
         else{
             $ok_sms=$recherche_contact_ok_sms;
             if($ok_sms=='Oui')
@@ -58,7 +59,8 @@ class DefaultController extends Controller
                 $int_ok_sms='';
         }
         if($recherche_contact_ok_mail===null)
-            $int_ok_mail='';
+            //$int_ok_mail='';
+            $ok_mail='';
         else{
             $ok_mail=$recherche_contact_ok_mail;
             if($ok_mail=='Oui')
@@ -76,8 +78,8 @@ class DefaultController extends Controller
         //TODO ajouter l'action getContacts qui renvoie le nom, le mail et le num de tel
         $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => $nom, 'prenom'=>$prenom,
             'date_naissance'=>$date_naissance,
-            'civilite'=>$civilite,'email'=>$email, 'telephone_portable'=>$telephone_portable,'ok_sms'=>$int_ok_sms,
-            'ok_mail'=>$int_ok_mail,'notes'=>$notes));
+            'civilite'=>$civilite,'email'=>$email, 'telephone_portable'=>$telephone_portable,'ok_sms'=>$ok_sms,
+            'ok_mail'=>$ok_mail,'notes'=>$notes));
         $liste_contacts = json_decode($return);
 
         //on recupere le menu et sous menu

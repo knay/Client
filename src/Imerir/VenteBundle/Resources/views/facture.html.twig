@@ -14,20 +14,29 @@ ALBA - Facture
 
 {% block title_ajout %}Facture{% endblock %}
 
-	
 {% block ajout %}
-	<label>Test : </label><p id="date"></p>
+	{% if detail_facture is defined %}
+		{% for detail in detail_facture %}
+			<label>numero : </label><p>{{ detail.numero_facture }}</p>
+			<label>date : </label><p>{{ detail.date_facture }}</p>
+			<label>client : </label><p>{{ detail.nom_client }}</p>
+			<label>article : </label><p>{{ detail.nom_article }}</p>
+			<label>nombre : </label><p>{{ detail.nombre_article }}</p>
+			<label>prix : </label><p>{{ detail.prix_article }}</p>
+			<label>reduction : </label><p>{{ detail.reduction_article }}</p>
+			<label>montant : </label><p>{{ detail.montant_facture }}</p>
+		{% endfor %}
+	{% endif %}
 {% endblock %}
 
 {% block recherche %}
-	<label>Date : </label><input type="text" id="date_de_recherche_facture" size="20" value="aaaa-mm-jj">
-	<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
-	<label>Client : </label><input type="text" id="recherche_client" size="20">
-	<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
+	<form method="post" action="{{ path('imerir_vente_facture') }}">
+		<label>Date : </label><input type="text" id="date_de_recherche_facture" name="date" size="20" value="aaaa-mm-jj">
+		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
+		<label>Client : </label><input type="text" id="recherche_client" name="client" size="20">
+		<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
 	<input type="submit">
 {% endblock %}
-
-
 
 {% block table %}
     <tr>
@@ -87,14 +96,6 @@ $("#recherche_client").change(function(){
 	$("#bouton_supprimer_client").css("display","inline");
 });
 
-// $(window).click(function(){
-// 	//Si rien dans le champ client on marque defaut
-// 	if($("#recherche_client").val() == ''){
-// 		$("#recherche_client").val(explication_client);
-// 	}
-// });
-
-
 //Permet de gerer l'evenement sur le bouton de suppresion de la recherche client
 $("#bouton_supprimer_client").click(function(){
 	$("#bouton_supprimer_client").css("display","none");
@@ -110,7 +111,6 @@ $("#recherche_client").click(function(){
 
 //Permet de gerer lorsque l'utilisateur click sur une ligne du tableau
 $(".select_ligne").click( function(){
-	alert();
 	$("#fieldset_ajout").css("display","inline");
 });
 

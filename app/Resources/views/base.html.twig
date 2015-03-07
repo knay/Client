@@ -6,6 +6,7 @@
         {% block stylesheets %}{% endblock %}
         <link rel="icon" type="image/x-icon" href="{{ asset('favicon.ico') }}" />
         <link rel="stylesheet" href="{{ asset('../vendor/components/font-awesome/css/font-awesome.css') }}"/>
+        <link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/flick/jquery-ui.css') }}">
         <link rel="stylesheet" href="{{ asset('../src/Imerir/NoyauBundle/Resources/public/css/cssDefault.css') }}"/>
         <link rel="stylesheet" href="{{ asset('../src/Imerir/NoyauBundle/Resources/public/css/cssAffichage.css') }}"/>
         
@@ -13,7 +14,7 @@
         <script type="text/javascript" src="{{ asset('../vendor/components/jqueryui/jquery-ui.js') }}"></script>
         <script type="text/javascript" src="{{ asset('../vendor/nnnick/chartjs/Chart.js') }}"></script>
         <script>
-	         $(function() {
+	         $(function() { // Fonction permettant de réagir au clic sur l'aide
 		        var aideCache = true; 
 	            $( "#boutonAide" ).click(function() {
 		            if(aideCache === true) {

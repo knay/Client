@@ -16,13 +16,20 @@ Attribut
 {% endblock %}
 
 {% block aide %}
-Veuillez saisir le nom de la caractéristique produit, ainsi que les valeurs possibles pour cette caractéristique.
-<br><em>Exemple : </em>
-<ul>
-	<li>Nom de la caractéristique : Taille vêtemment</li>
- 	<li>Valeurs possibles : S, M, L, XL</li> 
- 	<li>Lignes produits concernées : t-shirt, pull</li>
- </ul>  
+Les attributs correspondent aux caractèristiques de votre produit. Cela peut, aussi bien, être la taille de votre article
+que la marque de celui-ci, ou sa couleur.
+<h3>Ajouter un attribut</h3>
+<p>
+	Veuillez saisir le nom de l'attribut, ainsi que les valeurs possibles pour cet attribut.
+	<br><em>Exemple : </em>
+	<ul>
+		<li>Nom de la caractéristique : Taille vêtemment</li>
+	 	<li>Valeurs possibles : S, M, L, XL</li> 
+	 	<li>Lignes produits concernées : T-Shirt, Pull</li>
+	</ul>
+</p>
+<h3>Rechercher un attribut</h3>
+<p>La recherche se fait sur le nom des attributs ainsi que leurs valeurs.</p>  
 {% endblock %}
 
 {% block title %}
@@ -138,7 +145,7 @@ menuSelected
 
 {% block recherche %}
 <form action="{{ path('imerir_produit_modif_attributs') }}" method="post">
-	<label for="rechNom">Nom : </label><input type="text" name="rechNom">
+	<label for="rechNom">Attribut ou valeur possible : </label><input type="text" name="rechNom">
 	<input type="submit">
 </form>
 {% endblock %}

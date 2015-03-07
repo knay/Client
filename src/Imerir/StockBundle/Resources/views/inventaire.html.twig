@@ -17,15 +17,25 @@ menuSelected
 {% endblock %}
 
 {% block stylesheets %}
-	 <link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}">
      <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
 {% endblock %}
 
 {% block ajout %}
 <div id="dialog" style="display: none"></div>
 
+<div id="dialogSaisiCodeBarre" style="display: none" title="Saisie manuelle">
+	<p>Veuillez saisir le code barre recherché.<br>
+	<label for="saisie_code_barre">Code barre : </label>
+	<input type="text" name="saisie_code_barre" id="saisie_code_barre">
+	</p>
+	<input type="button" value="Valider la saisie" class="bouton" id="valid_saisie">
+</div>
+
 <form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
 	<div id="contenneur_inventaire" style="display:none;">
+		<div id="divBoutonOption">
+			<input type="button" value="Faire une saisie manuelle de code barre" class="bouton saisie_manuelle">
+		</div>
 		<table id="table_code_barre" class="tableau">
 			<tr>
 				<th></th>
@@ -68,7 +78,9 @@ menuSelected
 	
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 	<div id="message_accueil">
-		<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
+		<h2>Scanner un article pour commencer</h2>
+		OU<br>
+		<input type="button" value="Faire une saisie manuelle" class="bouton saisie_manuelle">
 	</div>
 	
 	<div id="chargement" style="display: none;">
@@ -87,6 +99,41 @@ menuSelected
 var nbCodeBarre = 0;  //< Le nombre d'article scanné. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
 var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
 var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problèmes de concurences avec AJAX... Elle permet de stocké des donnée le temps qu'une requete soit passée
+
+/** 
+ * Fonction ouvrant une fenetre de saisie manuelle de code barre
+ */
+$(".saisie_manuelle").click(function () {
+	var dial = $("#dialogSaisiCodeBarre");
+	dial.dialog({
+	    modal: true,
+	    width: "50%",
+		height: "300",
+		resizable: false,
+		draggable: false
+	});
+});
+
+/**
+ * Permet de valider la saisie manuelle de code barre.
+ * Une fois que le code barre a bien été saisi par l'utilisateur, on met la valeur de ce qui a été saisie 
+ * dans l'input où la douchette va normalement écrire, puis on lance la recherche.
+ */
+$("#valid_saisie").click(function () {
+	var input = $("#saisie_code_barre");
+	var valeurSaisie = input.val();
+	if (valeurSaisie === "") {
+		input.focus();
+		return;
+	}
+
+	var inputCodeBarre = $(".valeurCodeBarre");
+	inputCodeBarre.val(valeurSaisie); // On fait comme si on avait fait avec la douchette, on met dans l'input qui va bien
+	
+	validerCodeBarre(true); // On fait comme si on avait eu un code barre
+
+	$("#dialogSaisiCodeBarre").dialog("close");
+});
 
 /**
  * Fonction permettant d'ajouter un produit. 
@@ -258,7 +305,7 @@ $(document).ready(function (e) {
  * scan de produit.
  */
 $(document).keypress(function(e) {
-	if ($("#dialog").is(":visible") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
+	if ($("#dialog").is(":visible") === true || $("#dialogSaisiCodeBarre").is(":visible") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
 		return true;
 	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
@@ -272,72 +319,80 @@ $(document).keypress(function(e) {
 	$("#inputSubmit").attr("disabled", true);  // On grise le boutton submit le temps du traitement
 
 	if (input.val().length == 1) { // Si c'est le premier caractère taper on lance un timeout (pour le temps de lecture d'un code barre)
-		setTimeout (function () {
-			var ligne = tableau.children("tbody").children("tr").last().clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
-			var cellule = ligne.children('td');
-			var nbCaract = 0;
-			var ligneCur = tableau.children("tbody").children("tr").last(); // On récupère la ligne de tableau sur laquelle on va travailler
-			var existeDeja = false; // Permettra de savoir si on a déjà scané cet article ou non
-			var lignes = tableau.find("tr");
-
-			if (input.val().length < 10) {
-				input.val('');
-				return true;
-			}
-
-			$("#chargement").show();
-			$("#contenneur_inventaire").hide();
-			$("#message_accueil").hide();
-
-			lignes.each(function (e) { // On regarde dans toutes les lignes pour savoir si l'article à déjà été scanné
-				if (e === lignes.length - 1) // si c'est la ligne en cours, aucun interet on arrete la boucle
-					return; 
-
-				// Si c'est la même valeur de code barre c'est que l'article à déjà été scanné, on incrémente la quantité
-				if ($(this).find(".valeurCodeBarre").val() == ligneCur.find('.valeurCodeBarre').val()) {
-					existeDeja = true;
-					var qt = parseInt($(this).children('td').children(".quantite").val())+1;
-					$(this).children('td').children(".quantite").val(""+qt);
-					ligneCur.find(".valeurCodeBarre").val('');
-					$("#chargement_caisse").children("span").hide();
-				}
-			});
-			if (existeDeja === false) {
-				nbCodeBarre++;
-				
-				cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
-				cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
-				cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
-				cellule.children(".valAttribut").each(function (e) {
-					$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
-					nbCaract++;
-				});
-				cellule.children(".valeurCodeBarre").val('');
-				tableau.append(ligne);
-	
-				ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
-				ligneCur.show(); // On affiche l'article qu'on vient de scanner
-	
-				$('.supprimer').unbind('click');
-				$('.supprimer').click(supprimerLigne);
-				$('.selectProduit').unbind('change');
-				$('.selectProduit').change(onChangeSelect);
-				
-				$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
-	
-				getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
-			}
-			else {
-				 $("#contenneur_inventaire").show();
-				 $("#chargement").hide();
-			}
-				 
-		}, 220);
+		setTimeout (validerCodeBarre, 220);
 	}
 
     input.val(input.val()+ String.fromCharCode(e.which));
     return false;
 });
+
+/** 
+ * Fonction appelée lorsqu'un code barre a été valider.
+ * Va rechercher toutes les informations de l'article scanné depuis le serveur SOAP.
+ *
+ * @param saisieManuelle Précise s'il s'agit d'une saisie manuelle ou non. Si c'est une
+ *                       saisie manuelle on ne tient pas compte de la longueur du code barre.
+ */
+function validerCodeBarre(saisieManuelle) {
+	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
+	var ligne = tableau.children("tbody").children("tr").last().clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
+	var cellule = ligne.children('td');
+	var nbCaract = 0;
+	var ligneCur = tableau.children("tbody").children("tr").last(); // On récupère la ligne de tableau sur laquelle on va travailler
+	var existeDeja = false; // Permettra de savoir si on a déjà scané cet article ou non
+	var lignes = tableau.find("tr");
+
+	if (saisieManuelle !== true && input.val().length < 10) {
+		input.val('');
+		return true;
+	}
+
+	$("#chargement").show();
+	$("#contenneur_inventaire").hide();
+	$("#message_accueil").hide();
+
+	lignes.each(function (e) { // On regarde dans toutes les lignes pour savoir si l'article à déjà été scanné
+		if (e === lignes.length - 1) // si c'est la ligne en cours, aucun interet on arrete la boucle
+			return; 
+
+		// Si c'est la même valeur de code barre c'est que l'article à déjà été scanné, on incrémente la quantité
+		if ($(this).find(".valeurCodeBarre").val() == ligneCur.find('.valeurCodeBarre').val()) {
+			existeDeja = true;
+			var qt = parseInt($(this).children('td').children(".quantite").val())+1;
+			$(this).children('td').children(".quantite").val(""+qt);
+			ligneCur.find(".valeurCodeBarre").val('');
+			$("#chargement_caisse").children("span").hide();
+		}
+	});
+	if (existeDeja === false) {
+		nbCodeBarre++;
+		
+		cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
+		cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
+		cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
+		cellule.children(".valAttribut").html('');
+		cellule.children(".selectProduit").children('option').attr("selected", false);;
+		cellule.children(".valeurCodeBarre").val('');
+		tableau.append(ligne);
+
+		ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
+		ligneCur.show(); // On affiche l'article qu'on vient de scanner
+
+		$('.supprimer').unbind('click');
+		$('.supprimer').click(supprimerLigne);
+		$('.selectProduit').unbind('change');
+		$('.selectProduit').change(onChangeSelect);
+		
+		$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
+
+		getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+	}
+	else {
+		 $("#contenneur_inventaire").show();
+		 $("#chargement").hide();
+	}
+		 
+}
 
 /**
  * Permet de récupèrer un article complet depuis le SOAP.

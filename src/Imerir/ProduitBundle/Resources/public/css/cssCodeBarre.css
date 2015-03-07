@@ -49,6 +49,10 @@
     	visibility: visible;
     }
     
+    #divCodeBarre h3, #divCodeBarre p, #divCodeBarre a{
+    	display: none;
+    }
+    
     .code_barre td{
 		height: 5.4cm;
 		width: 7cm;

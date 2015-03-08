@@ -21,43 +21,58 @@ Ajouter/modifier un article
 {% endblock %}
 
 {% block ajout %}
-<form action="{{ path('imerir_produit_article_save') }}" method="post" style="display:none;" id="contenneur_inventaire">
-	<p>Veuillez saisir les informations suivantes : </p>
-	<table class="tableau_input" >
-		<tr>
-			<td><label for="code">Code barre : </label></td>
-			<td><input type="text" name="code" class="valeurCodeBarre" readonly="readonly"></td>
-		</tr>
-		<tr>
-			<td><label for="produit">Produit : </label></td> 
-			<td>
-				<select name="produit" class="selectProduit">
-				{% for j in produit %}
-					<option>{{ j.p }}</option>
-				{% endfor %}
-				</select>
-			</td>
-		</tr>
-		<tr>
-			<td><label for="prixClient">Prix de vente : </label></td>
- 			<td><input type="number" name="prixClient" min="1" value="1" class="prix" step="any"></td>
-		</tr>
-		<tr>
-			<td><label for="prixFournisseur">Prix fournisseur : </label></td>
- 			<td><input type="number" name="prixFournisseur" min="1" value="1" class="prix" step="any"></td>
-		</tr>
- 		<tr>
- 			<td><label for="caract">Attributs : </label></td>
- 			<td class="caract"></td>
- 		</tr>
- 		<tr>
- 			<td><input type="submit"></td>
- 		</tr>
-	</table>
-</form>
+<div id="dialogSaisiCodeBarre" style="display: none" title="Saisie manuelle">
+	<p>Veuillez saisir le code barre recherché.<br>
+	<label for="saisie_code_barre">Code barre : </label>
+	<input type="text" name="saisie_code_barre" id="saisie_code_barre">
+	</p>
+	<input type="button" value="Valider la saisie" class="bouton" id="valid_saisie">
+</div>
+<div style="display:none;" id="contenneur_inventaire">
+	<div id="divBoutonOption">
+		<input type="button" value="Scanner un autre article" class="bouton" id="scannerUnAutreArticle">
+		<input type="button" value="Faire une saisie manuelle de code barre" class="bouton saisie_manuelle">
+	</div>
+	<form action="{{ path('imerir_produit_article_save') }}" method="post" >
+		<p>Veuillez compléter les informations suivantes : </p>
+		<table class="tableau_input" >
+			<tr>
+				<td><label for="code">Code barre : </label></td>
+				<td><input type="text" name="code" class="valeurCodeBarre" readonly="readonly"></td>
+			</tr>
+			<tr>
+				<td><label for="produit">Produit : </label></td> 
+				<td>
+					<select name="produit" class="selectProduit">
+					{% for j in produit %}
+						<option>{{ j.p }}</option>
+					{% endfor %}
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<td><label for="prixClient">Prix de vente : </label></td>
+	 			<td><input type="number" name="prixClient" min="1" value="1" class="prix" step="any"></td>
+			</tr>
+			<tr>
+				<td><label for="prixFournisseur">Prix fournisseur : </label></td>
+	 			<td><input type="number" name="prixFournisseur" min="1" value="1" class="prix" step="any"></td>
+			</tr>
+	 		<tr>
+	 			<td><label for="caract">Attributs : </label></td>
+	 			<td class="caract"></td>
+	 		</tr>
+	 		<tr>
+	 			<td><input type="submit"></td>
+	 		</tr>
+		</table>
+	</form>
+</div>
 <!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 <div id="message_accueil">
-	<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
+	<h2>Scanner un article pour commencer</h2>
+	OU<br>
+	<input type="button" value="Faire une saisie manuelle" class="bouton saisie_manuelle">
 </div>
 
 <div id="chargement" style="display: none;">
@@ -86,15 +101,56 @@ $(document).ready(function (e) {
 	$('input[type="text"]').val('');
 });
 
+/** 
+ * Fonction ouvrant une fenetre de saisie manuelle de code barre
+ */
+$(".saisie_manuelle").click(function () {
+	var dial = $("#dialogSaisiCodeBarre");
+	dial.dialog({
+	    modal: true,
+	    width: "50%",
+		height: "300",
+		resizable: false,
+		draggable: false
+	});
+});
+
+$("#scannerUnAutreArticle").click(function() {
+	$("#chargement").hide();
+	$("#message_accueil").show();
+	$("#contenneur_inventaire").hide();
+});
+
+/**
+ * Permet de valider la saisie manuelle de code barre.
+ * Une fois que le code barre a bien été saisi par l'utilisateur, on met la valeur de ce qui a été saisie 
+ * dans l'input où la douchette va normalement écrire, puis on lance la recherche.
+ */
+$("#valid_saisie").click(function () {
+	var input = $("#saisie_code_barre");
+	var valeurSaisie = input.val();
+	if (valeurSaisie === "") {
+		input.focus();
+		return;
+	}
+
+	var inputCodeBarre = $(".valeurCodeBarre");
+	inputCodeBarre.val(valeurSaisie); // On fait comme si on avait fait avec la douchette, on met dans l'input qui va bien
+	
+	validerCodeBarre(true); // On fait comme si on avait eu un code barre
+
+	$("#dialogSaisiCodeBarre").dialog("close");
+});
+
 /**
  * Fonction clef du scan, permet de detecter lorsque l'on presse une touche,
  * la douchette agissant comme un clavier, cette methode est appelé lors d'un 
  * scan de produit.
- *
- * TODO : permettre d'écrire dans un champ type int.... la base quoi..
- * TODO : s'inspiré de la caisse pour faire un truc plus propre au niveau de l'affichage d'un champs qui sera vide au depart..
  */
 $(document).keypress(function(e) {
+	if ($("#dialogSaisiCodeBarre").is(":visible") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
+		return true;
+	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
 	// n'est plus la douchette qui est maître
 	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
@@ -111,30 +167,16 @@ $(document).keypress(function(e) {
 	}
 
 	if (input.val().length == 1) { // Si c'est le premier caractère taper on lance un timeout (pour le temps de lecture d'un code barre)
-		setTimeout (function () {
-			if (input.val().length < 10) {
-				input.val('');
-				isScanne = false;
-				return true;
-			}
-
-			$("#chargement").show();
-			$("#message_accueil").hide();
-			$("#contenneur_inventaire").hide();
-
-			$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
-			getArticleFromSoap(); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
-			getPrixFromSoap(); // On récupère le prix de l'article
-
-			isScanne = true;
-		}, 220);
+		setTimeout (validerCodeBarre, 220);
 	}
 
     input.val(input.val()+ String.fromCharCode(e.which));
     return false;
 });
 
-
+/**
+ * Permet de récupérer le prix d'un article depuis le serveur SOAP.
+ */
 function getPrixFromSoap() {
 	$.ajax({
 		   url: '{{ path('imerir_noyau_ajax_getPrixFromCodeBarre_caisse') }}',
@@ -144,6 +186,9 @@ function getPrixFromSoap() {
 		   success: function(data) {
 			   var prix = data.prix;
 			   $('.prix').val(prix);
+		   },
+		   error: function () {
+			   alert('[AJAX.ART003] Une erreur s\'est produit lors de la récupération des données.');
 		   },
 		   type: 'POST'
 	});	
@@ -164,6 +209,8 @@ function getArticleFromSoap() {
 		   success: function(data) {
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
 			   var nomProduit = $(".selectProduit").children('option');
+			   nomProduit.attr("selected", false);
+			   nomProduit.first().attr("selected", true);
 			   nomProduit.each(function (e) {
 				   if ($(this).html() === objJson['nomProduit'])
 					   $(this).attr("selected", true);
@@ -172,6 +219,9 @@ function getArticleFromSoap() {
 			   valeurCaracteristique = objJson.attributs; // Pour problème de concurences AJAX. Pour passer une variable à la fonction 'onChangeSelect' 
 
 			   $(".selectProduit").trigger('change'); // On simule le fait que l'on veuille changer de produit pour mettre à jour les attributs
+		   },
+		   error: function () {
+			   alert('[AJAX.ART001] Une erreur s\'est produit lors de la récupération des données.');
 		   },
 		   type: 'POST'
 	});
@@ -222,8 +272,38 @@ function onChangeSelect() {
 			   $("#contenneur_inventaire").show();
 			   $("#chargement").hide();
 		   },
+		   error: function () {
+			   alert('[AJAX.ART002] Une erreur s\'est produit lors de la récupération des données.');
+		   },
 		   type: 'POST'
 	});
+}
+
+/** 
+ * Fonction appelée lorsqu'un code barre a été valider.
+ * Va rechercher toutes les informations de l'article scanné depuis le serveur SOAP.
+ *
+ * @param saisieManuelle Précise s'il s'agit d'une saisie manuelle ou non. Si c'est une
+ *                       saisie manuelle on ne tient pas compte de la longueur du code barre.
+ */
+function validerCodeBarre(saisieManuelle) {
+	var input = $(".valeurCodeBarre"); // On récupère l'input dans lequel on va venir écrire le code barre
+	
+	if (saisieManuelle !== true && input.val().length < 10) {
+		input.val('');
+		isScanne = false;
+		return true;
+	}
+
+	$("#chargement").show();
+	$("#message_accueil").hide();
+	$("#contenneur_inventaire").hide();
+
+	$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
+	getArticleFromSoap(); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+	getPrixFromSoap(); // On récupère le prix de l'article
+
+	isScanne = true;
 }
 
 $("#inputSubmit").attr("disabled", false); // Par défaut le bouton submit et accessible

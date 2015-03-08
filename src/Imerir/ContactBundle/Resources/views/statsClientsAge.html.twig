@@ -1,0 +1,124 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block title_page %}
+Statistiques des contacts
+{% endblock %}
+
+{% block title %}
+ALBA - Statistiques
+{% endblock %}
+
+{% block clientBlock %}
+menuSelected
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssStats.css') }}"/> 
+{% endblock %}
+
+{% block title_ajout %}Vos statistiques{% endblock %}
+
+{% block ajout %}
+<p class="choixGraph">
+	Choisissez une option :<br>
+    <a class="bouton" href="{{ path('imerir_stats_client_sms_mail') }}">SMS & e-mails</a>
+    <a class="bouton boutonSelected" href="{{ path('imerir_stats_client_age') }}">Tranches d'âge</a>
+</p>
+
+<h3>Nombre de contacts par tranche d'âge : </h3>
+<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
+<div class="legende">
+Légende : 
+</div>
+{% endblock %}
+
+{% block recherche %}
+{% endblock %}
+
+{% block table %}
+	<tr><th>Nom</th><th>Valeurs possibles</th></tr>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+/**
+ * Quand la page est chargée on enlève le fieldset de recherche qui ne sert à rien.
+ */
+$(document).ready(function (e) {
+	$('#fieldset_recherche').remove();
+});
+
+
+var pieData = [
+               {% for i in stats %}
+               {
+            	   value : {{ i.moins25 }},
+            	   label : "A moins de 25 ans",
+                   labelColor : 'white',
+                   labelFontSize : '16',
+                   labelBackground : '#FF0000',
+                   color: "#FF8153"
+               },
+                {
+                    value : {{ i.entre25_40 }},
+                    label : "A entre 25 et 40 ans",
+                    labelColor : 'white',
+                    labelFontSize : '16',
+                    labelBackground : '#FF0000',
+                    color:"#4ACAB4"
+                },
+                {
+                    value : {{ i.entre40_60 }},
+                    label : "A entre 40 et 60 ans",
+                    labelColor : 'white',
+                    labelFontSize : '16',
+                    labelBackground : '#FF0000',
+                    color:"#878BB6"
+                },
+                {
+                    value : {{ i.plus60 }},
+                    label : "A entre 60 et 99 ans",
+                    labelColor : 'white',
+                    labelFontSize : '16',
+                    labelBackground : '#FF0000',
+                    color:"#FFEA88"
+                }
+               {% endfor %}
+           ];
+var options = {
+    //Boolean - Whether we should show a stroke on each segment
+    segmentShowStroke : true,
+    //String - The colour of each segment stroke
+    segmentStrokeColor : "#fff",
+    //Number - The width of each segment stroke
+    segmentStrokeWidth : 2,
+    //Number - The percentage of the chart that we cut out of the middle
+    percentageInnerCutout : 50, // This is 0 for Pie charts
+    //Number - Amount of animation steps
+    animationSteps : 100,
+    //String - Animation easing effect
+    animationEasing : "easeOutBounce",
+    //Boolean - Whether we animate the rotation of the Doughnut
+    animateRotate : true,
+    //Boolean - Whether we animate scaling the Doughnut from the centre
+    animateScale : false,
+    
+    legendTemplate : '<ul>'
+        +'<% for (var i=0; i<pieData.length; i++) { %>'
+          +'<li>'
+          +'<span style=\"background-color:<%=pieData[i].color%>; display: inline-block; height: 30px; width: 30px\">&nbsp</span>'
+          +'<% if (pieData[i].label) { %><%= pieData[i].label %><% } %>'
+        +'</li>'
+      +'<% } %>'
+    +'</ul>'
+};
+
+var ctx = $("#myChart").get(0).getContext("2d");
+var donut = new Chart(ctx).Pie(pieData, options);
+var legend = donut.generateLegend();
+$(".legende").append(legend);
+
+</script>
+{% endblock %}
+

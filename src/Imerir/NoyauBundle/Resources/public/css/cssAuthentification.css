@@ -83,28 +83,20 @@ label {
 	/*margin-top: 3rem;*/
 }
 
-button {
+input[type="submit"] {
 	margin-top: 3%;
 	margin-left: 80%;
 	background: #0099CC;
-	width: 55px;
 	height: 55px;
+	width: 55px;
 	border: 1px solid white;
 	border-radius: 50%;
 	font: bold 11px Arial;
 	color: white;
 }
 
-button:hover {
-	margin-top: 3%;
-	margin-left: 80%;
-	background: #0099CC;
-	width: 55px;
-	height: 55px;
+input[type="submit"]:hover {
 	border: 3px solid white;
-	border-radius: 50%;
-	font: bold 11px Arial;
-	color: white;
 }
 
 #erreur {

@@ -1,3 +1,95 @@
 .select_ligne {
 	text-align: center;
 }
+
+.feuille_facture {
+	width:100%;
+/* 	border:2px solid black; */
+}
+
+#logo_facture {
+	text-align: center;
+/* 	border: 2px solid orange; */
+}
+
+#logo_facture h1 {
+	color: black;
+}
+
+#information {
+	width: 100%;
+	height: auto;
+/* 	border: 2px solid yellow; */
+}
+
+#information_facture {
+/* 	border: 2px solid red; */
+	width: 50%;
+	text-align: left;
+	float: left;
+/* 	color: #FF00FF; */
+}
+
+#information_entreprise {
+/* 	border: 2px solid green; */
+	margin-left: 50%;
+	padding-right: 2%;
+	text-align: right;
+}
+
+#detail_sur_client {
+/* 	border:2px solid red; */
+	padding-left: 4%;
+	padding-top: 2%;
+}
+
+
+#tableau_facture {
+	width: 100%;
+	text-align: center;
+	padding-top: 2%;
+}
+
+#tableau_detail_facture {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 3%;
+	border-top: 2px solid black;
+	border: 1px solid black;
+}
+
+#tableau_detail_facture tr {
+	width: 100%;
+	border: 1px solid black;
+}
+
+#tableau_detail_facture th {
+	padding-left: auto;
+	padding-right: auto;
+	border: 1px solid black;
+}
+
+#tableau_detail_facture td {
+	border: 0.9px solid black;
+}
+
+.col_article {
+	width: 45%;
+}
+
+.col_article_contenu {
+	width: 45%;
+	text-align: left;
+	padding-left: 2%;
+}
+
+.tva {
+	text-align: right;
+}
+
+#bas_de_page_facture {
+	width: 100%;
+	padding-top: 5%;
+	padding-bottom: 1%;
+	text-align: center;
+}

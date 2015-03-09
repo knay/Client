@@ -23,6 +23,7 @@ menuSelected
 	Choisissez une option :<br>
     <a class="bouton boutonSelected" href="{{ path('imerir_stats_client_sms_mail') }}">SMS & e-mails</a>
     <a class="bouton" href="{{ path('imerir_stats_client_age') }}">Tranches d'âge</a>
+    <a class="bouton" href="{{ path('imerir_stats_client_ville') }}">Villes</a>
 </p>
 
 <h3>Contacts par rapport aux SMS et e-mails : </h3>
@@ -78,7 +79,7 @@ var pieData = [
                 },
                 {
                     value : {{ i.ok_mail_only }},
-                    label : "désire des e-mails uniquement",
+                    label : "Désire des e-mails uniquement",
                     labelColor : 'white',
                     labelFontSize : '16',
                     labelBackground : '#FF0000',

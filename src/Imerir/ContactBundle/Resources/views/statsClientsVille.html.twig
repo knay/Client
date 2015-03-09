@@ -1,0 +1,143 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block title_page %}
+Statistiques des ventes
+{% endblock %}
+
+{% block title %}
+ALBA - Statistiques
+{% endblock %}
+
+{% block venteBlock %}
+menuSelected
+{% endblock %}
+
+{% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssStats.css') }}"/> 
+{% endblock %}
+
+{% block title_ajout %}Vos statistiques{% endblock %}
+
+{% block ajout %}
+<p class="choixGraph">
+    Choisissez une option :<br>
+    <a class="bouton" href="{{ path('imerir_stats_client_sms_mail') }}">SMS & e-mails</a>
+    <a class="bouton" href="{{ path('imerir_stats_client_age') }}">Tranches d'âge</a>
+    <a class="bouton boutonSelected" href="{{ path('imerir_stats_client_ville') }}">Villes</a>
+</p>
+
+<h3>Répartition des contacts à travers les villes : </h3>
+<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
+<div class="legende">
+</div>
+{% endblock %}
+
+{% block recherche %}
+{% endblock %}
+
+{% block table %}
+	<tr><th>Nom</th><th>Valeurs possibles</th></tr>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+/**
+ * Quand la page est chargée on enlève le fieldset de recherche qui ne sert à rien.
+ */
+$(document).ready(function (e) {
+	$('#fieldset_recherche').remove();
+});
+
+
+
+var radar = {
+    labels: [
+        {% for i in stats %}
+            {% if loop.last %}
+                "{{ i.ville }}"
+            {% else %}
+                "{{ i.ville }}",
+            {% endif %}
+        {% endfor %}
+    ],
+    datasets: [{
+        label: "Répartition des contacts à travers les villes",
+        fillColor: "rgba(200,0,0,0.2)",
+        strokeColor: "rgba(200,0,0,1)",
+        pointColor: "rgba(0,0,0,0.5)",
+        pointStrokeColor: "#fff",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "rgba(220,220,220,1)",
+        data: [
+            {% for i in stats %}
+                {% if loop.last %}
+                    "{{ i.nb_personne }}"
+                {% else %}
+                    "{{ i.nb_personne }}",
+                {% endif %}
+                {% endfor %}
+        ]
+
+    }]
+};
+
+var optionsRadar = {
+    //Boolean - Whether to show lines for each scale point
+    scaleShowLine : true,
+
+    //Boolean - Whether we show the angle lines out of the radar
+    angleShowLineOut : true,
+
+    //Boolean - Whether to show labels on the scale
+    scaleShowLabels : false,
+
+    // Boolean - Whether the scale should begin at zero
+    scaleBeginAtZero : true,
+
+    //String - Colour of the angle line
+    angleLineColor : "rgba(0,0,0,.1)",
+
+    //Number - Pixel width of the angle line
+    angleLineWidth : 1,
+
+    //String - Point label font declaration
+    pointLabelFontFamily : "'Arial'",
+
+    //String - Point label font weight
+    pointLabelFontStyle : "normal",
+
+    //Number - Point label font size in pixels
+    pointLabelFontSize : 10,
+
+    //String - Point label font colour
+    pointLabelFontColor : "#666",
+
+    //Boolean - Whether to show a dot for each point
+    pointDot : true,
+
+    //Number - Radius of each point dot in pixels
+    pointDotRadius : 3,
+
+    //Number - Pixel width of point dot stroke
+    pointDotStrokeWidth : 1,
+
+    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+    pointHitDetectionRadius : 20,
+
+    //Boolean - Whether to show a stroke for datasets
+    datasetStroke : true,
+
+    //Number - Pixel width of dataset stroke
+    datasetStrokeWidth : 2,
+
+    //Boolean - Whether to fill the dataset with a colour
+    datasetFill : true
+};
+
+var ctx = $("#myChart").get(0).getContext("2d");
+var donut = new Chart(ctx).Radar(radar, optionsRadar);
+
+</script>
+{% endblock %}
+

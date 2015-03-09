@@ -21,3 +21,7 @@ imerir_stats_client_sms_mail:
 imerir_stats_client_age:
     path: /contacts/stats/age
     defaults: { _controller: ImerirContactBundle:Stats:contactAges }
+
+imerir_stats_client_ville:
+    path: /contacts/stats/ville
+    defaults: { _controller: ImerirContactBundle:Stats:contactVilles }

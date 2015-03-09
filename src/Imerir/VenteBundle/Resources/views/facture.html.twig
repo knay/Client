@@ -36,7 +36,8 @@ ALBA - Facture
 							<div id="detail_sur_client">
 								Le : {{ i.date_facture }}<br>
 								Client : {{ i.nom_client }}<br>
-								Adresse : <br>
+								Adresse : {{ i.adresse_numero }} {{ i.adresse_rue }} <br>
+								{{ i.adresse_code_postal }} {{ i.adresse_ville }} {{ i.adresse_pays }}
 							</div>
 							{% set variable_de_boucle = variable_de_boucle + 1 %}
 						{% endif %}

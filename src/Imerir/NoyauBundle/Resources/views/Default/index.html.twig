@@ -34,92 +34,94 @@ menuSelected
 	<p>Ou<br>Ajouter un nouveau client : <input type="button" value="Nouveau client" class="bouton" id="ajout_client"></p>
 	<div style="display: none;" id="divAjoutClient">
 		<input type="button" value="Retour" class="bouton retour_client"><br>
-		<table id="tableau_input">
-            <tr>
-                <td><label for="nom">Nom </label></td>
-                <td><input type="text" name="nom"/></td>
-                <input type="submit" value="Ajouter">
-            </tr>
-            <tr>
-                <td><label for="nom">Prenom </label></td>
-                <td><input type="text" name="prenom"/></td>
-            </tr>
-            <tr>
-                <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                <td><input type="date" name="date_naissance" id="datepicker"/></td>
-            </tr>
-            <tr>
-                <td><label for="civilite">Civilité </label></td>
-                <td>
-                    <select name="civilite">
-                        <option value="Mlle.">Mlle.</option>
-                        <option value="Mme.">Mme.</option>
-                        <option value="M.">M.</option>
-                    </select>
-                </td>
-            </tr>
-            <tr>
-                <td><label for="email">Email </label></td>
-                <td><input type="text" name="email"/></td>
-            </tr>
-            <tr>
-                <td><label for="telephone_portable">Telephone portable </label></td>
-                <td><input type="text" name="telephone_portable"/></td>
-            </tr>
-            <tr>
-                <td><label for="ok_sms">Désire recevoir des SMS </label></td>
-                <td><input type="checkbox" name="ok_sms"/></td>
-            </tr>
-            <tr>
-                <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
-                <td><input type="checkbox" name="ok_mail"/></td>
-            </tr>
-            <tr>
-                <td><label for="notes">Notes </label></td>
-                <td><textarea name="notes"></textarea></td>
-            </tr>
-            <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
-        </table>
-
-        {% set nbAdresse = 0 %}
-        {#champs pour l'adresse#}
-        <div id="lst_adresse">
-            <table class="tableau" id="tableau">
-                <tr>
-                    <th></th>
-                    <th class="titre_lst">Pays</th>
-                    <th class="titre_lst">Ville</th>
-                    <th class="titre_lst">Code postal</th>
-                    <th class="titre_lst">N° voie</th>
-                    <th class="titre_lst">Voie</th>
-                    <th class="titre_lst">N° appartement</th>
-                    <th class="titre_lst">Téléphone fixe</th>
-                </tr>
-                {% if detail_adresse.adresse is defined %}
-                    {% for i in detail_adresse.adresse %}
-                        <tr>
-                            <td>
-                                <i class="fa fa-minus-square supprimer"></i>
-                            </td>
-                            <td>
-                                <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
-                            </td>
-                        </tr>
-                        {% set nbAdresse = nbAdresse + 1 %}
-                    {% endfor %}
-                {% endif %}
-                <tr class="last">
-                    <td><i class="fa fa-plus-square ajout ajouter"></i></td>
-                    <td><input type="text" name="pays{{ nbAdresse }}"/></td>
-                    <td><input type="text" name="ville{{ nbAdresse }}"/></td>
-                    <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
-                    <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
-                    <td><input type="text" name="voie{{ nbAdresse }}"/></td>
-                    <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
-                    <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
-                </tr>
-            </table>
-        </div>
+		<form action="{{ path('imerir_validation_creation_client') }}" method="post">
+			<table id="tableau_input">
+	            <tr>
+	                <td><label for="nom">Nom </label></td>
+	                <td><input type="text" name="nom"/></td>
+	                <input type="button" value="Ajouter" id="valideNewClient" class="bouton">
+	            </tr>
+	            <tr>
+	                <td><label for="nom">Prenom </label></td>
+	                <td><input type="text" name="prenom"/></td>
+	            </tr>
+	            <tr>
+	                <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+	                <td><input type="date" name="date_naissance" id="datepicker"/></td>
+	            </tr>
+	            <tr>
+	                <td><label for="civilite">Civilité </label></td>
+	                <td>
+	                    <select name="civilite">
+	                        <option value="Mlle.">Mlle.</option>
+	                        <option value="Mme.">Mme.</option>
+	                        <option value="M.">M.</option>
+	                    </select>
+	                </td>
+	            </tr>
+	            <tr>
+	                <td><label for="email">Email </label></td>
+	                <td><input type="text" name="email"/></td>
+	            </tr>
+	            <tr>
+	                <td><label for="telephone_portable">Telephone portable </label></td>
+	                <td><input type="text" name="telephone_portable"/></td>
+	            </tr>
+	            <tr>
+	                <td><label for="ok_sms">Désire recevoir des SMS </label></td>
+	                <td><input type="checkbox" name="ok_sms"/></td>
+	            </tr>
+	            <tr>
+	                <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
+	                <td><input type="checkbox" name="ok_mail"/></td>
+	            </tr>
+	            <tr>
+	                <td><label for="notes">Notes </label></td>
+	                <td><textarea name="notes"></textarea></td>
+	            </tr>
+	            <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
+	        </table>
+	
+	        {% set nbAdresse = 0 %}
+	        {#champs pour l'adresse#}
+	        <div id="lst_adresse">
+	            <table class="tableau" id="tableau">
+	                <tr>
+	                    <th></th>
+	                    <th class="titre_lst">Pays</th>
+	                    <th class="titre_lst">Ville</th>
+	                    <th class="titre_lst">Code postal</th>
+	                    <th class="titre_lst">N° voie</th>
+	                    <th class="titre_lst">Voie</th>
+	                    <th class="titre_lst">N° appartement</th>
+	                    <th class="titre_lst">Téléphone fixe</th>
+	                </tr>
+	                {% if detail_adresse.adresse is defined %}
+	                    {% for i in detail_adresse.adresse %}
+	                        <tr>
+	                            <td>
+	                                <i class="fa fa-minus-square supprimer"></i>
+	                            </td>
+	                            <td>
+	                                <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
+	                            </td>
+	                        </tr>
+	                        {% set nbAdresse = nbAdresse + 1 %}
+	                    {% endfor %}
+	                {% endif %}
+	                <tr class="last">
+	                    <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+	                    <td><input type="text" name="pays{{ nbAdresse }}"/></td>
+	                    <td><input type="text" name="ville{{ nbAdresse }}"/></td>
+	                    <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
+	                    <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
+	                    <td><input type="text" name="voie{{ nbAdresse }}"/></td>
+	                    <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
+	                    <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
+	                </tr>
+	            </table>
+	        </div>
+	    </form>
 	</div>
 </div>
 
@@ -132,7 +134,10 @@ menuSelected
 			<input type="button" class="bouton saisie_client" value="Associer un client à cet achat">
 		</div>
 		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post">
-			<div id="enTete">Client <span id="dateSpan">{{ "now"|date("d/m/Y") }}</span></div>
+			<div id="enTete">
+				<span id="spanNomClient">Aucun client n'est associé à cet achat pour le moment</span> 
+				<span id="dateSpan">{{ "now"|date("d/m/Y") }}</span>
+			</div>
 			<h2>LISTE DES ARTICLES</h2>
 			<div id="chargement_caisse" >
 				&nbsp;
@@ -199,6 +204,10 @@ function supprimerLigne () {
 	}
 }
 
+/**
+ * Fonction réagissant lors du clic sur le bouton - à côté de la quantité de produit.
+ * Diminue la quantité de 1 en faisait attention de ne pas descendre en dessous de 0.
+ */
 function moinsQuantite() {
 	var input = $(this).parent().find(".quantite");
 	var qt = parseInt(input.val()) - 1;
@@ -206,14 +215,46 @@ function moinsQuantite() {
 		qt = 0;
 
 	input.val(qt);
+	calculerPrixTotal();
 }
 
+/**
+ * FOnction réagissant lors du clic sur le bouton + à côté de la quantité produit.
+ * Augmente la quantité produit de 1.
+ */
 function plusQuantite() {
 	var input = $(this).parent().find(".quantite");
 	var qt = parseInt(input.val()) + 1;
 
 	input.val(qt);
+	calculerPrixTotal();
 }
+
+/**
+ * Fonction permettant de réagir lorsque l'utilisateur clique sur le bouton valider du formulaire
+ * de création client.
+ * Cette fonction utilise la page de /creation/validation du bundle contact pour enregistrer les données.
+ */
+$("#valideNewClient").click(function () {
+	var form = $("#divAjoutClient").find("form");
+	var path = form.attr("action");
+	var method = form.attr("method");
+	var queryString = form.serialize();
+
+	$.ajax({
+		   url: path,
+		   data: queryString,
+		   success: function(data) {
+			   var civilite = form.find('select[name="civilite"]').val();
+			   var nom = form.find('input[name="nom"]').val();
+			   var prenom = form.find('input[name="prenom"]').val();
+
+			   $("#spanNomClient").html(civilite + " " + nom + " " + prenom);
+			   $("#dialogClient").dialog("close");
+		   },
+		   type: method
+	});
+});
 
 $('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
 $('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
@@ -334,7 +375,7 @@ $(document).ready(function (e) {
  * scan de produit.
  */
 $(document).keypress(function(e) {
-	if ($("#saisie_code_barre").is(":visible") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
+	if ($("#saisie_code_barre").is(":visible") === true || $("#dialogClient").is(":visible") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
 		return true;
 	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 

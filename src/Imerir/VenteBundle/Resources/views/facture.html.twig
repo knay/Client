@@ -83,22 +83,16 @@ ALBA - Facture
 					<td></td>
 					<td></td>
 					<td></td>
-					<td class="tva">TOTAL H.T</td>
-					<td>{{ montant_total|round(2, 'common') }}</td>
-				</tr>
-				<tr>
-					<td></td>
-					<td></td>
-					<td></td>
 					<td class="tva">Dont TVA &agrave; 20,00%</td>
 					<td>{{ prix_de_la_tva|round(2, 'common') }}</td>
 				</tr>
+				
 				<tr>
 					<td></td>
 					<td></td>
 					<td></td>
-					<td class="tva">TOTAL T.T.C</td>
-					<td>{{ montant_avec_tva|round(2, 'common') }}</td>
+					<td class="tva">TOTAL H.T</td>
+					<td>{{ montant_total|round(2, 'common') }}</td>
 				</tr>
 			</table>
 		</div>

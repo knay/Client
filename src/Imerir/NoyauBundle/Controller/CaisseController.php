@@ -44,18 +44,19 @@ class CaisseController extends Controller
     	$req = $this->getRequest()->request;
     	$tabArticle = array();
     	
+    	$tabArticle['idClient'] = $req->get('idClient');
     	// On va parser la request pour former un tableau avec les articles de l'inventaire propre
     	foreach ($req as $key => $value) {
     		$clef = explode('_', $key);
     		
     		if ($clef[0] === 'code') { // Si c'est le code barre
-    			$tabArticle[intval($clef[1])]['codeBarre'] = $value;
+    			$tabArticle['article'][intval($clef[1])]['codeBarre'] = $value;
     		}
     		else if ($clef[0] === 'quantite') { // Si c'est la quantite
-    			$tabArticle[intval($clef[1])]['quantite'] = intval($value);
+    			$tabArticle['article'][intval($clef[1])]['quantite'] = intval($value);
     		}
     		else if ($clef[0] === 'promo') { // Si c'est la promo
-    			$tabArticle[intval($clef[1])]['promo'] = intval($value);
+    			$tabArticle['article'][intval($clef[1])]['promo'] = intval($value);
     		}
     	}
     	

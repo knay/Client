@@ -28,8 +28,10 @@ menuSelected
 <div id="dialogClient" style="display: none" title="Associer un client">
 	<p>
 		Chercher un client :
-		<input type="text" id="nomClient">
+		<input type="text" id="critereRechClient">
 		<input type="button" value="Rechercher" class="bouton" id="chercher_client">
+		<table id="tabRechClient" class="tableau">
+		</table>
 	</p>
 	<p>Ou<br>Ajouter un nouveau client : <input type="button" value="Nouveau client" class="bouton" id="ajout_client"></p>
 	<div style="display: none;" id="divAjoutClient">
@@ -135,6 +137,7 @@ menuSelected
 		</div>
 		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post">
 			<div id="enTete">
+				<input type="hidden" id="inputIdClient" name="idClient">
 				<span id="spanNomClient">Aucun client n'est associé à cet achat pour le moment</span> 
 				<span id="dateSpan">{{ "now"|date("d/m/Y") }}</span>
 			</div>
@@ -256,17 +259,83 @@ $("#valideNewClient").click(function () {
 	});
 });
 
+/**
+ * Permet de réagir lorsque l'on clic sur le bouton rechercher un client. 
+ */
+$("#chercher_client").click(function () {
+	var valCritere = $("#critereRechClient").val();
+
+	$.ajax({
+		   url: '{{ path('imerir_noyau_ajax_getContactFromEverything_caisse') }}',
+		   data: {
+		      critere: valCritere
+		   },
+		   success: function(data) {
+			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
+			   $("#tabRechClient").html("");
+			   for(i in objJson) {
+				   var nom = "";
+				   var id = 0;
+				   var prenom = "";
+				   var date_naissance = "";
+				   var civilite = "";
+				   var email = "";
+				   var telephone_portable = "";
+
+				   if (typeof objJson[i].nom != 'undefined')
+					   nom = objJson[i].nom;
+				   if (typeof objJson[i].id != 'undefined')
+					   id = objJson[i].id;
+				   if (typeof objJson[i].prenom != 'undefined')
+					   prenom = objJson[i].prenom;
+				   if (typeof objJson[i].date_naissance != 'undefined')
+					   date_naissance = objJson[i].date_naissance;
+				   if (typeof objJson[i].civilite != 'undefined')
+					   civilite = objJson[i].civilite;
+				   if (typeof objJson[i].email != 'undefined')
+					   email = objJson[i].email;
+				   if (typeof objJson[i].telephone_portable != 'undefined')
+					   telephone_portable = objJson[i].telephone_portable;
+				   
+				   $("#tabRechClient").append("<tr>"
+						   + "<td class=\"tdNomClient\"><input type=\"hidden\" value=\""+id+"\" class=\"idClient\">"+nom+"</td>"
+						   + "<td class=\"tdPrenomClient\">"+prenom+"</td>"
+						   + "<td>"+date_naissance+"</td>"
+						   + "<td class=\"tdCiviliteClient\">"+civilite+"</td>"
+						   + "<td>"+email+"</td>"
+						   + "<td>"+telephone_portable+"</td>"
+						   + "</tr>");
+			   }
+			   $("#tabRechClient").find("tr").click(clickTrRechClient);
+		   },
+		   type: 'POST'
+	});
+});
+
 $('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
 $('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
 $('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
 $('#ajout_client').click(function () {
 	$("#divAjoutClient").show();
 	$("#dialogClient").children("p").hide();
+	$("#tabRechClient").hide();
 });
 $(".retour_client").click(function () {
 	$("#divAjoutClient").hide();
 	$("#dialogClient").children("p").show();
+	$("#tabRechClient").show();
 });
+
+/**
+ * Permet de réagir au clic sur le tableau de recherche de client.
+ */
+function clickTrRechClient() {
+	$("#inputIdClient").val($(this).find(".idClient").val());
+	$("#spanNomClient").html($(this).find(".tdCiviliteClient").html() + " " + 
+						     $(this).find(".tdPrenomClient").html() + " " + $(this).find(".tdNomClient").html());
+
+	$("#dialogClient").dialog("close");
+}
 
 /**
  * Fonction permettant de calculer le prix total d'une ligne.

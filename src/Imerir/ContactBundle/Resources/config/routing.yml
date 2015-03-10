@@ -25,3 +25,13 @@ imerir_stats_client_age:
 imerir_stats_client_ville:
     path: /contacts/stats/ville
     defaults: { _controller: ImerirContactBundle:Stats:contactVilles }
+    
+imerir_contact_anniversaires:
+    path: /contacts/anniversaires
+    defaults: { _controller: ImerirContactBundle:Anniversaires:index }
+    
+imerir_contact_anniversaires_rechercher:
+    path: /contacts/anniversaires/rechercher
+    defaults: { _controller: ImerirContactBundle:Anniversaires:getAnniversaire }
+    
+    

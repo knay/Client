@@ -6,7 +6,6 @@
 {% block affichage %}
 <fieldset id="fieldset_ajout">
 	<legend id="titre_fieldset" >{% block title_ajout %}AJOUT{% endblock %}</legend>    
-	{% if erreur is defined %}{% if erreur != "" %}<div id="erreur">{{ erreur }}</div>{% endif %}{% endif %}
 	{% block ajout %}{% endblock %}
 </fieldset>
 

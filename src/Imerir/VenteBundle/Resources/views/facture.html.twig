@@ -135,7 +135,7 @@ ALBA - Facture
         	</td>
         	<td>{{ i.date }}</td>
             <td>{{ i.client }}</td>
-            <td>{{ i.montant }}</td>
+            <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
 		</tr>
 		
     {% endfor %}

@@ -26,6 +26,9 @@ menuSelected
 </div>
 
 <div id="dialogClient" style="display: none" title="Associer un client">
+	<div id="chargement" style="display: none;">
+		<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>
+	</div>
 	<p>
 		Chercher un client :
 		<input type="text" id="critereRechClient">
@@ -138,7 +141,10 @@ menuSelected
 		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post">
 			<div id="enTete">
 				<input type="hidden" id="inputIdClient" name="idClient">
-				<span id="spanNomClient">Aucun client n'est associé à cet achat pour le moment</span> 
+				<span id="spanNomClient">
+					<i class="fa fa-exclamation-triangle" style="color: red;"></i>
+					Aucun client n'est associé à cet achat pour le moment
+				</span> 
 				<span id="dateSpan">{{ "now"|date("d/m/Y") }}</span>
 			</div>
 			<h2>LISTE DES ARTICLES</h2>
@@ -244,6 +250,11 @@ $("#valideNewClient").click(function () {
 	var method = form.attr("method");
 	var queryString = form.serialize();
 
+	$("#chargement").show();
+	$("#divAjoutClient").hide();
+	$("#dialogClient").children("p").hide();
+	$("#tabRechClient").hide();
+
 	$.ajax({
 		   url: path,
 		   data: queryString,
@@ -252,8 +263,10 @@ $("#valideNewClient").click(function () {
 			   var nom = form.find('input[name="nom"]').val();
 			   var prenom = form.find('input[name="prenom"]').val();
 
-			   $("#spanNomClient").html(civilite + " " + nom + " " + prenom);
-			   $("#dialogClient").dialog("close");
+			   $("#chargement").hide();
+			   $("#divAjoutClient").hide();
+			   $("#dialogClient").children("p").show();
+			   $("#tabRechClient").show();
 		   },
 		   type: method
 	});
@@ -265,12 +278,26 @@ $("#valideNewClient").click(function () {
 $("#chercher_client").click(function () {
 	var valCritere = $("#critereRechClient").val();
 
+	$("#chargement").show();
+	$("#divAjoutClient").hide();
+	$("#dialogClient").children("p").hide();
+	$("#tabRechClient").hide();
+
 	$.ajax({
 		   url: '{{ path('imerir_noyau_ajax_getContactFromEverything_caisse') }}',
 		   data: {
 		      critere: valCritere
 		   },
 		   success: function(data) {
+			   if (typeof data.erreur !== 'undefined') {
+				   alert("Une erreur est survenue lors de la recherche : \n"+data.erreur);
+				   $("#chargement").hide();
+				   $("#divAjoutClient").hide();
+				   $("#dialogClient").children("p").show();
+				   $("#tabRechClient").show();
+				   return;
+			   }
+			   
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
 			   $("#tabRechClient").html("");
 			   for(i in objJson) {
@@ -298,13 +325,18 @@ $("#chercher_client").click(function () {
 					   telephone_portable = objJson[i].telephone_portable;
 				   
 				   $("#tabRechClient").append("<tr>"
-						   + "<td class=\"tdNomClient\"><input type=\"hidden\" value=\""+id+"\" class=\"idClient\">"+nom+"</td>"
-						   + "<td class=\"tdPrenomClient\">"+prenom+"</td>"
-						   + "<td>"+date_naissance+"</td>"
-						   + "<td class=\"tdCiviliteClient\">"+civilite+"</td>"
-						   + "<td>"+email+"</td>"
-						   + "<td>"+telephone_portable+"</td>"
+						   + "<td class=\"tdNomClient\"><input type=\"hidden\" value=\""+escape(id)+"\" class=\"idClient\">"+escape(nom)+"</td>"
+						   + "<td class=\"tdPrenomClient\">"+escape(prenom)+"</td>"
+						   + "<td>"+escape(date_naissance)+"</td>"
+						   + "<td class=\"tdCiviliteClient\">"+escape(civilite)+"</td>"
+						   + "<td>"+escape(email)+"</td>"
+						   + "<td>"+escape(telephone_portable)+"</td>"
 						   + "</tr>");
+
+				   $("#chargement").hide();
+				   $("#divAjoutClient").hide();
+				   $("#dialogClient").children("p").show();
+				   $("#tabRechClient").show();
 			   }
 			   $("#tabRechClient").find("tr").click(clickTrRechClient);
 		   },
@@ -396,7 +428,7 @@ $(".saisie_client").click(function () {
 	var dial = $("#dialogClient");
 	dial.dialog({
 	    modal: true,
-	    width: "80%",
+	    width: "90%",
 		height: "500",
 		resizable: false,
 		draggable: false

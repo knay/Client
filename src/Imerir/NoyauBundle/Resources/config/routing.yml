@@ -10,6 +10,10 @@ imerir_noyau_ajax_getPrixFromCodeBarre_caisse:
     path:     /ajax/getPrixFromCodeBarre
     defaults: { _controller: ImerirNoyauBundle:AjaxCaisse:getPrixFromCodeBarre }
     
+imerir_noyau_ajax_getContactFromEverything_caisse:
+    path:     /ajax/getContactFromEverything
+    defaults: { _controller: ImerirNoyauBundle:AjaxCaisse:rechercheClient }    
+    
 imerir_noyau_check:
     path:     /check_login/
     defaults: { _controller: ImerirNoyauBundle:Default:checkLogin }

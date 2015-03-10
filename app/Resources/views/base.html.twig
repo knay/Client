@@ -84,10 +84,10 @@
  						    	</ul>
 						   	</li>
 		        		{% endif %}
-		        		{%  if i.menu == "evenement" %}
-			        		<a href="" title="{{ i.menu }}">
-			        			<li id="{{ i.menu }}" class="{% block eventBlock %}{% endblock %}">
-							    	<i class="fa fa-calendar"></i>
+{# 		        		{%  if i.menu == "evenement" %}#}
+{# 			        		<a href="" title="{{ i.menu }}">#}
+{# 			        			<li id="{{ i.menu }}" class="{% block eventBlock %}{% endblock %}">#}
+{# 							    	<i class="fa fa-calendar"></i>#}
 {# 							    	<ul id="3">#}
 {# 	 						    		{% for j in i.sous_menu %}#}
 {# 	 						    			{% if j != null %}#}
@@ -97,9 +97,9 @@
 {# 											{% endif %}#}
 {# 										{% endfor %}#}
 {# 	 						    	</ul>#}
-							    </li>
-						    </a>
-		        		{% endif %}
+{# 							    </li>#}
+{# 						    </a>#}
+{# 		        		{% endif %}#}
 		        		{%  if i.menu == "fournisseur" %}
 		        			<li id="{{ i.menu }}" title="{{ i.menu }}" class="{% block fournisseurBlock %}{% endblock %}">
 							    <i class="fa fa-truck"></i>

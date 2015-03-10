@@ -1,0 +1,81 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssMoyenPaiement.css') }}"/>
+{% endblock %}
+{% block title_page %}
+    Moyen de paiement
+{% endblock %}
+
+{% block title_ajout %}
+    {% if app.request.attributes.get('_route')=='imerir_vente_creation_moyen_paiement' %}
+        Ajouter un moyen de paiement
+    {% else %}
+        Modifier un moyen de paiement
+    {% endif %}
+{% endblock %}
+
+{% block venteBlock %}
+menuSelected
+{% endblock %}
+
+{% block aide %}
+Ici, vous pouvez ajouter ou modifier un moyen de paiement.
+{% endblock %}
+
+{% block ajout %}
+	<table class="tableau_bouton_en_modification">
+		<tr>
+	    {% if app.request.attributes.get('_route')=='imerir_vente_creation_moyen_paiement' %}
+	        <form action="{{ path('imerir_vente_creation_moyen_paiement') }}" method="post">
+                <label>Nom du moyen de paiement : </label>
+                <input type="text" name="nom"/>
+	            <input type="submit" value="Ajouter">
+	        </form>
+	    {% endif %}
+   		</tr>
+   		<tr>
+	    {% if app.request.attributes.get('_route')=='imerir_vente_afficher_modification_moyen_paiement' %}
+		        <form action="{{ path('imerir_vente_modification_moyen_paiement') }}" method="post">
+	                <label>Nom du moyen de paiement : </label>
+	                <input type="hidden" name="id_modifier" value="{{ id_selectioner }}">
+	                <input type="text" name="nom_modifier" value="{{ nom_selectioner }}">
+		            <input type="submit" value="Modifier">
+		        </form>
+		        <form action="{{ path('imerir_vente_creation_moyen_paiement') }}" method="post">
+		            <input type="submit" value="Annuler">
+		        </form>
+		   		<form action="{{ path('imerir_vente_supprimer_moyen_paiement') }}" method="post">
+		   			<input type="hidden" name="id_modifier" value="{{ id_selectioner }}">
+	                <input type="hidden" name="nom_modifier" value="{{ nom_selectioner }}">
+		            <input type="submit" value="Supprimer">
+		        </form>
+	    {% endif %}
+    	</tr>
+    </table>
+{% endblock %}
+
+{% block table %}
+    <tr>
+    	<th>Mode de paiements</th>
+    </tr>
+    {% for i in liste_mode_paiement %}
+        <tr>
+        	<td>{{ i.paiement_nom }}
+                <form method="post" action="{{ path('imerir_vente_afficher_modification_moyen_paiement') }}" style="display: none">
+                    <input type="hidden" name="id_selected" value="{{ i.paiement_id }}">
+                    <input type="hidden" name="nom_selected" value="{{ i.paiement_nom }}">
+                </form>
+            </td>
+        </tr>
+    {% endfor %}
+{% endblock %}
+
+
+{% block javascripts %}
+<script>
+    $('tr').click(function () {
+        $(this).children('td').children('form').submit();
+    });
+</script>
+{% endblock %}

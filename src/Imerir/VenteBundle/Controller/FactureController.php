@@ -54,9 +54,6 @@ class FactureController extends Controller
         $erreur='';
         //on recuperer les variables en post ici variable 
         $numero = $query->request->get('ligne_numero');
-//         $date = $query->request->get('ligne_date');
-//         $client = $query->request->get('ligne_client');
-//         $montant = $query->request->get('ligne_montant');
         
     	try {
     		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu

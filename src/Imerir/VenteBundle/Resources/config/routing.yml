@@ -13,3 +13,19 @@ imerir_vente_facture:
 imerir_vente_facture_detail:
     path:     /vente/facture/detail
     defaults: { _controller: ImerirVenteBundle:Facture:factureDetailFromLigneFacture }
+    
+imerir_vente_creation_moyen_paiement:
+    path:     /vente/creation/moyen_paiement
+    defaults: { _controller: ImerirVenteBundle:MoyenPaiement:index }
+    
+imerir_vente_afficher_modification_moyen_paiement:
+    path:     /vente/afficher/modification/moyen_paiement
+    defaults: { _controller: ImerirVenteBundle:MoyenPaiement:afficherEnModificationMoyenPaiement }
+    
+imerir_vente_modification_moyen_paiement:
+    path:     /vente/modification/moyen_paiement
+    defaults: { _controller: ImerirVenteBundle:MoyenPaiement:modificationMoyenPaiement }
+    
+imerir_vente_supprimer_moyen_paiement:
+    path:     /vente/supprimer/moyen_paiement
+    defaults: { _controller: ImerirVenteBundle:MoyenPaiement:supprimerMoyenPaiement }

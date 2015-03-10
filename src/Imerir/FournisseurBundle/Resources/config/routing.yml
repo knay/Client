@@ -14,4 +14,8 @@ imerir_modification_fournisseur:
     path:     /fournisseurs/modification
     defaults: { _controller: ImerirFournisseurBundle:Default:modifFournisseur }
 
+imerir_creation_commande_fournisseur:
+    path: /fournisseurs/commandes/creation
+    defaults: { _controller: ImerirFournisseurBundle:Commandes:ajoutCommande }
+
 

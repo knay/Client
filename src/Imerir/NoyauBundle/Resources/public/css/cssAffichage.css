@@ -145,6 +145,13 @@ input[type="submit"]:hover {
 	vertical-align: middle;
 }
 
+.recherche {
+	color: darkgreen;
+	cursor: pointer;
+	font-size: 15pt;
+	vertical-align: middle;
+}
+
 .supprimer {
 	color: red;
 	cursor: pointer;

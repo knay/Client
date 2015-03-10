@@ -38,7 +38,7 @@ Ajouter/modifier un article
 		<table class="tableau_input" >
 			<tr>
 				<td><label for="code">Code barre : </label></td>
-				<td><input type="text" name="code" class="valeurCodeBarre" readonly="readonly"></td>
+				<td><input type="text" name="code" class="valeurCodeBarre" readonly="readonly" value="{{ codeBarre }}"></td>
 			</tr>
 			<tr>
 				<td><label for="produit">Produit : </label></td> 
@@ -52,15 +52,19 @@ Ajouter/modifier un article
 			</tr>
 			<tr>
 				<td><label for="prixClient">Prix de vente : </label></td>
-	 			<td><input type="number" name="prixClient" min="1" value="1" class="prix" step="any"></td>
+	 			<td><input type="number" name="prixClient" min="1" value="1" class="prixClient" step="any"></td>
 			</tr>
 			<tr>
 				<td><label for="prixFournisseur">Prix fournisseur : </label></td>
-	 			<td><input type="number" name="prixFournisseur" min="1" value="1" class="prix" step="any"></td>
+	 			<td><input type="number" name="prixFournisseur" min="1" value="1" class="prixFournisseur" step="any"></td>
 			</tr>
 	 		<tr>
 	 			<td><label for="caract">Attributs : </label></td>
 	 			<td class="caract"></td>
+	 		</tr>
+	 		<tr id="ligneQuantite" style="visibility: hidden;">
+	 			<td>Quantité : </td>
+	 			<td><input type="number" name="quantite" value="0"></td>
 	 		</tr>
 	 		<tr>
 	 			<td><input type="submit"></td>
@@ -71,7 +75,7 @@ Ajouter/modifier un article
 <!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 <div id="message_accueil">
 	<h2>Scanner un article pour commencer</h2>
-	OU<br>
+	Ou<br>
 	<input type="button" value="Faire une saisie manuelle" class="bouton saisie_manuelle">
 </div>
 
@@ -81,10 +85,57 @@ Ajouter/modifier un article
 {% endblock %}
 
 {% block recherche %}
+	<form action="{{ path('imerir_produit_article') }}" method="post">
+    	<table>
+	    	<tr>
+	    		<td><label>Ligne Produit</label></td>
+	    		
+		        <td>
+		        	<select id="select_ligne_produit" name="nomLigneProduit">
+		            	<option></option>
+		            	{% for i in result_all_ligne_produit %}
+		                	<option>{{ i.nom_ligne_produit }}</option>
+		            	{% endfor %}
+		        	</select>
+		        </td>
+	        </tr>
+	        <tr>
+	        	<td><label>Produit</label></td>
+	        	<td><select id="select_produit" name="nomProduit"></select></td>
+	        </tr>
+        </table>
+        <input type="submit">
+    </form>
 {% endblock %}
 
 {% block table %}
-	<tr><th>Nom</th><th>Valeurs possibles</th></tr>
+	<tr>
+		<th>Code barre</th>
+		<th>Ligne produit</th>
+		<th>Produit</th>
+		<th>Attribut(s)</th>
+	</tr>
+	{% for i in tab_recherche %}
+	<tr>
+		<td>
+			<form method="post" action="{{ path('imerir_produit_article') }}">
+				<input type="hidden" value="{{ i.codeBarre }}" name="codeBarre">
+			</form>
+			{{ i.codeBarre }}
+		</td>
+		<td>{{ i.ligneProduit }}</td>
+		<td>{{ i.produit }}</td>
+		<td>
+			{% for j in i.valAttribut %}
+				{% if loop.last %}
+				{{ j }}
+				{% else %}
+				{{ j }},
+				{% endif %}
+			{% endfor %}
+		</td>
+	</tr>
+	{% endfor %}
 {% endblock %}
 
 {% block javascripts %}
@@ -92,13 +143,37 @@ Ajouter/modifier un article
 var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
 var isScanne = false;
 
+$("#fieldset_recherche").find(".tableau").find('tr').click(function () {
+	$(this).find("form").submit();
+});
+
+//Gestion des selects en fonction de la ligne produits selectionne
+$( "#select_ligne_produit" ).change(function() {
+	$.ajax({
+		   url: '{{ path('imerir_ajax_stock_get_produit') }}',
+		   data: { nomLigneProduit: $(this).val() },
+		   success: function(data) {
+			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
+//					alert(objJson);
+			   $("#select_produit").html('');
+			   $("#select_produit").html('<option></option>');
+				for(id_produit in objJson){
+//						alert(objJson[id_produit]['produit']);
+					 $("#select_produit").html( $("#select_produit").html()+'<option>'+objJson[id_produit]['produit']+'</option>');
+				}
+			   },
+		   type: 'POST'
+	});
+});
+
 /**
  * Fonction appelé automatique au chargement de la page.
  * Elle permet de vider tout les champs texte qui, sinon, pourrait avoir 
  * des trâces en cas de refresh de la page web.
  */
 $(document).ready(function (e) {
-	$('input[type="text"]').val('');
+	//$('input[type="text"]').val('');
+	validerCodeBarre(false);
 });
 
 /** 
@@ -184,8 +259,10 @@ function getPrixFromSoap() {
 		      codeBarre: $('.valeurCodeBarre').val()
 		   },
 		   success: function(data) {
-			   var prix = data.prix;
-			   $('.prix').val(prix);
+			   var montantClient = data.montant_client;
+			   var montantFournisseur = data.montant_fournisseur;
+			   $('.prixClient').val(montantClient);
+			   $('.prixFournisseur').val(montantFournisseur);
 		   },
 		   error: function () {
 			   alert('[AJAX.ART003] Une erreur s\'est produit lors de la récupération des données.');
@@ -215,6 +292,13 @@ function getArticleFromSoap() {
 				   if ($(this).html() === objJson['nomProduit'])
 					   $(this).attr("selected", true);
 			   });
+
+			   if (typeof objJson['nomProduit'] == "undefined")
+				   $("#ligneQuantite").css("visibility", "visible");
+			   else {
+				   $("#ligneQuantite").css("visibility", "hidden");
+				   $("#ligneQuantite").find("input").val("-1");
+			   }
 
 			   valeurCaracteristique = objJson.attributs; // Pour problème de concurences AJAX. Pour passer une variable à la fonction 'onChangeSelect' 
 

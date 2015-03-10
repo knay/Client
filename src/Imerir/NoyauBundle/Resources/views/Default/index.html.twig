@@ -561,7 +561,7 @@ function validerCodeBarre(saisieManuelle) {
 			      codeBarre: ligneCur.find('.code_barre').val()
 			   },
 			   success: function(data) {
-				   var prix = data.prix;
+				   var prix = data.montant_client;
 				   ligneCur.children('.tdPrix').html(prix);
 				   calculerPrixTotal(); // On recalcul le prix total, narmol
 				   calculerPrixLigne(ligneCur);

@@ -28,7 +28,7 @@ class AjaxCaisseController extends Controller
     		return new JsonResponse(array('erreur' => $e->getMessage())); // Une réponse JSON
     	}
     	 
-    	return new JsonResponse(array('prix' => $prix)); // Une réponse JSON
+    	return new JsonResponse(json_decode($prix)); // Une réponse JSON
     }
     
     /**

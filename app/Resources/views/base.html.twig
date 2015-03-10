@@ -75,6 +75,11 @@
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}
+										{% if j == "Anniversaires" %}
+	 						    			<a href="{{ path('imerir_contact_anniversaires') }}">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
 									{% endfor %}
  						    	</ul>
 						   	</li>
@@ -101,7 +106,7 @@
 							    <ul id="4">
  						    		{% for j in i.sous_menu %}
  						    			{% if j == "Commandes" %}
-	 						    			<a href="{{ path('imerir_creation_fournisseur') }}">
+	 						    			<a href="{{ path('imerir_creation_commande_fournisseur') }}">
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}

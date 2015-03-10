@@ -3,13 +3,19 @@
 }
 
 .feuille_facture {
-	width:100%;
-/* 	border:2px solid black; */
+	width:70%;
+	margin-left: auto;
+	margin-right: auto;
+	margin-top: 10px;
+	background-color: white;
+	border-top:0.8px solid black;
+	border-bottom:0.8px solid black;
 }
 
 #logo_facture {
 	text-align: center;
 /* 	border: 2px solid orange; */
+	padding-bottom: 5%;
 }
 
 #logo_facture h1 {
@@ -27,6 +33,7 @@
 	width: 50%;
 	text-align: left;
 	float: left;
+	padding-left: 2%;
 /* 	color: #FF00FF; */
 }
 
@@ -45,22 +52,23 @@
 
 
 #tableau_facture {
-	width: 100%;
+	width: auto;
 	text-align: center;
-	padding-top: 2%;
+	margin-left: 10px;
+	margin-right: 10px;
+	padding-top: 10%;
 }
 
 #tableau_detail_facture {
 	width: 100%;
 	border-collapse: collapse;
 	margin-top: 3%;
-	border-top: 2px solid black;
 	border: 1px solid black;
 }
 
 #tableau_detail_facture tr {
 	width: 100%;
-	border: 1px solid black;
+/* 	border: 1px solid black; */
 }
 
 #tableau_detail_facture th {
@@ -73,12 +81,8 @@
 	border: 0.9px solid black;
 }
 
-.col_article {
-	width: 45%;
-}
-
 .col_article_contenu {
-	width: 45%;
+	width: 20%;
 	text-align: left;
 	padding-left: 2%;
 }
@@ -87,9 +91,81 @@
 	text-align: right;
 }
 
+.en_gras_souligner {
+	text-decoration:underline;
+	font-weight:bold;
+}
+
+.en_gras{
+	font-weight:bold;
+}
+
 #bas_de_page_facture {
 	width: 100%;
-	padding-top: 5%;
+	padding-top: 10%;
 	padding-bottom: 1%;
 	text-align: center;
+}
+
+#last {
+	border-top: 2px solid black;
+}
+
+@media print{
+	body * {
+		visibility: hidden;
+		background-color: white;
+	}
+	
+	.feuille_facture {
+		visibility: visible;
+		height: 96%;
+        width: 99.7%;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        margin: auto;
+        font-size: 13pt;
+        padding-top:1cm;
+	}
+	
+	#logo_facture {
+		margin-top: 1.5cm;
+		height: 4cm;
+	}
+	
+	h1 {
+		font-size: 32px;
+	}
+	
+	#information_facture {
+		height: 5cm;
+	}
+	
+	#detail_sur_client {
+		font-size: 20pt;
+	}
+	
+	#information_entreprise {
+		font-size: 20pt;
+	}
+	
+	#tableau_detail_facture {
+		margin-left: 0.5cm;
+		width: 95%;
+	}
+	
+	#tableau_detail_facture th,td{
+		height: 1cm;
+	}
+	
+	#bas_de_page_facture {
+		position: absolute;
+		bottom: 0;
+	}
+	
+	.feuille_facture * {
+		visibility: visible;
+	}
+	
 }

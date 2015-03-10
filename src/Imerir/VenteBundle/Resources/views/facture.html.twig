@@ -14,6 +14,8 @@ ALBA - Facture
 
 {% block title_ajout %}Facture{% endblock %}
 
+{% block venteBlock %}menuSelected{% endblock %}
+
 {% block ajout %}
 
 	{% set variable_de_boucle = 0 %}
@@ -21,22 +23,22 @@ ALBA - Facture
 	{% set prix_de_la_tva = 0 %}
 	{% set montant_avec_tva = 0 %}
 	{% set tva = 20 %}
-	
+	<a href="#" onclick="window.print()" class="bouton">Imprimer</a>
 	<div class="feuille_facture">
 		<div id="logo_facture">
 			<h1>Logo - les caprices de lili</h1>
 		</div>
 		<div id="information">
-			<div id="information_facture">Facture n&deg;
+			<div id="information_facture">
 			{% if detail_facture_test is defined %}
 				{% if detail_facture_test != '' %}
 					{% for i in detail_facture_test %}
 						{% if variable_de_boucle == 0 %}
-							{{ i.numero_facture }}<br>
+							<label class="en_gras_souligner">Facture n&deg;{{ i.numero_facture }}<br></label>
 							<div id="detail_sur_client">
-								Le : {{ i.date_facture }}<br>
-								Client : {{ i.nom_client }}<br>
-								Adresse : {{ i.adresse_numero }} {{ i.adresse_rue }} <br>
+								<label class="en_gras">Le :</label> {{ i.date_facture }}<br>
+								<label class="en_gras">Client :</label> {{ i.nom_client }} {{ i.prenom_client }}<br>
+								<label class="en_gras">Adresse :</label> {{ i.adresse_numero }} {{ i.adresse_rue }},
 								{{ i.adresse_code_postal }} {{ i.adresse_ville }} {{ i.adresse_pays }}
 							</div>
 							{% set variable_de_boucle = variable_de_boucle + 1 %}
@@ -45,11 +47,12 @@ ALBA - Facture
 				{% endif %}
 			{% endif %}
 			</div>
-			<div id="information_entreprise">3, rue Voltaire<br>66000 Perpignan, France<br>04.68.57.33.26<br></div>
+			<div id="information_entreprise"><label class="en_gras">Les Caprices de Lili</label><br> 3, rue Voltaire<br>66000 Perpignan, France<br>04.68.57.33.26<br></div>
 		</div>
 		<div id="tableau_facture">
 			<table id="tableau_detail_facture" >
 				<tr>
+					<th class="col_article">Produit</th>
 					<th class="col_article">Article</th>
 					<th>Quantit&eacute</th>
 					<th>Prix Unitaire</th>
@@ -60,14 +63,12 @@ ALBA - Facture
 				{% if detail_facture_test != '' %}
 					{% for i in detail_facture_test %}
 						<tr>
-			{# 				<label>numero : </label><p>{{ i.numero_facture }}</p>#}
-			{# 				<label>date : </label><p>{{ i.date_facture }}</p>#}
-			{# 				<label>client : </label><p>{{ i.nom_client }}</p>#}
+							<td class="col_article_contenu">{{ i.nom_produit|capitalize }}</td>
 							<td class="col_article_contenu">{{ i.nom_article }}</td>
 							<td>{{ i.nombre_article }}</td>
-							<td>{{ i.prix_article }}</td>
+							<td>{{ i.prix_article|number_format(2, '.', ',') }} &euro;</td>
 							<td>{{ i.reduction_article }}</td>
-							<td>{{ i.montant_facture }}</td>
+							<td>{{ i.montant_facture|round(2, 'common')|number_format(2, '.', ',') }} &euro;</td>
 							{% set montant_total =  montant_total +  i.montant_facture %}
 						</tr>
 					{% endfor %}
@@ -75,7 +76,7 @@ ALBA - Facture
 				{% endif %}
 			{% else %}
 			{% endif %}
-				<tr><td></td><td></td><td></td><td></td><td></td></tr>
+				<tr id="last"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 				
 				{% set prix_de_la_tva = (montant_total*tva)/100 %}
 				{% set montant_avec_tva = montant_total + prix_de_la_tva %}
@@ -84,16 +85,18 @@ ALBA - Facture
 					<td></td>
 					<td></td>
 					<td></td>
+					<td></td>
 					<td class="tva">Dont TVA &agrave; 20,00%</td>
-					<td>{{ prix_de_la_tva|round(2, 'common') }}</td>
+					<td>{{ prix_de_la_tva|round(2, 'common')|number_format(2, '.', ',') }} &euro;</td>
 				</tr>
 				
 				<tr>
 					<td></td>
 					<td></td>
 					<td></td>
-					<td class="tva">TOTAL H.T</td>
-					<td>{{ montant_total|round(2, 'common') }}</td>
+					<td></td>
+					<td class="en_gras">TOTAL H.T</td>
+					<td class="en_gras">{{ montant_total|round(2, 'common')|number_format(2, '.', ',') }} &euro;</td>
 				</tr>
 			</table>
 		</div>
@@ -144,7 +147,7 @@ ALBA - Facture
 var format_affichage_date = "yy-mm-dd";
 var explication_client = "Nom";
 $("#bouton_supprimer_date").hide();
-// $("#fieldset_ajout").hide();
+$("#fieldset_ajout").hide();
 $("#bouton_supprimer_client").hide();
 $("#date_de_recherche_facture").val('aaaa-mm-jj');
 $("#recherche_client").val(explication_client);
@@ -189,7 +192,18 @@ $("#recherche_client").click(function(){
 //Permet de gerer lorsque l'utilisateur click sur une ligne du tableau
 $(".select_ligne").click( function(){
 	$(this).find('form').submit();
+	
 });
+
+{% if detail_facture_test is defined %}
+	{% if detail_facture_test != '' %}
+		$("#fieldset_ajout").show();
+	{% else %}
+		$("#fieldset_ajout").hide();
+	{% endif %}
+{% else %}
+	$("#fieldset_ajout").hide();
+{% endif %}
 
 //Permet de gerer la langue du datepicker
 (function( factory ) {

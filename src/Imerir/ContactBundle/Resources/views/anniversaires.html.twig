@@ -1,0 +1,118 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/imerircontact/css/css_anniversaires.css') }}"/>
+{% endblock %}
+
+{% block title_page %}
+Anniversaires
+{% endblock %}
+
+{% block title_ajout %}
+Anniversaires
+{% endblock %}
+
+{% block clientBlock %}
+menuSelected
+{% endblock %}
+
+{% block recherche %}
+	<form method="post" action="{{ path('imerir_contact_anniversaires_rechercher') }}">
+		<label>Date : </label><input type="text" id="date_de_recherche_anniversaire" name="date" size="20" value="aaaa-mm-jj">
+		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
+	<input type="submit">
+	</form>
+	{% if liste_des_anniversaires is defined %}
+		{% if liste_des_anniversaires == '' %}
+   			<p>Il n'y a aucun anniversaire aujourd'hui.</p>
+		{% endif %}
+	{% endif %}
+{% endblock %}
+
+{% block table %}
+	<tr>
+    	<th>Civilite</th>
+    	<th>Nom</th>
+    	<th>Prenom</th>
+    	<th>Date</th>
+    	<th>Email</th>
+    </tr>
+    {% if liste_des_anniversaires is defined %}
+		{% if liste_des_anniversaires != '' %}
+   			{% for i in liste_des_anniversaires %}
+		        <tr class="ligne_du_tableau">
+		        	<td>{{ i.client_civilite }}</td>
+		        	<td>{{ i.client_nom }}</td>
+		            <td>{{ i.client_prenom }}</td>
+		            <td>{{ i.client_date }}</td>
+		            <td>{{ i.client_email }}</td>
+				</tr>
+			{% endfor %}
+		{% endif %}
+	{% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+<link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}">
+<script>
+
+$("#fieldset_ajout").hide();
+$("#bouton_supprimer_date").hide();
+
+
+//Permet de parametrer le datepicker
+$(function() {
+    $( "#date_de_recherche_anniversaire" ).datepicker();
+	$( "#date_de_recherche_anniversaire" ).datepicker( "option", "showAnim", "slideDown" );
+	$( "#date_de_recherche_anniversaire" ).datepicker( "option", "dateFormat", format_affichage_date );
+});
+
+//Permet de gerer l'evenement du bouton de suppresion  de la date
+$("#bouton_supprimer_date").click(function(){
+	$( "#date_de_recherche_anniversaire" ).val('aaaa-mm-jj');
+	$("#bouton_supprimer_date").hide();
+});
+
+//Afficher l'icone de suppression lorsqu'une date est inscrite
+$("#date_de_recherche_anniversaire").change(function(){
+	$("#bouton_supprimer_date").css("display","inline");
+});
+
+
+//Permet de gerer la langue du datepicker
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+		factory( jQuery.datepicker );
+	}
+	
+}(function( datepicker ) {
+	datepicker.regional['fr'] = {
+		closeText: 'Fermer',
+		prevText: 'Pr&eacutec&eacutedent',
+		nextText: 'Suivant',
+		currentText: 'Aujourd\'hui',
+		monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
+			'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
+		monthNamesShort: ['janv.', 'f�vr.', 'mars', 'avril', 'mai', 'juin',
+			'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
+		dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+		dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+		dayNamesMin: ['D','L','M','M','J','V','S'],
+		weekHeader: 'Sem.',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	datepicker.setDefaults(datepicker.regional['fr']);
+
+	return datepicker.regional['fr'];
+
+}));
+
+</script>
+{% endblock %}

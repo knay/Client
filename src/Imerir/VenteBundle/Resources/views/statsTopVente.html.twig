@@ -21,8 +21,12 @@ menuSelected
 {% block ajout %}
 <p class="choixGraph">
 	Choisissez une option :<br>
-	<a class="bouton" href="{{ path('imerir_vente_stats') }}">Ventes quotidiennes</a>
-	<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats_top_vente') }}">Produits stars</a>
+	<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats') }}">
+		<i class="fa fa-area-chart"></i>Ventes quotidiennes
+	</a>
+	<a class="bouton" href="{{ path('imerir_vente_stats_top_vente') }}">
+		<i class="fa fa-pie-chart"></i>Produits stars
+	</a>
 	<a class="bouton" href="">Mes lignes produits</a>
 	<a class="bouton" href="">Vente et caractéristiques produits</a>
 </p>

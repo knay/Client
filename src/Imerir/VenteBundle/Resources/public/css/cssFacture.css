@@ -8,8 +8,7 @@
 	margin-right: auto;
 	margin-top: 10px;
 	background-color: white;
-	border-top:0.8px solid black;
-	border-bottom:0.8px solid black;
+	border:0.8px solid black;
 }
 
 #logo_facture {
@@ -127,6 +126,9 @@
         margin: auto;
         font-size: 13pt;
         padding-top:1cm;
+        border: none;
+        border-top: 0.8px solid black;
+        border-bottom: 0.8px solid black; 
 	}
 	
 	#logo_facture {

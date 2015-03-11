@@ -1,0 +1,100 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/imerircontact/css/css_anniversaires.css') }}"/>
+{% endblock %}
+
+{% block title_page %}
+Alba - Anniversaires
+{% endblock %}
+
+{% block title_ajout %}
+Anniversaires
+{% endblock %}
+
+{% block clientBlock %}
+menuSelected
+{% endblock %}
+
+{% block recherche %}
+	<form method="post" action="{{ path('imerir_contact_anniversaires_rechercher') }}">
+		<label>Mois : </label>
+		<select id="select_mois" name="mois">
+             <option value=""></option>
+             <option value="1">Janvier</option>
+             <option value="2">Fevrier</option>
+             <option value="3">Mars</option>
+             <option value="4">Avril</option>
+             <option value="5">Mai</option>
+             <option value="6">Juin</option>
+             <option value="7">Juillet</option>
+             <option value="8">Aout</option>
+             <option value="9">Septembre</option>
+             <option value="10">Octobre</option>
+             <option value="11">Novembre</option>
+             <option value="12">Decembre</option>
+        </select>
+		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
+		<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
+	</form>
+	{% if liste_des_anniversaires is defined %}
+		{% if liste_des_anniversaires == '' %}
+   			<p>Il n'y a aucun anniversaire aujourd'hui.</p>
+		{% endif %}
+	{% endif %}
+{% endblock %}
+
+{% block table %}
+	<tr>
+    	<th>Civilite</th>
+    	<th>Nom</th>
+    	<th>Prenom</th>
+    	<th>Date</th>
+    	<th>Age</th>
+    	<th>Email</th>
+    </tr>
+    {% if liste_des_anniversaires is defined %}
+		{% if liste_des_anniversaires != '' %}
+   			{% for i in liste_des_anniversaires %}
+		        <tr class="ligne_du_tableau">
+		        	<td>{{ i.client_civilite }}</td>
+		        	<td>{{ i.client_nom }}</td>
+		            <td>{{ i.client_prenom }}</td>
+		            <td>{{ i.client_date }}</td>
+		            <td>{{ i.client_age }}</td>
+		            <td>{{ i.client_email }}</td>
+				</tr>
+			{% endfor %}
+		{% endif %}
+	{% endif %}
+{% endblock %}
+
+
+{% block javascripts %}
+<link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}">
+<script>
+
+$("#fieldset_ajout").hide();
+$("#bouton_supprimer_date").hide();
+
+//Permet de gerer l'evenement du bouton de suppresion  de la date
+$("#bouton_supprimer_date").click(function(){
+	$("#select_mois").val('');
+	$("#bouton_supprimer_date").hide();
+});
+
+//Afficher l'icone de suppression lorsqu'une date est inscrite
+$("#select_mois").change(function(){
+	if($("#select_mois").val() != '' ){
+		$("#bouton_supprimer_date").show();
+	}
+	else{
+		$("#bouton_supprimer_date").hide();
+		$("#select_mois").val('');
+	}
+	
+});
+
+
+</script>
+{% endblock %}

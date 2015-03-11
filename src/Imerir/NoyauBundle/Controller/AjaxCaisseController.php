@@ -28,7 +28,7 @@ class AjaxCaisseController extends Controller
     		return new JsonResponse(array('erreur' => $e->getMessage())); // Une réponse JSON
     	}
     	 
-    	return new JsonResponse(array('prix' => $prix)); // Une réponse JSON
+    	return new JsonResponse(json_decode($prix)); // Une réponse JSON
     }
     
     /**
@@ -50,5 +50,23 @@ class AjaxCaisseController extends Controller
     	}
     	
     	return new JsonResponse($reponse); // Une réponse JSON
+    }
+    
+    /**
+     * L'action qui permet de rechercher tous les moyens de paiement depuis le serveur SOAP en AJAX.
+     * @return \Symfony\Component\HttpFoundation\Response La réponse JSON.
+     */
+    public function getMoyenPaiementAction() {
+    	$paiement = array();
+    	try {
+    		$soap = $this->get('noyau_soap'); // Récup module soap
+    		$return_mode_paiement = $soap->call('getAllModePaiement', array()); // Récup de tous les moyens de paiement
+    		$paiement = json_decode($return_mode_paiement);
+    	}
+    	catch(\SoapFault $e) {
+    		return new JsonResponse(array('erreur' => $e->getMessage()));
+    	}
+    	
+    	return new JsonResponse($paiement); // Une réponse JSON
     }
 }

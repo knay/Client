@@ -20,6 +20,9 @@ class ArticleController extends Controller
 		$req = $this->getRequest()->request;
 		$tabArticle = array();
 		$tabArticle['attributs'] = array();
+		$codeBarre = '';
+		if ($req->get('codeBarre') !== null)
+			$codeBarre = $req->get('codeBarre');
 		
 		// On va parser la request pour former un tableau avec les articles de l'inventaire propre
 		foreach ($req as $key => $value) {
@@ -34,6 +37,11 @@ class ArticleController extends Controller
 			}
 			else if ($key === 'prixFournisseur') { // Si c'est la quantite
 				$tabArticle['prixFournisseur'] = $value;
+			}
+			else if ($key === 'quantite') { // Si c'est la quantite
+				if($value > 0) {
+					$tabArticle['quantite'] = (int)$value;
+				}
 			}
 			else if (substr($key, 0, strlen('caract')) === 'caract') { // Si c'est une valeur d'attribut
 				$attributs = explode('_', $value);
@@ -54,6 +62,9 @@ class ArticleController extends Controller
 			// On récupère tous les produits pour les afficher dans un <select>
 			$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
 			$produitsRetour = json_decode($return_produits);
+			
+			$return_all_ligne_produit = $soap->call('getAllLigneProduit',array()); // On recupere toutes les lignes produits pour la recherche
+			$all_ligne_produit = json_decode($return_all_ligne_produit);
 		}
 		catch(\SoapFault $e) {
 			$erreur.=$e->getMessage();
@@ -69,7 +80,9 @@ class ArticleController extends Controller
 		
 		return $this->render('ImerirProduitBundle::article.html.twig', array('produit' => $produitsRetour,
 																			 'result_menu' => $menu_sous_menu,
-																			 'erreur' => $erreur));
+																			 'erreur' => $erreur,
+																			 'result_all_ligne_produit' => $all_ligne_produit,
+				                                                             'codeBarre' => $codeBarre));
 	}
 	
 	/**
@@ -85,12 +98,29 @@ class ArticleController extends Controller
     	$erreur = ''; // En cas d'erreur
     	$produitsRetour = array();
     	$menu_sous_menu = array();
-    	
+    	$tabRech = array();
+    	$req = $this->getRequest()->request;
+    	$codeBarre = '';
+    	if ($req->get('codeBarre') !== null)
+    		$codeBarre = $req->get('codeBarre');
     	
     	try {
     		// On récupère tous les produits pour les afficher dans un <select>
     		$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
     		$produitsRetour = json_decode($return_produits);
+    		
+    		$return_all_ligne_produit = $soap->call('getAllLigneProduit', array()); // On recupere toutes les lignes produits pour la recherche
+    		$all_ligne_produit = json_decode($return_all_ligne_produit);
+    		
+    		$lp = '';
+    		$produit = '';
+    		if ($req->get('nomLigneProduit') !== null)
+    			$lp = $req->get('nomLigneProduit');
+    		if ($req->get('nomProduit') !== null)
+    			$produit = $req->get('nomProduit');
+    		// On va chercher tous les articles en fonction des critères de recherche
+    		$resultRecherche = $soap->call('rechercheArticle', array('nomLigneProduit'=>$lp, 'ligneProduit'=>$produit)); 
+    		$tabRech = json_decode($resultRecherche);
     	}
     	catch(\SoapFault $e) {
     		$erreur.=$e->getMessage();
@@ -106,6 +136,9 @@ class ArticleController extends Controller
     	
         return $this->render('ImerirProduitBundle::article.html.twig', array('produit' => $produitsRetour, 
         		                                                             'result_menu' => $menu_sous_menu,
-        		                                                             'erreur' => $erreur));
+        		                                                             'erreur' => $erreur,
+        		                                                             'result_all_ligne_produit' => $all_ligne_produit,
+        																	 'tab_recherche' => $tabRech,
+        																	 'codeBarre' => $codeBarre));
     }
 }

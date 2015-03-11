@@ -23,7 +23,7 @@ ALBA - Facture
 	{% set prix_de_la_tva = 0 %}
 	{% set montant_avec_tva = 0 %}
 	{% set tva = 20 %}
-	<a href="#" onclick="window.print()" class="bouton">Imprimer</a>
+	<a href="#" onclick="window.print()" class="bouton"><i class="fa fa-print"></i> Imprimer</a>
 	<div class="feuille_facture">
 		<div id="logo_facture">
 			<h1>Logo - les caprices de lili</h1>
@@ -39,7 +39,8 @@ ALBA - Facture
 								<label class="en_gras">Le :</label> {{ i.date_facture }}<br>
 								<label class="en_gras">Client :</label> {{ i.nom_client }} {{ i.prenom_client }}<br>
 								<label class="en_gras">Adresse :</label> {{ i.adresse_numero }} {{ i.adresse_rue }},
-								{{ i.adresse_code_postal }} {{ i.adresse_ville }} {{ i.adresse_pays }}
+								{{ i.adresse_code_postal }} {{ i.adresse_ville }} {{ i.adresse_pays }}<br>
+								<label class="en_gras">Mode de r&egrave;glement : </label>{{ i.nom_moyen_paiement }}
 							</div>
 							{% set variable_de_boucle = variable_de_boucle + 1 %}
 						{% endif %}
@@ -113,7 +114,7 @@ ALBA - Facture
 		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
 		<label>Client : </label><input type="text" id="recherche_client" name="client" size="20">
 		<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
-	<input type="submit">
+		<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
 	</form>
 {% endblock %}
 
@@ -135,7 +136,7 @@ ALBA - Facture
         	</td>
         	<td>{{ i.date }}</td>
             <td>{{ i.client }}</td>
-            <td>{{ i.montant }}</td>
+            <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
 		</tr>
 		
     {% endfor %}

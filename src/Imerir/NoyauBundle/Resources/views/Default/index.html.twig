@@ -22,7 +22,9 @@ menuSelected
 	<label for="saisie_code_barre">Code barre : </label>
 	<input type="text" name="saisie_code_barre" id="saisie_code_barre">
 	</p>
-	<input type="button" value="Valider la saisie" class="bouton" id="valid_saisie">
+	<button type="button" class="bouton" id="valid_saisie">
+		<i class="fa fa-check"></i>Valider la saisie
+	</button>
 </div>
 
 <div id="dialogClient" style="display: none" title="Associer un client">
@@ -32,11 +34,12 @@ menuSelected
 	<p>
 		Chercher un client :
 		<input type="text" id="critereRechClient">
-		<input type="button" value="Rechercher" class="bouton" id="chercher_client">
+		<button class="bouton" id="chercher_client"><i class="fa fa-search"></i>Rechercher</button>
 		<table id="tabRechClient" class="tableau">
 		</table>
 	</p>
-	<p>Ou<br>Ajouter un nouveau client : <input type="button" value="Nouveau client" class="bouton" id="ajout_client"></p>
+	<p>Ou<br>Ajouter un nouveau client : 
+	<button type="button" class="bouton" id="ajout_client"><i class="fa fa-user-plus"></i>Nouveau client</button></p>
 	<div style="display: none;" id="divAjoutClient">
 		<input type="button" value="Retour" class="bouton retour_client"><br>
 		<form action="{{ path('imerir_validation_creation_client') }}" method="post">
@@ -135,11 +138,20 @@ menuSelected
 	{% if erreur is defined %}{% if erreur != "" %}<div id="erreur">{{ erreur }}</div>{% endif %}{% endif %}
 	<div id="contenneur_caisse" style="display:none;">
 		<div id="divBoutonOption">
-			<input type="button" class="bouton saisie_manuelle" value="Faire une saisie manuelle de code barre">
-			<input type="button" class="bouton saisie_client" value="Associer un client à cet achat">
+			<button class="bouton saisie_manuelle">
+				<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
+			</button>
+			<button class="bouton saisie_client" value="Associer un client à cet achat">
+				<i class="fa fa-user"></i>Associer un client à cet achat
+			</button>
 		</div>
-		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post">
+		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post" id="formulaireCaisse">
 			<div id="enTete">
+				<span id="spanMoyenPaiement">
+					<select id="moyenPaiement" name="moyenPaiement" placeholder="Moyen de paiement">
+						<option value="-1">Selectionner un moyen de paiement</option>
+					</select>
+				</span>
 				<input type="hidden" id="inputIdClient" name="idClient">
 				<span id="spanNomClient">
 					<i class="fa fa-exclamation-triangle" style="color: red;"></i>
@@ -162,14 +174,14 @@ menuSelected
 					<th>Total</th>
 				</tr>
 				<tr style="display:none">
-					<td><i class="fa fa-minus-square supprimer"></i></td>
+					<td><i class="fa fa-minus-square supprimer" title="Supprimer cet article de la vente"></i></td>
 					<td class="tdCodeBarre">
 						<input type="text" name="code_0" class="code_barre">
 					</td>
 					<td class="tdQuantite">
 						<input type="number" name="quantite_0" min="1" value="1" class="quantite">
-						<i class="fa fa-minus-square moinsQuantite"></i>
-						<i class="fa fa-plus-square plusQuantite"></i>
+						<i class="fa fa-minus-square moinsQuantite" title="-1 en quantité"></i>
+						<i class="fa fa-plus-square plusQuantite" title="+1 en quantité"></i>
 					</td>
 					<td class="tdPrix">
 					</td>
@@ -181,7 +193,9 @@ menuSelected
 					</td>
 				</tr>
 			</table>
-			<h2>TOTAL À PAYER : <input type="submit" id="btnCaisse" value="Valider la facture"><span id="prixTotal">0.0 €</span></h2>
+			<h2>TOTAL À PAYER : 
+				<button type="submit" id="btnCaisse" class="bouton"><i class="fa fa-check"></i>Valider la facture</button>
+				<span id="prixTotal">0.0 €</span></h2>
 		</form>
 	</div>
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
@@ -189,7 +203,9 @@ menuSelected
 		<div>
 			<h2>Scanner un article pour commencer</h2>
 			Ou<br>
-			<input type="button" value="Faire une saisie manuelle" class="bouton saisie_manuelle">
+			<button class="bouton saisie_manuelle">
+				<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
+			</button>
 		</div>
 	</div>
 </fieldset>
@@ -201,15 +217,51 @@ var tableau = $('#tableauCaisse'); //< Le tableau représentant les éléments s
 var nbCodeBarre = 0; //< Le nombre d'article scanné. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
 
 /**
+ * Permet de réagir lorsque l'on valide la vente.
+ * Va faire quelques vérifications pour renseigner à l'utilisateur si des problèmes sont détectés.
+ */
+$("#formulaireCaisse").submit(function (event) {
+	var idClient = $("#inputIdClient").val(); // On récupé l'id client pour savoir s'il est renseigné
+	var message = "Confirmer la vente ?"; // Le message de base du message de confirmation
+	var prix = tableau.find(".tdPrix:visible"); // On récup tous les prix pour savoir si certains n'en on pas 
+	var sansPrix = false; // Cette variable va nous permettre de savoir si certain articles n'ont pas de prix
+
+	prix.each(function () {
+		if ($(this).html().trim() == "") {
+			sansPrix = true; // Si un article n'a pas de prix
+		}
+	});
+
+	if (true === sansPrix) 
+		message = "Attention : certain articles n'ont pas de prix renseigné.\n" + message;
+	
+	if (idClient === "-1" || idClient === "") 
+		message = "Attention : cette vente n'est affectée à aucun client.\n" + message;
+
+	if ($("#moyenPaiement").val() < 1) 
+		message = "Attention : aucun moyen de paiement n'a été choisi pour cette vente.\n" + message;
+
+	// On affiche le message et on valide ou pas
+	if (confirm(message) === true) 
+		return true;
+	else {
+		event.preventDefault(); // On empeche le comportement par défaut le temps de vérifier
+		return false;
+	}
+});
+
+/**
  * Permet d'effacer une ligne d'inventaire en cas d'erreur de l'utilisateur.
  * Cette fonction est appéelé lorsque l'on clic sur le bouton moins.
  */
 function supprimerLigne () {
-	$(this).parent().parent().remove();
-	calculerPrixTotal();
-	if (tableau.children("tbody").children("tr").length == 2) {
-		$("#contenneur_caisse").hide();
-		$("#message_accueil").show();
+	if (confirm("Voulez-vous vraiment supprimer cet article ?") === true) {
+		$(this).parent().parent().remove();
+		calculerPrixTotal();
+		if (tableau.children("tbody").children("tr").length == 2) {
+			$("#contenneur_caisse").hide();
+			$("#message_accueil").show();
+		}
 	}
 }
 
@@ -346,7 +398,6 @@ $("#chercher_client").click(function () {
 
 $('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
 $('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
-$('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
 $('#ajout_client').click(function () {
 	$("#divAjoutClient").show();
 	$("#dialogClient").children("p").hide();
@@ -468,6 +519,17 @@ $(document).ready(function (e) {
 	$('input[type="text"]').val('');
 	$('.tdQuantite').children("input").val('1');
 	$('.tdPromo').children("input").val('0');
+
+	$.ajax({
+		   url: '{{ path('imerir_noyau_ajax_getMoyenPaiement_caisse') }}',
+		   success: function(data) {
+			   var select = $("#moyenPaiement");
+			   for(i in data) {
+				   select.append("<option value=\""+ data[i]['paiement_id'] +"\">" + data[i]['paiement_nom'] + "</option>");
+			   }
+		   },
+		   type: 'post'
+	});
 });
 
 /**
@@ -561,7 +623,7 @@ function validerCodeBarre(saisieManuelle) {
 			      codeBarre: ligneCur.find('.code_barre').val()
 			   },
 			   success: function(data) {
-				   var prix = data.prix;
+				   var prix = data.montant_client;
 				   ligneCur.children('.tdPrix').html(prix);
 				   calculerPrixTotal(); // On recalcul le prix total, narmol
 				   calculerPrixLigne(ligneCur);
@@ -578,6 +640,7 @@ function validerCodeBarre(saisieManuelle) {
 	}
 
 	$('input').change(calculerPrixTotal);
+	$('.supprimer').unbind("click"); // On bind le clic sur bouton - avec la fonction de suppression
 	$('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
 }
 </script>

@@ -55,7 +55,11 @@ de code barre.
 				<td><input type="number" name="nb_code_barre" value="1"></td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="Générer la feuille de code barre"></td>
+				<td>
+					<button class="bouton" type="submit">
+						<i class="fa fa-file-text"></i>Générer la feuille de code barre
+					</button>
+				</td>
 				<td></td>
 			</tr>
 		</table>
@@ -81,7 +85,11 @@ de code barre.
 				<td><input type="number" name="nb_etiquette_Y" value="{{ nbY }}"></td>
 			</tr>
 			<tr>
-				<td><input type="submit" value="Générer la feuille de code barre"></td>
+				<td>
+					<button class="bouton" type="submit">
+						<i class="fa fa-file-text"></i>Générer la feuille de code barre
+					</button>
+				</td>
 				<td></td>
 			</tr>
 		</table>
@@ -102,7 +110,7 @@ de code barre.
 		</tr>
 		{% endfor %}
 	</table>
-	<a href="#" onclick="window.print()" class="bouton">Imprimer les codes barres</a>
+	<a href="#" onclick="window.print()" class="bouton"><i class="fa fa-print"></i>Imprimer les codes barres</a>
 </div>
 {% endblock %}
 

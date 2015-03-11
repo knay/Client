@@ -76,15 +76,20 @@ class DefaultController extends Controller
             $notes = $recherche_contact_notes;
 
         //TODO ajouter l'action getContacts qui renvoie le nom, le mail et le num de tel
-        $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => $nom, 'prenom'=>$prenom,
-            'date_naissance'=>$date_naissance,
-            'civilite'=>$civilite,'email'=>$email, 'telephone_portable'=>$telephone_portable,'ok_sms'=>$ok_sms,
-            'ok_mail'=>$ok_mail,'notes'=>$notes));
-        $liste_contacts = json_decode($return);
+        try {
+            $return = $soap->call('getContacts', array('count' => 0, 'offset' => 0, 'nom' => $nom, 'prenom' => $prenom,
+                'date_naissance' => $date_naissance,
+                'civilite' => $civilite, 'email' => $email, 'telephone_portable' => $telephone_portable, 'ok_sms' => $ok_sms,
+                'ok_mail' => $ok_mail, 'notes' => $notes));
+            $liste_contacts = json_decode($return);
 
-        //on recupere le menu et sous menu
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+            //on recupere le menu et sous menu
+            $return_menu = $soap->call('getMenu', array());
+            $menu_sous_menu = json_decode($return_menu);
+        }
+        catch(\SoapFault $e) {
+            $erreur = $e->getMessage();
+        }
 
         //TODO invoquer le bon twig
         return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_contacts,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
@@ -133,11 +138,16 @@ class DefaultController extends Controller
         if($Contact_notes===null)
             $Contact_notes='';
 
-        $soap->call('ajoutContact',array('nom' => $Contact_nom,'prenom'=>$Contact_prenom ,
-            'date_naissance'=>$Contact_date_naissance,'civilite'=>$Contact_civilite,
-            'email'=>$Contact_email,
-            'telephone_portable'=>$Contact_telephone_portable,
-            'ok_sms'=>$Contact_ok_sms,'ok_mail'=>$Contact_ok_mail,'notes'=>$Contact_notes));
+        try{
+            $soap->call('ajoutContact',array('nom' => $Contact_nom,'prenom'=>$Contact_prenom ,
+                'date_naissance'=>$Contact_date_naissance,'civilite'=>$Contact_civilite,
+                'email'=>$Contact_email,
+                'telephone_portable'=>$Contact_telephone_portable,
+                'ok_sms'=>$Contact_ok_sms,'ok_mail'=>$Contact_ok_mail,'notes'=>$Contact_notes));
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
         ////////////////////////////////////////////////////////////////////////////
         /**
          * PARTIE ADRESSES
@@ -176,32 +186,47 @@ class DefaultController extends Controller
         }
         //print_r($adresse_pays);
         //PARTIE OU ON RECUPERE LA REF DU Contact
-        $retour_ref_Contact = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => $Contact_nom,
-            'prenom'=>$Contact_prenom,'date_naissance'=>$Contact_date_naissance,
-            'civilite'=>$Contact_civilite,'email'=>$Contact_email, 'telephone_portable'=>$Contact_telephone_portable,
-            'ok_sms'=>$Contact_ok_sms,
-            'ok_mail'=>$Contact_ok_mail,'notes'=>$Contact_notes));
+        try {
+            $retour_ref_Contact = $soap->call('getContacts', array('count' => 0, 'offset' => 0, 'nom' => $Contact_nom,
+                'prenom' => $Contact_prenom, 'date_naissance' => $Contact_date_naissance,
+                'civilite' => $Contact_civilite, 'email' => $Contact_email, 'telephone_portable' => $Contact_telephone_portable,
+                'ok_sms' => $Contact_ok_sms,
+                'ok_mail' => $Contact_ok_mail, 'notes' => $Contact_notes));
 
-        $ref_Contact = json_decode($retour_ref_Contact,true);
-        $ref_Contact_id = $ref_Contact[0]["id"];
+            $ref_Contact = json_decode($retour_ref_Contact, true);
+            $ref_Contact_id = $ref_Contact[0]["id"];
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
         //print_r($ref_Contact);
         if(!empty($adresse_pays[0]) || !empty($adresse_ville[0]) || !empty($adresse_code_postal[0]) || !empty($adresse_voie[0]) ||
             !empty($adresse_num_voie[0]) || !empty($adresse_num_appartement[0]) || !empty($adresse_telephone_fixe[0])) {
 
             //$est_Contact,$ref_id,$pays,$ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-            $soap->call('ajoutAdresse', array('est_fournisseur' => false, 'ref_id' => $ref_Contact_id, 'pays' => json_encode($adresse_pays),
-                'ville' => json_encode($adresse_ville), 'voie' => json_encode($adresse_voie), 'num_voie' => json_encode($adresse_num_voie),
-                'code_postal' => json_encode($adresse_code_postal), 'num_appartement' => json_encode($adresse_num_appartement),
-                'telephone_fixe' => json_encode($adresse_telephone_fixe)));
+            try {
+                $soap->call('ajoutAdresse', array('est_fournisseur' => false, 'ref_id' => $ref_Contact_id, 'pays' => json_encode($adresse_pays),
+                    'ville' => json_encode($adresse_ville), 'voie' => json_encode($adresse_voie), 'num_voie' => json_encode($adresse_num_voie),
+                    'code_postal' => json_encode($adresse_code_postal), 'num_appartement' => json_encode($adresse_num_appartement),
+                    'telephone_fixe' => json_encode($adresse_telephone_fixe)));
+            }
+            catch(\SoapFault $e) {
+                $erreur =$e->getMessage();
+            }
         }
         ////////////////////////////////////////////////////////////////////////////
 
 
         //TODO ajouter l'action getContacts qui renvoie le nom, le mail et le num de tel
-        $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
-            'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
-            'ok_mail'=>'','notes'=>''));
-        $liste_Contacts = json_decode($return);
+        try {
+            $return = $soap->call('getContacts', array('count' => 0, 'offset' => 0, 'nom' => '', 'prenom' => '', 'date_naissance' => '',
+                'civilite' => '', 'email' => '', 'telephone_portable' => '', 'ok_sms' => '',
+                'ok_mail' => '', 'notes' => ''));
+            $liste_Contacts = json_decode($return);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
         //insertion du Contact
 
         //on recupere le menu et sous menu
@@ -227,10 +252,15 @@ class DefaultController extends Controller
         $modif_ok_mail = $query->request->get('ok_mail_f');
         $modif_notes = $query->request->get('notes_f');
 
-        $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
-            'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
-            'ok_mail'=>'','notes'=>''));
-        $liste_Contacts = json_decode($return);
+        try {
+            $return = $soap->call('getContacts', array('count' => 0, 'offset' => 0, 'nom' => '', 'prenom' => '', 'date_naissance' => '',
+                'civilite' => '', 'email' => '', 'telephone_portable' => '', 'ok_sms' => '',
+                'ok_mail' => '', 'notes' => ''));
+            $liste_Contacts = json_decode($return);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
@@ -238,10 +268,15 @@ class DefaultController extends Controller
 
         //IL faut recuperer dans un tableau toutes les valeurs adresse pour chaque Contact
         //$count, $offset,$est_Contact,$ref_id, $pays, $ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-        $return_adresses_Contact = $soap->call('getAdresses',array('count'=>0,'offset'=>0,'est_fournisseur'=>false,
-            'ref_id'=>strval($modif_id),'pays'=>'','ville'=>'','voie'=>'','num_voie'=>'',
-            'code_postal'=>'','num_appartement'=>'','telephone_fixe'=>''));
-        $liste_adresses_Contact = json_decode($return_adresses_Contact);
+        try {
+            $return_adresses_Contact = $soap->call('getAdresses', array('count' => 0, 'offset' => 0, 'est_fournisseur' => false,
+                'ref_id' => strval($modif_id), 'pays' => '', 'ville' => '', 'voie' => '', 'num_voie' => '',
+                'code_postal' => '', 'num_appartement' => '', 'telephone_fixe' => ''));
+            $liste_adresses_Contact = json_decode($return_adresses_Contact);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
 
 
@@ -356,45 +391,70 @@ class DefaultController extends Controller
         if(empty($adresse_pays[0]) && empty($adresse_ville[0]) && empty($adresse_code_postal[0]) && empty($adresse_voie[0]) &&
             empty($adresse_num_voie[0]) && empty($adresse_num_appartement[0]) && empty($adresse_telephone_fixe[0])){
             //MODIFICATION
-            $soap->call('modifAdresse',array('est_visible'=>json_encode($modif_adresse_est_visible),
-                'id_ad'=>json_encode($modif_adresse_id),'pays'=>json_encode($modif_adresse_pays),
-                'ville'=>json_encode($modif_adresse_ville),'voie'=>json_encode($modif_adresse_voie),
-                'num_voie'=>json_encode($modif_adresse_num_voie),
-                'code_postal'=>json_encode($modif_adresse_code_postal),
-                'num_appartement'=>json_encode($modif_adresse_num_appartement),
-                'telephone_fixe'=>json_encode($modif_adresse_telephone_fixe)));
+            try {
+                $soap->call('modifAdresse', array('est_visible' => json_encode($modif_adresse_est_visible),
+                    'id_ad' => json_encode($modif_adresse_id), 'pays' => json_encode($modif_adresse_pays),
+                    'ville' => json_encode($modif_adresse_ville), 'voie' => json_encode($modif_adresse_voie),
+                    'num_voie' => json_encode($modif_adresse_num_voie),
+                    'code_postal' => json_encode($modif_adresse_code_postal),
+                    'num_appartement' => json_encode($modif_adresse_num_appartement),
+                    'telephone_fixe' => json_encode($modif_adresse_telephone_fixe)));
+            }
+            catch(\SoapFault $e) {
+                $erreur =$e->getMessage();
+            }
 
         }
         else{
             //MODIFICATION
-            $soap->call('modifAdresse',array('est_visible'=>json_encode($modif_adresse_est_visible),
-                'id_ad'=>json_encode($modif_adresse_id),'pays'=>json_encode($modif_adresse_pays),
-                'ville'=>json_encode($modif_adresse_ville),'voie'=>json_encode($modif_adresse_voie),
-                'num_voie'=>json_encode($modif_adresse_num_voie),
-                'code_postal'=>json_encode($modif_adresse_code_postal),
-                'num_appartement'=>json_encode($modif_adresse_num_appartement),
-                'telephone_fixe'=>json_encode($modif_adresse_telephone_fixe)));
+            try {
+                $soap->call('modifAdresse', array('est_visible' => json_encode($modif_adresse_est_visible),
+                    'id_ad' => json_encode($modif_adresse_id), 'pays' => json_encode($modif_adresse_pays),
+                    'ville' => json_encode($modif_adresse_ville), 'voie' => json_encode($modif_adresse_voie),
+                    'num_voie' => json_encode($modif_adresse_num_voie),
+                    'code_postal' => json_encode($modif_adresse_code_postal),
+                    'num_appartement' => json_encode($modif_adresse_num_appartement),
+                    'telephone_fixe' => json_encode($modif_adresse_telephone_fixe)));
+            }
+            catch(\SoapFault $e) {
+                $erreur =$e->getMessage();
+            }
             //INSERTION
-            $soap->call('ajoutAdresse',array('est_fournisseur'=>false,'ref_id'=>$ref_contact_id,'pays'=>json_encode($adresse_pays),
-                'ville'=>json_encode($adresse_ville),'voie'=>json_encode($adresse_voie),'num_voie'=>json_encode($adresse_num_voie),
-                'code_postal'=>json_encode($adresse_code_postal),'num_appartement'=>json_encode($adresse_num_appartement),
-                'telephone_fixe'=>json_encode($adresse_telephone_fixe)));
+            try {
+                $soap->call('ajoutAdresse', array('est_fournisseur' => false, 'ref_id' => $ref_contact_id, 'pays' => json_encode($adresse_pays),
+                    'ville' => json_encode($adresse_ville), 'voie' => json_encode($adresse_voie), 'num_voie' => json_encode($adresse_num_voie),
+                    'code_postal' => json_encode($adresse_code_postal), 'num_appartement' => json_encode($adresse_num_appartement),
+                    'telephone_fixe' => json_encode($adresse_telephone_fixe)));
+            }
+            catch(\SoapFault $e) {
+                $erreur =$e->getMessage();
+            }
         }
         //////////////////////////////////////////////////
 
-        $soap->call('modifContact',array('id'=>$old_id,
-            'nom'=>$new_nom,
-            'prenom'=>$new_prenom,
-            'date_naissance'=>$new_date_naissance,
-            'civilite'=>$new_civilite,
-            'email'=>$new_email,
-            'telephone_portable'=>$new_telephone_portable,
-            'ok_sms'=>$new_ok_sms,'ok_mail'=>$new_ok_mail,'notes'=>$new_notes));
+        try {
+            $soap->call('modifContact', array('id' => $old_id,
+                'nom' => $new_nom,
+                'prenom' => $new_prenom,
+                'date_naissance' => $new_date_naissance,
+                'civilite' => $new_civilite,
+                'email' => $new_email,
+                'telephone_portable' => $new_telephone_portable,
+                'ok_sms' => $new_ok_sms, 'ok_mail' => $new_ok_mail, 'notes' => $new_notes));
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
-        $return = $soap->call('getContacts',array('count' => 0,'offset' => 0, 'nom' => '', 'prenom'=>'','date_naissance'=>'',
-            'civilite'=>'','email'=>'', 'telephone_portable'=>'','ok_sms'=>'',
-            'ok_mail'=>'','notes'=>''));
-        $liste_Contacts = json_decode($return);
+        try {
+            $return = $soap->call('getContacts', array('count' => 0, 'offset' => 0, 'nom' => '', 'prenom' => '', 'date_naissance' => '',
+                'civilite' => '', 'email' => '', 'telephone_portable' => '', 'ok_sms' => '',
+                'ok_mail' => '', 'notes' => ''));
+            $liste_Contacts = json_decode($return);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());

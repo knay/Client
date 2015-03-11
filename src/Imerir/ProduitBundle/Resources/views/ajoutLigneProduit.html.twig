@@ -30,7 +30,9 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
                 <label for="nom">Nom de la ligne produit : </label>
                 <input type="text" name="nom"/>
             </div>
-            <input type="submit" value="Ajouter">
+            <button type="submit" class="bouton">
+                <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
     {% endif %}
 
@@ -40,7 +42,9 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
                 <label for="nom">Nom de la ligne produit : </label>
                 <input type="text" name="nom"/>
             </div>
-            <input type="submit" value="Ajouter">
+            <button type="submit" class="bouton">
+                <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
         <p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajoutée</p>
     {% endif %}
@@ -54,7 +58,9 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
                 <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
                 <input type="text" name="nom" value="{{ lp_nom_val }}"/>
             </div>
-            <input type="submit" value="Modifier">
+            <button type="submit" class="bouton">
+                <i class="fa fa-check"></i>Modifier
+            </button>
         </form>
     {% endif %}
 
@@ -64,7 +70,9 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
                 <label for="nom">Nom de la ligne produit : </label>
                 <input type="text" name="nom"/>
             </div>
-            <input type="submit" value="Ajouter">
+            <button type="submit" class="bouton">
+                <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
         <p class="validation_message">La ligne produit "{{ old_nom_lp }}" a bien été modifiée en "{{ nom_lp_add }}"</p>
     {% endif %}
@@ -75,7 +83,9 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
     <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="post">
         <label for="recherche_lp">Nom : </label><input type="text" name="recherche_lp">
         <label for="recherche_attribut">Attribut : </label><input type="text" name="recherche_attribut">
-        <input type="submit">
+        <button type="submit" class="bouton">
+            <i class="fa fa-search"></i>Rechercher
+        </button>
     </form>
 {% endblock %}
 

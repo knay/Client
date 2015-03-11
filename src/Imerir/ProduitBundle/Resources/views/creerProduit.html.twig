@@ -47,7 +47,9 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                     </td>
                 </tr>
             </table>
-            <input type="submit" value="Ajouter">
+            <button type="submit" class="bouton">
+                <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
     {% endif %}
 
@@ -69,7 +71,9 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                     </td>
                 </tr>
             </table>
-            <input type="submit" value="Ajouter">
+            <button type="submit" class="bouton">
+                <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
         <p class="validation_message">Le produit "{{ produit_add }}" a bien été ajouté pour la ligne produit "{{ lp_produit_add }}"</p>
     {% endif %}
@@ -101,7 +105,9 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                     </td>
                 </tr>
             </table>
-            <input type="submit" value="Modifier">
+            <button type="submit" class="bouton">
+                <i class="fa fa-check"></i>Modifier
+            </button>
         </form>
     {% endif %}
 
@@ -123,7 +129,9 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
 	                </td>
 	            </tr>
 	        </table>
-	        <input type="submit" value="Ajouter">
+            <button type="submit" class="bouton">
+                <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
         <p class="validation_message">Le produit "{{ old_p }}" a bien été modifié en produit "{{ new_p }}" pour la ligne produit "{{ new_lp }}"</p>
     {% endif %}
@@ -143,7 +151,9 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
         <label for="rechAttribut">Attribut : </label>
         <input type="text" name="rechAttribut">
         <label for="rechProduit">Produit : </label><input type="text" name="rechProduit">
-        <input type="submit">
+        <button type="submit" class="bouton">
+            <i class="fa fa-search"></i>Rechercher
+        </button>
     </form>
 {% endblock %}
 

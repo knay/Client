@@ -236,7 +236,7 @@ $(document).keypress(function(e) {
 	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
 	// n'est plus la douchette qui est maître
-	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
+	if ($('.prixClient:focus').length || $('.prixFournisseur:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
 		return true;
 	
 	var input = $(".valeurCodeBarre"); // On récupère l'input dans lequel on va venir écrire le code barre
@@ -297,8 +297,10 @@ function getArticleFromSoap() {
 			   nomProduit.attr("selected", false);
 			   nomProduit.first().attr("selected", true);
 			   nomProduit.each(function (e) {
-				   if ($(this).html() === objJson['nomProduit'])
+				   if ($(this).html() === objJson['nomProduit']) {
+					   nomProduit.first().attr("selected", false);
 					   $(this).attr("selected", true);
+				   }
 			   });
 
 			   if (typeof objJson['nomProduit'] == "undefined")

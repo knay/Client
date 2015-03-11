@@ -22,3 +22,10 @@ imerir_creation_validation_commande_fournisseur:
     path: /fournisseurs/commandes/creation/validation
     defaults: { _controller: ImerirFournisseurBundle:Commandes:execAjoutCommande }
 
+imerir_modification_commande_fournisseur:
+    path: /fournisseurs/commandes/modification
+    defaults: { _controller: ImerirFournisseurBundle:Commandes:modifCommande }
+
+imerir_modification_validation_commande_fournisseur:
+    path: /fournisseurs/commandes/modification/validation
+    defaults: { _controller: ImerirFournisseurBundle:Commandes:execModifCommande }

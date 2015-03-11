@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title_ajout %}
-    {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
+    {% if app.request.attributes.get('_route')=='imerir_modification_commande_fournisseur' %}
         MODIFICATION
     {% else %}
         AJOUT
@@ -67,46 +67,6 @@ menuSelected
                 </table>
             </div>
 
-            {#champs pour l'adresse#}
-            {#
-            <div id="lst_adresse">
-                <table class="tableau" id="tableau">
-                    <tr>
-                        <th></th>
-                        <th class="titre_lst">Pays</th>
-                        <th class="titre_lst">Ville</th>
-                        <th class="titre_lst">Code postal</th>
-                        <th class="titre_lst">N° voie</th>
-                        <th class="titre_lst">Voie</th>
-                        <th class="titre_lst">N° appartement</th>
-                        <th class="titre_lst">Téléphone fixe</th>
-                    </tr>
-                    {% if detail_adresse.adresse is defined %}
-                        {% for i in detail_adresse.adresse %}
-                            <tr>
-                                <td>
-                                    <i class="fa fa-minus-square supprimer"></i>
-                                </td>
-                                <td>
-                                    <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
-                                </td>
-                            </tr>
-                            {% set nbAdresse = nbAdresse + 1 %}
-                        {% endfor %}
-                    {% endif %}
-                    <tr class="last">
-                        <td><i class="fa fa-plus-square ajout ajouter"></i></td>
-                        <td><input type="text" name="pays{{ nbAdresse }}"/></td>
-                        <td><input type="text" name="ville{{ nbAdresse }}"/></td>
-                        <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
-                        <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
-                        <td><input type="text" name="voie{{ nbAdresse }}"/></td>
-                        <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
-                        <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
-                    </tr>
-                </table>
-            </div>
-            #}
         </form>
     {% endif %}
 
@@ -156,6 +116,119 @@ menuSelected
             </div>
             <p>c'est ok</p>
     {% endif %}
+
+    {% if app.request.attributes.get('_route')=='imerir_modification_commande_fournisseur' %}
+        <form action="{{ path('imerir_modification_validation_commande_fournisseur') }}" method="post" id="formulaire_creation_commande_fournisseur">
+            <table id="tableau_input">
+                <tr>
+                    <td>
+                        <label for="fournisseur">Fournisseur </label>
+                    </td>
+                    <td>
+                        <select name="fournisseur">
+                            <option></option>
+                            {% for j in liste_lignes_commandes %}
+                                {% if loop.last %}
+                                    {% for i in liste_fournisseurs %}
+                                        {% if j.fournisseur_id == i.id %}
+                                            <option value="{{ i.id }}" selected>{{ i.nom }}</option>
+                                        {% else %}
+                                            <option value="{{ i.id }}">{{ i.nom }}</option>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </td>
+                    <td>
+                        <label for="date_commande">Date de la commande </label>
+                    </td>
+                    <td>
+                        <input type="text" name="date_commande" id="datepicker">
+                    </td>
+                    <input type="submit" value="Modifier">
+                </tr>
+            </table>
+            <div id="lst_commande">
+                <table class="tableau" id="tableau">
+                    <th></th>
+                    <th>Article</th>
+                    <th>Quantité souhaitée</th>
+                    {% for i in liste_lignes_commandes %}
+                        <tr>
+                            <td><i class="fa fa-minus-square supprimer"></i>
+                                <input type="hidden" name="modif_commande_id_{{ i.commande_id }}" value="{{ i.commande_id }}"/>
+                                <input type="hidden" name="modif_ligne_commande_id_{{ i.ligne_commande_id }}" value="{{ i.ligne_commande_id }}"/>
+                                <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.commande_id }}" value="1"/>
+                            </td>
+                            <td><input type="text" name="modif_article_{{ i.commande_id }}" value="{{ i.code_barre }}"/>
+                                <label class="fa fa-th recherche rechercher"></label></td>
+                            <td><input type="number" name="modif_quantite_souhaite_{{ i.commande_id }}" value="{{ i.quantite_souhaite }}"/></td>
+                        </tr>
+                    {% endfor %}
+                    <tr>
+                        <td>
+                            <i class="fa fa-plus-square ajout ajouter"></i>
+                        </td>
+
+                        <td>
+                            <input type="text" width="80" name="article"/>
+                            <label class="fa fa-th recherche rechercher"></label>
+                        </td>
+                        <td>
+                            <input type="number" name="qty">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        {% endif %}
+
+        {% if app.request.attributes.get('_route')=='imerir_modification_validation_commande_fournisseur' %}
+            <form action="{{ path('imerir_creation_validation_commande_fournisseur') }}" method="post" id="formulaire_creation_commande_fournisseur">
+                <table id="tableau_input">
+                    <tr>
+                        <td>
+                            <label for="fournisseur">Fournisseur </label>
+                        </td>
+                        <td>
+                            <select name="fournisseur">
+                                <option></option>
+                                {% for i in liste_fournisseurs %}
+                                    <option value="{{ i.id }}">{{ i.nom }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <label for="date_commande">Date de la commande </label>
+                        </td>
+                        <td>
+                            <input type="text" name="date_commande" id="datepicker">
+                        </td>
+                        <input type="submit" value="Ajouter">
+                    </tr>
+                </table>
+                <div id="lst_commande">
+                    <table class="tableau" id="tableau">
+                        <th></th>
+                        <th>Article</th>
+                        <th>Quantité souhaitée</th>
+                        <tr>
+                            <td>
+                                <i class="fa fa-plus-square ajout ajouter"></i>
+                            </td>
+
+                            <td>
+                                <input type="text" width="80" name="article"/>
+                                <label class="fa fa-th recherche rechercher"></label>
+                            </td>
+                            <td>
+                                <input type="number" name="qty">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <p>c'est ok</p>
+            {% endif %}
 {% endblock %}
 
 {% block recherche %}
@@ -176,16 +249,15 @@ menuSelected
     {% for i in liste_commandes %}
 
         <tr><td>{{ i.fournisseur_nom }}
-                {#
-                <form method="post" action="{{ path('imerir_modification_fournisseur') }}" style="display: none">
-                    <input type="hidden" name="id_f" value="{{ i.id }}">
-                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
-                    <input type="hidden" name="email_f" value="{{ i.email }}">
-                    <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
-                    <input type="hidden" name="reference_client_f" value="{{ i.reference_client }}">
-                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
+                <form method="post" action="{{ path('imerir_modification_commande_fournisseur') }}" style="display: none">
+                    <input type="hidden" name="modif_fournisseur_nom" value="{{ i.fournisseur_nom }}">
+                    <input type="hidden" name="modif_fournisseur_id" value="{{ i.fournisseur_id }}">
+                    <input type="hidden" name="modif_commande_date_commande" value="{{ i.date_commande }}">
+                    <input type="hidden" name="modif_commande_id" value="{{ i.commande_id }}">
+                    <input type="hidden" name="modif_code_barre" value="{{ i.code_barre }}">
+                    <input type="hidden" name="modif_quantite_souhaite" value="{{ i.quantite_souhaite }}">
+                    <input type="hidden" name="modif_quantite_recu" value="{{ i.quantite_recu }}">
                 </form>
-                #}
             </td>
             <td>{{ i.date_commande }}</td>
         <td>{{ i.commande_id }}</td><td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
@@ -262,9 +334,9 @@ menuSelected
             changeYear: true,
             changeTime: true
         });
-        {% if modif_date_naissance is defined %}
-        var date = "{{ modif_date_naissance }}";
-        $("#datepicker").datepicker("setDate",date);
+        {% if modif_date_commande is defined %}
+            var date = "{{ modif_date_commande }}";
+            $("#datepicker").datepicker("setDate",date);
         {% endif %}
     });
     //Permet de gerer la langue du datepicker

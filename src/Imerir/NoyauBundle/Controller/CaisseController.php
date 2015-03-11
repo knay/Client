@@ -45,6 +45,7 @@ class CaisseController extends Controller
     	$tabArticle = array();
     	
     	$tabArticle['idClient'] = $req->get('idClient');
+    	$tabArticle['moyenPaiement'] = $req->get('moyenPaiement');
     	// On va parser la request pour former un tableau avec les articles de l'inventaire propre
     	foreach ($req as $key => $value) {
     		$clef = explode('_', $key);

@@ -1,0 +1,87 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block title_page %}Retour client{% endblock %}
+
+{% block title %}ALBA - Retour client{% endblock %}
+
+{% block venteBlock %}menuSelected{% endblock %}
+
+{% block stylesheets %}
+{% endblock %}
+
+{% block title_recherche %}Faire un retour client {% endblock %}
+
+{% block ajout %}
+{% endblock %}
+
+{% block recherche %}
+<p>Chercher une facture :</p>
+<form action="{{ path('imerir_vente_retour_client') }}" method="POST"> 
+	<table class="tableau_input">
+		<tr>
+			<td>Client : </td>
+			<td><input type="text" name="critereClient"></td>
+		</tr>
+		<tr>
+			<td>Ligne produit : </td>
+			<td><input type="text" name="nomLigneProduit"></td>
+		</tr>
+		<tr>
+			<td>Produit : </td>
+			<td><input type="text" name="nomProduit"></td>
+		</tr>
+		<tr>
+			<td>Date : </td>
+			<td>Du : <input type="text" name="dateDebut"></td>
+		</tr>
+		<tr>
+			<td></td>
+			<td>Au : <input type="text" name="dateFin"></td>
+		</tr>
+		<tr>
+			<td>
+				<button class="bouton" type="submit"><i class="fa fa-search"></i>Rechercher</button>
+			</td>
+			<td></td>
+		</tr>
+	</table>
+</form>
+{% endblock %}
+
+{% block table %}
+	<tr>
+	   	<th>N&deg;</th>
+	   	<th>Date</th>
+	   	<th>Client</th>
+	   	<th>Montant</th>
+	</tr>
+	    
+	{% for i in result_facture %}
+    <tr class="select_ligne">
+     	<td>
+        	<form method="post" action="{{ path('imerir_vente_facture_detail') }}" >
+       			<input type="hidden" name="ligne_numero" value="{{ i.numero }}">
+    		</form>
+    			{{ i.numero }}
+        </td>
+       	<td>{{ i.date }}</td>
+        <td>{{ i.client }}</td>
+        <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
+	</tr>
+		
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+
+/**
+ * Quand la page est chargée on enlève le fieldset de recherche qui ne sert à rien.
+ */
+$(document).ready(function (e) {
+	$('#fieldset_ajout').remove();
+});
+
+</script>
+{% endblock %}
+

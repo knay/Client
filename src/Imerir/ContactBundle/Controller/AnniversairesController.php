@@ -10,7 +10,7 @@ class AnniversairesController extends Controller
     {
     	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
     	$menu_sous_menu = array();
-    	$date= '';
+    	$mois= '';
     	$erreur = '';
     	
     	try {
@@ -22,7 +22,7 @@ class AnniversairesController extends Controller
     	}
     	
     	try {
-    		$return_tout_anniversaire = $soap->call('getAnniversaire', array('date'=>$date)); // On récupère le menu/sous-menu
+    		$return_tout_anniversaire = $soap->call('getAnniversaire', array('date'=>$mois)); // On récupère le menu/sous-menu
     		$anniversaire = json_decode($return_tout_anniversaire);
     	}
     	catch(\SoapFault $e) {
@@ -38,13 +38,8 @@ class AnniversairesController extends Controller
     	$query = $this->get('request');
     
     	$menu_sous_menu = array();
-    	$date = $query->request->get('date');
+    	$mois = $query->request->get('mois');
     	$erreur = '';
-    	
-    	//gestion des cas possible de retour en post a traiter avant la requete
-    	if($date == 'aaaa-mm-jj'){
-    		$date = '';
-    	}
     	 
     	try {
     		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
@@ -55,7 +50,7 @@ class AnniversairesController extends Controller
     	}
     	 
     	try {
-    		$return_anniversaire_recherche = $soap->call('getAnniversaire', array('date'=>$date)); // On récupère le menu/sous-menu
+    		$return_anniversaire_recherche = $soap->call('getAnniversaire', array('date'=>$mois)); // On récupère le menu/sous-menu
     		$anniversaire_recherche = json_decode($return_anniversaire_recherche);
     	}
     	catch(\SoapFault $e) {

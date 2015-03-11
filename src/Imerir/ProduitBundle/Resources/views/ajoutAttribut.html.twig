@@ -139,14 +139,19 @@ menuSelected
 		</table>
 	</div>
 	<br>
-	<input type="submit">
+	
+	<button type="submit" class="bouton">
+		<i class="fa fa-check"></i>Valider la saisie
+	</button>
 </form>
 {% endblock %}
 
 {% block recherche %}
 <form action="{{ path('imerir_produit_modif_attributs') }}" method="post">
 	<label for="rechNom">Attribut ou valeur possible : </label><input type="text" name="rechNom">
-	<input type="submit">
+	<button type="submit" class="bouton">
+		<i class="fa fa-search"></i>Rechercher
+	</button>
 </form>
 {% endblock %}
 

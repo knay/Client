@@ -28,13 +28,17 @@ menuSelected
 	<label for="saisie_code_barre">Code barre : </label>
 	<input type="text" name="saisie_code_barre" id="saisie_code_barre">
 	</p>
-	<input type="button" value="Valider la saisie" class="bouton" id="valid_saisie">
+	<button type="button" class="bouton" id="valid_saisie">
+		<i class="fa fa-check"></i>Valider la saisie
+	</button>
 </div>
 
 <form action="{{ path('imerir_stock_inventaire_save') }}" method="post">
 	<div id="contenneur_inventaire" style="display:none;">
 		<div id="divBoutonOption">
-			<input type="button" value="Faire une saisie manuelle de code barre" class="bouton saisie_manuelle">
+			<button type="button" class="bouton saisie_manuelle">
+				<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
+			</button>
 		</div>
 		<table id="table_code_barre" class="tableau">
 			<tr>
@@ -73,14 +77,16 @@ menuSelected
 				</td>
 			</tr>
 		</table>
-		<input type="submit" value="Valider">
+		<button type="submit" class="bouton"><i class="fa fa-check"></i>Valider l'inventaire</button>
 	</div>
 	
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 	<div id="message_accueil">
 		<h2>Scanner un article pour commencer</h2>
-		OU<br>
-		<input type="button" value="Faire une saisie manuelle" class="bouton saisie_manuelle">
+		Ou<br>
+		<button type="button" class="bouton saisie_manuelle">
+			<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
+		</button>
 	</div>
 	
 	<div id="chargement" style="display: none;">
@@ -127,7 +133,7 @@ $("#valid_saisie").click(function () {
 		return;
 	}
 
-	var inputCodeBarre = $(".valeurCodeBarre");
+	var inputCodeBarre = $(".valeurCodeBarre").last();
 	inputCodeBarre.val(valeurSaisie); // On fait comme si on avait fait avec la douchette, on met dans l'input qui va bien
 	
 	validerCodeBarre(true); // On fait comme si on avait eu un code barre

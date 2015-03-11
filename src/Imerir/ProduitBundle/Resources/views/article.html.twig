@@ -26,12 +26,18 @@ Ajouter/modifier un article
 	<label for="saisie_code_barre">Code barre : </label>
 	<input type="text" name="saisie_code_barre" id="saisie_code_barre">
 	</p>
-	<input type="button" value="Valider la saisie" class="bouton" id="valid_saisie">
+	<button class="bouton" id="valid_saisie">
+		<i class="fa fa-check"></i>Valider la saisie
+	</button>
 </div>
 <div style="display:none;" id="contenneur_inventaire">
 	<div id="divBoutonOption">
-		<input type="button" value="Scanner un autre article" class="bouton" id="scannerUnAutreArticle">
-		<input type="button" value="Faire une saisie manuelle de code barre" class="bouton saisie_manuelle">
+		<button class="bouton" id="scannerUnAutreArticle">
+			<i class="fa fa-refresh"></i>Scanner un autre article
+		</button>
+		<button class="bouton saisie_manuelle">
+			<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
+		</button>
 	</div>
 	<form action="{{ path('imerir_produit_article_save') }}" method="post" >
 		<p>Veuillez compléter les informations suivantes : </p>
@@ -67,7 +73,7 @@ Ajouter/modifier un article
 	 			<td><input type="number" name="quantite" value="0"></td>
 	 		</tr>
 	 		<tr>
-	 			<td><input type="submit"></td>
+	 			<td><button class="bouton" type="submit"><i class="fa fa-check"></i>Enregistrer</button></td>
 	 		</tr>
 		</table>
 	</form>
@@ -76,7 +82,9 @@ Ajouter/modifier un article
 <div id="message_accueil">
 	<h2>Scanner un article pour commencer</h2>
 	Ou<br>
-	<input type="button" value="Faire une saisie manuelle" class="bouton saisie_manuelle">
+	<button class="bouton saisie_manuelle">
+		<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
+	</button>
 </div>
 
 <div id="chargement" style="display: none;">
@@ -104,7 +112,7 @@ Ajouter/modifier un article
 	        	<td><select id="select_produit" name="nomProduit"></select></td>
 	        </tr>
         </table>
-        <input type="submit">
+       	<button type="submit" class="bouton"><i class="fa fa-search"></i>Rechercher</button>
     </form>
 {% endblock %}
 

@@ -20,7 +20,7 @@ menuSelected
 	<form method="post" action="{{ path('imerir_contact_anniversaires_rechercher') }}">
 		<label>Date : </label><input type="text" id="date_de_recherche_anniversaire" name="date" size="20" value="aaaa-mm-jj">
 		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
-	<input type="submit">
+		<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
 	</form>
 	{% if liste_des_anniversaires is defined %}
 		{% if liste_des_anniversaires == '' %}

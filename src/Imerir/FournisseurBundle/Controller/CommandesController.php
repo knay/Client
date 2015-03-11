@@ -20,8 +20,14 @@ class CommandesController extends Controller
             'telephone_portable'=>'','reference_client'=>'','notes'=>''));
         $liste_fournisseurs = json_decode($return);
 
+        //$count, $offset, $fournisseur_id, $fournisseur_nom, $commande_id, $article_code
+
+        $return_commandes = $soap->call('getCommandesFournisseurs',array('count' => 0,'offset' => 0,'fournisseur_id'=>'',
+            'fournisseur_nom'=>'','commande_id'=>'','article_code'=>'' ));
+
+        $liste_commandes = json_decode($return_commandes);
         return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
-            'liste_fournisseurs'=>$liste_fournisseurs,'nbLignes'=>0));
+            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0));
     }
 
 }

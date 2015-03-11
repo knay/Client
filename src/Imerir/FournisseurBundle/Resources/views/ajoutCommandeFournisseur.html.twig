@@ -43,8 +43,7 @@ menuSelected
                 <table class="tableau" id="tableau">
                     <th></th>
                     <th>Article</th>
-                    <th>Quantité</th>
-                    <th>Prix</th>
+                    <th>Quantité souhaitée</th>
                     <tr>
                         <td>
                             <i class="fa fa-plus-square ajout ajouter"></i>
@@ -55,9 +54,6 @@ menuSelected
                         </td>
                         <td>
                             <input type="number" name="qty">
-                        </td>
-                        <td>
-                            <input type="text" name="prix">
                         </td>
                     </tr>
                 </table>
@@ -110,27 +106,24 @@ menuSelected
 {% endblock %}
 
 {% block recherche %}
-    {#
-    <form action="{{ path('imerir_creation_fournisseur') }}" method="post">
-        <label for="recherche_fournisseur_nom">Nom fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_nom">
-        <label for="recherche__fournisseur_email">Email fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_email">
-        <label for="recherche_telephone_portable">Téléphone portable :</label>
-        <input type="text" name="recherche_fournisseur_telephone_portable">
-        <label for="recherche_reference_client">Référence client :</label>
-        <input type="text" name="recherche_fournisseur_reference_client">
+    <form action="{{ path('imerir_creation_commande_fournisseur') }}" method="post">
+        <label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label>
+        <input type="text" name="recherche_fournisseur_nom_fournisseur">
+        <label for="recherche_fournisseur_article">Article :</label>
+        <input type="text" name="recherche_fournisseur_article">
+        <label for="recherche_commande_fournisseur_id">Numéro de commande :</label>
+        <input type="text" name="recherche_commande_fournisseur_id">
         <input type="submit">
     </form>
-    #}
 {% endblock %}
 
-{# {% block table %}
-    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Email</th><th>Telephone portable</th>
-        <th>Référence client</th><th>Notes</th></tr>
-    {% for i in liste_fournisseurs %}
+{% block table %}
+    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Date de la commande</th><th>Numéro de la commande</th>
+        <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
+    {% for i in liste_commandes %}
 
-        <tr><td>{{ i.nom }}
+        <tr><td>{{ i.fournisseur_nom }}
+                {#
                 <form method="post" action="{{ path('imerir_modification_fournisseur') }}" style="display: none">
                     <input type="hidden" name="id_f" value="{{ i.id }}">
                     <input type="hidden" name="nom_f" value="{{ i.nom }}">
@@ -139,11 +132,12 @@ menuSelected
                     <input type="hidden" name="reference_client_f" value="{{ i.reference_client }}">
                     <input type="hidden" name="notes_f" value="{{ i.notes }}">
                 </form>
+                #}
             </td>
-        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td><td>{{ i.reference_client }}</td><td>{{ i.notes }}</td></tr>
+            <td>{{ i.date_commande }}</td>
+        <td>{{ i.commande_id }}</td><td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
     {% endfor %}
 {% endblock %}
-#}
 
 {% block javascripts %}
 <script>

@@ -114,7 +114,7 @@ menuSelected
                     </tr>
                 </table>
             </div>
-            <p>c'est ok</p>
+            <p class="validation_message">La commande a bien été ajoutée</p>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_modification_commande_fournisseur' %}
@@ -227,7 +227,7 @@ menuSelected
                         </tr>
                     </table>
                 </div>
-                <p>c'est ok</p>
+                <p class="validation_message">La commande n° {{ commande_id }} a bien été modifiée</p>
             {% endif %}
 {% endblock %}
 

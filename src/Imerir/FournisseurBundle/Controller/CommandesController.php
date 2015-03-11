@@ -235,7 +235,8 @@ class CommandesController extends Controller
 
         $liste_commandes = json_decode($return_commandes);
         return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
-            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0));
+            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,
+            'commande_id'=>$modif_commande_id[0]));
         ////////////////////////////////////////////////////////////
 
     }

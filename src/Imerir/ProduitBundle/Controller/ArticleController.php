@@ -20,6 +20,9 @@ class ArticleController extends Controller
 		$req = $this->getRequest()->request;
 		$tabArticle = array();
 		$tabArticle['attributs'] = array();
+		$codeBarre = '';
+		if ($req->get('codeBarre') !== null)
+			$codeBarre = $req->get('codeBarre');
 		
 		// On va parser la request pour former un tableau avec les articles de l'inventaire propre
 		foreach ($req as $key => $value) {
@@ -78,7 +81,8 @@ class ArticleController extends Controller
 		return $this->render('ImerirProduitBundle::article.html.twig', array('produit' => $produitsRetour,
 																			 'result_menu' => $menu_sous_menu,
 																			 'erreur' => $erreur,
-																			 'result_all_ligne_produit' => $all_ligne_produit));
+																			 'result_all_ligne_produit' => $all_ligne_produit,
+				                                                             'codeBarre' => $codeBarre));
 	}
 	
 	/**

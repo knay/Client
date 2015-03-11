@@ -5,7 +5,7 @@
 {% endblock %}
 
 {% block title_page %}
-Anniversaires
+Alba - Anniversaires
 {% endblock %}
 
 {% block title_ajout %}
@@ -50,6 +50,7 @@ menuSelected
     	<th>Nom</th>
     	<th>Prenom</th>
     	<th>Date</th>
+    	<th>Age</th>
     	<th>Email</th>
     </tr>
     {% if liste_des_anniversaires is defined %}
@@ -60,6 +61,7 @@ menuSelected
 		        	<td>{{ i.client_nom }}</td>
 		            <td>{{ i.client_prenom }}</td>
 		            <td>{{ i.client_date }}</td>
+		            <td>{{ i.client_age }}</td>
 		            <td>{{ i.client_email }}</td>
 				</tr>
 			{% endfor %}

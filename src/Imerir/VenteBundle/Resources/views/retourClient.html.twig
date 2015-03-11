@@ -12,6 +12,54 @@
 {% block title_recherche %}Faire un retour client {% endblock %}
 
 {% block ajout %}
+	{% set montant_total = 0 %}
+	{% set prix_de_la_tva = 0 %}
+	{% set montant_avec_tva = 0 %}
+	{% set tva = 20 %}
+	<div id="information">
+		<div id="information_facture">
+		{% if detail_facture is defined %}
+			{% if detail_facture != '' %}
+				{% for i in detail_facture %}
+					<label class="en_gras_souligner">Facture n&deg;{{ i.numero_facture }}<br></label>
+					<div id="detail_sur_client">
+						<label class="en_gras">Le :</label> {{ i.date_facture }}<br>
+						<label class="en_gras">Client :</label> {{ i.nom_client }} {{ i.prenom_client }}<br>
+						<label class="en_gras">Mode de r&egrave;glement : </label>{{ i.nom_moyen_paiement }}
+					</div>
+				{% endfor %}
+			{% endif %}
+		{% endif %}
+		</div>
+	</div>
+	<div id="tableau_facture">
+		<table id="tableau_detail_facture" class="tableau" >
+			<tr>
+				<th class="col_article">Produit</th>
+				<th class="col_article">Article</th>
+				<th>Quantité</th>
+				<th>Prix Unitaire</th>
+				<th>Réduction</th>
+				<th>Montant</th>
+			</tr>
+		{% if detail_facture is defined %}
+			{% if detail_facture != '' %}
+				{% for i in detail_facture %}
+					<tr>
+						<td class="col_article_contenu">{{ i.nom_produit|capitalize }}</td>
+						<td class="col_article_contenu">{{ i.nom_article }}</td>
+						<td>{{ i.nombre_article }}</td>
+						<td>{{ i.prix_article|number_format(2, '.', ',') }} &euro;</td>
+						<td>{{ i.reduction_article }}</td>
+						<td>{{ i.montant_facture|round(2, 'common')|number_format(2, '.', ',') }} &euro;</td>
+						{% set montant_total =  montant_total +  i.montant_facture %}
+					</tr>
+				{% endfor %}
+			{% else %}
+			{% endif %}
+		{% endif %}
+		</table>
+	</div>
 {% endblock %}
 
 {% block recherche %}
@@ -59,8 +107,8 @@
 	{% for i in result_facture %}
     <tr class="select_ligne">
      	<td>
-        	<form method="post" action="{{ path('imerir_vente_facture_detail') }}" >
-       			<input type="hidden" name="ligne_numero" value="{{ i.numero }}">
+        	<form method="post" action="{{ path('imerir_vente_retour_client_detail') }}" >
+       			<input type="hidden" name="id_facture" value="{{ i.numero }}">
     		</form>
     			{{ i.numero }}
         </td>
@@ -68,7 +116,6 @@
         <td>{{ i.client }}</td>
         <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
 	</tr>
-		
     {% endfor %}
 {% endblock %}
 
@@ -76,10 +123,22 @@
 <script>
 
 /**
- * Quand la page est chargée on enlève le fieldset de recherche qui ne sert à rien.
+ * Quand la page est chargée on enlève le fieldset d'ajout qui ne sert à rien si on a pas le detail de facture.
  */
 $(document).ready(function (e) {
-	$('#fieldset_ajout').remove();
+	{% if detail_facture is defined %}
+		{% if detail_facture != '' %}
+			$("#fieldset_ajout").show();
+		{% else %}
+			$("#fieldset_ajout").hide();
+		{% endif %}
+	{% else %}
+		$("#fieldset_ajout").hide();
+	{% endif %}
+});
+
+$(".select_ligne").click(function () {
+	$(this).find("form").submit();
 });
 
 </script>

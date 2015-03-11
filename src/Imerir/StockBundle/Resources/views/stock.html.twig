@@ -75,7 +75,7 @@ menuSelected
     	<th>Code barre de l'article</th>
     	<th>Quantité</th>
     </tr>
-    {% for i in result_stock %}
+{# {% for i in result_stock %}
      	{% if i.quantite <= 0 %}
      		<tr class="quantite_inferieur_zero">
 	    {% else %}
@@ -87,6 +87,7 @@ menuSelected
             <td>{{ i.quantite }}</td>
         </tr>
     {% endfor %}
+    #}
 {% endblock %}
 
 {% block javascripts %}

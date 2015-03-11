@@ -29,3 +29,7 @@ imerir_vente_modification_moyen_paiement:
 imerir_vente_supprimer_moyen_paiement:
     path:     /vente/supprimer/moyen_paiement
     defaults: { _controller: ImerirVenteBundle:MoyenPaiement:supprimerMoyenPaiement }
+    
+imerir_vente_retour_client:
+    path:     /vente/retour_client
+    defaults: { _controller: ImerirVenteBundle:RetourClient:faireRetourClient }

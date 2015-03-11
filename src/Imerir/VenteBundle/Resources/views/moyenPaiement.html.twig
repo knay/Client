@@ -30,7 +30,7 @@ Ici, vous pouvez ajouter ou modifier un moyen de paiement.
 	        <form action="{{ path('imerir_vente_creation_moyen_paiement') }}" method="post">
                 <label>Nom du moyen de paiement : </label>
                 <input type="text" name="nom"/>
-	            <input type="submit" value="Ajouter">
+	            <button class="bouton" ><i class="fa fa-plus"></i> Ajouter</button>
 	        </form>
 	    {% endif %}
    		</tr>
@@ -40,15 +40,15 @@ Ici, vous pouvez ajouter ou modifier un moyen de paiement.
 	                <label>Nom du moyen de paiement : </label>
 	                <input type="hidden" name="id_modifier" value="{{ id_selectioner }}">
 	                <input type="text" name="nom_modifier" value="{{ nom_selectioner }}">
-		            <input type="submit" value="Modifier">
+		            <button class="bouton" ><i class="fa fa-pencil-square-o"></i> Modifier</button>
 		        </form>
 		        <form action="{{ path('imerir_vente_creation_moyen_paiement') }}" method="post">
-		            <input type="submit" value="Annuler">
+		            <button class="bouton" ><i class="fa fa-reply"></i></i> Annuler</button>
 		        </form>
 		   		<form action="{{ path('imerir_vente_supprimer_moyen_paiement') }}" method="post">
 		   			<input type="hidden" name="id_modifier" value="{{ id_selectioner }}">
 	                <input type="hidden" name="nom_modifier" value="{{ nom_selectioner }}">
-		            <input type="submit" value="Supprimer">
+		            <button class="bouton" ><i class="fa fa-trash-o"></i> Supprimer</button>
 		        </form>
 	    {% endif %}
     	</tr>

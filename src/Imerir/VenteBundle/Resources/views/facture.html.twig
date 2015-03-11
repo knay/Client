@@ -23,7 +23,7 @@ ALBA - Facture
 	{% set prix_de_la_tva = 0 %}
 	{% set montant_avec_tva = 0 %}
 	{% set tva = 20 %}
-	<a href="#" onclick="window.print()" class="bouton">Imprimer</a>
+	<a href="#" onclick="window.print()" class="bouton"><i class="fa fa-print"></i> Imprimer</a>
 	<div class="feuille_facture">
 		<div id="logo_facture">
 			<h1>Logo - les caprices de lili</h1>
@@ -113,7 +113,7 @@ ALBA - Facture
 		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
 		<label>Client : </label><input type="text" id="recherche_client" name="client" size="20">
 		<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
-	<input type="submit">
+		<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
 	</form>
 {% endblock %}
 

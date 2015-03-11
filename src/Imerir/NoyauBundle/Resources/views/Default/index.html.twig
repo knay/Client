@@ -204,7 +204,7 @@ var nbCodeBarre = 0; //< Le nombre d'article scanné. Utilisé pour envoyé tout
  * Permet de réagir lorsque l'on valide la vente.
  * Va faire quelques vérifications pour renseigner à l'utilisateur si des problèmes sont détectés.
  */
-$("#formulaireCaisse").click(function (event) {
+$("#formulaireCaisse").submit(function (event) {
 	event.preventDefault(); // On empeche le comportement par défaut le temps de vérifier
 	
 	var idClient = $("#inputIdClient").val(); // On récupé l'id client pour savoir s'il est renseigné

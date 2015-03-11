@@ -37,6 +37,12 @@ menuSelected
                             {% endfor %}
                         </select>
                     </td>
+                    <td>
+                        <label for="date_commande">Date de la commande </label>
+                    </td>
+                    <td>
+                        <input type="text" name="date_commande" id="datepicker">
+                    </td>
                     <input type="submit" value="Ajouter">
                 </tr>
             </table>
@@ -45,7 +51,6 @@ menuSelected
                     <th></th>
                     <th>Article</th>
                     <th>Quantité souhaitée</th>
-                    <th>Date de la commande</th>
                     <tr>
                         <td>
                             <i class="fa fa-plus-square ajout ajouter"></i>
@@ -57,9 +62,6 @@ menuSelected
                         </td>
                         <td>
                             <input type="number" name="qty">
-                        </td>
-                        <td>
-                            <input type="text" name="date_commande" id="datepicker">
                         </td>
                     </tr>
                 </table>
@@ -123,6 +125,12 @@ menuSelected
                             {% endfor %}
                         </select>
                     </td>
+                    <td>
+                        <label for="date_commande">Date de la commande </label>
+                    </td>
+                    <td>
+                        <input type="text" name="date_commande" id="datepicker">
+                    </td>
                     <input type="submit" value="Ajouter">
                 </tr>
             </table>
@@ -131,7 +139,6 @@ menuSelected
                     <th></th>
                     <th>Article</th>
                     <th>Quantité souhaitée</th>
-                    <th>Date de la commande</th>
                     <tr>
                         <td>
                             <i class="fa fa-plus-square ajout ajouter"></i>
@@ -143,10 +150,6 @@ menuSelected
                         </td>
                         <td>
                             <input type="number" name="qty">
-                        </td>
-
-                        <td>
-                            <input type="text" name="date_commande" id="datepicker">
                         </td>
                     </tr>
                 </table>
@@ -217,7 +220,7 @@ menuSelected
                 '<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td>'
                 +'<td><input type="text" width="80" name="article'+numLigneCommande+'"/><label class="fa fa-th recherche rechercher"></label></td>'
                 +'<td><input type="number" name="qty'+numLigneCommande+'"></td>'
-                +'<td><input type="text" name="prix'+numLigneCommande+'"></td></tr>'
+                +'</tr>'
                 );
 
                 last.find("i").toggleClass("ajout");

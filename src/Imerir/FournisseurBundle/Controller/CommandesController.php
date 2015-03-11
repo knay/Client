@@ -58,16 +58,33 @@ class CommandesController extends Controller
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
 
-        $commande_nom_fournisseur = $query->request->get('fournisseur');
-        $commande_article = $query->request->get('article');
-        $commande_qty = $query->request->get('qty');
-        $commande_date = $query->request->get('date_commande');
+        $commande_nom_fournisseur = array();
+        $commande_article = array();
+        $commande_qty = array();
+        $commande_date = array();
 
 
-        //$fournisseur_id, $article_code, $date_commande, $quantite_souhaite
-        $soap->call('ajoutCommandeFournisseur',array('fournisseur_id'=>json_encode($commande_nom_fournisseur),
-            'article_code'=>json_encode($commande_article)
-        , 'date_commande'=>json_encode($commande_date),'quantite_souhaite'=>json_encode($commande_qty)));
+        foreach ($query->request as $key => $value) {
+            if (substr($key, 0, strlen('fournisseur')) === 'fournisseur') {
+                array_push($commande_nom_fournisseur, $value);
+            }
+            if (substr($key, 0, strlen('qty')) === 'qty') {
+                array_push($commande_qty, $value);
+            }
+            if (substr($key, 0, strlen('article')) === 'article') {
+                array_push($commande_article, $value);
+            }
+            if (substr($key, 0, strlen('date_commande')) === 'date_commande') {
+                array_push($commande_date, $value);
+            }
+        }
+
+        if(!empty($commande_nom_fournisseur) && !empty($commande_article) && !empty($commande_qty)){
+            //$fournisseur_id, $article_code, $date_commande, $quantite_souhaite
+            $soap->call('ajoutCommandeFournisseur',array('fournisseur_id'=>json_encode($commande_nom_fournisseur),
+                'article_code'=>json_encode($commande_article)
+            , 'date_commande'=>json_encode($commande_date),'quantite_souhaite'=>json_encode($commande_qty)));
+        }
 
         //PARTIE COMMUNE//////////////////////////////////////////
         $return_menu = $soap->call('getMenu', array());

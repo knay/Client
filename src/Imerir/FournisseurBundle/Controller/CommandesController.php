@@ -333,9 +333,11 @@ class CommandesController extends Controller
         <label for="recherche_commande_fournisseur_id">Numéro de commande :</label>
         <input type="text" name="recherche_commande_fournisseur_id">
         */
-        $recherche_nom = $query->request->get('recherche_fournisseur_nom_fournisseur');
+        $recherche_nom = $query->request->get('recherche_commande_fournisseur_nom_fournisseur');
         $recherche_article = $query->request->get('recherche_fournisseur_article');
         $recherche_commande = $query->request->get('recherche_commande_fournisseur_id');
+        $recherche_date_deb = $query->request->get('recherche_date_deb');
+        $recherche_date_fin = $query->request->get('recherche_date_fin');
 
         $erreur = '';
 
@@ -351,6 +353,14 @@ class CommandesController extends Controller
             $commande = $recherche_commande;
         else
             $commande = '';
+        if(!empty($recherche_date_deb))
+            $date_deb = $recherche_date_deb;
+        else
+            $date_deb = '';
+        if(!empty($recherche_date_fin))
+            $date_fin = $recherche_date_fin;
+        else
+            $date_fin = '';
         //////////////////
 
         //on recupere le menu et sous menu
@@ -367,8 +377,9 @@ class CommandesController extends Controller
         }
 
         try {
-            $return_commandes = $soap->call('getCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
-                'fournisseur_nom' => $nom, 'commande_id' => $commande, 'article_code' => $article));
+            $return_commandes = $soap->call('getAllCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
+                'fournisseur_nom' => $nom, 'commande_id' => $commande, 'article_code' => $article,'date_deb'=>$date_deb,
+                'date_fin'=>$date_fin));
         }
         catch(\SoapFault $e) {
             $erreur .=$e->getMessage();

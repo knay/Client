@@ -173,17 +173,17 @@ class ReceptionCommandeController extends Controller
 
         //on teste si il y a des valeurs à ajouter
         if(!empty($modif_quantite) && !empty($modif_article) && !empty($modif_commande_id)){
-            //try {
+            try {
                 //ajoutReceptionCommandeAction($commande_id,$ligne_commande_id, $article_code, $quantite, $date_reception)
                 $soap->call('ajoutReceptionCommande',array('commande_id'=>json_encode($modif_commande_id),
                     'ligne_commande_id'=>json_encode($modif_ligne_commande_id),
                     'article_code'=>json_encode($modif_article),'quantite'=>json_encode($modif_quantite),
                     'date_reception'=>json_encode($modif_date_reception)
                     ));
-            //}
-            //catch(\SoapFault $e){
-            //    $erreur .=$e->getMessage();
-            //}
+            }
+            catch(\SoapFault $e){
+                $erreur .=$e->getMessage();
+            }
         }
 
         //PARTIE COMMUNE//////////////////////////////////////////

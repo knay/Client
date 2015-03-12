@@ -7,6 +7,7 @@
 {% block venteBlock %}menuSelected{% endblock %}
 
 {% block stylesheets %}
+<link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssRetourClient.css') }}"/>
 {% endblock %}
 
 {% block title_recherche %}Choisir la facture concernée par le retour {% endblock %}
@@ -29,11 +30,11 @@
 				</tr>
 				<tr>
 					<td>Code barre de l'article : </td>
-					<td id="tdCodeBarre"><input type="text" name="codeBarre" value=""></td>
+					<td id="tdCodeBarre"><input type="text" name="codeBarre" value="" readonly></td>
 				</tr>
 				<tr>
-					<td>Promotion appliquée : </td>
-					<td id="tdPromo"><input type="text" name="promo" value=""></td>
+					<td>Promotion appliquée lors de l'achat : </td>
+					<td id="tdPromo"><input type="number" name="promo" value="" min="0" max="100"></td>
 				</tr>
 				<tr>
 					<td>Prix unitaire : </td>
@@ -130,7 +131,13 @@
 		</tr>
 		<tr>
 			<td>Ligne produit : </td>
-			<td><input type="text" name="nomLigneProduit"></td>
+			<td>
+				<select name="nomLigneProduit">
+					{% for i in ligne_produit %}
+                        <option>{{ i.nom }}</option>
+                    {% endfor %}
+                </select>
+			</td>
 		</tr>
 		<tr>
 			<td>Produit : </td>
@@ -138,11 +145,11 @@
 		</tr>
 		<tr>
 			<td>Date : </td>
-			<td>Du : <input type="text" name="dateDebut"></td>
+			<td>À partir du : <input type="text" name="dateDebut" class="datePicker"></td>
 		</tr>
 		<tr>
 			<td></td>
-			<td>Au : <input type="text" name="dateFin"></td>
+			<td>Jusqu'au : <input type="text" name="dateFin" class="datePicker"></td>
 		</tr>
 		<tr>
 			<td>
@@ -180,6 +187,15 @@
 {% block javascripts %}
 <script>
 
+var format_affichage_date = "yy-mm-dd";
+
+//Permet de parametrer le datepicker
+$(function() {
+    $(".datePicker").datepicker();
+	$(".datePicker").datepicker( "option", "showAnim", "slideDown" );
+	$(".datePicker").datepicker( "option", "dateFormat", format_affichage_date );
+});
+
 /**
  * Quand la page est chargée on enlève le fieldset d'ajout qui ne sert à rien si on a pas le detail de facture.
  */
@@ -213,7 +229,7 @@ function moinsQuantite() {
 }
 
 /**
- * FOnction réagissant lors du clic sur le bouton + à côté de la quantité produit.
+ * Fonction réagissant lors du clic sur le bouton + à côté de la quantité produit.
  * Augmente la quantité produit de 1.
  */
 function plusQuantite() {
@@ -224,20 +240,30 @@ function plusQuantite() {
 	calculerPrixTotal();
 }
 
+/**
+ * Permet d'accéder au détail lorsqu'on clic sur une facture, pour avoir les lignes concernées.
+ */
 $(".select_ligne").click(function () {
 	$(this).find("form").submit();
 });
 
+/**
+ * Lorsque l'on modifie une valeur sur la fenetre de retour client, il faut recalculer 
+ * le prix à rembourser.
+ */
 $("#dialogRetour").find("input").change(function () {
 	calculerPrixTotal();
 });
 
+/**
+ * Permet de réagir lorsque l'on clique sur la ligne facture dont on veut faire un retour. 
+ */
 $("#tableau_detail_facture").find('tr:not(:first)').click(function () {
 	var dial = $("#dialogRetour");
 	dial.dialog({
 	    modal: true,
 	    width: "50%",
-		height: "500",
+		height: "300",
 		resizable: false,
 		draggable: false
 	});
@@ -255,10 +281,14 @@ $("#tableau_detail_facture").find('tr:not(:first)').click(function () {
 	$("#tdCodeBarre").find("input").val(codeBarre);
 	$("#tdPromo").find("input").val(promo);
 	$("#tdPrix").html(prixUnitaire);
-	$("#tdQuantite").find("input").val(quantite);
+	$("#tdQuantite").find("input").val('1');
 	calculerPrixTotal();
 });
 
+/**
+ * Permet de calculer le prix total à rembourser pour le commerçant.
+ * S'affiche dans la dialog de alidation de retour client.
+ */
 function calculerPrixTotal () {
 	var nomProduit = $("#dialogRetour").find("input[name='nomProduit']").val();
 	var codeBarre = $("#dialogRetour").find("input[name='codeBarre']").val();
@@ -270,6 +300,41 @@ function calculerPrixTotal () {
 	var prixTot = parseFloat(quantite)*parseFloat(prixUnitaire)-(parseFloat(quantite)*parseFloat(prixUnitaire)*parseFloat(promo)/100);
 	$("#tdTotal").html(prixTot+" €");
 }
+
+// Permet de gerer la langue du datepicker
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+		factory( jQuery.datepicker );
+	}
+	
+}(function( datepicker ) {
+	datepicker.regional['fr'] = {
+		closeText: 'Fermer',
+		prevText: 'Pr&eacutec&eacutedent',
+		nextText: 'Suivant',
+		currentText: 'Aujourd\'hui',
+		monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
+			'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
+		monthNamesShort: ['janv.', 'f�vr.', 'mars', 'avril', 'mai', 'juin',
+			'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
+		dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+		dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+		dayNamesMin: ['D','L','M','M','J','V','S'],
+		weekHeader: 'Sem.',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	datepicker.setDefaults(datepicker.regional['fr']);
+
+	return datepicker.regional['fr'];
+
+}));
+//
 
 </script>
 {% endblock %}

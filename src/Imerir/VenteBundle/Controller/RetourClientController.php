@@ -42,9 +42,19 @@ class RetourClientController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-    	return $this->render('ImerirVenteBundle::retourClient.html.twig', array('result_menu' => $menu_sous_menu,
-    																			'result_facture'=>$facture,
-    																	        'erreur'=>$erreur));
+    	// On récupère toutes les lignes produits
+    	try {
+    		$return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => ''));
+    		$lignesProduitsretour = json_decode($return_lp);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
+    	
+    	return $this->render('ImerirVenteBundle::retourClient.html.twig', array('ligne_produit' => $lignesProduitsretour,
+    																			'result_menu' => $menu_sous_menu,
+    																			'result_facture' => $facture,
+    																	        'erreur' => $erreur));
     }
     
     public function faireRetourClientDetailsAction() {
@@ -81,10 +91,20 @@ class RetourClientController extends Controller
     	catch(\SoapFault $e) {
     		$erreur.=$e->getMessage();
     	}
+    	
+    	// On récupère toutes les lignes produits
+    	try {
+    		$return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => ''));
+    		$lignesProduitsretour = json_decode($return_lp);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
     	 
-    	return $this->render('ImerirVenteBundle::retourClient.html.twig', array('result_menu' => $menu_sous_menu,
+    	return $this->render('ImerirVenteBundle::retourClient.html.twig', array('ligne_produit' => $lignesProduitsretour, 
+    																			'result_menu' => $menu_sous_menu,
     																			'result_facture' => $facture,
-    																			'detail_facture'=>$detail_facture, 
+    																			'detail_facture'=> $detail_facture, 
     																			'erreur' => $erreur));
     }
     
@@ -119,9 +139,9 @@ class RetourClientController extends Controller
     	if ($codeBarre !== null && $quantite !== null && $promo !== null && $idFacture !== null) {
 			try {
 				$soap->call('enregistrerRetour', array('idFacture' => $idFacture, 
-															 'quantite' => $quantite, 
-															 'code_barre' => $codeBarre, 
-											 				 'promo' => $promo));
+													   'quantite' => $quantite, 
+												       'code_barre' => $codeBarre, 
+											 		   'promo' => $promo));
 			}
 			catch(\SoapFault $e) {
 				$erreur.=$e->getMessage();
@@ -141,9 +161,19 @@ class RetourClientController extends Controller
     	catch(\SoapFault $e) {
     		$erreur.=$e->getMessage();
     	}
+    	
+    	// On récupère toutes les lignes produits
+    	try {
+    		$return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => ''));
+    		$lignesProduitsretour = json_decode($return_lp);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
     	 
-    	return $this->render('ImerirVenteBundle::retourClient.html.twig', array('result_menu' => $menu_sous_menu,
-    			'result_facture'=>$facture,
-    			'erreur'=>$erreur));
+    	return $this->render('ImerirVenteBundle::retourClient.html.twig', array('ligne_produit' => $lignesProduitsretour,
+    																			'result_menu' => $menu_sous_menu,
+    																			'result_facture' => $facture,
+    																			'erreur' => $erreur));
     }
 }

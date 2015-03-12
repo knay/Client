@@ -1,0 +1,28 @@
+.moinsQuantite {
+	color: #0099CC;
+	vertical-align: middle;
+	cursor: pointer;
+}
+
+.moinsQuantite:hover {
+	color: #33B5E5;
+}
+
+.plusQuantite {
+	color: #0099CC;
+	vertical-align: middle;
+	margin-right: 20px;
+	cursor: pointer;
+}
+
+.plusQuantite:hover {
+	color: #33B5E5;
+}
+
+#dialogRetour {
+	margin: 0 auto;
+}
+
+#dialogRetour table {
+	margin: 0 auto;
+}

@@ -13,10 +13,15 @@ class FactureController extends Controller
     	
     	//on recuperer les variables en post ici
     	$date = $query->request->get('date');
+    	if ($date === null)
+    		$date = '';
     	$client = $query->request->get('client');
+    	if ($client === null)
+    		$client = '';
     	$menu_sous_menu = array();
     	
     	$erreur = '';
+    	$facture = array();
     	 
     	try {
     		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
@@ -42,7 +47,7 @@ class FactureController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-    	return $this->render('ImerirVenteBundle::facture.html.twig', array('result_menu' => $menu_sous_menu,'result_facture'=>$facture));
+    	return $this->render('ImerirVenteBundle::facture.html.twig', array('result_menu' => $menu_sous_menu,'result_facture'=>$facture, 'erreur'=>$erreur));
     }
     
     /**

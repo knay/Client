@@ -46,12 +46,22 @@ class DefaultController extends Controller
             $attributRechVal=$attributRech;
 
         //on récupère toutes les lignes produits
-        $return_lp = $soap->call('getLigneProduit', array('count' => 0,'offset' => 0, 'nom' =>''));
-        $lignesProduitsretour = json_decode($return_lp);
+        try {
+            $return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => ''));
+            $lignesProduitsretour = json_decode($return_lp);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on récupère tous les produits
-        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal, 'attribut'=>$attributRechVal));
-        $produitsRetour = json_decode($return_produits);
+        try {
+            $return_produits = $soap->call('getProduit', array('count' => 0, 'offset' => 0, 'nom' => $nomRechVal, 'ligneproduit' => $lpRechVal, 'attribut' => $attributRechVal));
+            $produitsRetour = json_decode($return_produits);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
@@ -73,15 +83,30 @@ class DefaultController extends Controller
 
         $soap = $this->get('noyau_soap');
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
-        $return = $soap->call('ajoutProduit',array('nom' => $nom,'ligneProduit' => $ligneProduit));
+        try {
+            $return = $soap->call('ajoutProduit', array('nom' => $nom, 'ligneProduit' => $ligneProduit));
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on récupère toutes les lignes produits
-        $return_lp = $soap->call('getLigneProduit', array('count' => 0,'offset' => 0, 'nom' => ''));
-        $lignesProduitsretour = json_decode($return_lp);
+        try {
+            $return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => ''));
+            $lignesProduitsretour = json_decode($return_lp);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on récupère tous les produits
-        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-        $produitsRetour = json_decode($return_produits);
+        try {
+            $return_produits = $soap->call('getProduit', array('count' => 0, 'offset' => 0, 'nom' => '', 'ligneproduit' => ''));
+            $produitsRetour = json_decode($return_produits);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
@@ -125,12 +150,22 @@ class DefaultController extends Controller
             $attributRechVal=$attributRech;
 
         //on récupère toutes les lignes produits
-        $return_lp = $soap->call('getLigneProduit', array('count' => 0,'offset' => 0, 'nom' =>''));
-        $lignesProduitsretour = json_decode($return_lp);
+        try {
+            $return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => ''));
+            $lignesProduitsretour = json_decode($return_lp);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on récupère tous les produits
-        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>$nomRechVal, 'ligneproduit'=>$lpRechVal,'attribut'=>$attributRechVal));
-        $produitsRetour = json_decode($return_produits);
+        try {
+            $return_produits = $soap->call('getProduit', array('count' => 0, 'offset' => 0, 'nom' => $nomRechVal, 'ligneproduit' => $lpRechVal, 'attribut' => $attributRechVal));
+            $produitsRetour = json_decode($return_produits);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
@@ -154,15 +189,30 @@ class DefaultController extends Controller
 
         $soap = $this->get('noyau_soap');
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
-        $return = $soap->call('modifProduit',array('nom_lp' => $nom_modif_lp,'nom_p' => $nom_modif_p,'id_p'=>$id_modif_p));
+        try {
+            $return = $soap->call('modifProduit', array('nom_lp' => $nom_modif_lp, 'nom_p' => $nom_modif_p, 'id_p' => $id_modif_p));
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on récupère toutes les lignes produits
-        $return_lp = $soap->call('getLigneProduit', array('count' => 0,'offset' => 0, 'nom' => ''));
-        $lignesProduitsretour = json_decode($return_lp);
+        try {
+            $return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => ''));
+            $lignesProduitsretour = json_decode($return_lp);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on récupère tous les produits
-        $return_produits = $soap->call('getProduit',array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-        $produitsRetour = json_decode($return_produits);
+        try {
+            $return_produits = $soap->call('getProduit', array('count' => 0, 'offset' => 0, 'nom' => '', 'ligneproduit' => ''));
+            $produitsRetour = json_decode($return_produits);
+        }
+        catch(\SoapFault $e) {
+            $erreur =$e->getMessage();
+        }
 
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());

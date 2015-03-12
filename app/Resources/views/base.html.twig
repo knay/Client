@@ -12,6 +12,7 @@
         
         <script type="text/javascript" src="{{ asset('../vendor/components/jquery/jquery.js') }}"></script>
         <script type="text/javascript" src="{{ asset('../vendor/components/jqueryui/jquery-ui.js') }}"></script>
+		{#<script src="/js/jquery-ui-timepicker-addon-0.6.2.js" type="text/javascript"></script>#}
         <script type="text/javascript" src="{{ asset('../vendor/nnnick/chartjs/Chart.js') }}"></script>
         <script>
 	         $(function() { // Fonction permettant de réagir au clic sur l'aide
@@ -190,7 +191,7 @@
 											</a>
 										{% endif %}
 										{% if j == "Retour" %}
-	 						    			<a href="">
+	 						    			<a href="{{ path('imerir_vente_retour_client') }}">
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}

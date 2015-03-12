@@ -28,7 +28,9 @@ menuSelected
             <tr>
                 <td><label for="nom">Nom fournisseur </label></td>
                 <td><input type="text" name="nom"/></td>
-                <input type="submit" value="Ajouter">
+                <button type="submit" class="bouton">
+                    <i class="fa fa-check"></i>Valider la saisie
+                </button>
             </tr>
             <tr>
                 <td><label for="email">Email </label></td>
@@ -97,7 +99,9 @@ menuSelected
                 <tr>
                     <td><label for="nom">Nom fournisseur </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <input type="submit" value="Ajouter">
+                    <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+                    </button>
                 </tr>
                 <tr>
                     <td><label for="email">Email </label></td>
@@ -167,7 +171,9 @@ menuSelected
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
-                <input type="submit" value="Modifier">
+                <button type="submit" class="bouton">
+                    <i class="fa fa-check"></i>Modifier
+                </button>
                 <tr><td><label for="nom">Email </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
                 <tr><td><label for="nom">Téléphone portable </label></td>
@@ -242,7 +248,9 @@ menuSelected
                 <tr>
                     <td><label for="nom">Nom fournisseur </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <input type="submit" value="Ajouter">
+                    <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+                    </button>
                 </tr>
                 <tr>
                     <td><label for="email">Email </label></td>
@@ -316,7 +324,9 @@ menuSelected
         <input type="text" name="recherche_fournisseur_telephone_portable">
         <label for="recherche_reference_client">Référence client :</label>
         <input type="text" name="recherche_fournisseur_reference_client">
-        <input type="submit">
+        <button type="submit" class="bouton">
+            <i class="fa fa-search"></i>Rechercher
+        </button>
 
     </form>
 {% endblock %}

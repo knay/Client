@@ -23,7 +23,7 @@ menuSelected
 
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_reception_article_saisie' %}
-        <form action="{{ path('imerir_modification_validation_commande_fournisseur') }}" method="post" id="formulaire_creation_commande_fournisseur">
+        <form action="{{ path('imerir_reception_article_saisie_validation') }}" method="post" id="formulaire_creation_commande_fournisseur">
             <table id="tableau_input">
                 <tr>
                     <td>
@@ -68,18 +68,29 @@ menuSelected
                     <th>Article</th>
                     <th>Quantité souhaitée</th>
                     <th>Quantité reçue</th>
+                    <th>Quantité à ajouter</th>
                     {% for i in liste_lignes_commandes %}
                         <tr>
-                            <input type="hidden" name="modif_commande_id_{{ i.commande_id }}" value="{{ i.commande_id }}"/>
+                            <input type="hidden" name="modif_commande_id_{{ i.ligne_commande_id }}" value="{{ i.commande_id }}"/>
                             <input type="hidden" name="modif_ligne_commande_id_{{ i.ligne_commande_id }}" value="{{ i.ligne_commande_id }}"/>
-                            <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.commande_id }}" value="1"/>
-                            <td><input type="hidden" name="modif_article_{{ i.commande_id }}" value="{{ i.code_barre }}"/>
-                                <label for="modif_article">{{ i.code_barre }}</label></td>
-                            <td><input type="hidden" name="modif_quantite_souhaite_{{ i.commande_id }}" value="{{ i.quantite_souhaite }}"/>
-                                <label for="modif_quantite_souhaite">{{ i.quantite_souhaite}}</label></td>
+                            <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.ligne_commande_id }}" value="1"/>
+                            <td><input type="hidden" name="modif_article_{{ i.ligne_commande_id }}" value="{{ i.code_barre }}"/>
+                                <label for="modif_article_{{ i.ligne_commande_id }}">{{ i.code_barre }}</label></td>
+                            <td><input type="hidden" name="modif_quantite_souhaite_{{ i.ligne_commande_id }}" value="{{ i.quantite_souhaite }}"/>
+                                <label for="modif_quantite_souhaite_{{ i.ligne_commande_id }}">{{ i.quantite_souhaite}}</label></td>
                             </td>
                             <td>
-                                <input type="number" name="quantite_recu">
+                                <input type="hidden" name="quantite_recu_{{ i.ligne_commande_id }}">
+                                <label for="quantite_recu">
+                                    {% if i.quantite_recu == '' %}
+                                        0
+                                    {% else %}
+                                        {{ i.quantite_recu }}
+                                    {% endif %}
+                                </label>
+                            </td>
+                            <td>
+                                <input type="number" name="quantite_ajoute_{{ i.ligne_commande_id }}">
                             </td>
                         </tr>
                     {% endfor %}
@@ -87,60 +98,19 @@ menuSelected
             </div>
         {% endif %}
 
-        {% if app.request.attributes.get('_route')=='imerir_modification_validation_commande_fournisseur' %}
-            <form action="{{ path('imerir_creation_validation_commande_fournisseur') }}" method="post" id="formulaire_creation_commande_fournisseur">
-                <table id="tableau_input">
-                    <tr>
-                        <td>
-                            <label for="fournisseur">Fournisseur </label>
-                        </td>
-                        <td>
-                            <select name="fournisseur">
-                                <option></option>
-                                {% for i in liste_fournisseurs %}
-                                    <option value="{{ i.id }}">{{ i.nom }}</option>
-                                {% endfor %}
-                            </select>
-                        </td>
-                        <td>
-                            <label for="date_commande">Date de la commande </label>
-                        </td>
-                        <td>
-                            <input type="text" name="date_commande" id="datepicker">
-                        </td>
-                        <button type="submit" class="bouton">
-                            <i class="fa fa-check"></i>Valider la saisie
-                        </button>
-                    </tr>
-                </table>
-                <div id="lst_commande">
-                    <table class="tableau" id="tableau">
-                        <th></th>
-                        <th>Article</th>
-                        <th>Quantité souhaitée</th>
-                        <tr>
-                            <td>
-                                <i class="fa fa-plus-square ajout ajouter"></i>
-                            </td>
-
-                            <td>
-                                <input type="text" width="80" name="article"/>
-                                <label class="fa fa-th recherche rechercher"></label>
-                            </td>
-                            <td>
-                                <input type="number" name="qty">
-                            </td>
-                        </tr>
-                    </table>
-                </div>
-
+        {% if app.request.attributes.get('_route')=='imerir_reception_article_saisie_validation' %}
                 {% if erreur == '' %}
-                    <p class="validation_message">La commande n° {{ commande_id }} a bien été modifiée</p>
+                    <p class="validation_message">La réception a bien été réalisée</p>
                 {% endif %}
-            {% endif %}
+        {% endif %}
 {% endblock %}
 
 {% block recherche %}
+    {% if app.request.attributes.get('_route')=='imerir_reception_article_saisie_validation' %}
+        {% if erreur == '' %}
+            <p class="validation_message">La commande n° {{ commande_id }} a bien été modifiée</p>
+        {% endif %}
+    {% endif %}
     <form action="{{ path('imerir_reception_article') }}" method="post">
         <label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label>
         <input type="text" name="recherche_fournisseur_nom_fournisseur">
@@ -171,7 +141,14 @@ menuSelected
                 </form>
             </td>
             <td>{{ i.date_commande }}</td>
-        <td>{{ i.commande_id }}</td><td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
+        <td>{{ i.commande_id }}</td><td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td>
+            <td>
+                {% if i.quantite_recu == '' %}
+                    0
+                {% else %}
+                    {{ i.quantite_recu }}
+                {% endif %}
+            </td></tr>
     {% endfor %}
 {% endblock %}
 

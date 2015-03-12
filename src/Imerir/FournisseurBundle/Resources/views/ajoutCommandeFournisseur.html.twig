@@ -166,13 +166,13 @@ menuSelected
                     {% for i in liste_lignes_commandes %}
                         <tr>
                             <td><i class="fa fa-minus-square supprimer"></i>
-                                <input type="hidden" name="modif_commande_id_{{ i.commande_id }}" value="{{ i.commande_id }}"/>
+                                <input type="hidden" name="modif_commande_id_{{ i.ligne_commande_id }}" value="{{ i.commande_id }}"/>
                                 <input type="hidden" name="modif_ligne_commande_id_{{ i.ligne_commande_id }}" value="{{ i.ligne_commande_id }}"/>
-                                <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.commande_id }}" value="1"/>
+                                <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.ligne_commande_id }}" value="1"/>
                             </td>
-                            <td><input type="text" name="modif_article_{{ i.commande_id }}" value="{{ i.code_barre }}"/>
+                            <td><input type="text" name="modif_article_{{ i.ligne_commande_id }}" value="{{ i.code_barre }}"/>
                                 <label class="fa fa-th recherche rechercher"></label></td>
-                            <td><input type="number" name="modif_quantite_souhaite_{{ i.commande_id }}" value="{{ i.quantite_souhaite }}"/></td>
+                            <td><input type="number" name="modif_quantite_souhaite_{{ i.ligne_commande_id }}" value="{{ i.quantite_souhaite }}"/></td>
                         </tr>
                     {% endfor %}
                     <tr>

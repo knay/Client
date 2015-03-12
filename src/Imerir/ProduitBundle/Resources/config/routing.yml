@@ -57,3 +57,7 @@ imerir_reception_article:
 imerir_reception_article_saisie:
     path:   /article/reception/saisie
     defaults: { _controller: ImerirProduitBundle:ReceptionCommande:saisieReception }
+
+imerir_reception_article_saisie_validation:
+    path:   /article/reception/saisie/validation
+    defaults: { _controller: ImerirProduitBundle:ReceptionCommande:execSaisieReception }

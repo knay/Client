@@ -75,7 +75,10 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                 <i class="fa fa-check"></i>Valider la saisie
             </button>
         </form>
-        <p class="validation_message">Le produit "{{ produit_add }}" a bien été ajouté pour la ligne produit "{{ lp_produit_add }}"</p>
+        {% if erreur == '' %}
+            <p class="validation_message">Le produit "{{ produit_add }}" a bien été ajouté pour la ligne produit "{{ lp_produit_add }}"</p>
+        {% endif %}
+
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_modification_produit' %}
@@ -133,7 +136,10 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                 <i class="fa fa-check"></i>Valider la saisie
             </button>
         </form>
-        <p class="validation_message">Le produit "{{ old_p }}" a bien été modifié en produit "{{ new_p }}" pour la ligne produit "{{ new_lp }}"</p>
+        {% if erreur == '' %}
+            <p class="validation_message">Le produit "{{ old_p }}" a bien été modifié en produit "{{ new_p }}" pour la ligne produit "{{ new_lp }}"</p>
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}

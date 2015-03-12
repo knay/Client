@@ -23,6 +23,8 @@ class CommandesController extends Controller
         $recherche_article = $query->request->get('recherche_fournisseur_article');
         $recherche_commande = $query->request->get('recherche_commande_fournisseur_id');
 
+        $erreur = '';
+
         if(!empty($recherche_nom))
             $nom = $recherche_nom;
         else
@@ -47,7 +49,7 @@ class CommandesController extends Controller
             $liste_fournisseurs = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         try {
@@ -55,12 +57,12 @@ class CommandesController extends Controller
                 'fournisseur_nom' => $nom, 'commande_id' => $commande, 'article_code' => $article));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         $liste_commandes = json_decode($return_commandes);
         return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
-            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0));
+            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,'erreur'=>$erreur));
     }
 
 
@@ -75,6 +77,8 @@ class CommandesController extends Controller
         $commande_qty = array();
         $commande_date = array();
 
+
+        $erreur = '';
 
         foreach ($query->request as $key => $value) {
             if (substr($key, 0, strlen('fournisseur')) === 'fournisseur') {
@@ -99,7 +103,7 @@ class CommandesController extends Controller
                 , 'date_commande' => json_encode($commande_date), 'quantite_souhaite' => json_encode($commande_qty)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
         }
 
@@ -113,7 +117,7 @@ class CommandesController extends Controller
             $liste_fournisseurs = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         try {
@@ -121,12 +125,12 @@ class CommandesController extends Controller
                 'fournisseur_nom' => '', 'commande_id' => '', 'article_code' => ''));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         $liste_commandes = json_decode($return_commandes);
         return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
-            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0));
+            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,'erreur'=>$erreur));
         ////////////////////////////////////////////////////////////
 
     }
@@ -144,12 +148,14 @@ class CommandesController extends Controller
         $modif_quantite_souhaite = $query->request->get('modif_quantite_souhaite');
         $modif_quantite_recu = $query->request->get('modif_quantite_recu');
 
+        $erreur = '';
+
         try {
             $return_liste_lignes_commandes = $soap->call('getLignesCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
                 'fournisseur_nom' => '', 'commande_id' => $modif_commande_id, 'article_code' => ''));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         $liste_lignes_commandes = json_decode($return_liste_lignes_commandes);
@@ -165,7 +171,7 @@ class CommandesController extends Controller
             $liste_fournisseurs = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         try {
@@ -174,12 +180,12 @@ class CommandesController extends Controller
 
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         $liste_commandes = json_decode($return_commandes);
         return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
             'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,
-            'liste_lignes_commandes'=>$liste_lignes_commandes,'modif_date_commande'=>$modif_date_commande));
+            'liste_lignes_commandes'=>$liste_lignes_commandes,'modif_date_commande'=>$modif_date_commande,'erreur'=>$erreur));
         ////////////////////////////////////////////////////////////
 
     }
@@ -200,6 +206,8 @@ class CommandesController extends Controller
         $commande_article = array();
         $commande_qty = array();
         $commande_date = array();
+
+        $erreur = '';
 
 
         foreach ($query->request as $key => $value) {
@@ -246,7 +254,7 @@ class CommandesController extends Controller
                     'est_visible' => json_encode($modif_commande_est_visible)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
 
         }
@@ -265,7 +273,7 @@ class CommandesController extends Controller
                     'est_visible' => json_encode($modif_commande_est_visible)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
             //INSERTION
             try {
@@ -274,7 +282,7 @@ class CommandesController extends Controller
                 , 'date_commande' => json_encode($commande_date), 'quantite_souhaite' => json_encode($commande_qty)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
         }
 
@@ -283,7 +291,7 @@ class CommandesController extends Controller
             $return_menu = $soap->call('getMenu', array());
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         $menu_sous_menu = json_decode($return_menu);
 
@@ -293,7 +301,7 @@ class CommandesController extends Controller
             $liste_fournisseurs = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         try {
@@ -301,15 +309,74 @@ class CommandesController extends Controller
                 'fournisseur_nom' => '', 'commande_id' => '', 'article_code' => ''));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         $liste_commandes = json_decode($return_commandes);
         return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
             'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,
-            'commande_id'=>$modif_commande_id[0]));
+            'commande_id'=>$modif_commande_id[0],'erreur'=>$erreur));
         ////////////////////////////////////////////////////////////
 
+    }
+
+    public function historiqueCommandeAction()
+    {
+        $soap = $this->get('noyau_soap');
+        $query = $this->get('request');
+        //PARTIE RECHERCHE
+        /*
+        <label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label>
+        <input type="text" name="recherche_fournisseur_nom_fournisseur">
+        <label for="recherche_fournisseur_article">Article :</label>
+        <input type="text" name="recherche_fournisseur_article">
+        <label for="recherche_commande_fournisseur_id">Numéro de commande :</label>
+        <input type="text" name="recherche_commande_fournisseur_id">
+        */
+        $recherche_nom = $query->request->get('recherche_fournisseur_nom_fournisseur');
+        $recherche_article = $query->request->get('recherche_fournisseur_article');
+        $recherche_commande = $query->request->get('recherche_commande_fournisseur_id');
+
+        $erreur = '';
+
+        if(!empty($recherche_nom))
+            $nom = $recherche_nom;
+        else
+            $nom = '';
+        if(!empty($recherche_article))
+            $article = $recherche_article;
+        else
+            $article = '';
+        if(!empty($recherche_commande))
+            $commande = $recherche_commande;
+        else
+            $commande = '';
+        //////////////////
+
+        //on recupere le menu et sous menu
+        $return_menu = $soap->call('getMenu', array());
+        $menu_sous_menu = json_decode($return_menu);
+
+        try {
+            $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
+                'telephone_portable' => '', 'reference_client' => '', 'notes' => ''));
+            $liste_fournisseurs = json_decode($return);
+        }
+        catch(\SoapFault $e) {
+            $erreur .=$e->getMessage();
+        }
+
+        try {
+            $return_commandes = $soap->call('getCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
+                'fournisseur_nom' => $nom, 'commande_id' => $commande, 'article_code' => $article));
+        }
+        catch(\SoapFault $e) {
+            $erreur .=$e->getMessage();
+        }
+
+        $liste_commandes = json_decode($return_commandes);
+        return $this->render('ImerirFournisseurBundle::historiqueCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
+            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,'erreur'=>$erreur));
     }
 
 }

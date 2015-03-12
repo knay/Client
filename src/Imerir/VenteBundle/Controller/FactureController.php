@@ -57,6 +57,7 @@ class FactureController extends Controller
     	$soap = $this->get('noyau_soap');
         $query = $this->get('request');
         $erreur='';
+        $detail_facture = array();
         //on recuperer les variables en post ici variable 
         $numero = $query->request->get('ligne_numero');
         

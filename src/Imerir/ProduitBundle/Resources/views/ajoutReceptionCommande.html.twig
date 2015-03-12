@@ -1,0 +1,290 @@
+{% extends "::baseAffichage.html.twig" %}
+
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>
+{% endblock %}
+
+{% block title_page %}
+    Réception de commandes fournisseurs
+{% endblock %}
+
+{% block title_ajout %}
+    RECEPTION
+{% endblock %}
+
+{% block title_recherche %}
+    SELECTION COMMANDE
+{% endblock %}
+
+{% block produitBlock %}
+menuSelected
+{% endblock %}
+
+
+{% block ajout %}
+    {% if app.request.attributes.get('_route')=='imerir_reception_article_saisie' %}
+        <form action="{{ path('imerir_modification_validation_commande_fournisseur') }}" method="post" id="formulaire_creation_commande_fournisseur">
+            <table id="tableau_input">
+                <tr>
+                    <td>
+                        <label for="fournisseur">Fournisseur : </label>
+                    </td>
+                    <td>
+                    {% for j in liste_lignes_commandes %}
+                        {% if loop.last %}
+                            {% for i in liste_fournisseurs %}
+                                {% if j.fournisseur_id == i.id %}
+                                    <label for="fournisseur" style="font-style: italic;">{{ i.nom }}</label>
+                                    <input type="hidden" value="{{ i.id }}" >
+                                {% endif %}
+                            {% endfor %}
+                        {% endif %}
+                    {% endfor %}
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="date_commande">Date de la commande : </label>
+                    </td>
+                    <td>
+                        <label for="date_commande" style="font-style: italic;">{{ modif_date_commande }}</label>
+                        <input type="hidden" name="date_commande" value="{{ modif_date_commande }}">
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="date_reception">Date de la réception : </label>
+                    </td>
+                    <td>
+                        <input type="text" name="date_reception"  class="datepicker">
+                    </td>
+                    <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+                    </button>
+                </tr>
+            </table>
+            <div id="lst_commande">
+                <table class="tableau" id="tableau">
+                    <th>Article</th>
+                    <th>Quantité souhaitée</th>
+                    <th>Quantité reçue</th>
+                    {% for i in liste_lignes_commandes %}
+                        <tr>
+                            <input type="hidden" name="modif_commande_id_{{ i.commande_id }}" value="{{ i.commande_id }}"/>
+                            <input type="hidden" name="modif_ligne_commande_id_{{ i.ligne_commande_id }}" value="{{ i.ligne_commande_id }}"/>
+                            <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.commande_id }}" value="1"/>
+                            <td><input type="hidden" name="modif_article_{{ i.commande_id }}" value="{{ i.code_barre }}"/>
+                                <label for="modif_article">{{ i.code_barre }}</label></td>
+                            <td><input type="hidden" name="modif_quantite_souhaite_{{ i.commande_id }}" value="{{ i.quantite_souhaite }}"/>
+                                <label for="modif_quantite_souhaite">{{ i.quantite_souhaite}}</label></td>
+                            </td>
+                            <td>
+                                <input type="number" name="quantite_recu">
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
+        {% endif %}
+
+        {% if app.request.attributes.get('_route')=='imerir_modification_validation_commande_fournisseur' %}
+            <form action="{{ path('imerir_creation_validation_commande_fournisseur') }}" method="post" id="formulaire_creation_commande_fournisseur">
+                <table id="tableau_input">
+                    <tr>
+                        <td>
+                            <label for="fournisseur">Fournisseur </label>
+                        </td>
+                        <td>
+                            <select name="fournisseur">
+                                <option></option>
+                                {% for i in liste_fournisseurs %}
+                                    <option value="{{ i.id }}">{{ i.nom }}</option>
+                                {% endfor %}
+                            </select>
+                        </td>
+                        <td>
+                            <label for="date_commande">Date de la commande </label>
+                        </td>
+                        <td>
+                            <input type="text" name="date_commande" id="datepicker">
+                        </td>
+                        <button type="submit" class="bouton">
+                            <i class="fa fa-check"></i>Valider la saisie
+                        </button>
+                    </tr>
+                </table>
+                <div id="lst_commande">
+                    <table class="tableau" id="tableau">
+                        <th></th>
+                        <th>Article</th>
+                        <th>Quantité souhaitée</th>
+                        <tr>
+                            <td>
+                                <i class="fa fa-plus-square ajout ajouter"></i>
+                            </td>
+
+                            <td>
+                                <input type="text" width="80" name="article"/>
+                                <label class="fa fa-th recherche rechercher"></label>
+                            </td>
+                            <td>
+                                <input type="number" name="qty">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                {% if erreur == '' %}
+                    <p class="validation_message">La commande n° {{ commande_id }} a bien été modifiée</p>
+                {% endif %}
+            {% endif %}
+{% endblock %}
+
+{% block recherche %}
+    <form action="{{ path('imerir_reception_article') }}" method="post">
+        <label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label>
+        <input type="text" name="recherche_fournisseur_nom_fournisseur">
+        <label for="recherche_fournisseur_article">Article :</label>
+        <input type="text" name="recherche_fournisseur_article">
+        <label for="recherche_commande_fournisseur_id">Numéro de commande :</label>
+        <input type="text" name="recherche_commande_fournisseur_id">
+        <button type="submit" class="bouton">
+            <i class="fa fa-search"></i>Rechercher
+        </button>
+    </form>
+{% endblock %}
+
+{% block table %}
+    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Date de la commande</th><th>Numéro de la commande</th>
+        <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
+    {% for i in liste_commandes %}
+
+        <tr><td>{{ i.fournisseur_nom }}
+                <form method="post" action="{{ path('imerir_reception_article_saisie') }}" style="display: none">
+                    <input type="hidden" name="modif_fournisseur_nom" value="{{ i.fournisseur_nom }}">
+                    <input type="hidden" name="modif_fournisseur_id" value="{{ i.fournisseur_id }}">
+                    <input type="hidden" name="modif_commande_date_commande" value="{{ i.date_commande }}">
+                    <input type="hidden" name="modif_commande_id" value="{{ i.commande_id }}">
+                    <input type="hidden" name="modif_code_barre" value="{{ i.code_barre }}">
+                    <input type="hidden" name="modif_quantite_souhaite" value="{{ i.quantite_souhaite }}">
+                    <input type="hidden" name="modif_quantite_recu" value="{{ i.quantite_recu }}">
+                </form>
+            </td>
+            <td>{{ i.date_commande }}</td>
+        <td>{{ i.commande_id }}</td><td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
+    {% endfor %}
+{% endblock %}
+
+{% block javascripts %}
+<script>
+    //variables
+    {% if flag_no_commande is defined %}
+        $("#fieldset_ajout").hide();
+    {% endif %}
+    var numLigneCommande = 200;
+    ///
+    $('tr').click(function () {
+        $(this).children('td').children('form').submit();
+    });
+
+    /**
+    * Fonction permettant de réagir lors du click sur ajouter un élément.
+    * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
+    * un élément.
+    */
+    $("#lst_commande").find('.ajouter').click(
+            function ajoutItem() {
+                var last = $("#lst_commande").find('tr').last();
+                var input = $(last).find('input');
+                /*
+                if ($(input).val() === "") {
+                    input.select();
+                }
+                */
+               // else {
+                $("#lst_commande").children("table").append(
+                '<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td>'
+                +'<td><input type="text" width="80" name="article'+numLigneCommande+'"/><label class="fa fa-th recherche rechercher"></label></td>'
+                +'<td><input type="number" name="qty'+numLigneCommande+'"></td>'
+                +'</tr>'
+                );
+
+                last.find("i").toggleClass("ajout");
+                last.find("i").toggleClass("supprimer");
+                last.find("i").toggleClass("fa-plus-square");
+                last.find("i").toggleClass("fa-minus-square");
+                last.find("i").toggleClass("ajouter");
+                last.toggleClass("last");
+
+                $(this).unbind('click');
+                $("#lst_commande").find('.ajouter').click(ajoutItem);
+                $("#lst_commande").find('.supprimer').click(supprimerItem);
+
+                numAdresse++;
+                //}
+            }
+    );
+    $('.supprimer').click(supprimerItem); // On bind le click sur le boutton moins avec la fonction de suppression de ligne
+
+    /**
+     * Cette fonction permet de supprimer une valeur d'attribut.
+     * Elle est appelée lorsque l'on clic sur le boutton moins.
+     */
+    function supprimerItem() {
+        var est_visible = $(this).parent().find('.est_visible');
+        if(est_visible.length == 0){
+            $(this).parent().parent().remove();
+        }
+        else{
+            $(this).parent().parent().hide();
+            est_visible.val('0');
+        }
+    }
+
+    $(function() {
+
+        $( ".datepicker" ).datepicker({
+            changeMonth: true,
+            changeYear: true,
+            changeTime: true
+        });
+        {% if modif_date_reception is defined %}
+            var date = "{{ modif_date_reception }}";
+            $(".datepicker").datepicker("setDate",date);
+        {% endif %}
+    });
+    //Permet de gerer la langue du datepicker
+    (function( factory ) {
+        if ( typeof define === "function" && define.amd ) {
+
+            define([ "../jquery.ui.datepicker" ], factory );
+        } else {
+            factory( jQuery.datepicker );
+        }
+
+    }(function( datepicker ) {
+        datepicker.regional['fr'] = {
+            closeText: 'Fermer',
+            prevText: 'Pr&eacutec&eacutedent',
+            nextText: 'Suivant',
+            currentText: 'Aujourd\'hui',
+            monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
+                'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
+            monthNamesShort: ['janv.', 'f�vr.', 'mars', 'avril', 'mai', 'juin',
+                'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
+            dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+            dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+            dayNamesMin: ['D','L','M','M','J','V','S'],
+            weekHeader: 'Sem.',
+            dateFormat: 'yy-mm-dd',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''};
+        datepicker.setDefaults(datepicker.regional['fr']);
+
+        return datepicker.regional['fr'];
+
+    }));
+</script>
+{% endblock %}

@@ -8,6 +8,10 @@
     Contacts
 {% endblock %}
 
+{% block title %}
+ALBA - Contacts
+{% endblock %}
+
 {% block title_ajout %}
     {% if app.request.attributes.get('_route')=='imerir_modification_client' %}
         MODIFICATION

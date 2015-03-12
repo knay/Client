@@ -142,7 +142,7 @@ $("#valid_saisie").click(function () {
 });
 
 /**
- * Fonction permettant d'ajouter un produit. 
+ * Fonction permettant de modifier les attributs. 
  */
 function modifierAttribut() {
 	var ligne = $(this).parent().parent().parent(); // La ligne sur laquelle on a cliqué
@@ -161,7 +161,11 @@ function modifierAttribut() {
             width: "90%",
         	height: "450",
         	resizable: false,
-        	draggable: false
+        	draggable: false,
+        	close: function() {
+        		$("#contenneur_inventaire").show();
+			   	$("#chargement").hide();
+            }
         });
         
         dial.find("#div_menu").remove();
@@ -227,7 +231,11 @@ function ajoutProduit() {
             width: "90%",
         	height: "400",
         	resizable: false,
-        	draggable: false
+        	draggable: false,
+        	close: function() {
+        		$("#contenneur_inventaire").show();
+			   	$("#chargement").hide();
+            }
         });
         
         dial.find("#div_menu").remove();
@@ -284,10 +292,12 @@ function ajoutProduit() {
  * Cette fonction est appéelé lorsque l'on clic sur le bouton moins.
  */
 function supprimerLigne () {
-	$(this).parent().parent().remove();
-	if (tableau.children("tbody").children("tr").length == 2) {
-		$("#contenneur_inventaire").hide();
-		$("#message_accueil").show();
+	if (confirm("Voulez-vous vraiment supprimer cet article ?") === true) {
+		$(this).parent().parent().remove();
+		if (tableau.children("tbody").children("tr").length == 2) {
+			$("#contenneur_inventaire").hide();
+			$("#message_accueil").show();
+		}
 	}
 }
 

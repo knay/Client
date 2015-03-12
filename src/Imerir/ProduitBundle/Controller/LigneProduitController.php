@@ -6,8 +6,10 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class LigneProduitController extends Controller
 {
+
     public function ajoutLigneProduitAction()
     {
+        $erreur = '';
         $soap = $this->get('noyau_soap');
 
         $query = $this->get('request');
@@ -29,14 +31,15 @@ class LigneProduitController extends Controller
             $liste_ligne_produit = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
         
-        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit,'result_menu' => $menu_sous_menu));
+        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig',
+            array('liste_ligne_produit'=>$liste_ligne_produit,'result_menu' => $menu_sous_menu,'erreur'=>$erreur));
     }
 
     public function execAjoutLigneProduitAction()
@@ -47,12 +50,14 @@ class LigneProduitController extends Controller
         $nom = $query->request->get('nom');
 
         $soap = $this->get('noyau_soap');
+
+        $erreur = '';
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
         try {
             $return = $soap->call('ajoutLigneProduit', array('nom' => $nom));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         try {
@@ -60,14 +65,15 @@ class LigneProduitController extends Controller
             $liste_ligne_produit = json_decode($return_lp);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         
         //on recupere le menu et sous menu
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
         
-        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit,'nom_lp_add'=>$nom,'result_menu' => $menu_sous_menu));
+        return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit,'nom_lp_add'=>$nom,
+            'result_menu' => $menu_sous_menu,'erreur'=>$erreur));
     }
 
     public function modifLigneProduitAction()
@@ -75,6 +81,7 @@ class LigneProduitController extends Controller
         $soap = $this->get('noyau_soap');
 
         $query = $this->get('request');
+        $erreur = '';
         //on recuperer les variables en post ici variable pour filtrer le tableau
         //et variable pour modifier une ligne produit
         $recherche_lp = $query->request->get('recherche_lp');
@@ -96,7 +103,7 @@ class LigneProduitController extends Controller
             $liste_ligne_produit = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         
         //on recupere le menu et sous menu
@@ -104,7 +111,8 @@ class LigneProduitController extends Controller
         $menu_sous_menu = json_decode($return_menu);
         
         return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig',
-            array('liste_ligne_produit'=>$liste_ligne_produit,'lp_nom_val'=>$nom_modif_lp,'lp_id_val'=>$id_modif_lp,'result_menu' => $menu_sous_menu));
+            array('liste_ligne_produit'=>$liste_ligne_produit,'lp_nom_val'=>$nom_modif_lp,'lp_id_val'=>$id_modif_lp,
+                'result_menu' => $menu_sous_menu,'erreur'=>$erreur));
     }
 
     public function execModifLigneProduitAction()
@@ -115,13 +123,14 @@ class LigneProduitController extends Controller
         $nom = $query->request->get('nom');
         $old_nom = $query->request->get('old_nom');
 
+        $erreur = '';
         $soap = $this->get('noyau_soap');
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
         try {
             $return = $soap->call('modifLigneProduit', array('id' => $id, 'nom' => $nom));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         try {
@@ -129,7 +138,7 @@ class LigneProduitController extends Controller
             $liste_ligne_produit = json_decode($return_lp);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         
         //on recupere le menu et sous menu
@@ -137,7 +146,8 @@ class LigneProduitController extends Controller
         $menu_sous_menu = json_decode($return_menu);
         
         return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig',
-            array('liste_ligne_produit'=>$liste_ligne_produit,'nom_lp_add'=>$nom,'old_nom_lp'=>$old_nom,'result_menu' => $menu_sous_menu));
+            array('liste_ligne_produit'=>$liste_ligne_produit,'nom_lp_add'=>$nom,'old_nom_lp'=>$old_nom,
+                'result_menu' => $menu_sous_menu,'erreur'=>$erreur));
     }
 
 

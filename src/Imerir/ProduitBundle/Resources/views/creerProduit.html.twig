@@ -7,6 +7,10 @@
     Produits
 {% endblock %}
 
+{% block title %}
+ALBA - Produits
+{% endblock %}
+
 {% block title_ajout %}
     {% if app.request.attributes.get('_route')=='imerir_produit_modification_produit' %}
         Modifier un produit

@@ -19,28 +19,62 @@ security:
         - { path: ^/login$, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/register, role: IS_AUTHENTICATED_ANONYMOUSLY }
         - { path: ^/resetting, role: IS_AUTHENTICATED_ANONYMOUSLY }
-        - { path: ^/$, role: ROLE_GERANT }
+        - { path: ^/$, role: ROLE_EMPLOYE }
+        - { path: ^/enregistreAchat$, role: ROLE_EMPLOYE }
         - { path: ^/produits/attribut$, role: ROLE_GERANT }
-        - { path: ^/inventaire$, role: ROLE_EMPLOYE }
         - { path: ^/produits/attribut/save$, role: ROLE_GERANT }
         - { path: ^/produits/creation$, role: ROLE_GERANT }
         - { path: ^/produits/creation/validation$, role: ROLE_GERANT }
+        - { path: ^/produits/modification$, role: ROLE_GERANT }
         - { path: ^/produits/modification/validation$, role: ROLE_GERANT }
         - { path: ^/ligne_produits/creation$, role: ROLE_GERANT }
         - { path: ^/ligne_produits/creation/validation$, role: ROLE_GERANT }
-        - { path: ^/ligne_produits/modification$, role: ROLE_EMPLOYE }
+        - { path: ^/ligne_produits/modification$, role: ROLE_GERANT }
         - { path: ^/ligne_produits/modification/validation$, role: ROLE_GERANT }
         - { path: ^/article$, role: ROLE_GERANT }
+        - { path: ^/article/save$, role: ROLE_GERANT }
+        - { path: ^/code_barre$, role: ROLE_EMPLOYE }
         - { path: ^/ajax/getPrixFromCodeBarre$, role: ROLE_EMPLOYE }
-        - { path: ^/enregistreAchat$, role: ROLE_EMPLOYE }
+        - { path: ^/ajax/getContactFromEverything$, role: ROLE_EMPLOYE }
+        - { path: ^/ajax/getMoyenPaiement$, role: ROLE_EMPLOYE }
+        - { path: ^/stock$, role: ROLE_EMPLOYE }
         - { path: ^/inventaire$, role: ROLE_EMPLOYE }
         - { path: ^/inventaire/save$, role: ROLE_EMPLOYE }
         - { path: ^/inventaire/dev/alba$, role: ROLE_EMPLOYE }
         - { path: ^/inventaire/dev/alba/save$, role: ROLE_EMPLOYE }
         - { path: ^/ajax/inventaireGetAttribut$, role: ROLE_EMPLOYE }
         - { path: ^/ajax/inventaireGetArticleFromCodeBarre$, role: ROLE_EMPLOYE }
-        - { path: ^/stock$, role: ROLE_EMPLOYE }
-        
+        - { path: ^/ajax/stockGetProduit$, role: ROLE_EMPLOYE }
+        - { path: ^/contacts/creation$, role: ROLE_GERANT }
+        - { path: ^/contacts/creation/validation$, role: ROLE_GERANT }
+        - { path: ^/contacts/modification$, role: ROLE_GERANT }
+        - { path: ^/contacts/modification/validation$, role: ROLE_GERANT }
+        - { path: ^/contacts/stats/sms_mail$, role: ROLE_GERANT }
+        - { path: ^/contacts/stats/age$, role: ROLE_GERANT }
+        - { path: ^/contacts/stats/ville$, role: ROLE_GERANT }
+        - { path: ^/contacts/anniversaires$, role: ROLE_EMPLOYE }
+        - { path: ^/contacts/anniversaires/rechercher$, role: ROLE_EMPLOYE }
+        - { path: ^/fournisseurs/creation$, role: ROLE_GERANT }
+        - { path: ^/fournisseurs/creation/validation$, role: ROLE_GERANT }
+        - { path: ^/fournisseurs/modification$, role: ROLE_GERANT }
+        - { path: ^/fournisseurs/modification/validation$, role: ROLE_GERANT }
+        - { path: ^/fournisseurs/commandes/creation$, role: ROLE_GERANT }
+        - { path: ^/fournisseurs/commandes/creation/validation$, role: ROLE_GERANT }
+        - { path: ^/fournisseurs/commandes/modification$, role: ROLE_GERANT }
+        - { path: ^/fournisseurs/commandes/modification/validation$, role: ROLE_GERANT }
+        - { path: ^/fournisseurs/commandes/historique$, role: ROLE_GERANT }
+        - { path: ^/vente/stats$, role: ROLE_GERANT }
+        - { path: ^/vente/stats/top$, role: ROLE_GERANT }
+        - { path: ^/vente/facture$, role: ROLE_GERANT }
+        - { path: ^/vente/facture/detail$, role: ROLE_GERANT }
+        - { path: ^/vente/creation/moyen_paiement$, role: ROLE_GERANT }
+        - { path: ^/vente/afficher/modification/moyen_paiement$, role: ROLE_GERANT }
+        - { path: ^/vente/modification/moyen_paiement$, role: ROLE_GERANT }
+        - { path: ^/vente/supprimer/moyen_paiement$, role: ROLE_GERANT }
+        - { path: ^/vente/retour_client$, role: ROLE_EMPLOYE }
+        - { path: ^/vente/retour_client_details$, role: ROLE_EMPLOYE }
+        - { path: ^/vente/retour_client/valid$, role: ROLE_EMPLOYE }
+    
     role_hierarchy:
         ROLE_GERANT:       [ ROLE_GERANT, ROLE_EMPLOYE ]
         ROLE_EMPLOYE:      ROLE_EMPLOYE

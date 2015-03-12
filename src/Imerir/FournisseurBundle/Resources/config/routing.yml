@@ -29,3 +29,7 @@ imerir_modification_commande_fournisseur:
 imerir_modification_validation_commande_fournisseur:
     path: /fournisseurs/commandes/modification/validation
     defaults: { _controller: ImerirFournisseurBundle:Commandes:execModifCommande }
+
+imerir_historique_commande_fournisseur:
+    path: /fournisseurs/commandes/historique
+    defaults: { _controller: ImerirFournisseurBundle:Commandes:historiqueCommande }

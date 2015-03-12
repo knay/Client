@@ -74,7 +74,10 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
                 <i class="fa fa-check"></i>Valider la saisie
             </button>
         </form>
-        <p class="validation_message">La ligne produit "{{ old_nom_lp }}" a bien été modifiée en "{{ nom_lp_add }}"</p>
+        {% if erreur == '' %}
+            <p class="validation_message">La ligne produit "{{ old_nom_lp }}" a bien été modifiée en "{{ nom_lp_add }}"</p>
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}

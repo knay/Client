@@ -18,6 +18,7 @@ class DefaultController extends Controller
         $recherche_fournisseur_reference_client = $query->request->get('recherche_fournisseur_reference_client');
         $recherche_fournisseur_notes = $query->request->get('recherche_fournisseur_notes');
 
+        $erreur = '';
 
         if($recherche_fournisseur_nom===null)
             $nom='';
@@ -46,8 +47,9 @@ class DefaultController extends Controller
                 'telephone_portable' => $telephone_portable, 'reference_client' => $reference_client, 'notes' => $notes));
             $liste_fournisseurs = json_decode($return);
         }
+
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         //on recupere le menu et sous menu
@@ -55,7 +57,8 @@ class DefaultController extends Controller
         $menu_sous_menu = json_decode($return_menu);
 
         //TODO invoquer le bon twig
-        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
+        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,
+            'result_menu' => $menu_sous_menu,'nbAdresse'=>0,'erreur'=>$erreur));
     }
 
     public function execAjoutFournisseurAction()
@@ -69,6 +72,8 @@ class DefaultController extends Controller
         $fournisseur_telephone_portable = $query->request->get('telephone_portable');
         $fournisseur_reference_client = $query->request->get('reference_client');
         $fournisseur_notes = $query->request->get('notes');
+
+        $erreur = '';
 
         if($fournisseur_nom===null)
             $fournisseur_nom='';
@@ -90,7 +95,7 @@ class DefaultController extends Controller
                 'notes' => $fournisseur_notes));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         ////////////////////////////////////////////////////////////////////////////
         /**
@@ -104,6 +109,7 @@ class DefaultController extends Controller
         $adresse_num_appartement = array();
         $adresse_telephone_fixe = array();
 
+        $erreur = '';
 
         foreach ($query->request as $key => $value) {
             if (substr($key, 0, strlen('pays')) === 'pays') {
@@ -136,7 +142,7 @@ class DefaultController extends Controller
                 'notes' => $fournisseur_notes));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         $ref_fournisseur = json_decode($retour_ref_fournisseur,true);
@@ -153,20 +159,21 @@ class DefaultController extends Controller
                     'telephone_fixe' => json_encode($adresse_telephone_fixe)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
         }
         ////////////////////////////////////////////////////////////////////////////
 
 
         //TODO ajouter l'action getFournisseurs qui renvoie le nom, le mail et le num de tel
+        $erreur = '';
         try {
             $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
                 'telephone_portable' => '', 'reference_client' => '', 'notes' => ''));
             $liste_fournisseurs = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         //insertion du fournisseur
 
@@ -175,7 +182,8 @@ class DefaultController extends Controller
         $menu_sous_menu = json_decode($return_menu);
 
         //TODO invoquer le bon twig
-        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
+        return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,
+            'result_menu' => $menu_sous_menu,'nbAdresse'=>0,'erreur'=>$erreur));
     }
 
     public function modifFournisseurAction(){
@@ -189,13 +197,15 @@ class DefaultController extends Controller
         $modif_reference_client = $query->request->get('reference_client_f');
         $modif_notes = $query->request->get('notes_f');
 
+        $erreur = '';
+
         try {
             $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
                 'telephone_portable' => '', 'reference_client' => '', 'notes' => ''));
             $liste_fournisseurs = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         //on recupere le menu et sous menu
@@ -211,7 +221,7 @@ class DefaultController extends Controller
             $liste_adresses_fournisseur = json_decode($return_adresses_fournisseur);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
 
@@ -220,7 +230,7 @@ class DefaultController extends Controller
             'modif_nom'=>$modif_nom,'modif_email'=>$modif_email,
             'modif_telephone_portable'=>$modif_telephone_portable,'modif_reference_client'=>$modif_reference_client,
             'modif_notes'=>$modif_notes,'liste_adresses_fournisseur'=>$liste_adresses_fournisseur,
-            'nbAdresse'=>0));
+            'nbAdresse'=>0,'erreur'=>$erreur));
 
     }
 
@@ -235,6 +245,8 @@ class DefaultController extends Controller
         $new_telephone_portable = $query->request->get('new_telephone_portable');
         $new_reference_client = $query->request->get('new_reference_client');
         $new_notes = $query->request->get('new_notes');
+
+        $erreur = '';
 
         ////////////////////PARTIE ADRESSES///////////////
         $modif_adresse_est_visible = array();
@@ -328,7 +340,7 @@ class DefaultController extends Controller
                     'telephone_fixe' => json_encode($modif_adresse_telephone_fixe)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
 
         }
@@ -344,7 +356,7 @@ class DefaultController extends Controller
                     'telephone_fixe' => json_encode($modif_adresse_telephone_fixe)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
             //INSERTION
             try {
@@ -354,7 +366,7 @@ class DefaultController extends Controller
                     'telephone_fixe' => json_encode($adresse_telephone_fixe)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
         }
         //////////////////////////////////////////////////
@@ -364,7 +376,7 @@ class DefaultController extends Controller
                 'reference_client' => $new_reference_client, 'notes' => $new_notes));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         try {
@@ -373,7 +385,7 @@ class DefaultController extends Controller
             $liste_fournisseurs = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         //on recupere le menu et sous menu
@@ -383,7 +395,7 @@ class DefaultController extends Controller
         return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu'=>$menu_sous_menu,'old_id'=>$old_id,
             'old_nom'=>$old_nom,'new_nom'=>$new_nom,'new_email'=>$new_email,
             'new_telephone_portable'=>$new_telephone_portable,'new_reference_client'=>$new_reference_client,
-        'new_notes'=>$new_notes,'nbAdresse'=>0));
+        'new_notes'=>$new_notes,'nbAdresse'=>0,'erreur'=>$erreur));
 
     }
 

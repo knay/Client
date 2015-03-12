@@ -10,6 +10,8 @@ class DefaultController extends Controller
     {
         $soap = $this->get('noyau_soap');
 
+        $erreur = '';
+
         $query = $this->get('request');
         //TODO ajouter un champs post dans le twig avec recherche contact
         $recherche_contact_nom = $query->request->get('recherche_contact_nom');
@@ -88,17 +90,19 @@ class DefaultController extends Controller
             $menu_sous_menu = json_decode($return_menu);
         }
         catch(\SoapFault $e) {
-            $erreur = $e->getMessage();
+            $erreur .= $e->getMessage();
         }
 
         //TODO invoquer le bon twig
-        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_contacts,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
+        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_contacts,'result_menu' => $menu_sous_menu,
+            'nbAdresse'=>0,'erreur'=>$erreur));
     }
 
     public function execAjoutContactAction()
     {
         $soap = $this->get('noyau_soap');
 
+        $erreur = '';
         $query = $this->get('request');
 
         $Contact_nom = $query->request->get('nom');
@@ -146,7 +150,7 @@ class DefaultController extends Controller
                 'ok_sms'=>$Contact_ok_sms,'ok_mail'=>$Contact_ok_mail,'notes'=>$Contact_notes));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         ////////////////////////////////////////////////////////////////////////////
         /**
@@ -197,7 +201,7 @@ class DefaultController extends Controller
             $ref_Contact_id = $ref_Contact[0]["id"];
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         //print_r($ref_Contact);
         if(!empty($adresse_pays[0]) || !empty($adresse_ville[0]) || !empty($adresse_code_postal[0]) || !empty($adresse_voie[0]) ||
@@ -211,7 +215,7 @@ class DefaultController extends Controller
                     'telephone_fixe' => json_encode($adresse_telephone_fixe)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
         }
         ////////////////////////////////////////////////////////////////////////////
@@ -225,7 +229,7 @@ class DefaultController extends Controller
             $liste_Contacts = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
         //insertion du Contact
 
@@ -234,12 +238,15 @@ class DefaultController extends Controller
         $menu_sous_menu = json_decode($return_menu);
 
         //TODO invoquer le bon twig
-        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_Contacts,'result_menu' => $menu_sous_menu,'nbAdresse'=>0));
+        return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_Contacts,'result_menu' => $menu_sous_menu,
+            'nbAdresse'=>0,'erreur'=>$erreur));
     }
 
     public function modifContactAction(){
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
+
+        $erreur = '';
 
         $modif_id = $query->request->get('id_f');
         $modif_nom = $query->request->get('nom_f');
@@ -259,7 +266,7 @@ class DefaultController extends Controller
             $liste_Contacts = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         //on recupere le menu et sous menu
@@ -275,7 +282,7 @@ class DefaultController extends Controller
             $liste_adresses_Contact = json_decode($return_adresses_Contact);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
 
@@ -288,13 +295,15 @@ class DefaultController extends Controller
             'modif_telephone_portable'=>$modif_telephone_portable,
             'modif_ok_sms'=>$modif_ok_sms,
             'modif_ok_mail'=>$modif_ok_mail,'modif_notes'=>$modif_notes,'liste_adresses_contact'=>$liste_adresses_Contact,
-            'nbAdresse'=>0));
+            'nbAdresse'=>0,'erreur'=>$erreur));
 
     }
 
     public function execModifContactAction(){
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
+
+        $erreur = '';
 
         $old_id = $query->request->get('old_id');
         $old_nom = $query->request->get('old_nom');
@@ -401,7 +410,7 @@ class DefaultController extends Controller
                     'telephone_fixe' => json_encode($modif_adresse_telephone_fixe)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
 
         }
@@ -417,7 +426,7 @@ class DefaultController extends Controller
                     'telephone_fixe' => json_encode($modif_adresse_telephone_fixe)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
             //INSERTION
             try {
@@ -427,7 +436,7 @@ class DefaultController extends Controller
                     'telephone_fixe' => json_encode($adresse_telephone_fixe)));
             }
             catch(\SoapFault $e) {
-                $erreur =$e->getMessage();
+                $erreur .=$e->getMessage();
             }
         }
         //////////////////////////////////////////////////
@@ -443,7 +452,7 @@ class DefaultController extends Controller
                 'ok_sms' => $new_ok_sms, 'ok_mail' => $new_ok_mail, 'notes' => $new_notes));
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         try {
@@ -453,7 +462,7 @@ class DefaultController extends Controller
             $liste_Contacts = json_decode($return);
         }
         catch(\SoapFault $e) {
-            $erreur =$e->getMessage();
+            $erreur .=$e->getMessage();
         }
 
         //on recupere le menu et sous menu
@@ -462,7 +471,7 @@ class DefaultController extends Controller
 
         return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_Contacts,'result_menu'=>$menu_sous_menu,'old_id'=>$old_id,
             'old_nom'=>$old_nom,'new_nom'=>$new_nom,'new_email'=>$new_email,
-            'new_telephone_portable'=>$new_telephone_portable,'nbAdresse'=>0));
+            'new_telephone_portable'=>$new_telephone_portable,'nbAdresse'=>0,'erreur'=>$erreur));
 
     }
 

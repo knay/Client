@@ -9,9 +9,60 @@
 {% block stylesheets %}
 {% endblock %}
 
-{% block title_recherche %}Faire un retour client {% endblock %}
+{% block title_recherche %}Choisir la facture concernée par le retour {% endblock %}
+
+{% block title_ajout %}Effectuer un retour client{% endblock %}
 
 {% block ajout %}
+	<div id="dialogRetour" style="display: none;" title="Confirmer le retour client">
+		<form method="post" action="{{ path('imerir_vente_valider_retour_client') }}">
+			<table class="tableau_input">
+				<tr>
+					<td>Produit : 
+						{% if detail_facture is defined %}
+							{% if detail_facture != '' %}
+							<input type="hidden" name="idFacture" value="{{ detail_facture.0.numero_facture }}">
+							{% endif %}
+						{% endif %}
+					</td>
+					<td id="tdProduit"></td>
+				</tr>
+				<tr>
+					<td>Code barre de l'article : </td>
+					<td id="tdCodeBarre"><input type="text" name="codeBarre" value=""></td>
+				</tr>
+				<tr>
+					<td>Promotion appliquée : </td>
+					<td id="tdPromo"><input type="text" name="promo" value=""></td>
+				</tr>
+				<tr>
+					<td>Prix unitaire : </td>
+					<td id="tdPrix"></td>
+				</tr>
+				<tr>
+					<td>Quantité rendu : </td>
+					<td id="tdQuantite">
+						<input name="quantite" value="" id="inputQt">
+						<i class="fa fa-minus-square moinsQuantite" title="-1 en quantité"></i>
+						<i class="fa fa-plus-square plusQuantite" title="+1 en quantité"></i>
+					</td>
+				</tr>
+				<tr>
+					<td>Total à rembourser : </td>
+					<td id="tdTotal"></td>
+				</tr>
+				<tr>
+					<td>
+						<button type="submit" class="bouton">
+							<i class="fa fa-check"></i>Confirmer le retour
+						</button> 
+					</td>
+					<td></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
 	{% set montant_total = 0 %}
 	{% set prix_de_la_tva = 0 %}
 	{% set montant_avec_tva = 0 %}
@@ -20,19 +71,18 @@
 		<div id="information_facture">
 		{% if detail_facture is defined %}
 			{% if detail_facture != '' %}
-				{% for i in detail_facture %}
-					<label class="en_gras_souligner">Facture n&deg;{{ i.numero_facture }}<br></label>
-					<div id="detail_sur_client">
-						<label class="en_gras">Le :</label> {{ i.date_facture }}<br>
-						<label class="en_gras">Client :</label> {{ i.nom_client }} {{ i.prenom_client }}<br>
-						<label class="en_gras">Mode de r&egrave;glement : </label>{{ i.nom_moyen_paiement }}
-					</div>
-				{% endfor %}
+				<label class="en_gras_souligner">Facture n&deg;{{ detail_facture.0.numero_facture }}<br></label>
+				<div id="detail_sur_client">
+					<label class="en_gras">Le :</label> {{ detail_facture.0.date_facture }}<br>
+					<label class="en_gras">Client :</label> {{ detail_facture.0.nom_client }} {{ detail_facture.0.prenom_client }}<br>
+					<label class="en_gras">Mode de r&egrave;glement : </label>{{ detail_facture.0.nom_moyen_paiement }}
+				</div>
 			{% endif %}
 		{% endif %}
 		</div>
 	</div>
 	<div id="tableau_facture">
+		<p> Choisissez l'article retourné dans le tableau ci-dessous.</p>
 		<table id="tableau_detail_facture" class="tableau" >
 			<tr>
 				<th class="col_article">Produit</th>
@@ -46,7 +96,15 @@
 			{% if detail_facture != '' %}
 				{% for i in detail_facture %}
 					<tr>
-						<td class="col_article_contenu">{{ i.nom_produit|capitalize }}</td>
+						<td class="col_article_contenu">
+							<input type="hidden" value="{{ i.nom_produit|capitalize }}" name="nomProduit">
+							<input type="hidden" value="{{ i.nom_article }}" name="codeBarre">
+							<input type="hidden" value="{{ i.nombre_article }}" name="quantite">
+							<input type="hidden" value="{{ i.reduction_article }}" name="promo">
+							<input type="hidden" value="{{ i.prix_article|number_format(2, '.', '.') }}" name="prixUnitaire">
+							<input type="hidden" value="{{ i.reduction_article }}" name="reductionArticle">
+							{{ i.nom_produit|capitalize }}
+						</td>
 						<td class="col_article_contenu">{{ i.nom_article }}</td>
 						<td>{{ i.nombre_article }}</td>
 						<td>{{ i.prix_article|number_format(2, '.', ',') }} &euro;</td>
@@ -137,9 +195,81 @@ $(document).ready(function (e) {
 	{% endif %}
 });
 
+$('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
+$('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
+
+/**
+ * Fonction réagissant lors du clic sur le bouton - à côté de la quantité de produit.
+ * Diminue la quantité de 1 en faisait attention de ne pas descendre en dessous de 0.
+ */
+function moinsQuantite() {
+	var input = $(this).parent().find("#inputQt");
+	var qt = parseInt(input.val()) - 1;
+	if(qt < 0)
+		qt = 0;
+
+	input.val(qt);
+	calculerPrixTotal();
+}
+
+/**
+ * FOnction réagissant lors du clic sur le bouton + à côté de la quantité produit.
+ * Augmente la quantité produit de 1.
+ */
+function plusQuantite() {
+	var input = $(this).parent().find("#inputQt");
+	var qt = parseInt(input.val()) + 1;
+
+	input.val(qt);
+	calculerPrixTotal();
+}
+
 $(".select_ligne").click(function () {
 	$(this).find("form").submit();
 });
+
+$("#dialogRetour").find("input").change(function () {
+	calculerPrixTotal();
+});
+
+$("#tableau_detail_facture").find('tr:not(:first)').click(function () {
+	var dial = $("#dialogRetour");
+	dial.dialog({
+	    modal: true,
+	    width: "50%",
+		height: "500",
+		resizable: false,
+		draggable: false
+	});
+
+	var nomProduit = $(this).find("input[name='nomProduit']").val();
+	var codeBarre = $(this).find("input[name='codeBarre']").val();
+	var quantite = $(this).find("input[name='quantite']").val();
+	var promo = $(this).find("input[name='promo']").val();
+	if (promo === "")
+		promo = 0;
+	var prixUnitaire = $(this).find("input[name='prixUnitaire']").val();
+	var reductionArticle = $(this).find("input[name='reductionArticle']").val();
+
+	$("#tdProduit").html(nomProduit);
+	$("#tdCodeBarre").find("input").val(codeBarre);
+	$("#tdPromo").find("input").val(promo);
+	$("#tdPrix").html(prixUnitaire);
+	$("#tdQuantite").find("input").val(quantite);
+	calculerPrixTotal();
+});
+
+function calculerPrixTotal () {
+	var nomProduit = $("#dialogRetour").find("input[name='nomProduit']").val();
+	var codeBarre = $("#dialogRetour").find("input[name='codeBarre']").val();
+	var quantite = $("#dialogRetour").find("input[name='quantite']").val();
+	var promo = $("#dialogRetour").find("input[name='promo']").val();
+	var prixUnitaire = $("#dialogRetour").find("#tdPrix").html();
+	var reductionArticle = $("#dialogRetour").find("input[name='reductionArticle']").val();
+
+	var prixTot = parseFloat(quantite)*parseFloat(prixUnitaire)-(parseFloat(quantite)*parseFloat(prixUnitaire)*parseFloat(promo)/100);
+	$("#tdTotal").html(prixTot+" €");
+}
 
 </script>
 {% endblock %}

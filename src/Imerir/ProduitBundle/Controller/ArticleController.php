@@ -19,6 +19,7 @@ class ArticleController extends Controller
 		
 		$req = $this->getRequest()->request;
 		$tabArticle = array();
+		$tabRech = array();
 		$tabArticle['attributs'] = array();
 		$codeBarre = '';
 		if ($req->get('codeBarre') !== null)
@@ -69,6 +70,21 @@ class ArticleController extends Controller
 		catch(\SoapFault $e) {
 			$erreur.=$e->getMessage();
 		}
+		
+		try {
+			$lp = '';
+			$produit = '';
+			if ($req->get('nomLigneProduit') !== null)
+				$lp = $req->get('nomLigneProduit');
+			if ($req->get('nomProduit') !== null)
+				$produit = $req->get('nomProduit');
+			// On va chercher tous les articles en fonction des critères de recherche
+			$resultRecherche = $soap->call('rechercheArticle', array('nomLigneProduit'=>$lp, 'ligneProduit'=>$produit));
+			$tabRech = json_decode($resultRecherche);
+		}
+		catch(\SoapFault $e) {
+			$erreur.=$e->getMessage();
+		}
 		 
 		try {
 			$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
@@ -82,6 +98,7 @@ class ArticleController extends Controller
 																			 'result_menu' => $menu_sous_menu,
 																			 'erreur' => $erreur,
 																			 'result_all_ligne_produit' => $all_ligne_produit,
+																			 'tab_recherche' => $tabRech,
 				                                                             'codeBarre' => $codeBarre));
 	}
 	

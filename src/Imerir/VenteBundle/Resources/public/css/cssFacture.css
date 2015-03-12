@@ -118,14 +118,14 @@
 	
 	.feuille_facture {
 		visibility: visible;
-		height: 96%;
+		height: 95%;
         width: 99.7%;
         position: fixed;
         top: 0px;
         left: 0px;
         margin: auto;
         font-size: 13pt;
-        padding-top:1cm;
+        margin-top:1cm;
         border: none;
         border-top: 0.8px solid black;
         border-bottom: 0.8px solid black; 
@@ -142,14 +142,15 @@
 	
 	#information_facture {
 		height: 5cm;
+		font-size: 18pt;
 	}
 	
 	#detail_sur_client {
-		font-size: 20pt;
+		font-size: 16pt;
 	}
 	
 	#information_entreprise {
-		font-size: 20pt;
+		font-size: 16pt;
 	}
 	
 	#tableau_detail_facture {

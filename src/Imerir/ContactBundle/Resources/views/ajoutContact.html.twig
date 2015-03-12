@@ -204,7 +204,9 @@ menuSelected
                 </table>
             </div>
         </form>
-        <p class="validation_message">Le contact a bien été ajouté</p>
+        {% if erreur == '' %}
+            <p class="validation_message">Le contact a bien été ajouté</p>
+        {% endif %}
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_modification_client' %}
@@ -423,7 +425,10 @@ menuSelected
                 </table>
             </div>
         </form>
-        <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié</p>
+        {% if erreur == '' %}
+            <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié</p>
+        {% endif %}
+
     {% endif %}
 
 {% endblock %}

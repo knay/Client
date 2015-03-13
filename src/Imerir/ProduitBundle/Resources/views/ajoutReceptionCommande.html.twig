@@ -20,6 +20,10 @@
 menuSelected
 {% endblock %}
 
+{% block title %}
+    ALBA - Réception commandes
+{% endblock %}
+
 
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_reception_article_saisie' %}

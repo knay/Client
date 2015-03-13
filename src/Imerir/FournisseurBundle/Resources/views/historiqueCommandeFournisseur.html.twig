@@ -16,6 +16,10 @@
 menuSelected
 {% endblock %}
 
+{% block title %}
+    ALBA - Historique commandes fournisseurs
+{% endblock %}
+
 {% block ajout %}
     <form action="{{ path('imerir_historique_commande_fournisseur') }}" method="post">
         <table>

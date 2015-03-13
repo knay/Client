@@ -20,6 +20,10 @@
 menuSelected
 {% endblock %}
 
+{% block title %}
+    ALBA - Commandes fournisseurs
+{% endblock %}
+
 
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_creation_commande_fournisseur' %}

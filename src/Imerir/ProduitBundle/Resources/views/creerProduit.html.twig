@@ -151,19 +151,34 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
 
 {% block recherche %}
     <form action="{{ path('imerir_produit_creation_produit') }}" method="post">
-    	<label for="rechLp">Ligne produit : </label>
-        <select name="rechLp">
-            <option></option>
-            {% for i in ligne_produit %}
-                <option>{{ i.nom }}</option>
-            {% endfor %}
-        </select>
-        <label for="rechAttribut">Attribut : </label>
-        <input type="text" name="rechAttribut">
-        <label for="rechProduit">Produit : </label><input type="text" name="rechProduit">
-        <button type="submit" class="bouton">
-            <i class="fa fa-search"></i>Rechercher
-        </button>
+    	<table>
+    		<tr>
+    		
+		    	<td><label for="rechLp">Ligne produit : </label></td>
+		        <td>
+		        	<select name="rechLp">
+		            	<option></option>
+		            	{% for i in ligne_produit %}
+		                	<option>{{ i.nom }}</option>
+		            	{% endfor %}
+		        	</select>
+	        	</td>
+		        <td><label for="rechAttribut">Attribut : </label></td>
+		        <td><input type="text" name="rechAttribut"></td>
+		    </tr>
+		    <tr>
+			    <td>
+			    	<label for="rechProduit">Produit : </label>
+		    	</td>
+			    <td><input type="text" name="rechProduit"></td>
+			    <td></td>
+		        <td>	
+		        	<button type="submit" class="bouton">
+		            	<i class="fa fa-search"></i>Rechercher
+		        	</button>
+	        	</td>
+	        </tr>
+        </table>
     </form>
 {% endblock %}
 

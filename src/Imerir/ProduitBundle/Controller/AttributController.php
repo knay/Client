@@ -15,9 +15,6 @@ class AttributController extends Controller
 {
 	/**
 	 * Action appélée lorsque à la page de modification d'un attribut et de ses valeurs.
-	 * 
-	 * TODO: gérer erreur d'accés SOAP
-	 * 
 	 * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
 	 */
     public function modifAttributAction()

@@ -16,6 +16,10 @@
 menuSelected
 {% endblock %}
 
+{% block title %}
+    ALBA - Historique commandes fournisseurs
+{% endblock %}
+
 {% block ajout %}
     <form action="{{ path('imerir_historique_commande_fournisseur') }}" method="post">
         <table>
@@ -45,14 +49,13 @@ menuSelected
     </form>
 
     <tr class="liste_fournisseurs">
-        <table class="tableau">
-        <th>Nom fournisseur</th><th>Date de la commande</th><th>Numéro de la commande</th>
+        <table class="tableau"><th>Numéro de la commande</th><th>Nom fournisseur</th><th>Date de la commande</th>
         <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
         {% for i in liste_commandes %}
 
-            <tr><td>{{ i.fournisseur_nom }}</td>
+            <tr><td>{{ i.commande_id }}</td><td>{{ i.fournisseur_nom }}</td>
                 <td>{{ i.date_commande }}</td>
-            <td>{{ i.commande_id }}</td><td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
+            <td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
 
         {% endfor %}
         </table>

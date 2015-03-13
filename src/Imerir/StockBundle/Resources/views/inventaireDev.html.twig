@@ -17,17 +17,35 @@ ALBA - Iventaire complet
 {% endblock %}
 
 {% block ajout %}
+<div id="dialog" style="display: none"></div>
+
+<div id="dialogSaisiCodeBarre" style="display: none" title="Saisie manuelle">
+	<p>Veuillez saisir le code barre recherché.<br>
+	<label for="saisie_code_barre">Code barre : </label>
+	<input type="text" name="saisie_code_barre" id="saisie_code_barre">
+	</p>
+	<button type="button" class="bouton" id="valid_saisie">
+		<i class="fa fa-check"></i>Valider la saisie
+	</button>
+</div>
+
 <form action="{{ path('imerir_stock_inventaire_dev_save') }}" method="post">
 	<div id="contenneur_inventaire" style="display:none;">
-		<input type="submit" id="inputSubmit">
+		<div id="divBoutonOption">
+			<button type="button" class="bouton saisie_manuelle">
+				<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
+			</button>
+		</div>
 		<table id="table_code_barre" class="tableau">
 			<tr>
 				<th></th>
 				<th>Produit</th>
 				<th>Code barre</th>
 				<th>Quantité</th>
-				<th>Prix article</th>
+				<th>Prix client</th>
+				<th>Prix fournisseur</th>
 				<th>Caractèristiques</th>
+{# 				petite bite tu as oublié la règle d'or !! #}
 			</tr>
 			<tr style="display: none">
 				<td><i class="fa fa-minus-square supprimer"></i></td>
@@ -37,10 +55,12 @@ ALBA - Iventaire complet
 							<option>{{ j.p }}</option>
 						{% endfor %}
 					</select>
+					<i class="fa fa-plus-square ajout ajoutProduit"></i>
 				</td>
 				<td><input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly"></td>
 				<td><input type="number" name="quantite_0" min="1" value="1" class="quantite"></td>
-				<td><input type="number" name="prix_0" class="prix" step="any"> €</td>
+				<td><input type="number" name="prixClient_0" class="prixClient prix" step="any"> €</td>
+				<td><input type="number" name="prixFournisseur_0" class="prixFournisseur prix" step="any"> €</td>
 				<td>
 					{% set nbCarac = 0 %}
 					
@@ -58,10 +78,16 @@ ALBA - Iventaire complet
 				</td>
 			</tr>
 		</table>
+		<button type="submit" class="bouton"><i class="fa fa-check"></i>Valider l'inventaire</button>
 	</div>
+	
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 	<div id="message_accueil">
-		<h2>SCANNER UN ARTICLE POUR COMMENCER</h2>
+		<h2>Scanner un article pour commencer</h2>
+		Ou<br>
+		<button type="button" class="bouton saisie_manuelle">
+			<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
+		</button>
 	</div>
 	
 	<div id="chargement" style="display: none;">
@@ -81,19 +107,204 @@ var nbCodeBarre = 0;  //< Le nombre d'article scanné. Utilisé pour envoyé tou
 var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
 var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problèmes de concurences avec AJAX... Elle permet de stocké des donnée le temps qu'une requete soit passée
 
+/** 
+ * Fonction ouvrant une fenetre de saisie manuelle de code barre
+ */
+$(".saisie_manuelle").click(function () {
+	var dial = $("#dialogSaisiCodeBarre");
+	dial.dialog({
+	    modal: true,
+	    width: "50%",
+		height: "300",
+		resizable: false,
+		draggable: false
+	});
+});
+
+/**
+ * Permet de valider la saisie manuelle de code barre.
+ * Une fois que le code barre a bien été saisi par l'utilisateur, on met la valeur de ce qui a été saisie 
+ * dans l'input où la douchette va normalement écrire, puis on lance la recherche.
+ */
+$("#valid_saisie").click(function () {
+	var input = $("#saisie_code_barre");
+	var valeurSaisie = input.val();
+	if (valeurSaisie === "") {
+		input.focus();
+		return;
+	}
+
+	var inputCodeBarre = $(".valeurCodeBarre").last();
+	inputCodeBarre.val(valeurSaisie); // On fait comme si on avait fait avec la douchette, on met dans l'input qui va bien
+	
+	validerCodeBarre(true); // On fait comme si on avait eu un code barre
+
+	$("#dialogSaisiCodeBarre").dialog("close");
+});
+
+/**
+ * Fonction permettant d'ajouter un produit. 
+ */
+function ajoutProduit() {
+	var ligne = $(this).parent().parent(); // La ligne sur laquelle on a cliqué
+
+	$("#dialog").attr("title", "Ajouter un nouveau produit");
+	
+	$("#contenneur_inventaire").hide();
+	$("#chargement").show();
+	   
+    $("#dialog").load('{{ path('imerir_produit_creation_produit') }}', function () {
+    	var dial = $("#dialog");
+    	$("#dialog").dialog({
+            modal: true,
+            width: "90%",
+        	height: "400",
+        	resizable: false,
+        	draggable: false,
+        	close: function() {
+        		$("#contenneur_inventaire").show();
+			   	$("#chargement").hide();
+            }
+        });
+        
+        dial.find("#div_menu").remove();
+        dial.find("#header").remove();
+        dial.find("#title_page").remove();
+        dial.find("#fieldset_recherche").remove();
+        dial.find("#affichage").css("left", "0");
+        dial.find("#affichage").css("width", "100%");
+
+        $( "#menu" ).children( "li" ).unbind("click");
+        
+        /**
+         * Fonction permettant de traiter le clic sur le bouton submit de la fenetre, si on submit, on envoie pas 
+         * le formulaire normalement, on le passe par AJAX.
+         */
+        dial.find('form').submit (function (event){ 
+        	event.preventDefault();
+        	
+            var valProduit = dial.find('input[name=nomProduit]').val();
+            var valLigneProduit = dial.find('select[name=nomLigneProduit]').val();
+
+            $("#dialog").html('<div id="chargement">'
+            		+'<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>'
+            		+'</div>');
+        	$.ajax({
+     		   url: '{{ path('imerir_produit_validation_creation_produit') }}',
+     		   data: {
+     			  nomProduit: valProduit,
+     			  nomLigneProduit: valLigneProduit
+     		   },
+     		   success: function(data) {
+     			  var select = ligne.find('.selectProduit');
+     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valProduit+'</option>');
+     			  $("#dialog").dialog("close");
+     			  ligne.effect( "highlight", {}, "3000" );
+     			  select.trigger('change');
+     			  $('.ajoutProduit').unbind('click');
+     			  $('.modifierAttribut').unbind('click');
+     			  $('.ajoutProduit').unbind('click');
+     			  $('.modifierAttribut').unbind('click');
+
+     			  $("#contenneur_inventaire").show();
+  			   	  $("#chargement").hide();
+     		   },
+     		   type: 'POST'
+     		});
+     		return false;
+        });
+    });
+}
+
+/**
+ * Fonction permettant de modifier les attributs. 
+ */
+function modifierAttribut() {
+	var ligne = $(this).parent().parent().parent(); // La ligne sur laquelle on a cliqué
+	var idAttr = $(this).parent().find('.id_attribut').val();
+
+	$("#dialog").attr("title", "Modifier un attribut");
+
+	$("#contenneur_inventaire").hide();
+	$("#chargement").show();
+
+    $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', {id : idAttr }, function () {
+        var dial = $("#dialog");
+        
+        dial.dialog({
+            modal: true,
+            width: "90%",
+        	height: "450",
+        	resizable: false,
+        	draggable: false,
+        	close: function() {
+        		$("#contenneur_inventaire").show();
+			   	$("#chargement").hide();
+            }
+        });
+        
+        dial.find("#div_menu").remove();
+        dial.find("#header").remove();
+        dial.find("#title_page").remove();
+        dial.find("#fieldset_recherche").remove();
+        dial.find("#affichage").css("left", "0");
+        dial.find("#affichage").css("width", "100%");
+
+        $( "#menu" ).children( "li" ).unbind("click");
+        
+        /**
+         * Fonction permettant de traiter le clic sur le bouton submit de la fenetre, si on submit, on envoie pas 
+         * le formulaire normalement, on le passe par AJAX.
+         */
+        dial.find('form').submit (function (event){ 
+        	event.preventDefault();
+        	
+            var valProduit = dial.find('input[name=nomProduit]').val();
+            var valLigneProduit = dial.find('select[name=nomLigneProduit]').val();
+
+            $("#dialog").html('<div id="chargement">'
+            		+'<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>'
+            		+'</div>');
+            var datas = $(this).serialize();
+        	$.ajax({
+     		   url: '{{ path('imerir_produit_save_attributs') }}',
+     		   data: datas,
+     		   success: function(data) {
+     			  var select = ligne.find('.selectProduit');
+     			  dial.dialog("close");
+     			  ligne.effect( "highlight", {}, "3000" );
+     			  select.trigger('change');
+     			  $('.ajoutProduit').unbind('click');
+     			  $('.modifierAttribut').unbind('click');
+     			  $('.ajoutProduit').unbind('click');
+     			  $('.modifierAttribut').unbind('click');
+     			  $("#contenneur_inventaire").show();
+  			      $("#chargement").hide();
+     		   },
+     		   type: 'POST'
+     		});
+     		return false;
+        });
+    });
+}
+
 /**
  * Permet d'effacer une ligne d'inventaire en cas d'erreur de l'utilisateur.
  * Cette fonction est appéelé lorsque l'on clic sur le bouton moins.
  */
 function supprimerLigne () {
-	$(this).parent().parent().remove();
-	if (tableau.children("tbody").children("tr").length == 2) {
-		$("#contenneur_inventaire").hide();
-		$("#message_accueil").show();
+	if (confirm("Voulez-vous vraiment supprimer cet article ?") === true) {
+		$(this).parent().parent().remove();
+		if (tableau.children("tbody").children("tr").length == 2) {
+			$("#contenneur_inventaire").hide();
+			$("#message_accueil").show();
+		}
 	}
 }
 
 $('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
+$('.ajoutProduit').click(ajoutProduit); // On bind le clic sur bouton - avec la fonction de suppression
+$('.modifierAttribut').click(modifierAttribut); // On bind le clic sur bouton modifer avec la modification d'attibut
 
 /**
  * Fonction appelé automatique au chargement de la page.
@@ -113,6 +324,9 @@ $(document).ready(function (e) {
  * TODO : s'inspiré de la caisse pour faire un truc plus propre au niveau de l'affichage d'un champs qui sera vide au depart..
  */
 $(document).keypress(function(e) {
+	if ($("#dialog").is(":visible") === true || $("#dialogSaisiCodeBarre").is(":visible") === true) // Si on est sur la dialog on ne prend plus en compte la douchette 
+		return true;
+	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
 	// n'est plus la douchette qui est maître
 	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
@@ -124,45 +338,7 @@ $(document).keypress(function(e) {
 	$("#inputSubmit").attr("disabled", true);  // On grise le boutton submit le temps du traitement
 
 	if (input.val().length == 1) { // Si c'est le premier caractère taper on lance un timeout (pour le temps de lecture d'un code barre)
-		setTimeout (function () {
-			var ligne = tableau.children("tbody").children("tr").last().clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
-			var cellule = ligne.children('td');
-			var nbCaract = 0;
-			var ligneCur = tableau.children("tbody").children("tr").last(); // On récupère la ligne de tableau sur laquelle on va travailler
-
-			if (input.val().length < 10) {
-				input.val('');
-				return true;
-			}
-
-			$("#chargement").show();
-			$("#contenneur_inventaire").hide();
-			$("#message_accueil").hide();
-			
-			nbCodeBarre++;
-			
-			cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
-			cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
-			cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
-			cellule.children(".prix").attr('name', 'prix_'+nbCodeBarre);
-			cellule.children(".valAttribut").each(function (e) {
-				$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
-				nbCaract++;
-			});
-			cellule.children(".valeurCodeBarre").val('');
-			tableau.append(ligne);
-
-			$('.supprimer').unbind('click');
-			$('.supprimer').click(supprimerLigne);
-			$('.selectProduit').unbind('change');
-			$('.selectProduit').change(onChangeSelect);
-
-			ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
-			ligneCur.show(); // On affiche l'article qu'on vient de scanner
-			
-			$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
-			getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
-		}, 220);
+		setTimeout (validerCodeBarre, 220);
 	}
 
     input.val(input.val()+ String.fromCharCode(e.which));
@@ -223,14 +399,16 @@ function onChangeSelect() {
 			   
 			   objJson.forEach(function (attr) {
 				   celulle.append('<label for="caract_'+numLigne+'_'+numValAttribut+'">'+attr.nom+' : </label> ');
-				   celulle.append('<select name="caract_'+numLigne+'_'+numValAttribut+'"></select><br/>');
-				   var select = celulle.children('select').last();
+				   celulle.append('<div><select name="caract_'+numLigne+'_'+numValAttribut+'"></select><i class="fa fa-pencil-square modifier modifierAttribut"></i><input type="hidden" class="id_attribut" name="id" value="'+attr.id+'"></div><br/>');
+				   var select = celulle.find('select').last();
 				   for (valAttr in attr.valeurs) {
 					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] === attr.valeurs[valAttr])
 					   	  select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 					   else 
 						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 				   }
+
+				   celulle.append('<input type="hidden" class="id_attribut" name="id" value="'+attr.id+'">');
 				   
 				   if (celulle.children('select').html() == '') {
 					   celulle.children('select').remove();
@@ -240,14 +418,62 @@ function onChangeSelect() {
 				   numValAttribut++;
 			   });
 
+			   $('.ajoutProduit').unbind('click');
+			   $('.ajoutProduit').click(ajoutProduit); // On bind le clic sur bouton - avec la fonction de suppression
+			   $('.modifierAttribut').unbind('click');
+			   $('.modifierAttribut').click(modifierAttribut); // On bind le clic sur bouton modifer avec la modification d'attibut
+			   
 			   $("#contenneur_inventaire").show();
 			   $("#chargement").hide();
+			   ligne.effect( "highlight", {}, 3000 );
 			   
 			   valeurCaracteristique = null;
 			   $("#inputSubmit").attr("disabled", false);
 		   },
 		   type: 'POST'
 	});
+}
+
+function validerCodeBarre(saisieManuelle) {
+	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
+	var ligne = tableau.find("tr").last().clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
+	var cellule = ligne.children('td');
+	var nbCaract = 0;
+	var ligneCur = tableau.find("tr").last(); // On récupère la ligne de tableau sur laquelle on va travailler
+
+	if (saisieManuelle !== true && input.val().length < 10) {
+		input.val('');
+		return true;
+	}
+
+	$("#chargement").show();
+	$("#contenneur_inventaire").hide();
+	$("#message_accueil").hide();
+	
+	nbCodeBarre++;
+	
+	cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
+	cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
+	cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
+	cellule.children(".prixClient").attr('name', 'prixClient_'+nbCodeBarre);
+	cellule.children(".prixFournisseur").attr('name', 'prixFournisseur_'+nbCodeBarre);
+	cellule.children(".valAttribut").each(function (e) {
+		$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
+		nbCaract++;
+	});
+	cellule.children(".valeurCodeBarre").val('');
+	tableau.append(ligne);
+
+	$('.supprimer').unbind('click');
+	$('.supprimer').click(supprimerLigne);
+	$('.selectProduit').unbind('change');
+	$('.selectProduit').change(onChangeSelect);
+
+	ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
+	ligneCur.show(); // On affiche l'article qu'on vient de scanner
+	
+	$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
+	getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
 }
 
 $("#inputSubmit").attr("disabled", false); // Par défaut le bouton submit et accessible

@@ -15,9 +15,6 @@ class AttributController extends Controller
 {
 	/**
 	 * Action appélée lorsque à la page de modification d'un attribut et de ses valeurs.
-	 * 
-	 * TODO: gérer erreur d'accés SOAP
-	 * 
 	 * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
 	 */
     public function modifAttributAction()
@@ -65,8 +62,13 @@ class AttributController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-    	$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu);
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}	
+   		catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
     	
         return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 
         		                                                                   'lst_attribut' => $jsonValeurAttribut,
@@ -138,8 +140,13 @@ class AttributController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-    	$return_menu = $soap->call('getMenu', array()); // On récup menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu);
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récup menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
     	
     	return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit,
     			 																   'lst_attribut' => $jsonValeurAttribut,

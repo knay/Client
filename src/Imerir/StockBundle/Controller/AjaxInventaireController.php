@@ -26,8 +26,13 @@ class AjaxInventaireController extends Controller
     	if (null === $nom)
     		$nom = '';
     	
-    	$soap = $this->get('noyau_soap'); // Récup module soap
-    	$attributs = $soap->call('getAttributFromNomProduit', array('nom'=>$nom));
+    	try {
+    		$soap = $this->get('noyau_soap'); // Récup module soap
+    		$attributs = $soap->call('getAttributFromNomProduit', array('nom'=>$nom));
+    	}
+    	catch(\SoapFault $e) {
+    		return new JsonResponse(array('erreur' => $e->getMessage()));
+    	}
     	
         return new JsonResponse($attributs); // Une réponse JSON
     }
@@ -42,8 +47,13 @@ class AjaxInventaireController extends Controller
     	if (null === $codeBarre) // On récup le code barre passé en POST
     		$codeBarre = '';
     	
-    	$soap = $this->get('noyau_soap'); // Récup module soap
-    	$attributs = $soap->call('getArticleFromCodeBarre', array('codeBarre'=>$codeBarre));
+    	try {
+    		$soap = $this->get('noyau_soap'); // Récup module soap
+    		$attributs = $soap->call('getArticleFromCodeBarre', array('codeBarre'=>$codeBarre));
+    	}
+    	catch(\SoapFault $e) {
+    		return new JsonResponse(array('erreur' => $e->getMessage()));
+    	}
     	 
     	return new JsonResponse($attributs); // Un réponse JSON
     }

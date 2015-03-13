@@ -49,3 +49,15 @@ imerir_produit_article_save:
 imerir_produit_code_barre:
     path:     /code_barre
     defaults: { _controller: ImerirProduitBundle:CodeBarre:index }
+
+imerir_reception_article:
+    path:   /article/reception
+    defaults: { _controller: ImerirProduitBundle:ReceptionCommande:ajoutReception }
+
+imerir_reception_article_saisie:
+    path:   /article/reception/saisie
+    defaults: { _controller: ImerirProduitBundle:ReceptionCommande:saisieReception }
+
+imerir_reception_article_saisie_validation:
+    path:   /article/reception/saisie/validation
+    defaults: { _controller: ImerirProduitBundle:ReceptionCommande:execSaisieReception }

@@ -8,6 +8,10 @@
     Fournisseurs
 {% endblock %}
 
+{% block title %}
+ALBA - Fournisseurs
+{% endblock %}
+
 {% block title_ajout %}
     {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
         MODIFICATION
@@ -322,18 +326,23 @@ menuSelected
 
 {% block recherche %}
     <form action="{{ path('imerir_creation_fournisseur') }}" method="post">
-        <label for="recherche_fournisseur_nom">Nom fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_nom">
-        <label for="recherche__fournisseur_email">Email fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_email">
-        <label for="recherche_telephone_portable">Téléphone portable :</label>
-        <input type="text" name="recherche_fournisseur_telephone_portable">
-        <label for="recherche_reference_client">Référence client :</label>
-        <input type="text" name="recherche_fournisseur_reference_client">
-        <button type="submit" class="bouton">
-            <i class="fa fa-search"></i>Rechercher
-        </button>
-
+        <table>
+            <tr>
+            <td><label for="recherche_fournisseur_nom">Nom fournisseur :</label></td>
+                <td><input type="text" name="recherche_fournisseur_nom"></td>
+                <td><label for="recherche__fournisseur_email">Email fournisseur :</label></td>
+                <td><input type="text" name="recherche_fournisseur_email"></td>
+            </tr>
+            <tr>
+                <td><label for="recherche_telephone_portable">Téléphone portable :</label></td>
+                <td><input type="text" name="recherche_fournisseur_telephone_portable"></td>
+                <td><label for="recherche_reference_client">Référence client :</label></td>
+                <td><input type="text" name="recherche_fournisseur_reference_client">
+                <td><button type="submit" class="bouton">
+                <i class="fa fa-search"></i>Rechercher
+            </button></td>
+            </tr>
+        </table>
     </form>
 {% endblock %}
 

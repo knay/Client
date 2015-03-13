@@ -148,6 +148,7 @@ menuSelected
 		<form action="{{ path('imerir_noyau_caisse_save') }}" method="post" id="formulaireCaisse">
 			<div id="enTete">
 				<span id="spanMoyenPaiement">
+					<i class="fa fa-exclamation-triangle" style="color: red;"></i>
 					<select id="moyenPaiement" name="moyenPaiement" placeholder="Moyen de paiement">
 						<option value="-1">Selectionner un moyen de paiement</option>
 					</select>
@@ -215,6 +216,17 @@ menuSelected
 <script>
 var tableau = $('#tableauCaisse'); //< Le tableau représentant les éléments scanné à la caisse
 var nbCodeBarre = 0; //< Le nombre d'article scanné. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
+
+/**
+ * Fonction permettant de réagir lorsqu'on choisi un moyen de paiement. 
+ * Si l'utilisateur choisi un moyen de paiement on cache le petit point d'exclamation.
+ */
+$("#moyenPaiement").change(function () {
+	if ($(this).val() !== "-1")
+		$(this).parent().children("i").hide();
+	else
+		$(this).parent().children("i").show();
+});
 
 /**
  * Permet de réagir lorsque l'on valide la vente.

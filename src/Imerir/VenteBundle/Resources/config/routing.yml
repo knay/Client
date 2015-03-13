@@ -37,3 +37,7 @@ imerir_vente_retour_client:
 imerir_vente_retour_client_detail:
     path:     /vente/retour_client_details
     defaults: { _controller: ImerirVenteBundle:RetourClient:faireRetourClientDetails }
+
+imerir_vente_valider_retour_client:
+    path:     /vente/retour_client/valid
+    defaults: { _controller: ImerirVenteBundle:RetourClient:validerRetourClient }

@@ -4,12 +4,22 @@ namespace Imerir\ContactBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
+/**
+ * Permet de gérer la modification, la création et la visualisation des contacts.
+ * Un contact est un client du commerce.
+ * 
+ * ROUTES :  /contacts/creation, /contacts/creation/validation, /contacts/modification, 
+ *           /contacts/modification/validation
+ */
 class DefaultController extends Controller
 {
+	/**
+	 * Permet d'ajouter un contact.
+	 * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
+	 */
     public function ajoutContactAction()
     {
         $soap = $this->get('noyau_soap');
-
         $erreur = '';
 
         $query = $this->get('request');
@@ -98,6 +108,10 @@ class DefaultController extends Controller
             'nbAdresse'=>0,'erreur'=>$erreur));
     }
 
+    /**
+     * Permet de valider l'enregistrement d'un nouveau contact.
+     * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
+     */
     public function execAjoutContactAction()
     {
         $soap = $this->get('noyau_soap');

@@ -20,25 +20,43 @@ class InventaireDevController extends Controller
     public function indexAction()
     {
     	$soap = $this->get('noyau_soap');
+    	$erreur = '';
     	
     	// On récupère tous les produits pour les afficher dans un <select>
-    	$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-    	$produitsRetour = json_decode($return_produits);
+    	try {
+    		$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
+    		$produitsRetour = json_decode($return_produits);}
+    	catch(\SoapFault $e) {
+    		$erreur .= $e->getMessage();
+    	}
+    	
 
     	// S'il y a des produits, on récupère également les attributs du premier 
     	// (parce que c'est celui qui est selectionné au départ)
-    	if (isset($produitsRetour[0]->p)) 
-    		$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    	if (isset($produitsRetour[0]->p)) {
+    		try {  
+    			$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    		}
+    		catch(\SoapFault $e) {
+    			$erreur.=$e->getMessage();
+    		}	
+    	}
     	else
     		$retSoapAttributs = '';
     	
-    	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu); 
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+   		}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	} 
     	
         return $this->render('ImerirStockBundle::inventaireDev.html.twig', 
         	                  array('produit'     => $produitsRetour,
         			                'attributs'   => json_decode($retSoapAttributs),
-        	   		                'result_menu' => $menu_sous_menu));
+        	   		                'result_menu' => $menu_sous_menu,
+        	                  		'erreur'      => $erreur));
     }
     
     /**
@@ -49,48 +67,76 @@ class InventaireDevController extends Controller
     	$soap = $this->get('noyau_soap');
     	$req = $this->getRequest()->request;
     	$tabArticle = array();
+    	$erreur = '';
     	
     	// On récupère tous les produits pour les afficher dans un <select>
-    	$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-    	$produitsRetour = json_decode($return_produits);
-    	
+    	try {
+    		$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
+    		$produitsRetour = json_decode($return_produits);
+    	}
+    	catch(\SoapFault $e) {
+            $erreur .= $e->getMessage();
+        }
     	// S'il y a des produits, on récupère également les attributs du premier
     	// (parce que c'est celui qui est selectionné au départ)
-    	if (isset($produitsRetour[0]->p))	
-	    	$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    	if (isset($produitsRetour[0]->p)) {
+    		try {
+	    		$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    		}
+    		catch(\SoapFault $e) {
+	    		$erreur.=$e->getMessage();
+    		}
+    	}
     	else 
     		$retSoapAttributs = '';
     	
     	// On va parser la request pour former un tableau avec les articles de l'inventaire propre
     	foreach ($req as $key => $value) {
     		$clef = explode('_', $key);
-    		$tabArticle[intval($clef[1])]['attributs'] = array();
-    		if ($clef[0] === 'produit') { // Si c'est le nom du produit concerné
-    			$tabArticle[intval($clef[1])]['produit'] = $value;
-    		}
-    		else if ($clef[0] === 'code') { // Si c'est le code barre
-    			$tabArticle[intval($clef[1])]['codeBarre'] = $value;
-    		}
-    		else if ($clef[0] === 'quantite') { // Si c'est la quantite
-    			$tabArticle[intval($clef[1])]['quantite'] = intval($value);
-    		}
-    		else if ($clef[0] === 'caract') { // Si c'est une valeur d'attribut
-    			$attributs = explode('_', $value);
-    			$tabArticle[intval($clef[1])]['attributs'][$attributs[0]] = $attributs[1];
-    		}
-    		else if ($clef[0] === 'prix') { // Si c'est une valeur d'attribut
-    			$tabArticle[intval($clef[1])]['prix'] = floatval($value);
+    		
+    		if (isset($clef[1])) {
+    			$tabArticle[intval($clef[1])]['attributs'] = array();
+	    		if ($clef[0] === 'produit') { // Si c'est le nom du produit concerné
+	    			$tabArticle[intval($clef[1])]['produit'] = $value;
+	    		}
+	    		else if ($clef[0] === 'code') { // Si c'est le code barre
+	    			$tabArticle[intval($clef[1])]['codeBarre'] = $value;
+	    		}
+	    		else if ($clef[0] === 'quantite') { // Si c'est la quantite
+	    			$tabArticle[intval($clef[1])]['quantite'] = intval($value);
+	    		}
+	    		else if ($clef[0] === 'caract') { // Si c'est une valeur d'attribut
+	    			$attributs = explode('_', $value);
+	    			$tabArticle[intval($clef[1])]['attributs'][$attributs[0]] = $attributs[1];
+	    		}
+	    		else if ($clef[0] === 'prixClient') { // Si c'est un prix client
+	    			$tabArticle[intval($clef[1])]['prixClient'] = floatval($value);
+	    		}
+	    		else if ($clef[0] === 'prixFournisseur') { // Si c'est un prix fournisseur
+	    			$tabArticle[intval($clef[1])]['prixFournisseur'] = floatval($value);
+	    		}
     		}
     	}
     	 
-    	$soap->call('faireInventaire', array('articles'=> json_encode($tabArticle), 'avecPrix'=>true)); // On enregistre toutes les données de l'inventaire
+    	try {
+    		$soap->call('faireInventaire', array('articles'=> json_encode($tabArticle), 'avecPrix'=>true)); // On enregistre toutes les données de l'inventaire
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .= $e->getMessage();
+    	}
     	
-    	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu);
+    	try {
+	    	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
+	    	$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .= $e->getMessage();
+    	}
     	
     	return $this->render('ImerirStockBundle::inventaireDev.html.twig',
 			    			  array('produit'     => $produitsRetour,
 			    			 	    'attributs'   => json_decode($retSoapAttributs),
-			    			 	    'result_menu' => $menu_sous_menu));
+			    			 	    'result_menu' => $menu_sous_menu,
+			    			  		'erreur'      => $erreur));
     }
 }

@@ -5,11 +5,15 @@
 {% endblock %}
 
 {% block title_page %}
-Alba - Anniversaires
+Anniversaires
 {% endblock %}
 
 {% block title_ajout %}
 Anniversaires
+{% endblock %}
+
+{% block title %}
+ALBA - Anniversaires
 {% endblock %}
 
 {% block clientBlock %}
@@ -18,7 +22,7 @@ menuSelected
 
 {% block recherche %}
 	<form method="post" action="{{ path('imerir_contact_anniversaires_rechercher') }}">
-		<label>Mois : </label>
+		<label>Anniversaire du mois de : </label>
 		<select id="select_mois" name="mois">
              <option value=""></option>
              <option value="1">Janvier</option>
@@ -34,7 +38,7 @@ menuSelected
              <option value="11">Novembre</option>
              <option value="12">Decembre</option>
         </select>
-		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
+		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i><br>
 		<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
 	</form>
 	{% if liste_des_anniversaires is defined %}

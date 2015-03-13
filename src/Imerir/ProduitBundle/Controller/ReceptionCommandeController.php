@@ -1,12 +1,12 @@
 <?php
 
-namespace Imerir\FournisseurBundle\Controller;
+namespace Imerir\ProduitBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-class CommandesController extends Controller
+class ReceptionCommandeController extends Controller
 {
-    public function ajoutCommandeAction()
+    public function ajoutReceptionAction()
     {
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
@@ -39,9 +39,14 @@ class CommandesController extends Controller
             $commande = '';
         //////////////////
 
-        //on recupere le menu et sous menu
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+        try {
+        	//on recupere le menu et sous menu
+        	$return_menu = $soap->call('getMenu', array());
+        	$menu_sous_menu = json_decode($return_menu);
+        }
+        catch(\SoapFault $e) {
+        	$erreur.=$e->getMessage();
+        }
 
         try {
             $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
@@ -53,6 +58,7 @@ class CommandesController extends Controller
         }
 
         try {
+            //($count, $offset, $fournisseur_id, $fournisseur_nom, $commande_id, $article_code)
             $return_commandes = $soap->call('getCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
                 'fournisseur_nom' => $nom, 'commande_id' => $commande, 'article_code' => $article));
         }
@@ -61,81 +67,13 @@ class CommandesController extends Controller
         }
 
         $liste_commandes = json_decode($return_commandes);
-        return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
-            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,'erreur'=>$erreur));
+        return $this->render('ImerirProduitBundle::ajoutReceptionCommande.html.twig',array('result_menu' => $menu_sous_menu,
+            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,'erreur'=>$erreur,
+            'flag_no_commande'=>''));
     }
 
 
-    public function execAjoutCommandeAction(){
-        //PARTIE COMMUNE////////
-        $soap = $this->get('noyau_soap');
-        $query = $this->get('request');
-        ///////////////////////
-
-        $commande_nom_fournisseur = array();
-        $commande_article = array();
-        $commande_qty = array();
-        $commande_date = array();
-
-
-        $erreur = '';
-
-        foreach ($query->request as $key => $value) {
-            if (substr($key, 0, strlen('fournisseur')) === 'fournisseur') {
-                array_push($commande_nom_fournisseur, $value);
-            }
-            if (substr($key, 0, strlen('qty')) === 'qty') {
-                array_push($commande_qty, $value);
-            }
-            if (substr($key, 0, strlen('article')) === 'article') {
-                array_push($commande_article, $value);
-            }
-            if (substr($key, 0, strlen('date_commande')) === 'date_commande') {
-                array_push($commande_date, $value);
-            }
-        }
-
-        if(!empty($commande_nom_fournisseur) && !empty($commande_article) && !empty($commande_qty)){
-            //$fournisseur_id, $article_code, $date_commande, $quantite_souhaite
-            try {
-                $soap->call('ajoutCommandeFournisseur', array('fournisseur_id' => json_encode($commande_nom_fournisseur),
-                    'article_code' => json_encode($commande_article)
-                , 'date_commande' => json_encode($commande_date), 'quantite_souhaite' => json_encode($commande_qty)));
-            }
-            catch(\SoapFault $e) {
-                $erreur .=$e->getMessage();
-            }
-        }
-
-        //PARTIE COMMUNE//////////////////////////////////////////
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
-
-        try {
-            $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
-                'telephone_portable' => '', 'reference_client' => '', 'notes' => ''));
-            $liste_fournisseurs = json_decode($return);
-        }
-        catch(\SoapFault $e) {
-            $erreur .=$e->getMessage();
-        }
-
-        try {
-            $return_commandes = $soap->call('getCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
-                'fournisseur_nom' => '', 'commande_id' => '', 'article_code' => ''));
-        }
-        catch(\SoapFault $e) {
-            $erreur .=$e->getMessage();
-        }
-
-        $liste_commandes = json_decode($return_commandes);
-        return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
-            'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,'erreur'=>$erreur));
-        ////////////////////////////////////////////////////////////
-
-    }
-
-    public function modifCommandeAction(){
+    public function saisieReceptionAction(){
         //PARTIE COMMUNE////////
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
@@ -161,8 +99,13 @@ class CommandesController extends Controller
         $liste_lignes_commandes = json_decode($return_liste_lignes_commandes);
 
         //PARTIE COMMUNE//////////////////////////////////////////
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+        try {
+        	$return_menu = $soap->call('getMenu', array());
+        	$menu_sous_menu = json_decode($return_menu);
+        }
+        catch(\SoapFault $e) {
+        	$erreur.=$e->getMessage();
+        }
 
 
         try {
@@ -183,7 +126,7 @@ class CommandesController extends Controller
             $erreur .=$e->getMessage();
         }
         $liste_commandes = json_decode($return_commandes);
-        return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
+        return $this->render('ImerirProduitBundle::ajoutReceptionCommande.html.twig',array('result_menu' => $menu_sous_menu,
             'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,
             'liste_lignes_commandes'=>$liste_lignes_commandes,'modif_date_commande'=>$modif_date_commande,'erreur'=>$erreur));
         ////////////////////////////////////////////////////////////
@@ -191,109 +134,77 @@ class CommandesController extends Controller
     }
 
 
-    public function execModifCommandeAction(){
+    public function execSaisieReceptionAction(){
+
+        /*
+         * <input type="hidden" name="modif_commande_id_{{ i.commande_id }}" value="{{ i.commande_id }}"/>
+                            <input type="hidden" name="modif_ligne_commande_id_{{ i.ligne_commande_id }}" value="{{ i.ligne_commande_id }}"/>
+                            <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.commande_id }}" value="1"/>
+                            <td><input type="hidden" name="modif_article_{{ i.commande_id }}" value="{{ i.code_barre }}"/>
+                                <label for="modif_article">{{ i.code_barre }}</label></td>
+                            <td><input type="hidden" name="modif_quantite_souhaite_{{ i.commande_id }}" value="{{ i.quantite_souhaite }}"/>
+                                <label for="modif_quantite_souhaite">{{ i.quantite_souhaite}}</label></td>
+                            </td>
+                            <td>
+                                <input type="number" name="quantite_recu">
+         */
+        //ajoutReceptionCommandeAction($commande_id, $article_code, $quantite, $date_reception)
         //PARTIE COMMUNE////////
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
         ///////////////////////
-        $modif_commande_est_visible = array();
         $modif_commande_id = array();
         $modif_ligne_commande_id = array();
         $modif_article = array();
-        $modif_quantite_souhaite = array();
-
-        $commande_nom_fournisseur = array();
-        $commande_article = array();
-        $commande_qty = array();
-        $commande_date = array();
+        $modif_quantite = array();
+        $modif_date_reception = array();
 
         $erreur = '';
 
 
         foreach ($query->request as $key => $value) {
-            ////PARTIE MODIFICATION
-            if (substr($key, 0, strlen('modif_est_visible')) === 'modif_est_visible') {
-                array_push($modif_commande_est_visible, $value);
+            if (substr($key, 0, strlen('modif_ligne_commande_id')) === 'modif_ligne_commande_id') {
+                array_push($modif_ligne_commande_id, $value);
             }
             if (substr($key, 0, strlen('modif_commande_id')) === 'modif_commande_id') {
                 array_push($modif_commande_id, $value);
             }
-            if (substr($key, 0, strlen('modif_ligne_commande_id')) === 'modif_ligne_commande_id') {
-                array_push($modif_ligne_commande_id, $value);
-            }
             if (substr($key, 0, strlen('modif_article')) === 'modif_article') {
                 array_push($modif_article, $value);
             }
-            if (substr($key, 0, strlen('modif_quantite_souhaite')) === 'modif_quantite_souhaite') {
-                array_push($modif_quantite_souhaite, $value);
+            if (substr($key, 0, strlen('quantite_ajoute')) === 'quantite_ajoute') {
+                array_push($modif_quantite, $value);
             }
-            ////PARTIE INSERTION DE DONNEES
-            if (substr($key, 0, strlen('fournisseur')) === 'fournisseur') {
-                array_push($commande_nom_fournisseur, $value);
+            if (substr($key, 0, strlen('date_reception')) === 'date_reception') {
+                array_push($modif_date_reception, $value);
             }
-            if (substr($key, 0, strlen('qty')) === 'qty') {
-                array_push($commande_qty, $value);
-            }
-            if (substr($key, 0, strlen('article')) === 'article') {
-                array_push($commande_article, $value);
-            }
-            if (substr($key, 0, strlen('date_commande')) === 'date_commande') {
-                array_push($commande_date, $value);
-            }
+
         }
 
         //on teste si il y a des valeurs à ajouter
-        if(empty($commande_article[0]) && empty($commande_qty[0])){
-            //MODIFICATION
+        if(!empty($modif_quantite) && !empty($modif_article) && !empty($modif_commande_id)){
             try {
-                $soap->call('modifCommandeFournisseur', array('fournisseur_id' => json_encode($commande_nom_fournisseur)
-                , 'commande_id' => json_encode($modif_commande_id),
-                    'ligne_commande_id' => json_encode($modif_ligne_commande_id),
-                    'date_commande' => json_encode($commande_date), 'article_code' => json_encode($modif_article),
-                    'quantite_souhaite' => json_encode($modif_quantite_souhaite),
-                    'est_visible' => json_encode($modif_commande_est_visible)));
+                //ajoutReceptionCommandeAction($commande_id,$ligne_commande_id, $article_code, $quantite, $date_reception)
+                $soap->call('ajoutReceptionCommande',array('commande_id'=>json_encode($modif_commande_id),
+                    'ligne_commande_id'=>json_encode($modif_ligne_commande_id),
+                    'article_code'=>json_encode($modif_article),'quantite'=>json_encode($modif_quantite),
+                    'date_reception'=>json_encode($modif_date_reception)
+                    ));
             }
-            catch(\SoapFault $e) {
-                $erreur .=$e->getMessage();
-            }
-
-        }
-        else{
-            //MODIFICATION
-            /*
-             * modifCommandeFournisseurAction($commande_id, $ligne_commande_id, $article_code, $date_commande,
-												   $quantite_souhaite, $est_visible)
-             */
-            try {
-                $soap->call('modifCommandeFournisseur', array('fournisseur_id' => json_encode($commande_nom_fournisseur)
-                , 'commande_id' => json_encode($modif_commande_id),
-                    'ligne_commande_id' => json_encode($modif_ligne_commande_id),
-                    'date_commande' => json_encode($commande_date), 'article_code' => json_encode($modif_article),
-                    'quantite_souhaite' => json_encode($modif_quantite_souhaite),
-                    'est_visible' => json_encode($modif_commande_est_visible)));
-            }
-            catch(\SoapFault $e) {
-                $erreur .=$e->getMessage();
-            }
-            //INSERTION
-            try {
-                $soap->call('ajoutCommandeFournisseur', array('fournisseur_id' => json_encode($commande_nom_fournisseur),
-                    'article_code' => json_encode($commande_article)
-                , 'date_commande' => json_encode($commande_date), 'quantite_souhaite' => json_encode($commande_qty)));
-            }
-            catch(\SoapFault $e) {
+            catch(\SoapFault $e){
                 $erreur .=$e->getMessage();
             }
         }
 
         //PARTIE COMMUNE//////////////////////////////////////////
         try {
-            $return_menu = $soap->call('getMenu', array());
+            $return_menu = $soap->call('getMenu', array()); 
+            $menu_sous_menu = json_decode($return_menu);
         }
         catch(\SoapFault $e) {
             $erreur .=$e->getMessage();
         }
-        $menu_sous_menu = json_decode($return_menu);
+       
 
         try {
             $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
@@ -313,7 +224,7 @@ class CommandesController extends Controller
         }
 
         $liste_commandes = json_decode($return_commandes);
-        return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
+        return $this->render('ImerirProduitBundle::ajoutReceptionCommande.html.twig',array('result_menu' => $menu_sous_menu,
             'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,
             'commande_id'=>$modif_commande_id[0],'erreur'=>$erreur));
         ////////////////////////////////////////////////////////////
@@ -363,9 +274,14 @@ class CommandesController extends Controller
             $date_fin = '';
         //////////////////
 
-        //on recupere le menu et sous menu
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+        try {
+        	//on recupere le menu et sous menu
+        	$return_menu = $soap->call('getMenu', array());
+        	$menu_sous_menu = json_decode($return_menu);
+        }
+        catch(\SoapFault $e) {
+        	$erreur.=$e->getMessage();
+        }
 
         try {
             $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',

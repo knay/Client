@@ -20,6 +20,7 @@ class InventaireController extends Controller
     public function indexAction()
     {
     	$soap = $this->get('noyau_soap');
+    	$erreur = '';
     	
     	// On récupère tous les produits pour les afficher dans un <select>
     	$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
@@ -27,18 +28,31 @@ class InventaireController extends Controller
 
     	// S'il y a des produits, on récupère également les attributs du premier 
     	// (parce que c'est celui qui est selectionné au départ)
-    	if (isset($produitsRetour[0]->p)) 
-    		$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    	if (isset($produitsRetour[0]->p)) {
+    		try {
+    			$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    		}
+    		catch(\SoapFault $e) {
+    			$erreur.=$e->getMessage();
+    		}
+    	}
     	else
     		$retSoapAttributs = '';
     	
-    	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu); 
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu); 
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
     	
         return $this->render('ImerirStockBundle::inventaire.html.twig', 
         	                  array('produit'     => $produitsRetour,
         			                'attributs'   => json_decode($retSoapAttributs),
-        	   		                'result_menu' => $menu_sous_menu));
+        	   		                'result_menu' => $menu_sous_menu,
+        	                  		'erreur'      => $erreur
+        	                  ));
     }
     
     /**
@@ -49,10 +63,17 @@ class InventaireController extends Controller
     	$soap = $this->get('noyau_soap');
     	$req = $this->getRequest()->request;
     	$tabArticle = array();
+    	$erreur = '';
     	
-    	// On récupère tous les produits pour les afficher dans un <select>
-    	$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-    	$produitsRetour = json_decode($return_produits);
+    	
+    	try {
+    		// On récupère tous les produits pour les afficher dans un <select>
+    		$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
+    		$produitsRetour = json_decode($return_produits);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
     	
     	// S'il y a des produits, on récupère également les attributs du premier
     	// (parce que c'est celui qui est selectionné au départ)
@@ -83,14 +104,26 @@ class InventaireController extends Controller
     		}
     	}
     	 
-    	$soap->call('faireInventaire', array('articles'=> json_encode($tabArticle), 'avecPrix'=>false)); // On enregistre toutes les données de l'inventaire
+    	try {
+    		$soap->call('faireInventaire', array('articles'=> json_encode($tabArticle), 'avecPrix'=>false)); // On enregistre toutes les données de l'inventaire
+   		}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
     	
-    	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu);
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
     	
     	return $this->render('ImerirStockBundle::inventaire.html.twig',
 			    			  array('produit'     => $produitsRetour,
 			    			 	    'attributs'   => json_decode($retSoapAttributs),
-			    			 	    'result_menu' => $menu_sous_menu));
+			    			 	    'result_menu' => $menu_sous_menu,
+			    			  		'erreur'      => $erreur
+			    			  ));
     }
 }

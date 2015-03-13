@@ -43,7 +43,9 @@ class MoyenPaiementController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-    	return $this->render('ImerirVenteBundle::moyenPaiement.html.twig', array('result_menu' => $menu_sous_menu,'liste_mode_paiement'=>$paiement,'erreur'=>$erreur));
+    	return $this->render('ImerirVenteBundle::moyenPaiement.html.twig', array('result_menu' => $menu_sous_menu, 
+    																			 'liste_mode_paiement' => $paiement, 
+    																			 'erreur' => $erreur));
      }
 
      public function afficherEnModificationMoyenPaiementAction(){
@@ -73,7 +75,11 @@ class MoyenPaiementController extends Controller
      		$erreur.=$e->getMessage();
      	}
      	 
-     	return $this->render('ImerirVenteBundle::moyenPaiement.html.twig', array('result_menu' => $menu_sous_menu,'liste_mode_paiement'=>$paiement,'id_selectioner'=>$selected_id,'nom_selectioner'=>$selected_nom,'erreur'=>$erreur)); 
+     	return $this->render('ImerirVenteBundle::moyenPaiement.html.twig', array('result_menu' => $menu_sous_menu,
+     																			 'liste_mode_paiement' => $paiement,
+     																			 'id_selectioner' => $selected_id,
+     																			 'nom_selectioner' => $selected_nom,
+     																			 'erreur'=>$erreur)); 
      }
      
      public function modificationMoyenPaiementAction(){

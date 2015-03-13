@@ -19,29 +19,50 @@ menuSelected
 {% block title_ajout %}Vos statistiques{% endblock %}
 
 {% block ajout %}
-<p class="choixGraph">
-	Choisissez une option :<br>
-	<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats') }}">
-		<i class="fa fa-area-chart"></i>Ventes quotidiennes
-	</a>
-	<a class="bouton" href="{{ path('imerir_vente_stats_top_vente') }}">
-		<i class="fa fa-pie-chart"></i>Produits stars
-	</a>
-{# 	<a class="bouton" href="">Mes lignes produits</a>#}
-{# 	<a class="bouton" href="">Vente et caractéristiques produits</a>#}
-</p>
-
-<h3>Evolution des ventes (en euro) : </h3>
-<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
-<div class="legende">
-	Légende : 
-	<ul>
-		<li>
-			<span style="background-color: #cb3636; display: inline-block; height: 30px; width: 30px;">&nbsp;</span>
-			Ventes par jour (en euro)
-		</li>
-	</ul>
-</div>
+	<p class="choixGraph">
+	{# 	Choisissez une option :<br>#}
+		<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats') }}">
+			<i class="fa fa-area-chart"></i>Ventes quotidiennes
+		</a>
+		<a class="bouton" href="{{ path('imerir_vente_stats_top_vente') }}">
+			<i class="fa fa-pie-chart"></i>Produits stars
+		</a>
+	{# 	<a class="bouton" href="">Mes lignes produits</a>#}
+	{# 	<a class="bouton" href="">Vente et caract√©ristiques produits</a>#}
+	</p>
+	
+	<form method="post" action="{{ path('imerir_vente_stats') }}">
+			<label>Date : </label>
+			<input type="text" id="date_de_recherche_vente" name="date" size="20">
+			<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
+			<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
+	</form>
+	
+	<p class="choixGraph">
+	</p>
+	
+	<h3>Chiffre d'affaires par jour (en &euro;) : </h3>
+	<table>
+		<tr>
+			<td>
+				<div class="legende">
+					<ul>
+						<li>
+							<span style="background-color: rgba(36,187,241,1); display: inline-block; height: 5px; width: 30px;">&nbsp;</span>
+							Mois N
+						</li>
+						<li>
+							<span style="background-color: rgba(150,150,150,1); display: inline-block; height: 5px; width: 30px;">&nbsp;</span>
+							Mois N-1
+						</li>
+					</ul>
+				</div>
+			</td>
+			<td>
+				<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
+			</td>
+		<tr>
+	</table>
 {% endblock %}
 
 {% block recherche %}
@@ -52,36 +73,81 @@ menuSelected
 {% endblock %}
 
 {% block javascripts %}
+<link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}"/>
 <script>
+$("#bouton_supprimer_date").hide();
 
 /**
- * Quand la page est chargée on enlève le fieldset de recherche qui ne sert à rien.
+ * Quand la page est charg√©e on enl√®ve le fieldset de recherche qui ne sert √† rien.
  */
-$(document).ready(function (e) {
-	$('#fieldset_recherche').remove();
-});
 
+$(document).ready(function() {
+	$('#fieldset_recherche').remove();
+   	$('#date_de_recherche_vente').datepicker({
+		changeMonth: true,
+     	changeYear: true,
+     	changeDay: false,
+     	dateFormat: 'MM-yy',
+
+    	onClose: function() {
+        	var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
+        	var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
+        	$(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+        	$("#bouton_supprimer_date").show();
+     	},
+
+     	beforeShow: function() {
+       		if ((selDate = $(this).val()).length > 0) 
+       		{
+          		iYear = selDate.substring(selDate.length - 4, selDate.length);
+          		iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5), 
+                $(this).datepicker('option', 'monthNames'));
+          		$(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
+          		$(this).datepicker('setDate', new Date(iYear, iMonth, 1));
+       		}
+    	}
+	});
+});
 
 var data = {
         labels : [
-              {% for i in axeX %}
+              {% for i in axeX_n_moins_un %}
                   "{{ i }}",
               {% endfor %}
         ],
         datasets : [
         {
-            fillColor : "rgba(203,54,54, 0.75)",
-            strokeColor : "#cb3636",
-            pointColor : "#fff",
-            pointStrokeColor : "#9DB86D",
+        	label: "mois n",
+            fillColor: "rgba(151,187,205,0.2)",
+            strokeColor: "rgba(36,187,241,1)",
+            pointColor: "rgba(36,187,241,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(151,187,205,1)",
             data : [
-				{% for j in axeY %}
-				{{ j|number_format(2, '.', ',') }},
+				{% for j in axeY_n %}
+					{{ j }},
+				{% endfor %} 
+            ]
+        },
+        {
+        	label: "mois n-1",
+            fillColor: "rgba(150,150,150,0.2)",
+            strokeColor: "rgba(150,150,150,1)",
+            pointColor: "rgba(150,150,150,1)",
+            pointStrokeColor: "#fff",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "rgba(150,150,150,1)",
+            data : [
+				{% for a in axeY_n_moins_un %}
+					{{ a }},
 				{% endfor %} 
             ]
         }
-    ]
-    }
+        
+      ]
+}
+    
 var options = {
     //Boolean - Whether we should show a stroke on each segment
     segmentShowStroke : true,
@@ -100,18 +166,51 @@ var options = {
     //Boolean - Whether we animate scaling the Doughnut from the centre
     animateScale : false,
     
-    legendTemplate : '<ul>'
-        +'<% for (var i=0; i<data.datasets.length; i++) { %>'
-          +'<li>'
-          +'<span style=\"background-color:<%=data[i].fillColor%>\"></span>'
-          +'<% if (data[i].label) { %><%= data[i].label %><% } %>'
-        +'</li>'
-      +'<% } %>'
-    +'</ul>'
 };
-
 var ctx = $("#myChart").get(0).getContext("2d");
 var graph = new Chart(ctx).Line(data);
+
+
+//Permet de gerer l'evenement du bouton de suppresion  de la date
+$("#bouton_supprimer_date").click(function(){
+	$("#date_de_recherche_vente" ).val('');
+	$("#bouton_supprimer_date").hide();
+});
+
+//Permet de gerer la langue du datepicker
+(function( factory ) {
+	if ( typeof define === "function" && define.amd ) {
+
+		define([ "../jquery.ui.datepicker" ], factory );
+	} else {
+		factory( jQuery.datepicker );
+	}
+	
+}(function( datepicker ) {
+	datepicker.regional['fr'] = {
+		closeText: 'Fermer',
+		prevText: 'Pr&eacutec&eacutedent',
+		nextText: 'Suivant',
+		currentText: 'Aujourd\'hui',
+		monthNames: ['janvier', 'février', 'mars', 'avril', 'mai', 'juin',
+			'juillet', 'août', 'septembre', 'octobre', 'novembre', 'décembre'],
+		monthNamesShort: ['janv.', 'f&eacutevr.', 'mars', 'avril', 'mai', 'juin',
+			'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
+		dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+		dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+		dayNamesMin: ['D','L','M','M','J','V','S'],
+		weekHeader: 'Sem.',
+		dateFormat: 'yy-mm-dd',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''};
+	datepicker.setDefaults(datepicker.regional['fr']);
+
+	return datepicker.regional['fr'];
+
+}));
+//
 
 </script>
 {% endblock %}

@@ -13,6 +13,10 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
  */
 class ArticleController extends Controller
 {
+	/**
+	 * Action permettant de sauvegarder les modifications sur un article.
+	 * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
+	 */
 	public function saveArticleAction () {
 		$soap = $this->get('noyau_soap');
 		$erreur = '';
@@ -104,9 +108,6 @@ class ArticleController extends Controller
 	
 	/**
 	 * Action appélée lorsque à la page de modification d'un attribut et de ses valeurs.
-	 * 
-	 * TODO: gérer erreur d'accés SOAP
-	 * 
 	 * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
 	 */
     public function modifArticleAction()

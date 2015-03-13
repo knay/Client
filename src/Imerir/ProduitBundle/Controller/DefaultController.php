@@ -6,23 +6,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
 class DefaultController extends Controller
 {
-    public function ajoutAttributAction()
-    {
-        ini_set("soap.wsdl_cache_enabled", 0);
-        //todo mettre l'url dans un twig de ressources
-        $client = new \SoapClient('http://localhost/alba/web/app_dev.php/soap');
-        $client->__setCookie('PHPSESSID', uniqid());
-        $result = $client->__soapCall('login', array('username'=>'alba','passwd'=>'alba'));
-        echo $result;
-        
-        //on recupere le menu et sous menu
-        $soap = $this->get('noyau_soap');
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
-        
-        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('result_menu' => $menu_sous_menu));
-    }
-
     public function ajoutProduitAction()
     {
         $soap = $this->get('noyau_soap');
@@ -65,14 +48,21 @@ class DefaultController extends Controller
             $erreur .=$e->getMessage();
         }
 
-        //on recupere le menu et sous menu
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+        try {
+        	//on recupere le menu et sous menu
+        	$return_menu = $soap->call('getMenu', array());
+        	$menu_sous_menu = json_decode($return_menu);
+        }
+        catch(\SoapFault $e) {
+        	$erreur.=$e->getMessage();
+        }
+        
         
         //on appelle la fonction ajoutLigneProduit du serveur soap qui prend en parametre le nom de la ligne produit
         return $this->render('ImerirProduitBundle::creerProduit.html.twig', array('ligne_produit' => $lignesProduitsretour,
         		'produits'=>$produitsRetour,
-        		'result_menu' => $menu_sous_menu,'erreur'=>$erreur
+        		'result_menu' => $menu_sous_menu, 
+        		'erreur'=>$erreur
         ));
     }
 
@@ -120,7 +110,8 @@ class DefaultController extends Controller
         		'produits'=>$produitsRetour,
         		'produit_add'=>$nom,
         		'lp_produit_add'=>$ligneProduit,
-        		'result_menu' => $menu_sous_menu,'erreur'=>$erreur
+        		'result_menu' => $menu_sous_menu,
+        		'erreur'=>$erreur
         ));
 
 

@@ -33,13 +33,24 @@ class InventaireDevController extends Controller
 
     	// S'il y a des produits, on récupère également les attributs du premier 
     	// (parce que c'est celui qui est selectionné au départ)
-    	if (isset($produitsRetour[0]->p)) 
-    		$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    	if (isset($produitsRetour[0]->p)) {
+    		try {  
+    			$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    		}
+    		catch(\SoapFault $e) {
+    			$erreur.=$e->getMessage();
+    		}	
+    	}
     	else
     		$retSoapAttributs = '';
     	
-    	$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
-    	$menu_sous_menu = json_decode($return_menu); 
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récup le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+   		}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	} 
     	
         return $this->render('ImerirStockBundle::inventaireDev.html.twig', 
         	                  array('produit'     => $produitsRetour,
@@ -68,8 +79,14 @@ class InventaireDevController extends Controller
         }
     	// S'il y a des produits, on récupère également les attributs du premier
     	// (parce que c'est celui qui est selectionné au départ)
-    	if (isset($produitsRetour[0]->p))	
-	    	$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    	if (isset($produitsRetour[0]->p)) {
+    		try {
+	    		$retSoapAttributs = $soap->call('getAttributFromNomProduit', array('nom'=>$produitsRetour[0]->p));
+    		}
+    		catch(\SoapFault $e) {
+	    		$erreur.=$e->getMessage();
+    		}
+    	}
     	else 
     		$retSoapAttributs = '';
     	

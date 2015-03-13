@@ -39,9 +39,14 @@ class ReceptionCommandeController extends Controller
             $commande = '';
         //////////////////
 
-        //on recupere le menu et sous menu
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+        try {
+        	//on recupere le menu et sous menu
+        	$return_menu = $soap->call('getMenu', array());
+        	$menu_sous_menu = json_decode($return_menu);
+        }
+        catch(\SoapFault $e) {
+        	$erreur.=$e->getMessage();
+        }
 
         try {
             $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
@@ -94,8 +99,13 @@ class ReceptionCommandeController extends Controller
         $liste_lignes_commandes = json_decode($return_liste_lignes_commandes);
 
         //PARTIE COMMUNE//////////////////////////////////////////
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+        try {
+        	$return_menu = $soap->call('getMenu', array());
+        	$menu_sous_menu = json_decode($return_menu);
+        }
+        catch(\SoapFault $e) {
+        	$erreur.=$e->getMessage();
+        }
 
 
         try {
@@ -188,12 +198,13 @@ class ReceptionCommandeController extends Controller
 
         //PARTIE COMMUNE//////////////////////////////////////////
         try {
-            $return_menu = $soap->call('getMenu', array());
+            $return_menu = $soap->call('getMenu', array()); 
+            $menu_sous_menu = json_decode($return_menu);
         }
         catch(\SoapFault $e) {
             $erreur .=$e->getMessage();
         }
-        $menu_sous_menu = json_decode($return_menu);
+       
 
         try {
             $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
@@ -263,9 +274,14 @@ class ReceptionCommandeController extends Controller
             $date_fin = '';
         //////////////////
 
-        //on recupere le menu et sous menu
-        $return_menu = $soap->call('getMenu', array());
-        $menu_sous_menu = json_decode($return_menu);
+        try {
+        	//on recupere le menu et sous menu
+        	$return_menu = $soap->call('getMenu', array());
+        	$menu_sous_menu = json_decode($return_menu);
+        }
+        catch(\SoapFault $e) {
+        	$erreur.=$e->getMessage();
+        }
 
         try {
             $return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',

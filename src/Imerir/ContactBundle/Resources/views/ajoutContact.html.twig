@@ -83,6 +83,7 @@ menuSelected
                 <table class="tableau" id="tableau">
                     <tr>
                         <th></th>
+                        <th class="titre_lst">Type adresse</th>
                         <th class="titre_lst">Pays</th>
                         <th class="titre_lst">Ville</th>
                         <th class="titre_lst">Code postal</th>
@@ -106,6 +107,10 @@ menuSelected
                     {% endif %}
                     <tr class="last">
                         <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+                        <td><select name="type_adresse{{ nbAdresse }}">
+                        	<option>Facturation</option>
+                        	<option>Autre</option>
+                        </select></td>
                         <td><input type="text" name="pays{{ nbAdresse }}"/></td>
                         <td><input type="text" name="ville{{ nbAdresse }}"/></td>
                         <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
@@ -174,6 +179,7 @@ menuSelected
                 <table class="tableau" id="tableau">
                     <tr>
                         <th></th>
+                        <th class="titre_lst">Type adresse</th>
                         <th class="titre_lst">Pays</th>
                         <th class="titre_lst">Ville</th>
                         <th class="titre_lst">Code postal</th>
@@ -197,6 +203,10 @@ menuSelected
                     {% endif %}
                     <tr class="last">
                         <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+                        <td><select name="type_adresse{{ nbAdresse }}">
+                        	<option>Autre</option>
+                        	<option>Facturation</option>
+                        </select></td>
                         <td><input type="text" name="pays{{ nbAdresse }}"/></td>
                         <td><input type="text" name="ville{{ nbAdresse }}"/></td>
                         <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
@@ -289,6 +299,7 @@ menuSelected
                 <table class="tableau" id="tableau">
                     <tr>
                         <th></th>
+                        <th class="titre_lst">Type adresse</th>
                         <th class="titre_lst">Pays</th>
                         <th class="titre_lst">Ville</th>
                         <th class="titre_lst">Code postal</th>
@@ -316,6 +327,18 @@ menuSelected
                             <input type="hidden" name="modif_id_{{ i.id }}" value="{{ i.id }}"/>
                             <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.id }}" value="1"/>
                         </td>
+                        {#TODO#}
+                        <td><select name="modif_type_adresse{{ i.id }}">
+                        	{% if i.type_adresse_nom == 'Facturation' %}
+                        		<option selected>Facturation</option>
+                        		<option>Autre</option>
+                        		{% set flag_fact = 1 %}
+                        	{% else %}	
+                        		<option selected>Autre</option>
+                        		<option>Facturation</option>
+                        		{% set flag_fact = 0 %}
+                        	{% endif %}	
+                        </select></td>
                         <td><input type="text" name="modif_pays_{{ i.id }}" value="{{ i.pays }}"/></td>
                         <td><input type="text" name="modif_ville_{{ i.id }}" value="{{ i.ville }}"/></td>
                         <td><input type="text" name="modif_code_postal_{{ i.id }}" value="{{ i.code_postal }}"/></td>
@@ -327,6 +350,20 @@ menuSelected
                     {% endfor %}
                     <tr class="last">
                         <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+                        <td><select name="type_adresse{{ nbAdresse }}">
+                        {% if flag_fact is defined %}
+                        	{% if flag_fact == 1 %}
+	                        	<option>Autre</option>
+	                        	<option>Facturation</option>
+	                        {% else %}	
+	                        	<option>Facturation</option>
+	                        	<option>Autre</option>
+	                        {% endif %}
+	                    {% else %}
+	                        	<option>Autre</option>
+	                        	<option>Facturation</option>
+	                    {% endif %}    	
+                        </select></td>
                         <td><input type="text" name="pays{{ nbAdresse }}"/></td>
                         <td><input type="text" name="ville{{ nbAdresse }}"/></td>
                         <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
@@ -395,6 +432,7 @@ menuSelected
                 <table class="tableau" id="tableau">
                     <tr>
                         <th></th>
+                        <th class="titre_lst">Type adresse</th>
                         <th class="titre_lst">Pays</th>
                         <th class="titre_lst">Ville</th>
                         <th class="titre_lst">Code postal</th>
@@ -418,6 +456,10 @@ menuSelected
                     {% endif %}
                     <tr class="last">
                         <td><i class="fa fa-plus-square ajout ajouter"></i></td>
+                        <td><select name="type_adresse{{ nbAdresse }}">
+                        	<option>Facturation</option>
+                        	<option>Autre</option>
+                        </select></td>
                         <td><input type="text" name="pays{{ nbAdresse }}"/></td>
                         <td><input type="text" name="ville{{ nbAdresse }}"/></td>
                         <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
@@ -564,6 +606,7 @@ menuSelected
                // else {
                 $("#lst_adresse").children("table").append(
                         '<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td>' +
+                        '<td><select name="type_adresse'+numAdresse+'"><option>Autre</option><option>Facturation</option></select></td>'+
                         '<td><input type="text" name="pays'+numAdresse+'"/></td>' +
                         '<td><input type="text" name="ville'+numAdresse+'"/></td>' +
                         '<td><input type="text" name="code_postal'+numAdresse+'"/></td>' +

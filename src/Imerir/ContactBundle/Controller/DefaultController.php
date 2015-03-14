@@ -177,6 +177,7 @@ class DefaultController extends Controller
         $adresse_voie = array();
         $adresse_num_appartement = array();
         $adresse_telephone_fixe = array();
+        $adresse_type_adresse = array();
 
 
         foreach ($query->request as $key => $value) {
@@ -200,6 +201,9 @@ class DefaultController extends Controller
             }
             if (substr($key, 0, strlen('telephone_fixe')) === 'telephone_fixe') {
                 array_push($adresse_telephone_fixe, $value);
+            }
+            if (substr($key, 0, strlen('type_adresse')) === 'type_adresse') {
+            	array_push($adresse_type_adresse, $value);
             }
         }
         //print_r($adresse_pays);
@@ -226,7 +230,9 @@ class DefaultController extends Controller
                 $soap->call('ajoutAdresse', array('est_fournisseur' => false, 'ref_id' => $ref_Contact_id, 'pays' => json_encode($adresse_pays),
                     'ville' => json_encode($adresse_ville), 'voie' => json_encode($adresse_voie), 'num_voie' => json_encode($adresse_num_voie),
                     'code_postal' => json_encode($adresse_code_postal), 'num_appartement' => json_encode($adresse_num_appartement),
-                    'telephone_fixe' => json_encode($adresse_telephone_fixe)));
+                    'telephone_fixe' => json_encode($adresse_telephone_fixe),
+                		'type_adresse'=>json_encode($adresse_type_adresse)
+                ));
             }
             catch(\SoapFault $e) {
                 $erreur .=$e->getMessage();
@@ -342,6 +348,7 @@ class DefaultController extends Controller
         $modif_adresse_voie = array();
         $modif_adresse_num_appartement = array();
         $modif_adresse_telephone_fixe = array();
+        $modif_adresse_type_adresse = array();
 
         $adresse_pays = array();
         $adresse_ville = array();
@@ -350,6 +357,7 @@ class DefaultController extends Controller
         $adresse_voie = array();
         $adresse_num_appartement = array();
         $adresse_telephone_fixe = array();
+        $adresse_type_adresse = array();
 
 
         foreach ($query->request as $key => $value) {
@@ -381,6 +389,9 @@ class DefaultController extends Controller
             if (substr($key, 0, strlen('modif_telephone_fixe')) === 'modif_telephone_fixe') {
                 array_push($modif_adresse_telephone_fixe, $value);
             }
+            if (substr($key, 0, strlen('modif_type_adresse')) === 'modif_type_adresse') {
+            	array_push($modif_adresse_type_adresse, $value);
+            }
             ////PARTIE INSERTION DE DONNEES
             if (substr($key, 0, strlen('pays')) === 'pays') {
                 array_push($adresse_pays, $value);
@@ -403,6 +414,9 @@ class DefaultController extends Controller
             if (substr($key, 0, strlen('telephone_fixe')) === 'telephone_fixe') {
                 array_push($adresse_telephone_fixe, $value);
             }
+            if (substr($key, 0, strlen('type_adresse')) === 'type_adresse') {
+            	array_push($adresse_type_adresse, $value);
+            }
         }
         //print_r($adresse_pays);
         //PARTIE OU ON RECUPERE LA REF DU Contact
@@ -421,7 +435,9 @@ class DefaultController extends Controller
                     'num_voie' => json_encode($modif_adresse_num_voie),
                     'code_postal' => json_encode($modif_adresse_code_postal),
                     'num_appartement' => json_encode($modif_adresse_num_appartement),
-                    'telephone_fixe' => json_encode($modif_adresse_telephone_fixe)));
+                    'telephone_fixe' => json_encode($modif_adresse_telephone_fixe),
+                		'type_adresse'=>json_encode($modif_adresse_type_adresse)
+                ));
             }
             catch(\SoapFault $e) {
                 $erreur .=$e->getMessage();
@@ -437,7 +453,9 @@ class DefaultController extends Controller
                     'num_voie' => json_encode($modif_adresse_num_voie),
                     'code_postal' => json_encode($modif_adresse_code_postal),
                     'num_appartement' => json_encode($modif_adresse_num_appartement),
-                    'telephone_fixe' => json_encode($modif_adresse_telephone_fixe)));
+                    'telephone_fixe' => json_encode($modif_adresse_telephone_fixe),
+                		'type_adresse'=>json_encode($modif_adresse_type_adresse)
+                ));
             }
             catch(\SoapFault $e) {
                 $erreur .=$e->getMessage();
@@ -447,7 +465,7 @@ class DefaultController extends Controller
                 $soap->call('ajoutAdresse', array('est_fournisseur' => false, 'ref_id' => $ref_contact_id, 'pays' => json_encode($adresse_pays),
                     'ville' => json_encode($adresse_ville), 'voie' => json_encode($adresse_voie), 'num_voie' => json_encode($adresse_num_voie),
                     'code_postal' => json_encode($adresse_code_postal), 'num_appartement' => json_encode($adresse_num_appartement),
-                    'telephone_fixe' => json_encode($adresse_telephone_fixe)));
+                    'telephone_fixe' => json_encode($adresse_telephone_fixe),'type_adresse'=>json_encode($adresse_type_adresse)));
             }
             catch(\SoapFault $e) {
                 $erreur .=$e->getMessage();

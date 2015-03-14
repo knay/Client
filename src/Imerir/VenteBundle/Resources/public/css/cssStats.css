@@ -10,9 +10,14 @@
 
 .graphiqueConteneur {
 	text-align: center;
+	padding-left:20%;
 }
 
 .choixGraph {
 	padding-bottom: 10px;
 	border-bottom: 1px solid #669900;
 }
+
+.ui-datepicker-calendar {
+    display: none;
+}​

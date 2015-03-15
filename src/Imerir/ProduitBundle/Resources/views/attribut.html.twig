@@ -3,8 +3,14 @@
 {% set nbAttribut = 0 %}
 {% set nbLigneProduit = 0 %}
 
-{% block title_page %}
-Attribut
+{% block title_page %}Attributs{% endblock %}
+
+{% block title %}ALBA - Attributs{% endblock %}
+
+{% block produitBlock %}menuSelected{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}">
 {% endblock %}
 
 {% block title_ajout %}
@@ -32,20 +38,7 @@ que la marque de celui-ci, ou sa couleur.
 <p>La recherche se fait sur le nom des attributs ainsi que leurs valeurs.</p>  
 {% endblock %}
 
-{% block title %}
-ALBA - Attribut
-{% endblock %}
-
-{% block produitBlock %}
-menuSelected
-{% endblock %}
-
-{% block stylesheets %}
-	<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}">
-{% endblock %}
-
 {% block ajout %}
-
 <form action="{{ path('imerir_produit_save_attributs') }}" method="post">
 	<div id="divNom">
 		<label for="nom">Nom : </label>
@@ -169,7 +162,7 @@ menuSelected
 		<th>Lignes produits</th>
 	</tr>
 	
-{% for i in lst_attribut %}
+	{% for i in lst_attribut %}
 	<tr>
 		<td>
 			<form method="post" action="{{ path('imerir_produit_modif_attributs') }}" style="display: none">
@@ -190,7 +183,7 @@ menuSelected
 			{{ i.ligne_produit }}
 		</td>
 	</tr>
-{% endfor %}
+	{% endfor %}
 {% endblock %}
 
 {% block javascripts %}

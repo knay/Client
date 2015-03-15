@@ -5,11 +5,11 @@
 {% endblock %}
 
 {% block title %}
-ALBA - Moyen de paiement
+ALBA - Moyens de paiement
 {% endblock %}
 
 {% block title_page %}
-    Moyen de paiement
+    Moyens de paiement
 {% endblock %}
 
 {% block title_ajout %}
@@ -34,27 +34,28 @@ Ici, vous pouvez ajouter ou modifier un moyen de paiement.
 	    {% if app.request.attributes.get('_route')=='imerir_vente_creation_moyen_paiement' %}
 	        <form action="{{ path('imerir_vente_creation_moyen_paiement') }}" method="post">
                 <label>Nom du moyen de paiement : </label>
-                <input type="text" name="nom"/>
+                <input type="text" name="nom"/><br>
 	            <button class="bouton" ><i class="fa fa-plus"></i> Ajouter</button>
 	        </form>
 	    {% endif %}
    		</tr>
    		<tr>
 	    {% if app.request.attributes.get('_route')=='imerir_vente_afficher_modification_moyen_paiement' %}
-		        <form action="{{ path('imerir_vente_modification_moyen_paiement') }}" method="post">
-	                <label>Nom du moyen de paiement : </label>
-	                <input type="hidden" name="id_modifier" value="{{ id_selectioner }}">
-	                <input type="text" name="nom_modifier" value="{{ nom_selectioner }}">
-		            <button class="bouton" ><i class="fa fa-pencil-square-o"></i> Modifier</button>
-		        </form>
-		        <form action="{{ path('imerir_vente_creation_moyen_paiement') }}" method="post">
-		            <button class="bouton" ><i class="fa fa-reply"></i></i> Annuler</button>
-		        </form>
-		   		<form action="{{ path('imerir_vente_supprimer_moyen_paiement') }}" method="post">
-		   			<input type="hidden" name="id_modifier" value="{{ id_selectioner }}">
-	                <input type="hidden" name="nom_modifier" value="{{ nom_selectioner }}">
-		            <button class="bouton" ><i class="fa fa-trash-o"></i> Supprimer</button>
-		        </form>
+	        <form action="{{ path('imerir_vente_modification_moyen_paiement') }}" method="post">
+                <label>Nom du moyen de paiement : </label>
+                <input type="hidden" name="id_modifier" value="{{ id_selectioner }}">
+                <input type="text" name="nom_modifier" value="{{ nom_selectioner }}">
+                <br>
+	            <button class="bouton" ><i class="fa fa-pencil-square-o"></i> Modifier</button>
+	        </form>
+	        <form action="{{ path('imerir_vente_creation_moyen_paiement') }}" method="post">
+	            <button class="bouton" ><i class="fa fa-reply"></i></i> Annuler</button>
+	        </form>
+	   		<form action="{{ path('imerir_vente_supprimer_moyen_paiement') }}" method="post">
+	   			<input type="hidden" name="id_modifier" value="{{ id_selectioner }}">
+                <input type="hidden" name="nom_modifier" value="{{ nom_selectioner }}">
+	            <button class="bouton" ><i class="fa fa-trash-o"></i> Supprimer</button>
+	        </form>
 	    {% endif %}
     	</tr>
     </table>
@@ -62,7 +63,7 @@ Ici, vous pouvez ajouter ou modifier un moyen de paiement.
 
 {% block table %}
     <tr>
-    	<th>Mode de paiements</th>
+    	<th>Moyens de paiement</th>
     </tr>
     {% for i in liste_mode_paiement %}
         <tr>

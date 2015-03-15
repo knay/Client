@@ -1,3 +1,7 @@
 .tableau_bouton_en_modification td{
 	color: red;
 }
+
+.bouton {
+	margin-left: 10px;
+}

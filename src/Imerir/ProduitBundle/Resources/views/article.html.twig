@@ -18,6 +18,7 @@ Ajouter/modifier un article
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
+<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/cssArticle.css') }}"/> 
 {% endblock %}
 
 {% block ajout %}
@@ -74,6 +75,11 @@ Ajouter/modifier un article
 	 		</tr>
 	 		<tr>
 	 			<td><button class="bouton" type="submit"><i class="fa fa-check"></i>Enregistrer</button></td>
+	 			<td>
+		 			<a href="{{ path('imerir_produit_article') }}" class="bouton">
+						<i class="fa fa-reply"></i>Annuler
+					</a>
+				</td>
 	 		</tr>
 		</table>
 	</form>
@@ -96,7 +102,7 @@ Ajouter/modifier un article
 	<form action="{{ path('imerir_produit_article') }}" method="post">
     	<table>
 	    	<tr>
-	    		<td><label>Ligne Produit</label></td>
+	    		<td><label>Ligne produit : </label></td>
 	    		
 		        <td>
 		        	<select id="select_ligne_produit" name="nomLigneProduit">
@@ -108,7 +114,7 @@ Ajouter/modifier un article
 		        </td>
 	        </tr>
 	        <tr>
-	        	<td><label>Produit</label></td>
+	        	<td><label>Produit : </label></td>
 	        	<td><select id="select_produit" name="nomProduit"></select></td>
 	        </tr>
         </table>

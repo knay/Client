@@ -11,7 +11,9 @@
 
 <fieldset id="fieldset_recherche">
 	<legend id="titre_fieldset" >{% block title_recherche %}Recherche{% endblock %}</legend> 
-	{% block recherche %}{% endblock %}
+	<div id="div_recherche">
+		{% block recherche %}{% endblock %}
+	</div>
 	{% block tableaux %}
 		<table class="tableau">
 			{% block table %}

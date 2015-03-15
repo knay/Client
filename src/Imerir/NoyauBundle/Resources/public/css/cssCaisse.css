@@ -155,12 +155,18 @@
 }
 
 #btnCaisse {
-	float: right;
+	right: 0;
 	margin-left: 20px;
+	background-color: #FF8800;
+	border: 1px solid #DD7700;
+}
+
+#btnCaisse:hover {
+	background-color: #FFBB33;
 }
 
 #divBoutonOption {
-	border-bottom: 1px solid #669900;
+	border-bottom: 1px solid #dfdfdf;
 	padding-bottom: 7px;
 }
 
@@ -168,8 +174,13 @@
 	text-align: center;
 }
 
+#moyenPaiement {
+	font-size: 13pt;
+	margin-right: 20px;
+}
+
 .moinsQuantite {
-	color: #0099CC;
+	color: #6A6A6A;
 	vertical-align: middle;
 }
 
@@ -178,11 +189,36 @@
 }
 
 .plusQuantite {
-	color: #0099CC;
+	color: #6A6A6A;
 	vertical-align: middle;
 	margin-right: 20px;
 }
 
 .plusQuantite:hover {
 	color: #33B5E5;
+}
+
+.alignDroite {
+	text-align: right;
+}
+
+.spanOu {
+	font-size: 15pt;
+	font-weight: bold;
+	margin-left: 50px;
+	margin-right: 80px;
+}
+
+#presAjoutClient span {
+	vertical-align: middle;
+	display: inline-block;
+}
+
+#presAjoutClient span table {
+	display: inline-block;
+	min-width: 400px;
+}
+
+#critereRechClient {
+	width: 350px;
 }

@@ -91,12 +91,12 @@ class MoyenPaiementController extends Controller
      	$modifier_nom_dont_id = $query->request->get('id_modifier');
      	 
      	if($modifier_nom_par != ''){
-     	     	try {
-     		    	$soap->call('modifierModePaiement', array('id'=>$modifier_nom_dont_id,'nom'=>$modifier_nom_par));
-     		    }
-     		    catch(\SoapFault $e) {
-     		    	$erreur.=$e->getMessage();
-     		    }
+          	try {
+     	    	$soap->call('modifierModePaiement', array('id'=>$modifier_nom_dont_id,'nom'=>$modifier_nom_par));
+    		}
+    	    catch(\SoapFault $e) {
+     	    	$erreur.=$e->getMessage(); // TODO gérer cette erreur soap... pour l'afficher 
+     		}
      	}
      	return $this->redirect($this->generateUrl('imerir_vente_creation_moyen_paiement'));
      }
@@ -111,7 +111,7 @@ class MoyenPaiementController extends Controller
      		$soap->call('supprimerModePaiement', array('id'=>$modifier_nom_dont_id));
      	}
      	catch(\SoapFault $e) {
-     		$erreur.=$e->getMessage();
+     		$erreur.=$e->getMessage();  // TODO gérer cette erreur soap... pour l'afficher 
      	}
      	return $this->redirect($this->generateUrl('imerir_vente_creation_moyen_paiement'));
      }

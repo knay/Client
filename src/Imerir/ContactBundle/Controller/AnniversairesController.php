@@ -21,6 +21,7 @@ class AnniversairesController extends Controller
     {
     	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
     	$menu_sous_menu = array();
+    	$anniversaire = array();
     	$mois= '';
     	$erreur = '';
     	
@@ -56,6 +57,8 @@ class AnniversairesController extends Controller
     	$query = $this->get('request');
     
     	$menu_sous_menu = array();
+    	$anniversaire_recherche = array();
+    	
     	$mois = $query->request->get('mois');
     	if (null === $mois)
     		$mois = '';

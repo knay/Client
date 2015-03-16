@@ -1,3 +1,15 @@
 .ligne_du_tableau {
 	text-align: center;
 }
+
+.pas_anniversaire {
+	text-align: center;
+	color: #3E3E3E;
+	font-size: 16pt;
+	margin-top: 50px;
+}
+
+.recherche_form {
+	border-bottom: 1px solid #dfdfdf;
+	padding-bottom: 7px;
+}

@@ -63,7 +63,7 @@
 			</table>
 		</form>
 	</div>
-
+	
 	{% set montant_total = 0 %}
 	{% set prix_de_la_tva = 0 %}
 	{% set montant_avec_tva = 0 %}
@@ -119,6 +119,9 @@
 		{% endif %}
 		</table>
 	</div>
+	<a href="{{ path('imerir_vente_retour_client') }}" class="bouton">
+		<i class="fa fa-reply"></i>Annuler
+	</a>
 {% endblock %}
 
 {% block recherche %}
@@ -144,12 +147,12 @@
 			<td><input type="text" name="nomProduit"></td>
 		</tr>
 		<tr>
-			<td>Date : </td>
-			<td>À partir du : <input type="text" name="dateDebut" class="datePicker"></td>
+			<td>À partir du : </td>
+			<td><input type="text" name="dateDebut" class="datePicker"></td>
 		</tr>
 		<tr>
-			<td></td>
-			<td>Jusqu'au : <input type="text" name="dateFin" class="datePicker"></td>
+			<td>Jusqu'au : </td>
+			<td><input type="text" name="dateFin" class="datePicker"></td>
 		</tr>
 		<tr>
 			<td>

@@ -70,12 +70,12 @@ class AttributController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 
-        		                                                                   'lst_attribut' => $jsonValeurAttribut,
-        		                                                                   'detail_attribut' => $jsonValeurAttributAll,
-        																		   'result_menu' => $menu_sous_menu,
-        		                                                                   'modification' => $modification,
-        		                                                                   'erreur' => $erreur));
+        return $this->render('ImerirProduitBundle::attribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 
+        		                                                              'lst_attribut' => $jsonValeurAttribut,
+        		                                                              'detail_attribut' => $jsonValeurAttributAll,
+        																	  'result_menu' => $menu_sous_menu,
+        		                                                              'modification' => $modification,
+        		                                                              'erreur' => $erreur));
     }
     
     /**
@@ -148,10 +148,10 @@ class AttributController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-    	return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit,
-    			 																   'lst_attribut' => $jsonValeurAttribut,
-    			 																   'result_menu' => $menu_sous_menu, 
-    			                                                                   'modification' => false,
-    			                                                                   'erreur' => $erreur));
+    	return $this->render('ImerirProduitBundle::attribut.html.twig', array('ligne_produit' => $jsonLigneProduit,
+    			 															  'lst_attribut' => $jsonValeurAttribut,
+    			 															  'result_menu' => $menu_sous_menu, 
+    			                                                              'modification' => false,
+    			                                                              'erreur' => $erreur));
     }
 }

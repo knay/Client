@@ -3,8 +3,14 @@
 {% set nbAttribut = 0 %}
 {% set nbLigneProduit = 0 %}
 
-{% block title_page %}
-Attribut
+{% block title_page %}Attributs{% endblock %}
+
+{% block title %}ALBA - Attributs{% endblock %}
+
+{% block produitBlock %}menuSelected{% endblock %}
+
+{% block stylesheets %}
+	<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}">
 {% endblock %}
 
 {% block title_ajout %}
@@ -32,27 +38,14 @@ que la marque de celui-ci, ou sa couleur.
 <p>La recherche se fait sur le nom des attributs ainsi que leurs valeurs.</p>  
 {% endblock %}
 
-{% block title %}
-ALBA - Attribut
-{% endblock %}
-
-{% block produitBlock %}
-menuSelected
-{% endblock %}
-
-{% block stylesheets %}
-	<link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutattribut.css') }}">
-{% endblock %}
-
 {% block ajout %}
-
 <form action="{{ path('imerir_produit_save_attributs') }}" method="post">
 	<div id="divNom">
 		<label for="nom">Nom : </label>
 		{% if detail_attribut.nom is defined %} 
 		<input type="text" name="nom" value="{{ detail_attribut.nom }}"/>
 		{% else %}
-		<input type="text" name="nom"/>
+		<input type="text" name="nom" placeholder="'Couleur', 'Marque', 'Taille', 'Parfum', etc."/>
 		{% endif %}
 		{% if detail_attribut.id is defined %}
 		<input type="hidden" name="id" value="{{ detail_attribut.id }}">
@@ -143,12 +136,19 @@ menuSelected
 	<button type="submit" class="bouton">
 		<i class="fa fa-check"></i>Valider la saisie
 	</button>
+	
+	{% if modification == true %}
+		<a href="{{ path('imerir_produit_modif_attributs') }}" class="bouton">
+			<i class="fa fa-reply"></i>Annuler
+		</a>
+	{% endif %}
 </form>
 {% endblock %}
 
 {% block recherche %}
 <form action="{{ path('imerir_produit_modif_attributs') }}" method="post">
-	<label for="rechNom">Attribut ou valeur possible : </label><input type="text" name="rechNom">
+	<label for="rechNom">Attribut ou valeur possible : </label>
+	<input type="text" name="rechNom" placeholder="'Simone perele', 'Marque', 'Rouge', etc."><br>
 	<button type="submit" class="bouton">
 		<i class="fa fa-search"></i>Rechercher
 	</button>
@@ -156,8 +156,13 @@ menuSelected
 {% endblock %}
 
 {% block table %}
-	<tr><th>Nom</th><th>Valeurs possibles</th></tr>
-{% for i in lst_attribut %}
+	<tr>
+		<th>Nom</th>
+		<th>Valeurs possibles</th>
+		<th>Lignes produits</th>
+	</tr>
+	
+	{% for i in lst_attribut %}
 	<tr>
 		<td>
 			<form method="post" action="{{ path('imerir_produit_modif_attributs') }}" style="display: none">
@@ -174,8 +179,11 @@ menuSelected
 				{% endif %}
 			{% endfor %}
 		</td>
+		<td>
+			{{ i.ligne_produit }}
+		</td>
 	</tr>
-{% endfor %}
+	{% endfor %}
 {% endblock %}
 
 {% block javascripts %}

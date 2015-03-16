@@ -31,15 +31,26 @@ menuSelected
 	<div id="chargement" style="display: none;">
 		<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>
 	</div>
-	<p>
-		Chercher un client :
-		<input type="text" id="critereRechClient">
-		<button class="bouton" id="chercher_client"><i class="fa fa-search"></i>Rechercher</button>
-		<table id="tabRechClient" class="tableau">
-		</table>
-	</p>
-	<p>Ou<br>Ajouter un nouveau client : 
-	<button type="button" class="bouton" id="ajout_client"><i class="fa fa-user-plus"></i>Nouveau client</button></p>
+	<span id="presAjoutClient">
+		<span>
+			<table>
+				<tr><td>Chercher un client :</td></tr>
+				<tr><td><input type="text" placeholder="Nom, prénom, téléphone, addresse e-mail..." id="critereRechClient"></td>
+				<tr><td><button class="bouton" id="chercher_client"><i class="fa fa-search"></i>Rechercher</button></td></tr>
+			</table>
+		</span>
+		<span class="spanOu">
+		OU
+		</span>
+		<span>
+			<table>
+				<tr><td>Ajouter un nouveau client :</td></tr> 
+				<tr><td><button type="button" class="bouton" id="ajout_client"><i class="fa fa-user-plus"></i>Nouveau client</button></td></tr>
+			</table>
+		</span>
+	</span>
+	<table id="tabRechClient" class="tableau_contact" style="display:none; width:100%">
+	</table>
 	<div style="display: none;" id="divAjoutClient">
 		<input type="button" value="Retour" class="bouton retour_client"><br>
 		<form action="{{ path('imerir_validation_creation_client') }}" method="post">
@@ -194,9 +205,13 @@ menuSelected
 					</td>
 				</tr>
 			</table>
-			<h2>TOTAL À PAYER : 
+			<h2>
+				TOTAL À PAYER : 
+				<span id="prixTotal">0.0 €</span>
+			</h2>
+			<div class="alignDroite">
 				<button type="submit" id="btnCaisse" class="bouton"><i class="fa fa-check"></i>Valider la facture</button>
-				<span id="prixTotal">0.0 €</span></h2>
+			</div>
 		</form>
 	</div>
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
@@ -244,8 +259,10 @@ $("#formulaireCaisse").submit(function (event) {
 		}
 	});
 
-	if (true === sansPrix) 
-		message = "Attention : certain articles n'ont pas de prix renseigné.\n" + message;
+	if (true === sansPrix) {
+		alert("Attention : Vous ne pouvez pas valider une facture avec un article inconnu. \nSupprimer cet article pour continuer.");
+		return false;
+	}
 	
 	if (idClient === "-1" || idClient === "") 
 		message = "Attention : cette vente n'est affectée à aucun client.\n" + message;
@@ -316,6 +333,7 @@ $("#valideNewClient").click(function () {
 
 	$("#chargement").show();
 	$("#divAjoutClient").hide();
+	$("#presAjoutClient").hide();
 	$("#dialogClient").children("p").hide();
 	$("#tabRechClient").hide();
 
@@ -330,6 +348,7 @@ $("#valideNewClient").click(function () {
 			   $("#chargement").hide();
 			   $("#divAjoutClient").hide();
 			   $("#dialogClient").children("p").show();
+			   $("#presAjoutClient").show();
 			   $("#tabRechClient").show();
 		   },
 		   type: method
@@ -344,6 +363,7 @@ $("#chercher_client").click(function () {
 
 	$("#chargement").show();
 	$("#divAjoutClient").hide();
+	$("#presAjoutClient").hide();
 	$("#dialogClient").children("p").hide();
 	$("#tabRechClient").hide();
 
@@ -356,14 +376,24 @@ $("#chercher_client").click(function () {
 			   if (typeof data.erreur !== 'undefined') {
 				   alert("Une erreur est survenue lors de la recherche : \n"+data.erreur);
 				   $("#chargement").hide();
-				   $("#divAjoutClient").hide();
+				   $("#divAjoutClient").show();
+				   $("#presAjoutClient").show();
 				   $("#dialogClient").children("p").show();
 				   $("#tabRechClient").show();
 				   return;
 			   }
+
+			   $("#tabRechClient").html("");
+			   $("#tabRechClient").append("<tr>"
+					   + "<th>Civilité</th>"
+					   + "<th>Nom</th>"
+					   + "<th>Prenom</th>"
+					   + "<th>Date de naissance</th>"
+					   + "<th>Addresse mail</th>"
+					   + "<th>Téléphone</th>"
+					   + "</tr>");
 			   
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
-			   $("#tabRechClient").html("");
 			   for(i in objJson) {
 				   var nom = "";
 				   var id = 0;
@@ -389,19 +419,19 @@ $("#chercher_client").click(function () {
 					   telephone_portable = objJson[i].telephone_portable;
 				   
 				   $("#tabRechClient").append("<tr>"
+						   + "<td class=\"tdCiviliteClient\">"+escape(civilite)+"</td>"
 						   + "<td class=\"tdNomClient\"><input type=\"hidden\" value=\""+escape(id)+"\" class=\"idClient\">"+escape(nom)+"</td>"
 						   + "<td class=\"tdPrenomClient\">"+escape(prenom)+"</td>"
 						   + "<td>"+escape(date_naissance)+"</td>"
-						   + "<td class=\"tdCiviliteClient\">"+escape(civilite)+"</td>"
 						   + "<td>"+escape(email)+"</td>"
 						   + "<td>"+escape(telephone_portable)+"</td>"
 						   + "</tr>");
-
-				   $("#chargement").hide();
-				   $("#divAjoutClient").hide();
-				   $("#dialogClient").children("p").show();
-				   $("#tabRechClient").show();
 			   }
+			   $("#chargement").hide();
+			   $("#divAjoutClient").hide();
+			   $("#presAjoutClient").show();
+			   $("#dialogClient").children("p").show();
+			   $("#tabRechClient").show();
 			   $("#tabRechClient").find("tr").click(clickTrRechClient);
 		   },
 		   type: 'POST'
@@ -413,11 +443,13 @@ $('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de
 $('#ajout_client').click(function () {
 	$("#divAjoutClient").show();
 	$("#dialogClient").children("p").hide();
+	$("#presAjoutClient").hide();
 	$("#tabRechClient").hide();
 });
 $(".retour_client").click(function () {
 	$("#divAjoutClient").hide();
 	$("#dialogClient").children("p").show();
+	$("#presAjoutClient").show();
 	$("#tabRechClient").show();
 });
 

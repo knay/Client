@@ -60,6 +60,7 @@
 	border-radius: 2px;
 	width: 100%;
 	height: auto;
+	text-align: center;
 }
 
 
@@ -95,8 +96,8 @@
 	padding-right: 5px;
 	padding-top: 1px;
 	padding-bottom: 1px;
+	text-align: center;
 }
-
 
 .tableau tr:nth-child(even) {
 	cursor: pointer;
@@ -111,6 +112,14 @@
 .tableau tr:hover {
 	background-color: #ffedca;
 }
+
+.commande_input {
+    width: 90%;
+    /*height: 10%;*/
+    margin: 0px;
+}
+
+
 
 #title_page {
 	text-align: center;

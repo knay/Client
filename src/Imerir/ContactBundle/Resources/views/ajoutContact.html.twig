@@ -45,7 +45,7 @@ menuSelected
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
                     <td>
-                        <select name="civilite">
+                        <select name="civilite" style="width: 150px">
                             <option value="Mlle.">Mlle.</option>
                             <option value="Mme.">Mme.</option>
                             <option value="M.">M.</option>
@@ -146,7 +146,7 @@ menuSelected
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
                     <td>
-                        <select name="civilite">
+                        <select name="civilite" style="width: 150px">
                             <option value="Mlle.">Mlle.</option>
                             <option value="Mme.">Mme.</option>
                             <option value="M.">M.</option>
@@ -205,7 +205,7 @@ menuSelected
                     {% endif %}
                     <tr class="last">
                         <td><i class="fa fa-plus-square ajout ajouter"></i></td>
-                        <td><select name="type_adresse{{ nbAdresse }}">
+                        <td><select name="type_adresse{{ nbAdresse }}" style="width: 150px">
                         	<option>Autre</option>
                         	<option>Facturation</option>
                         </select></td>
@@ -249,7 +249,7 @@ menuSelected
 
                 <tr><td><label for="nom">Civilité </label></td>
                     <td>
-                        <select name="new_civilite">
+                        <select name="new_civilite" style="width: 150px">
                             {% if modif_civilite == 'Mlle.' %}
                                 <option selected value="">Mlle.</option>
                             {% else %}
@@ -337,7 +337,7 @@ menuSelected
                             <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.id }}" value="1"/>
                         </td>
                         {#TODO#}
-                        <td><select name="modif_type_adresse{{ i.id }}">
+                        <td><select name="modif_type_adresse{{ i.id }}" style="width: 150px">
                         	{% if i.type_adresse_nom == 'Facturation' %}
                         		<option selected>Facturation</option>
                         		<option>Autre</option>
@@ -359,7 +359,7 @@ menuSelected
                     {% endfor %}
                     <tr class="last">
                         <td><i class="fa fa-plus-square ajout ajouter"></i></td>
-                        <td><select name="type_adresse{{ nbAdresse }}">
+                        <td><select name="type_adresse{{ nbAdresse }}" style="width: 150px">
                         {% if flag_fact is defined %}
                         	{% if flag_fact == 1 %}
 	                        	<option>Autre</option>
@@ -511,7 +511,7 @@ menuSelected
             </tr>
             <tr>
                 <td><label for="recherche_contact_civilite">Civilité :</label></td>
-                <td><select name="recherche_contact_civilite">
+                <td><select name="recherche_contact_civilite" style="width: 150px">
                     <option value=""></option>
                     <option value="Mlle.">Mlle.</option>
                     <option value="Mme.">Mme.</option>
@@ -527,14 +527,14 @@ menuSelected
             </tr>
             <tr>
                 <td><label for="recherche_contact_ok_sms">Désire recevoir des SMS </label></td>
-                <td><select name="recherche_contact_ok_sms">
+                <td><select name="recherche_contact_ok_sms" style="width: 150px">
                         <option value=""></option>
                         <option value="Oui">Oui</option>
                         <option value="Non">Non</option>
                     </select></td>
 
                 <td><label for="recherche_contact_ok_mail">Désire recevoir des e-mails </label></td>
-                <td><select name="recherche_contact_ok_mail">
+                <td><select name="recherche_contact_ok_mail" style="width: 150px">
                         <option value=""></option>
                         <option value="Oui">Oui</option>
                         <option value="Non">Non</option>

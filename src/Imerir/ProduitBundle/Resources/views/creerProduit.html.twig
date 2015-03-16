@@ -43,7 +43,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                 <tr>
                 	<td><label for="nomLigneProduit">Ligne produit : </label></td>
                     <td>
-                    	<select name="nomLigneProduit">
+                    	<select name="nomLigneProduit" style="width: 150px">
                         {% for i in ligne_produit %}
                             <option>{{ i.nom }}</option>
                         {% endfor %}
@@ -67,7 +67,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                 <tr>
                 	<td><label for="nomLigneProduit">Ligne produit : </label></td>
                     <td>
-                    	<select name="nomLigneProduit">
+                    	<select name="nomLigneProduit" style="width: 150px">
                         {% for i in ligne_produit %}
                             <option>{{ i.nom }}</option>
                         {% endfor %}
@@ -100,7 +100,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                 <tr>
                 	<td><label for="nomLigneProduit">Ligne produit : </label></td>
                     <td>
-                    	<select name="nomLigneProduit">
+                    	<select name="nomLigneProduit" style="width: 150px">
                         {% for i in ligne_produit %}
                             {% if i.nom == nom_modif_lp %}
                                 <option selected>{{ i.nom }}</option>
@@ -128,7 +128,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
 	            <tr>
 	             	<td><label for="nomLigneProduit">Ligne produit : </label></td>
 	                <td>
-	                 	<select name="nomLigneProduit">
+	                 	<select name="nomLigneProduit" style="width: 150px">
 	                    {% for i in ligne_produit %}
 	                        <option>{{ i.nom }}</option>
 	                    {% endfor %}
@@ -156,7 +156,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
     		
 		    	<td><label for="rechLp">Ligne produit : </label></td>
 		        <td>
-		        	<select name="rechLp">
+		        	<select name="rechLp" style="width: 150px">
 		            	<option></option>
 		            	{% for i in ligne_produit %}
 		                	<option>{{ i.nom }}</option>

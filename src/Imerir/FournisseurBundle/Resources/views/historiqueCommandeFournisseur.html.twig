@@ -24,7 +24,7 @@ menuSelected
     <form action="{{ path('imerir_historique_commande_fournisseur') }}" method="post">
         <table>
             <tr>
-                <td><label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label></td>
+                <td><label for="recherche_commande_fournisseur_nom_fournisseur">Fournisseur :</label></td>
                 <td><select name="recherche_commande_fournisseur_nom_fournisseur">
                     <option></option>
                     {% for i in liste_fournisseurs %}
@@ -33,7 +33,7 @@ menuSelected
                 </select></td>
                 <td> <label for="recherche_fournisseur_article">Article :</label></td>
                 <td><input type="text" name="recherche_fournisseur_article"></td>
-                <td><label for="recherche_commande_fournisseur_id">Numéro de commande :</label></td>
+                <td><label for="recherche_commande_fournisseur_id">Référence :</label></td>
                 <td><input type="text" name="recherche_commande_fournisseur_id"></td>
                 <td><button type="submit" class="bouton">
                     <i class="fa fa-search"></i>Rechercher
@@ -49,7 +49,7 @@ menuSelected
     </form>
 
     <tr class="liste_fournisseurs">
-        <table class="tableau"><th>Numéro de la commande</th><th>Nom fournisseur</th><th>Date de la commande</th>
+        <table class="tableau"><th>Référence </th><th>Fournisseur</th><th>Date de la commande</th>
         <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
         {% for i in liste_commandes %}
 

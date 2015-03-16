@@ -62,9 +62,7 @@ menuSelected
                     <td>
                         <input type="text" name="date_reception"  class="datepicker">
                     </td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
             </table>
             <div id="lst_commande">
@@ -100,6 +98,9 @@ menuSelected
                     {% endfor %}
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         {% endif %}
 
         {% if app.request.attributes.get('_route')=='imerir_reception_article_saisie_validation' %}
@@ -116,20 +117,26 @@ menuSelected
         {% endif %}
     {% endif %}
     <form action="{{ path('imerir_reception_article') }}" method="post">
-        <label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_nom_fournisseur">
-        <label for="recherche_fournisseur_article">Article :</label>
-        <input type="text" name="recherche_fournisseur_article">
-        <label for="recherche_commande_fournisseur_id">Numéro de commande :</label>
-        <input type="text" name="recherche_commande_fournisseur_id">
-        <button type="submit" class="bouton">
+    <table>
+    <tr>
+        <td><label for="recherche_commande_fournisseur_nom_fournisseur">Fournisseur :</label></td>
+        <td><input type="text" name="recherche_fournisseur_nom_fournisseur"></td>
+        <td><label for="recherche_fournisseur_article">Article :</label></td>
+        <td><input type="text" name="recherche_fournisseur_article"></td>
+    </tr>
+    <tr>    
+        <td><label for="recherche_commande_fournisseur_id">Référence commande :</label></td>
+        <td><input type="text" name="recherche_commande_fournisseur_id"></td>
+        <td><button type="submit" class="bouton">
             <i class="fa fa-search"></i>Rechercher
-        </button>
+        </button></td>
+    </tr>    
+    </table>    
     </form>
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_fournisseurs"><th>Numéro de la commande</th><th>Nom fournisseur</th><th>Date de la commande</th>
+    <tr class="liste_fournisseurs"><th>Référence commande</th><th>Fournisseur</th><th>Date de la commande</th>
         <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
     {% for i in liste_commandes %}
 

@@ -48,6 +48,7 @@
 	heigth: auto;
 	padding: 0.5%;
 	margin: 0.1%;
+	width: 100%;
 }
 .tableau_contact th {
 	background: #0099CC;
@@ -63,7 +64,7 @@
 
 .tableau_contact td {
 	border-radius: 2px;
-	width: auto;
+	width: 100%;
 	height: auto;
 /* 	padding-left: 1%; */
 /* 	border: 1px solid green; */

@@ -25,7 +25,7 @@ class SoapService
     public function __construct($container) {
     	$this->container = $container;
     	
-		ini_set("soap.wsdl_cache_enabled", 0); // On desactive le cache, pour pas avoir de problèmes
+		ini_set("soap.wsdl_cache_enabled", 1); // On desactive le cache, pour pas avoir de problèmes
 		
     	$url = $this->container->getParameter('soap_serveur'); // Récup de l'url du serveur dans la conf
     	$this->client = new \SoapClient($url);

@@ -126,7 +126,8 @@ menuSelected
                     <button type="submit" class="bouton">
                         <i class="fa fa-check"></i>Valider la saisie
                     </button>
-                    
+                  
+            </form>        
             {% if erreur == '' %}
                 <p class="validation_message">La commande a bien été ajoutée</p>
             {% endif %}
@@ -200,8 +201,9 @@ menuSelected
                 </table>
             </div>
             <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Modifier
+                        <i class="fa fa-edit"></i>Modifier
             </button>
+            </form>
         {% endif %}
 
         {% if app.request.attributes.get('_route')=='imerir_modification_validation_commande_fournisseur' %}
@@ -252,6 +254,7 @@ menuSelected
                 <button type="submit" class="bouton">
                             <i class="fa fa-check"></i>Valider la saisie
                 </button>
+                </form>
                 {% if erreur == '' %}
                     <p class="validation_message">La commande n° {{ commande_id }} a bien été modifiée</p>
                 {% endif %}

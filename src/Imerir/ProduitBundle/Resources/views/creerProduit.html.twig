@@ -37,7 +37,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
         <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
              <table class="tableau_input">
                 <tr>
-                	<td><label for="nomProduit">Référence produit : </label></td>
+                	<td><label for="nomProduit">Référence : </label></td>
                 	<td><input type="text" name="nomProduit"/></td>
                 </tr>
                 <tr>
@@ -61,7 +61,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
         <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
             <table class="tableau_input">
                 <tr>
-                	<td><label for="nomProduit">Référence produit : </label></td>
+                	<td><label for="nomProduit">Référence : </label></td>
                 	<td><input type="text" name="nomProduit"/></td>
                 </tr>
                 <tr>
@@ -89,7 +89,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
         <form action="{{ path('imerir_produit_validation_modification_produit') }}" method="post" id="formulaire_creation_produit">
             <table class="tableau_input">
                 <tr>
-                	<td><label for="nomProduit">Référence produit : </label></td>
+                	<td><label for="nomProduit">Référence : </label></td>
                 	<td>
                 		<input type="text" name="nom_modif_p" value="{{ nom_modif_p }}"/>
                 		<input type="hidden" name="old_nom_modif_p" value="{{ nom_modif_p }}"/>
@@ -113,7 +113,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                 </tr>
             </table>
             <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Modifier
+                <i class="fa fa-edit"></i>Modifier
             </button>
         </form>
     {% endif %}
@@ -122,7 +122,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
     	<form action="{{ path('imerir_produit_validation_modification_produit') }}" method="post" id="formulaire_creation_produit">
 	        <table class="tableau_input">
 	            <tr>
-	               	<td><label for="nomProduit">Référence produit : </label></td>
+	               	<td><label for="nomProduit">Référence : </label></td>
 	                <td><input type="text" name="nomProduit"/></td>
 	            </tr>
 	            <tr>

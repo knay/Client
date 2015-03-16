@@ -180,9 +180,7 @@ menuSelected
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
-                <button type="submit" class="bouton">
-                    <i class="fa fa-check"></i>Modifier
-                </button>
+                
                 <tr><td><label for="nom">Email </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
                 <tr><td><label for="nom">Téléphone portable </label></td>
@@ -248,6 +246,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                    <i class="fa fa-edit"></i>Modifier
+            </button>
         </form>
     {% endif %}
 
@@ -257,9 +258,7 @@ menuSelected
                 <tr>
                     <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
                 <tr>
                     <td><label for="email">Email </label></td>
@@ -317,6 +316,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
 
         {% if erreur == '' %}

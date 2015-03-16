@@ -32,9 +32,7 @@ menuSelected
                 <tr>
                     <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
                 <tr>
                     <td><label for="nom">Prenom </label></td>
@@ -47,10 +45,11 @@ menuSelected
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
                     <td>
-                        <select name="civilite">
+                        <select name="civilite" style="width: 150px">
                             <option value="Mlle.">Mlle.</option>
                             <option value="Mme.">Mme.</option>
                             <option value="M.">M.</option>
+                            <option value="Société">Société</option>
                         </select>
                     </td>
                 </tr>
@@ -83,7 +82,7 @@ menuSelected
                 <table class="tableau_contact" id="tableau">
                     <tr>
                         <th></th>
-                        <th class="titre_lst">Type adresse</th>
+                        <th class="titre_lst">Type</th>
                         <th class="titre_lst">Pays</th>
                         <th class="titre_lst">Ville</th>
                         <th class="titre_lst">Code postal</th>
@@ -121,6 +120,10 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <br>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
     {% endif %}
 
@@ -130,9 +133,7 @@ menuSelected
                 <tr>
                     <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
                 <tr>
                     <td><label for="nom">Prenom </label></td>
@@ -145,10 +146,11 @@ menuSelected
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
                     <td>
-                        <select name="civilite">
+                        <select name="civilite" style="width: 150px">
                             <option value="Mlle.">Mlle.</option>
                             <option value="Mme.">Mme.</option>
                             <option value="M.">M.</option>
+                            <option value="Société">Société</option>
                         </select>
                     </td>
                 </tr>
@@ -179,7 +181,7 @@ menuSelected
                 <table class="tableau_contact" id="tableau">
                     <tr>
                         <th></th>
-                        <th class="titre_lst">Type adresse</th>
+                        <th class="titre_lst">Type</th>
                         <th class="titre_lst">Pays</th>
                         <th class="titre_lst">Ville</th>
                         <th class="titre_lst">Code postal</th>
@@ -203,7 +205,7 @@ menuSelected
                     {% endif %}
                     <tr class="last">
                         <td><i class="fa fa-plus-square ajout ajouter"></i></td>
-                        <td><select name="type_adresse{{ nbAdresse }}">
+                        <td><select name="type_adresse{{ nbAdresse }}" style="width: 150px">
                         	<option>Autre</option>
                         	<option>Facturation</option>
                         </select></td>
@@ -217,6 +219,10 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <br>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
         {% if erreur == '' %}
             <p class="validation_message">Le contact a bien été ajouté</p>
@@ -232,9 +238,7 @@ menuSelected
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
 
-                <button type="submit" class="bouton">
-                    <i class="fa fa-check"></i>Modifier
-                </button>
+                
 
                 <tr><td><label for="nom">Prenom </label>
                         <input type="hidden" name="old_prenom" value="{{ modif_prenom }}"></td>
@@ -245,7 +249,7 @@ menuSelected
 
                 <tr><td><label for="nom">Civilité </label></td>
                     <td>
-                        <select name="new_civilite">
+                        <select name="new_civilite" style="width: 150px">
                             {% if modif_civilite == 'Mlle.' %}
                                 <option selected value="">Mlle.</option>
                             {% else %}
@@ -260,6 +264,11 @@ menuSelected
                                 <option selected>M.</option>
                             {% else %}
                                 <option>M.</option>
+                            {% endif %}  
+                            {% if modif_civilite == 'Société' %}
+                                <option selected>Société</option>
+                            {% else %}
+                                <option>Société</option>
                             {% endif %}
                         </select>
                     </td></tr>
@@ -299,7 +308,7 @@ menuSelected
                 <table class="tableau_contact" id="tableau">
                     <tr>
                         <th></th>
-                        <th class="titre_lst">Type adresse</th>
+                        <th class="titre_lst">Type</th>
                         <th class="titre_lst">Pays</th>
                         <th class="titre_lst">Ville</th>
                         <th class="titre_lst">Code postal</th>
@@ -328,7 +337,7 @@ menuSelected
                             <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.id }}" value="1"/>
                         </td>
                         {#TODO#}
-                        <td><select name="modif_type_adresse{{ i.id }}">
+                        <td><select name="modif_type_adresse{{ i.id }}" style="width: 150px">
                         	{% if i.type_adresse_nom == 'Facturation' %}
                         		<option selected>Facturation</option>
                         		<option>Autre</option>
@@ -350,7 +359,7 @@ menuSelected
                     {% endfor %}
                     <tr class="last">
                         <td><i class="fa fa-plus-square ajout ajouter"></i></td>
-                        <td><select name="type_adresse{{ nbAdresse }}">
+                        <td><select name="type_adresse{{ nbAdresse }}" style="width: 150px">
                         {% if flag_fact is defined %}
                         	{% if flag_fact == 1 %}
 	                        	<option>Autre</option>
@@ -374,6 +383,10 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <br>
+            <button type="submit" class="bouton">
+                    <i class="fa fa-edit"></i>Modifier
+            </button>
         </form>
     {% endif %}
 
@@ -383,9 +396,7 @@ menuSelected
                 <tr>
                     <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
                 <tr>
                     <td><label for="nom">Prenom </label></td>
@@ -402,6 +413,7 @@ menuSelected
                             <option value="Mlle.">Mlle.</option>
                             <option value="Mme.">Mme.</option>
                             <option value="M.">M.</option>
+                            <option value="Société">Société.</option>
                         </select>
                     </td>
                 </tr>
@@ -432,7 +444,7 @@ menuSelected
                 <table class="tableau_contact" id="tableau">
                     <tr>
                         <th></th>
-                        <th class="titre_lst">Type adresse</th>
+                        <th class="titre_lst">Type</th>
                         <th class="titre_lst">Pays</th>
                         <th class="titre_lst">Ville</th>
                         <th class="titre_lst">Code postal</th>
@@ -470,6 +482,10 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <br>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
         {% if erreur == '' %}
             <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié</p>
@@ -495,11 +511,12 @@ menuSelected
             </tr>
             <tr>
                 <td><label for="recherche_contact_civilite">Civilité :</label></td>
-                <td><select name="recherche_contact_civilite">
+                <td><select name="recherche_contact_civilite" style="width: 150px">
                     <option value=""></option>
                     <option value="Mlle.">Mlle.</option>
                     <option value="Mme.">Mme.</option>
                     <option value="M.">M.</option>
+                    <option value="Société">Société</option>
                 </select></td>
 
                 <td><label for="recherche_contact_email">Email :</label></td>
@@ -510,14 +527,14 @@ menuSelected
             </tr>
             <tr>
                 <td><label for="recherche_contact_ok_sms">Désire recevoir des SMS </label></td>
-                <td><select name="recherche_contact_ok_sms">
+                <td><select name="recherche_contact_ok_sms" style="width: 150px">
                         <option value=""></option>
                         <option value="Oui">Oui</option>
                         <option value="Non">Non</option>
                     </select></td>
 
                 <td><label for="recherche_contact_ok_mail">Désire recevoir des e-mails </label></td>
-                <td><select name="recherche_contact_ok_mail">
+                <td><select name="recherche_contact_ok_mail" style="width: 150px">
                         <option value=""></option>
                         <option value="Oui">Oui</option>
                         <option value="Non">Non</option>

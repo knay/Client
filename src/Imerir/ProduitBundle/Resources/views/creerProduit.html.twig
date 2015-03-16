@@ -37,13 +37,13 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
         <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
              <table class="tableau_input">
                 <tr>
-                	<td><label for="nomProduit">Référence produit : </label></td>
+                	<td><label for="nomProduit">Référence : </label></td>
                 	<td><input type="text" name="nomProduit"/></td>
                 </tr>
                 <tr>
                 	<td><label for="nomLigneProduit">Ligne produit : </label></td>
                     <td>
-                    	<select name="nomLigneProduit">
+                    	<select name="nomLigneProduit" style="width: 150px">
                         {% for i in ligne_produit %}
                             <option>{{ i.nom }}</option>
                         {% endfor %}
@@ -61,13 +61,13 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
         <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
             <table class="tableau_input">
                 <tr>
-                	<td><label for="nomProduit">Référence produit : </label></td>
+                	<td><label for="nomProduit">Référence : </label></td>
                 	<td><input type="text" name="nomProduit"/></td>
                 </tr>
                 <tr>
                 	<td><label for="nomLigneProduit">Ligne produit : </label></td>
                     <td>
-                    	<select name="nomLigneProduit">
+                    	<select name="nomLigneProduit" style="width: 150px">
                         {% for i in ligne_produit %}
                             <option>{{ i.nom }}</option>
                         {% endfor %}
@@ -89,7 +89,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
         <form action="{{ path('imerir_produit_validation_modification_produit') }}" method="post" id="formulaire_creation_produit">
             <table class="tableau_input">
                 <tr>
-                	<td><label for="nomProduit">Référence produit : </label></td>
+                	<td><label for="nomProduit">Référence : </label></td>
                 	<td>
                 		<input type="text" name="nom_modif_p" value="{{ nom_modif_p }}"/>
                 		<input type="hidden" name="old_nom_modif_p" value="{{ nom_modif_p }}"/>
@@ -100,7 +100,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                 <tr>
                 	<td><label for="nomLigneProduit">Ligne produit : </label></td>
                     <td>
-                    	<select name="nomLigneProduit">
+                    	<select name="nomLigneProduit" style="width: 150px">
                         {% for i in ligne_produit %}
                             {% if i.nom == nom_modif_lp %}
                                 <option selected>{{ i.nom }}</option>
@@ -113,7 +113,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
                 </tr>
             </table>
             <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Modifier
+                <i class="fa fa-edit"></i>Modifier
             </button>
         </form>
     {% endif %}
@@ -122,13 +122,13 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
     	<form action="{{ path('imerir_produit_validation_modification_produit') }}" method="post" id="formulaire_creation_produit">
 	        <table class="tableau_input">
 	            <tr>
-	               	<td><label for="nomProduit">Référence produit : </label></td>
+	               	<td><label for="nomProduit">Référence : </label></td>
 	                <td><input type="text" name="nomProduit"/></td>
 	            </tr>
 	            <tr>
 	             	<td><label for="nomLigneProduit">Ligne produit : </label></td>
 	                <td>
-	                 	<select name="nomLigneProduit">
+	                 	<select name="nomLigneProduit" style="width: 150px">
 	                    {% for i in ligne_produit %}
 	                        <option>{{ i.nom }}</option>
 	                    {% endfor %}
@@ -156,7 +156,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
     		
 		    	<td><label for="rechLp">Ligne produit : </label></td>
 		        <td>
-		        	<select name="rechLp">
+		        	<select name="rechLp" style="width: 150px">
 		            	<option></option>
 		            	{% for i in ligne_produit %}
 		                	<option>{{ i.nom }}</option>

@@ -30,25 +30,37 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_produit_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
-            <div id="divNom">
-                <label for="nom">Nom de la ligne produit : </label>
-                <input type="text" name="nom"/>
-            </div>
-            <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Valider la saisie
-            </button>
+            <table class="tableau_input">
+            <tr>
+            	<td><label for="nom">Nom : </label></td>
+	            <td><input type="text" name="nom"/></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td><button type="submit" class="bouton">
+	                <i class="fa fa-check"></i>Valider la saisie
+	            </button></td>
+            </tr>
+            </table>
+            
         </form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
-            <div id="divNom">
-                <label for="nom">Nom de la ligne produit : </label>
-                <input type="text" name="nom"/>
-            </div>
-            <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Valider la saisie
-            </button>
+            <table class="tableau_input">
+            <tr>
+            	<td><label for="nom">Nom : </label></td>
+	            <td><input type="text" name="nom"/></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td><button type="submit" class="bouton">
+	                <i class="fa fa-check"></i>Valider la saisie
+	            </button></td>
+            </tr>
+            </table>
+            
         </form>
         <p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajoutée</p>
     {% endif %}
@@ -56,27 +68,42 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
     {% if app.request.attributes.get('_route')=='imerir_produit_modification_ligne_produit' %}
 
         <form action="{{ path('imerir_produit_validation_modification_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
-            <div id="divNom">
-                <label for="nom">Nom de la ligne produit : </label>
-                <input type="hidden" name="id_lp" value="{{ lp_id_val }}">
-                <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
-                <input type="text" name="nom" value="{{ lp_nom_val }}"/>
-            </div>
-            <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Modifier
-            </button>
+            <table>
+            	<tr>
+            	<td>
+	                <label for="nom">Nom : </label>
+	                <input type="hidden" name="id_lp" value="{{ lp_id_val }}">
+	                <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
+	            </td>    
+	            <td>    
+	                <input type="text" name="nom" value="{{ lp_nom_val }}"/>
+            	</td>
+            	</tr>
+            	<tr>
+            		<td></td>
+	            	<td><button type="submit" class="bouton">
+	                <i class="fa fa-edit"></i>Modifier
+	            	</button></td>
+	           </tr> 	
+            </table>
         </form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_modification_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
-            <div id="divNom">
-                <label for="nom">Nom de la ligne produit : </label>
-                <input type="text" name="nom"/>
-            </div>
-            <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Valider la saisie
-            </button>
+            <table class="tableau_input">
+            <tr>
+            	<td><label for="nom">Nom : </label></td>
+	            <td><input type="text" name="nom"/></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td><button type="submit" class="bouton">
+	                <i class="fa fa-check"></i>Valider la saisie
+	            </button></td>
+            </tr>
+            </table>
+            
         </form>
         {% if erreur == '' %}
             <p class="validation_message">La ligne produit "{{ old_nom_lp }}" a bien été modifiée en "{{ nom_lp_add }}"</p>

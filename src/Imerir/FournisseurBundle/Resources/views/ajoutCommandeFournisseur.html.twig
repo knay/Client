@@ -34,22 +34,22 @@ menuSelected
                         <label for="fournisseur">Fournisseur </label>
                     </td>
                     <td>
-                        <select name="fournisseur">
+                        <select name="fournisseur" style="width: 150px">
                             <option></option>
                             {% for i in liste_fournisseurs %}
                                 <option value="{{ i.id }}">{{ i.nom }}</option>
                             {% endfor %}
                         </select>
                     </td>
+                </tr>
+                <tr>
                     <td>
                         <label for="date_commande">Date de la commande </label>
                     </td>
                     <td>
                         <input type="text" name="date_commande" id="datepicker">
                     </td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
             </table>
             <div id="lst_commande">
@@ -63,7 +63,7 @@ menuSelected
                         </td>
 
                         <td>
-                            <input type="text" width="80" name="article"/>
+                            <input type="text" class="commande_input" name="article"/>
                             <label class="fa fa-th recherche rechercher"></label>
                         </td>
                         <td>
@@ -72,7 +72,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
-
+			<button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+             </button>
         </form>
     {% endif %}
 
@@ -84,22 +86,21 @@ menuSelected
                         <label for="fournisseur">Fournisseur </label>
                     </td>
                     <td>
-                        <select name="fournisseur">
+                        <select name="fournisseur" style="width: 150px">
                             <option></option>
                             {% for i in liste_fournisseurs %}
                                 <option value="{{ i.id }}">{{ i.nom }}</option>
                             {% endfor %}
                         </select>
                     </td>
+                </tr>
+                <tr>    
                     <td>
                         <label for="date_commande">Date de la commande </label>
                     </td>
                     <td>
                         <input type="text" name="date_commande" id="datepicker">
                     </td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
                 </tr>
             </table>
             <div id="lst_commande">
@@ -113,15 +114,20 @@ menuSelected
                         </td>
 
                         <td>
-                            <input type="text" width="80" name="article"/>
+                            <input class="commande_input" type="text" width="80" name="article"/>
                             <label class="fa fa-th recherche rechercher"></label>
                         </td>
                         <td>
-                            <input type="number" name="qty">
+                            <input class="commande_input" type="number" name="qty">
                         </td>
                     </tr>
                 </table>
             </div>
+                    <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+                    </button>
+                  
+            </form>        
             {% if erreur == '' %}
                 <p class="validation_message">La commande a bien été ajoutée</p>
             {% endif %}
@@ -136,7 +142,7 @@ menuSelected
                         <label for="fournisseur">Fournisseur </label>
                     </td>
                     <td>
-                        <select name="fournisseur">
+                        <select name="fournisseur" style="width: 150px">
                             <option></option>
                             {% for j in liste_lignes_commandes %}
                                 {% if loop.last %}
@@ -151,15 +157,15 @@ menuSelected
                             {% endfor %}
                         </select>
                     </td>
+                </tr>
+                <tr>    
                     <td>
                         <label for="date_commande">Date de la commande </label>
                     </td>
                     <td>
                         <input type="text" name="date_commande" id="datepicker">
                     </td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Modifier
-                    </button>
+                    
                 </tr>
             </table>
             <div id="lst_commande">
@@ -174,9 +180,9 @@ menuSelected
                                 <input type="hidden" name="modif_ligne_commande_id_{{ i.ligne_commande_id }}" value="{{ i.ligne_commande_id }}"/>
                                 <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.ligne_commande_id }}" value="1"/>
                             </td>
-                            <td><input type="text" name="modif_article_{{ i.ligne_commande_id }}" value="{{ i.code_barre }}"/>
+                            <td><input class="commande_input" type="text" name="modif_article_{{ i.ligne_commande_id }}" value="{{ i.code_barre }}"/>
                                 <label class="fa fa-th recherche rechercher"></label></td>
-                            <td><input type="number" name="modif_quantite_souhaite_{{ i.ligne_commande_id }}" value="{{ i.quantite_souhaite }}"/></td>
+                            <td><input class="commande_input" type="number" name="modif_quantite_souhaite_{{ i.ligne_commande_id }}" value="{{ i.quantite_souhaite }}"/></td>
                         </tr>
                     {% endfor %}
                     <tr>
@@ -185,15 +191,19 @@ menuSelected
                         </td>
 
                         <td>
-                            <input type="text" width="80" name="article"/>
+                            <input class="commande_input" type="text" width="80" name="article"/>
                             <label class="fa fa-th recherche rechercher"></label>
                         </td>
                         <td>
-                            <input type="number" name="qty">
+                            <input class="commande_input" type="number" name="qty">
                         </td>
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-edit"></i>Modifier
+            </button>
+            </form>
         {% endif %}
 
         {% if app.request.attributes.get('_route')=='imerir_modification_validation_commande_fournisseur' %}
@@ -204,22 +214,21 @@ menuSelected
                             <label for="fournisseur">Fournisseur </label>
                         </td>
                         <td>
-                            <select name="fournisseur">
+                            <select name="fournisseur" style="width: 150px">
                                 <option></option>
                                 {% for i in liste_fournisseurs %}
                                     <option value="{{ i.id }}">{{ i.nom }}</option>
                                 {% endfor %}
                             </select>
                         </td>
+                    </tr>
+                    <tr>    
                         <td>
                             <label for="date_commande">Date de la commande </label>
                         </td>
                         <td>
                             <input type="text" name="date_commande" id="datepicker">
                         </td>
-                        <button type="submit" class="bouton">
-                            <i class="fa fa-check"></i>Valider la saisie
-                        </button>
                     </tr>
                 </table>
                 <div id="lst_commande">
@@ -233,16 +242,19 @@ menuSelected
                             </td>
 
                             <td>
-                                <input type="text" width="80" name="article"/>
+                                <input class="commande_input" type="text" width="80" name="article"/>
                                 <label class="fa fa-th recherche rechercher"></label>
                             </td>
                             <td>
-                                <input type="number" name="qty">
+                                <input class="commande_input" type="number" name="qty">
                             </td>
                         </tr>
                     </table>
                 </div>
-
+                <button type="submit" class="bouton">
+                            <i class="fa fa-check"></i>Valider la saisie
+                </button>
+                </form>
                 {% if erreur == '' %}
                     <p class="validation_message">La commande n° {{ commande_id }} a bien été modifiée</p>
                 {% endif %}
@@ -253,13 +265,13 @@ menuSelected
     <form action="{{ path('imerir_creation_commande_fournisseur') }}" method="post">
         <table>
             <tr>
-                <td><label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label></td>
+                <td><label for="recherche_commande_fournisseur_nom_fournisseur">Fournisseur :</label></td>
                 <td><input type="text" name="recherche_fournisseur_nom_fournisseur"></td>
                 <td><label for="recherche_fournisseur_article">Article :</label></td>
                 <td><input type="text" name="recherche_fournisseur_article"></td>
             </tr>
             <tr>
-                <td> <label for="recherche_commande_fournisseur_id">Numéro de commande :</label></td>
+                <td> <label for="recherche_commande_fournisseur_id">Référence :</label></td>
                 <td> <input type="text" name="recherche_commande_fournisseur_id"></td>
                 <td><button type="submit" class="bouton">
             <i class="fa fa-search"></i>Rechercher
@@ -270,7 +282,7 @@ menuSelected
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_fournisseurs"><th>Numéro de la commande</th><th>Nom fournisseur</th><th>Date de la commande</th>
+    <tr class="liste_fournisseurs"><th>Référence</th><th>Fournisseur</th><th>Date de la commande</th>
         <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
     {% for i in liste_commandes %}
 

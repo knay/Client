@@ -30,11 +30,9 @@ menuSelected
         <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table id="tableau_input">
             <tr>
-                <td><label for="nom">Nom fournisseur </label></td>
+                <td><label for="nom">Nom </label></td>
                 <td><input type="text" name="nom"/></td>
-                <button type="submit" class="bouton">
-                    <i class="fa fa-check"></i>Valider la saisie
-                </button>
+                
             </tr>
             <tr>
                 <td><label for="email">Email </label></td>
@@ -94,6 +92,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                    <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
     {% endif %}
 
@@ -101,11 +102,9 @@ menuSelected
         <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table id="tableau_input">
                 <tr>
-                    <td><label for="nom">Nom fournisseur </label></td>
+                    <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
                 <tr>
                     <td><label for="email">Email </label></td>
@@ -163,6 +162,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
 
         {% if erreur == '' %}
@@ -174,13 +176,11 @@ menuSelected
 
         <form action="{{ path('imerir_validation_modification_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table id="tableau_input">
-                <tr><td><label for="nom">Nom fournisseur </label>
+                <tr><td><label for="nom">Nom </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
-                <button type="submit" class="bouton">
-                    <i class="fa fa-check"></i>Modifier
-                </button>
+                
                 <tr><td><label for="nom">Email </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
                 <tr><td><label for="nom">Téléphone portable </label></td>
@@ -246,6 +246,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                    <i class="fa fa-edit"></i>Modifier
+            </button>
         </form>
     {% endif %}
 
@@ -253,11 +256,9 @@ menuSelected
         <form action="{{ path('imerir_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table>
                 <tr>
-                    <td><label for="nom">Nom fournisseur </label></td>
+                    <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
                 <tr>
                     <td><label for="email">Email </label></td>
@@ -315,6 +316,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
 
         {% if erreur == '' %}
@@ -328,9 +332,9 @@ menuSelected
     <form action="{{ path('imerir_creation_fournisseur') }}" method="post">
         <table>
             <tr>
-            <td><label for="recherche_fournisseur_nom">Nom fournisseur :</label></td>
+            <td><label for="recherche_fournisseur_nom">Nom :</label></td>
                 <td><input type="text" name="recherche_fournisseur_nom"></td>
-                <td><label for="recherche__fournisseur_email">Email fournisseur :</label></td>
+                <td><label for="recherche__fournisseur_email">Email :</label></td>
                 <td><input type="text" name="recherche_fournisseur_email"></td>
             </tr>
             <tr>
@@ -347,7 +351,7 @@ menuSelected
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Email</th><th>Telephone portable</th>
+    <tr class="liste_fournisseurs"><th>Nom </th><th>Email</th><th>Telephone portable</th>
         <th>Référence client</th><th>Notes</th></tr>
     {% for i in liste_fournisseurs %}
 

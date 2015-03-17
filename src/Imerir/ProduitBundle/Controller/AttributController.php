@@ -23,11 +23,9 @@ class AttributController extends Controller
     	$erreur = ''; // En cas d'erreur
     	$modification = false;
     	
-    	$nomRech = $this->getRequest()->request->get('rechNom'); // Si on fait une recher sur le nom de l'article
+    	$nomRech = $this->getRequest()->query->get('rechNom'); // Si on fait une recher sur le nom de l'article
     	if (null === $nomRech)
     		$nomRech = '';
-    	
-    	echo $nomRech;
     	
     	$jsonValeurAttribut = array();
     	try {

@@ -66,17 +66,31 @@ Ici, vous pouvez ajouter ou modifier un moyen de paiement.
     	<th>Moyens de paiement</th>
     </tr>
     {% for i in liste_mode_paiement %}
-        <tr>
-        	<td>{{ i.paiement_nom }}
-                <form method="post" action="{{ path('imerir_vente_afficher_modification_moyen_paiement') }}" style="display: none">
-                    <input type="hidden" name="id_selected" value="{{ i.paiement_id }}">
-                    <input type="hidden" name="nom_selected" value="{{ i.paiement_nom }}">
-                </form>
-            </td>
-        </tr>
+    	{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr>
+	        	<td>{{ i.paiement_nom }}
+	                <form method="post" action="{{ path('imerir_vente_afficher_modification_moyen_paiement') }}" style="display: none">
+	                    <input type="hidden" name="id_selected" value="{{ i.paiement_id }}">
+	                    <input type="hidden" name="nom_selected" value="{{ i.paiement_nom }}">
+	                </form>
+	            </td>
+	        </tr>
+	    {% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
 {% endblock %}
 
+{% block numero_page %}
+	{% if liste_mode_paiement|length > ligneParPage %}
+		{% for i in 0..liste_mode_paiement|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
 <script>

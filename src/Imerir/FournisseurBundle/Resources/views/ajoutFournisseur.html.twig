@@ -329,7 +329,7 @@ menuSelected
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_creation_fournisseur') }}" method="post">
+    <form action="{{ path('imerir_creation_fournisseur') }}" method="get">
         <table>
             <tr>
             <td><label for="recherche_fournisseur_nom">Nom :</label></td>
@@ -354,21 +354,34 @@ menuSelected
     <tr class="liste_fournisseurs"><th>Nom </th><th>Email</th><th>Telephone portable</th>
         <th>Référence client</th><th>Notes</th></tr>
     {% for i in liste_fournisseurs %}
-
-        <tr><td>{{ i.nom }}
-                <form method="post" action="{{ path('imerir_modification_fournisseur') }}" style="display: none">
-                    <input type="hidden" name="id_f" value="{{ i.id }}">
-                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
-                    <input type="hidden" name="email_f" value="{{ i.email }}">
-                    <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
-                    <input type="hidden" name="reference_client_f" value="{{ i.reference_client }}">
-                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
-                </form>
-            </td>
-        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td><td>{{ i.reference_client }}</td><td>{{ i.notes }}</td></tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr><td>{{ i.nom }}
+	                <form method="post" action="{{ path('imerir_modification_fournisseur') }}" style="display: none">
+	                    <input type="hidden" name="id_f" value="{{ i.id }}">
+	                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
+	                    <input type="hidden" name="email_f" value="{{ i.email }}">
+	                    <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
+	                    <input type="hidden" name="reference_client_f" value="{{ i.reference_client }}">
+	                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
+	                </form>
+	            </td>
+	        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td><td>{{ i.reference_client }}</td><td>{{ i.notes }}</td></tr>
+        {% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
 {% endblock %}
 
+{% block numero_page %}
+	{% if liste_fournisseurs|length > ligneParPage %}
+		{% for i in 0..liste_fournisseurs|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
 <script>

@@ -12,10 +12,10 @@ class FactureController extends Controller
     	$query = $this->get('request');
     	
     	//on recuperer les variables en post ici
-    	$date = $query->request->get('date');
+    	$date = $query->query->get('date');
     	if ($date === null)
     		$date = '';
-    	$client = $query->request->get('client');
+    	$client = $query->query->get('client');
     	if ($client === null)
     		$client = '';
     	$menu_sous_menu = array();

@@ -285,21 +285,35 @@ menuSelected
     <tr class="liste_fournisseurs"><th>Référence</th><th>Fournisseur</th><th>Date de la commande</th>
         <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
     {% for i in liste_commandes %}
-
-        <tr><td>{{ i.commande_id }}</td><td>{{ i.fournisseur_nom }}
-                <form method="post" action="{{ path('imerir_modification_commande_fournisseur') }}" style="display: none">
-                    <input type="hidden" name="modif_fournisseur_nom" value="{{ i.fournisseur_nom }}">
-                    <input type="hidden" name="modif_fournisseur_id" value="{{ i.fournisseur_id }}">
-                    <input type="hidden" name="modif_commande_date_commande" value="{{ i.date_commande }}">
-                    <input type="hidden" name="modif_commande_id" value="{{ i.commande_id }}">
-                    <input type="hidden" name="modif_code_barre" value="{{ i.code_barre }}">
-                    <input type="hidden" name="modif_quantite_souhaite" value="{{ i.quantite_souhaite }}">
-                    <input type="hidden" name="modif_quantite_recu" value="{{ i.quantite_recu }}">
-                </form>
-            </td>
-            <td>{{ i.date_commande }}</td>
-        <td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr><td>{{ i.commande_id }}</td><td>{{ i.fournisseur_nom }}
+	                <form method="post" action="{{ path('imerir_modification_commande_fournisseur') }}" style="display: none">
+	                    <input type="hidden" name="modif_fournisseur_nom" value="{{ i.fournisseur_nom }}">
+	                    <input type="hidden" name="modif_fournisseur_id" value="{{ i.fournisseur_id }}">
+	                    <input type="hidden" name="modif_commande_date_commande" value="{{ i.date_commande }}">
+	                    <input type="hidden" name="modif_commande_id" value="{{ i.commande_id }}">
+	                    <input type="hidden" name="modif_code_barre" value="{{ i.code_barre }}">
+	                    <input type="hidden" name="modif_quantite_souhaite" value="{{ i.quantite_souhaite }}">
+	                    <input type="hidden" name="modif_quantite_recu" value="{{ i.quantite_recu }}">
+	                </form>
+	            </td>
+	            <td>{{ i.date_commande }}</td>
+	        <td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
+        {% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
+{% endblock %}
+
+{% block numero_page %}
+	{% if liste_commandes|length > ligneParPage %}
+		{% for i in 0..liste_commandes|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
 {% endblock %}
 
 {% block javascripts %}

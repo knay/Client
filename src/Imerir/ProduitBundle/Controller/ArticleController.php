@@ -22,6 +22,7 @@ class ArticleController extends Controller
 		$erreur = '';
 		
 		$req = $this->getRequest()->request;
+		$query = $this->getRequest()->query;
 		$tabArticle = array();
 		$tabRech = array();
 		$tabArticle['attributs'] = array();
@@ -78,10 +79,10 @@ class ArticleController extends Controller
 		try {
 			$lp = '';
 			$produit = '';
-			if ($req->get('nomLigneProduit') !== null)
-				$lp = $req->get('nomLigneProduit');
-			if ($req->get('nomProduit') !== null)
-				$produit = $req->get('nomProduit');
+			if ($$query->get('nomLigneProduit') !== null)
+				$lp = $query->get('nomLigneProduit');
+			if ($query->get('nomProduit') !== null)
+				$produit = $query->get('nomProduit');
 			// On va chercher tous les articles en fonction des critères de recherche
 			$resultRecherche = $soap->call('rechercheArticle', array('nomLigneProduit'=>$lp, 'ligneProduit'=>$produit));
 			$tabRech = json_decode($resultRecherche);
@@ -118,6 +119,7 @@ class ArticleController extends Controller
     	$menu_sous_menu = array();
     	$tabRech = array();
     	$req = $this->getRequest()->request;
+    	$query = $this->getRequest()->query;
     	$codeBarre = '';
     	if ($req->get('codeBarre') !== null)
     		$codeBarre = $req->get('codeBarre');
@@ -132,10 +134,10 @@ class ArticleController extends Controller
     		
     		$lp = '';
     		$produit = '';
-    		if ($req->get('nomLigneProduit') !== null)
-    			$lp = $req->get('nomLigneProduit');
+    		if ($query->get('nomLigneProduit') !== null)
+    			$lp = $query->get('nomLigneProduit');
     		if ($req->get('nomProduit') !== null)
-    			$produit = $req->get('nomProduit');
+    			$produit = $query->get('nomProduit');
     		// On va chercher tous les articles en fonction des critères de recherche
     		$resultRecherche = $soap->call('rechercheArticle', array('nomLigneProduit'=>$lp, 'ligneProduit'=>$produit)); 
     		$tabRech = json_decode($resultRecherche);

@@ -121,7 +121,7 @@ ALBA - Factures
 {% endblock %}
 
 {% block recherche %}
-	<form method="post" action="{{ path('imerir_vente_facture') }}">
+	<form method="get" action="{{ path('imerir_vente_facture') }}">
 		<table class="tableau_input">
 			<tr>
 				<td>
@@ -160,19 +160,33 @@ ALBA - Factures
     </tr>
     
     {% for i in result_facture %}
-        <tr class="select_ligne">
-        	<td>
-        		<form method="post" action="{{ path('imerir_vente_facture_detail') }}" >
-	        		<input type="hidden" name="ligne_numero" value="{{ i.numero }}">
-    			</form>
-    		{{ i.numero }}
-        	</td>
-        	<td>{{ i.date }}</td>
-            <td>{{ i.client }}</td>
-            <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
-		</tr>
-		
+    	{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr class="select_ligne">
+	        	<td>
+	        		<form method="post" action="{{ path('imerir_vente_facture_detail') }}" >
+		        		<input type="hidden" name="ligne_numero" value="{{ i.numero }}">
+	    			</form>
+	    		{{ i.numero }}
+	        	</td>
+	        	<td>{{ i.date }}</td>
+	            <td>{{ i.client }}</td>
+	            <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
+			</tr>
+		{% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
+{% endblock %}
+
+{% block numero_page %}
+	{% if result_facture|length > ligneParPage %}
+		{% for i in 0..result_facture|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
 {% endblock %}
 
 {% block javascripts %}

@@ -59,7 +59,7 @@ class AnniversairesController extends Controller
     	$menu_sous_menu = array();
     	$anniversaire_recherche = array();
     	
-    	$mois = $query->request->get('mois');
+    	$mois = $query->query->get('mois');
     	if (null === $mois)
     		$mois = '';
     	$erreur = '';

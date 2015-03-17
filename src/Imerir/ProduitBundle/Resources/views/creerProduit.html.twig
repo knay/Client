@@ -150,7 +150,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
 
 
 {% block recherche %}
-    <form action="{{ path('imerir_produit_creation_produit') }}" method="post">
+    <form action="{{ path('imerir_produit_creation_produit') }}" method="get">
     	<table>
     		<tr>
     		
@@ -185,21 +185,38 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
 
 
 {% block table %}
-    <tr class="produits"><th>Ligne produit</th><th>Produit</th></tr>
+    <tr class="produits">
+    	<th>Ligne produit</th>
+    	<th>Produit</th>
+    </tr>
     {% for i in produits %}
-        <tr><td>{{ i.lp }}</td>
-            <td>{{ i.p }}
-                <form method="post" action="{{ path('imerir_produit_modification_produit') }}" style="display: none">
-                    <input type="hidden" name="nom_lp" value="{{ i.lp}}">
-                    <input type="hidden" name="id_p" value="{{ i.p_id}}">
-                    <input type="hidden" name="nom_p" value="{{ i.p }}">
-                </form>
-            </td></tr>
+    	{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr>
+	        	<td>{{ i.lp }}</td>
+	            <td>{{ i.p }}
+	                <form method="post" action="{{ path('imerir_produit_modification_produit') }}" style="display: none">
+	                    <input type="hidden" name="nom_lp" value="{{ i.lp}}">
+	                    <input type="hidden" name="id_p" value="{{ i.p_id}}">
+	                    <input type="hidden" name="nom_p" value="{{ i.p }}">
+	                </form>
+	            </td>
+	        </tr>
+        {% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
 {% endblock %}
 
-
-
+{% block numero_page %}
+	{% if produits|length > ligneParPage %}
+		{% for i in 0..produits|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
     <script>

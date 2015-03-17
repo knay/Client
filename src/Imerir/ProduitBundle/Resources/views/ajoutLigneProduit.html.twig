@@ -114,7 +114,7 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="post">
+    <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="get">
     	<table>
         	<tr>
         		<td><label for="recherche_lp">Nom : </label></td>
@@ -139,17 +139,32 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 {% block table %}
     <tr class="liste_ligne_produit"><th>Ligne produit</th><th>Attributs</th></tr>
     {% for i in liste_ligne_produit %}
-
-        <tr><td>{{ i.nom }}
-                <form method="post" action="{{ path('imerir_produit_modification_ligne_produit') }}" style="display: none">
-                    <input type="hidden" name="id_lp" value="{{ i.id }}">
-                    <input type="hidden" name="nom_lp" value="{{ i.nom }}">
-                </form>
-            </td>
-            <td>{{ i.attribut_nom }}</td></tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+        	<tr>
+        		<td>{{ i.nom }}
+                	<form method="post" action="{{ path('imerir_produit_modification_ligne_produit') }}" style="display: none">
+                    	<input type="hidden" name="id_lp" value="{{ i.id }}">
+                    	<input type="hidden" name="nom_lp" value="{{ i.nom }}">
+                	</form>
+            	</td>
+            	<td>{{ i.attribut_nom }}</td>
+            </tr>
+        {% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
 {% endblock %}
 
+{% block numero_page %}
+	{% if liste_ligne_produit|length > ligneParPage %}
+		{% for i in 0..liste_ligne_produit|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
 <script>

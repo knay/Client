@@ -12,11 +12,11 @@ class DefaultController extends Controller
 
         $query = $this->get('request');
         //TODO ajouter un champs post dans le twig avec recherche fournisseur
-        $recherche_fournisseur_nom = $query->request->get('recherche_fournisseur_nom');
-        $recherche_fournisseur_email = $query->request->get('recherche_fournisseur_email');
-        $recherche_fournisseur_telephone_portable = $query->request->get('recherche_fournisseur_telephone_portable');
-        $recherche_fournisseur_reference_client = $query->request->get('recherche_fournisseur_reference_client');
-        $recherche_fournisseur_notes = $query->request->get('recherche_fournisseur_notes');
+        $recherche_fournisseur_nom = $query->query->get('recherche_fournisseur_nom');
+        $recherche_fournisseur_email = $query->query->get('recherche_fournisseur_email');
+        $recherche_fournisseur_telephone_portable = $query->query->get('recherche_fournisseur_telephone_portable');
+        $recherche_fournisseur_reference_client = $query->query->get('recherche_fournisseur_reference_client');
+        $recherche_fournisseur_notes = $query->query->get('recherche_fournisseur_notes');
 
         $erreur = '';
 

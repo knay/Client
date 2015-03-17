@@ -75,17 +75,32 @@ menuSelected
     	<th>Quantité</th>
     </tr>
     {% for i in result_stock %}
-     	{% if i.quantite <= 0 %}
-     		<tr class="quantite_inferieur_zero">
-	    {% else %}
-	      	<tr>
+    	{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	     	{% if i.quantite <= 0 %}
+	     		<tr class="quantite_inferieur_zero">
+		    {% else %}
+		      	<tr>
+		    {% endif %}
+	     		<td>{{ i.ligne_produit }}</td>
+	            <td>{{ i.produit }}</td>
+	            <td id="article_stats">{{ i.article }}</td>
+	            <td>{{ i.quantite }}</td>
+	        </tr>
 	    {% endif %}
-     		<td>{{ i.ligne_produit }}</td>
-            <td>{{ i.produit }}</td>
-            <td id="article_stats">{{ i.article }}</td>
-            <td>{{ i.quantite }}</td>
-        </tr>
+		{% set numLigne = numLigne + 1 %}
     {% endfor %}
+{% endblock %}
+
+{% block numero_page %}
+	{% if result_stock|length > ligneParPage %}
+		{% for i in 0..result_stock|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
 {% endblock %}
 
 {% block javascripts %}

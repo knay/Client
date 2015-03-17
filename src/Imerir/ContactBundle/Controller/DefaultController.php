@@ -24,15 +24,15 @@ class DefaultController extends Controller
 
         $query = $this->get('request');
         //TODO ajouter un champs post dans le twig avec recherche contact
-        $recherche_contact_nom = $query->request->get('recherche_contact_nom');
-        $recherche_contact_prenom = $query->request->get('recherche_contact_prenom');
-        $recherche_contact_date_naissance = $query->request->get('recherche_contact_date_naissance');
-        $recherche_contact_civilite = $query->request->get('recherche_contact_civilite');
-        $recherche_contact_email = $query->request->get('recherche_contact_email');
-        $recherche_contact_telephone_portable = $query->request->get('recherche_contact_telephone_portable');
-        $recherche_contact_ok_sms = $query->request->get('recherche_contact_ok_sms');
-        $recherche_contact_ok_mail = $query->request->get('recherche_contact_ok_mail');
-        $recherche_contact_notes = $query->request->get('recherche_contact_notes');
+        $recherche_contact_nom = $query->query->get('recherche_contact_nom');
+        $recherche_contact_prenom = $query->query->get('recherche_contact_prenom');
+        $recherche_contact_date_naissance = $query->query->get('recherche_contact_date_naissance');
+        $recherche_contact_civilite = $query->query->get('recherche_contact_civilite');
+        $recherche_contact_email = $query->query->get('recherche_contact_email');
+        $recherche_contact_telephone_portable = $query->query->get('recherche_contact_telephone_portable');
+        $recherche_contact_ok_sms = $query->query->get('recherche_contact_ok_sms');
+        $recherche_contact_ok_mail = $query->query->get('recherche_contact_ok_mail');
+        $recherche_contact_notes = $query->query->get('recherche_contact_notes');
 
         if($recherche_contact_nom===null)
             $nom='';
@@ -265,6 +265,7 @@ class DefaultController extends Controller
     public function modifContactAction(){
         $soap = $this->get('noyau_soap');
         $query = $this->get('request');
+        $liste_adresses_Contact = array();
 
         $erreur = '';
 
@@ -295,14 +296,16 @@ class DefaultController extends Controller
 
         //IL faut recuperer dans un tableau toutes les valeurs adresse pour chaque Contact
         //$count, $offset,$est_Contact,$ref_id, $pays, $ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-        try {
-            $return_adresses_Contact = $soap->call('getAdresses', array('count' => 0, 'offset' => 0, 'est_fournisseur' => false,
-                'ref_id' => strval($modif_id), 'pays' => '', 'ville' => '', 'voie' => '', 'num_voie' => '',
-                'code_postal' => '', 'num_appartement' => '', 'telephone_fixe' => ''));
-            $liste_adresses_Contact = json_decode($return_adresses_Contact);
-        }
-        catch(\SoapFault $e) {
-            $erreur .=$e->getMessage();
+        if ($modif_id !== null) {
+	        try {
+	            $return_adresses_Contact = $soap->call('getAdresses', array('count' => 0, 'offset' => 0, 'est_fournisseur' => false,
+	                'ref_id' => strval($modif_id), 'pays' => '', 'ville' => '', 'voie' => '', 'num_voie' => '',
+	                'code_postal' => '', 'num_appartement' => '', 'telephone_fixe' => ''));
+	            $liste_adresses_Contact = json_decode($return_adresses_Contact);
+	        }
+	        catch(\SoapFault $e) {
+	            $erreur .=$e->getMessage();
+	        }
         }
 
 
@@ -473,18 +476,20 @@ class DefaultController extends Controller
         }
         //////////////////////////////////////////////////
 
-        try {
-            $soap->call('modifContact', array('id' => $old_id,
-                'nom' => $new_nom,
-                'prenom' => $new_prenom,
-                'date_naissance' => $new_date_naissance,
-                'civilite' => $new_civilite,
-                'email' => $new_email,
-                'telephone_portable' => $new_telephone_portable,
-                'ok_sms' => $new_ok_sms, 'ok_mail' => $new_ok_mail, 'notes' => $new_notes));
-        }
-        catch(\SoapFault $e) {
-            $erreur .=$e->getMessage();
+        if ($old_id !== null) {
+	        try {
+	            $soap->call('modifContact', array('id' => $old_id,
+	                'nom' => $new_nom,
+	                'prenom' => $new_prenom,
+	                'date_naissance' => $new_date_naissance,
+	                'civilite' => $new_civilite,
+	                'email' => $new_email,
+	                'telephone_portable' => $new_telephone_portable,
+	                'ok_sms' => $new_ok_sms, 'ok_mail' => $new_ok_mail, 'notes' => $new_notes));
+	        }
+	        catch(\SoapFault $e) {
+	            $erreur .=$e->getMessage();
+	        }
         }
 
         try {

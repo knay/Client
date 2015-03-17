@@ -29,7 +29,7 @@ menuSelected
 {% endblock %}
 
 {% block recherche %}
-	<form method="post" action="{{ path('imerir_contact_anniversaires_rechercher') }}" class="recherche_form">
+	<form method="get" action="{{ path('imerir_contact_anniversaires_rechercher') }}" class="recherche_form">
 		<label>Tous les anniversaires du mois de : </label>
 		<select id="select_mois" name="mois">
              <option value=""></option>
@@ -73,7 +73,8 @@ menuSelected
     {% endif %}
     {% if liste_des_anniversaires is defined %}
 		{% if liste_des_anniversaires is not empty %}
-   			{% for i in liste_des_anniversaires %}
+	   		{% for i in liste_des_anniversaires %}
+	   			{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
 		        <tr class="ligne_du_tableau">
 		        	<td>{{ i.client_civilite }}</td>
 		        	<td>{{ i.client_nom }}</td>
@@ -82,11 +83,26 @@ menuSelected
 		            <td>{{ i.client_age }}</td>
 		            <td>{{ i.client_email }}</td>
 				</tr>
+				{% endif %}
+				{% set numLigne = numLigne + 1 %}
 			{% endfor %}
 		{% endif %}
 	{% endif %}
 {% endblock %}
 
+{% block numero_page %}
+	{% if liste_des_anniversaires is defined %}
+		{% if liste_des_anniversaires|length > ligneParPage %}
+			{% for i in 0..liste_des_anniversaires|length/ligneParPage %}
+				{% if i == page-1 %}
+					<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+				{% else %} 
+					<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+				{% endif %}
+			{% endfor %}  
+		{% endif %}
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
 <link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}">

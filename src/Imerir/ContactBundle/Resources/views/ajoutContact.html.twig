@@ -496,7 +496,7 @@ menuSelected
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_creation_client') }}" method="post">
+    <form action="{{ path('imerir_creation_client') }}" method="get">
         <table id="tableau_input">
             <tr>
 
@@ -560,41 +560,54 @@ menuSelected
         <th>Notes</th>
     </tr>
     {% for i in liste_contacts %}
-
-        <tr><td>{{ i.nom }}
-                <form method="post" action="{{ path('imerir_modification_client') }}" style="display: none">
-                    <input type="hidden" name="id_f" value="{{ i.id }}">
-                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
-                    <input type="hidden" name="prenom_f" value="{{ i.prenom }}">
-                    <input type="hidden" name="date_naissance_f" value="{{ i.date_naissance }}">
-                    <input type="hidden" name="civilite_f" value="{{ i.civilite }}">
-                    <input type="hidden" name="email_f" value="{{ i.email }}">
-                    <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
-                    <input type="hidden" name="ok_sms_f" value="{{ i.ok_sms }}">
-                    <input type="hidden" name="ok_mail_f" value="{{ i.ok_mail }}">
-                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
-                </form>
-            </td>
-            <td>{{ i.prenom }}</td>
-            <td>{{ i.date_naissance }}</td>
-            <td>{{ i.civilite }}</td>
-            <td>{{ i.email }}</td>
-            <td>{{ i.telephone_portable }}</td>
-            {% if i.ok_sms=='1' %}
-                <td>Oui</td>
-            {% else %}
-                <td>Non</td>
-            {% endif %}
-            {% if i.ok_mail=='1' %}
-                <td>Oui</td>
-            {% else %}
-                <td>Non</td>
-            {% endif %}
-            <td>{{ i.notes }}</td>
-        </tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr><td>{{ i.nom }}
+	                <form method="post" action="{{ path('imerir_modification_client') }}" style="display: none">
+	                    <input type="hidden" name="id_f" value="{{ i.id }}">
+	                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
+	                    <input type="hidden" name="prenom_f" value="{{ i.prenom }}">
+	                    <input type="hidden" name="date_naissance_f" value="{{ i.date_naissance }}">
+	                    <input type="hidden" name="civilite_f" value="{{ i.civilite }}">
+	                    <input type="hidden" name="email_f" value="{{ i.email }}">
+	                    <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
+	                    <input type="hidden" name="ok_sms_f" value="{{ i.ok_sms }}">
+	                    <input type="hidden" name="ok_mail_f" value="{{ i.ok_mail }}">
+	                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
+	                </form>
+	            </td>
+	            <td>{{ i.prenom }}</td>
+	            <td>{{ i.date_naissance }}</td>
+	            <td>{{ i.civilite }}</td>
+	            <td>{{ i.email }}</td>
+	            <td>{{ i.telephone_portable }}</td>
+	            {% if i.ok_sms=='1' %}
+	                <td>Oui</td>
+	            {% else %}
+	                <td>Non</td>
+	            {% endif %}
+	            {% if i.ok_mail=='1' %}
+	                <td>Oui</td>
+	            {% else %}
+	                <td>Non</td>
+	            {% endif %}
+	            <td>{{ i.notes }}</td>
+	        </tr>
+	        {% endif %}
+	        {% set numLigne = numLigne + 1 %}
     {% endfor %}
 {% endblock %}
 
+{% block numero_page %}
+	{% if liste_contacts|length > ligneParPage %}
+		{% for i in 0..liste_contacts|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
     <link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}">

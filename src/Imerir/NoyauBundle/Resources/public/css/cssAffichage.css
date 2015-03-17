@@ -215,3 +215,23 @@ input[type="submit"]:hover {
 	vertical-align: middle;
 }
 
+.num_page {
+	color: orange;
+	text-decoration: none;
+	margin-right: 4px;
+}
+
+.num_page:hover {
+	color: #00AADD;
+}
+
+.selected_page {
+	font-weight: bold;
+	color: red;
+}
+
+#div_num_page {
+	background-color: white;
+	border-top: 1px solid #dfdfdf;
+	border-bottom: 1px solid #dfdfdf;
+}

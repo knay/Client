@@ -99,7 +99,7 @@ Ajouter/modifier un article
 {% endblock %}
 
 {% block recherche %}
-	<form action="{{ path('imerir_produit_article') }}" method="post">
+	<form action="{{ path('imerir_produit_article') }}" method="get">
     	<table>
 	    	<tr>
 	    		<td><label>Ligne produit : </label></td>
@@ -130,26 +130,41 @@ Ajouter/modifier un article
 		<th>Attribut(s)</th>
 	</tr>
 	{% for i in tab_recherche %}
-	<tr>
-		<td>
-			<form method="post" action="{{ path('imerir_produit_article') }}">
-				<input type="hidden" value="{{ i.codeBarre }}" name="codeBarre">
-			</form>
-			{{ i.codeBarre }}
-		</td>
-		<td>{{ i.ligneProduit }}</td>
-		<td>{{ i.produit }}</td>
-		<td>
-			{% for j in i.valAttribut %}
-				{% if loop.last %}
-				{{ j }}
-				{% else %}
-				{{ j }},
-				{% endif %}
-			{% endfor %}
-		</td>
-	</tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+			<tr>
+				<td>
+					<form method="post" action="{{ path('imerir_produit_article') }}">
+						<input type="hidden" value="{{ i.codeBarre }}" name="codeBarre">
+					</form>
+					{{ i.codeBarre }}
+				</td>
+				<td>{{ i.ligneProduit }}</td>
+				<td>{{ i.produit }}</td>
+				<td>
+					{% for j in i.valAttribut %}
+						{% if loop.last %}
+						{{ j }}
+						{% else %}
+						{{ j }},
+						{% endif %}
+					{% endfor %}
+				</td>
+			</tr>
+		{% endif %}
+		{% set numLigne = numLigne + 1 %}
 	{% endfor %}
+{% endblock %}
+
+{% block numero_page %}
+	{% if tab_recherche|length > ligneParPage %}
+		{% for i in 0..tab_recherche|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
 {% endblock %}
 
 {% block javascripts %}

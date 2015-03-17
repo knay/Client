@@ -115,16 +115,29 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 
 {% block recherche %}
     <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="post">
-        <label for="recherche_lp">Nom : </label><input type="text" name="recherche_lp">
-        <label for="recherche_attribut">Attribut : </label><input type="text" name="recherche_attribut">
-        <button type="submit" class="bouton">
-            <i class="fa fa-search"></i>Rechercher
-        </button>
+    	<table>
+        	<tr>
+        		<td><label for="recherche_lp">Nom : </label></td>
+        		<td><input type="text" name="recherche_lp"></td>
+        	</tr>
+        	<tr>
+        		<td><label for="recherche_attribut">Attribut : </label></td>
+        		<td><input type="text" name="recherche_attribut"></td>
+        	</tr>
+        	<tr>
+        		<td></td>
+        		<td>
+        			<button type="submit" class="bouton">
+            			<i class="fa fa-search"></i>Rechercher
+            		</button>
+            	</td>
+            </tr>
+        </table>
     </form>
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_ligne_produit"><th>Nom ligne produit</th><th>Attributs</th></tr>
+    <tr class="liste_ligne_produit"><th>Ligne produit</th><th>Attributs</th></tr>
     {% for i in liste_ligne_produit %}
 
         <tr><td>{{ i.nom }}

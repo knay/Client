@@ -92,7 +92,7 @@ menuSelected
                                 </label>
                             </td>
                             <td>
-                                <input type="number" name="quantite_ajoute_{{ i.ligne_commande_id }}">
+                                <input type="number" min="0" name="quantite_ajoute_{{ i.ligne_commande_id }}">
                             </td>
                         </tr>
                     {% endfor %}
@@ -193,7 +193,7 @@ menuSelected
                 $("#lst_commande").children("table").append(
                 '<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td>'
                 +'<td><input type="text" width="80" name="article'+numLigneCommande+'"/><label class="fa fa-th recherche rechercher"></label></td>'
-                +'<td><input type="number" name="qty'+numLigneCommande+'"></td>'
+                +'<td><input type="number" min="0" name="qty'+numLigneCommande+'"></td>'
                 +'</tr>'
                 );
 

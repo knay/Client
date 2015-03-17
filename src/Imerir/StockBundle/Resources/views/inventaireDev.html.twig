@@ -58,7 +58,11 @@ ALBA - Iventaire complet
 					<i class="fa fa-plus-square ajout ajoutProduit"></i>
 				</td>
 				<td><input type="text" name="code_0" class="valeurCodeBarre" readonly="readonly"></td>
-				<td><input type="number" name="quantite_0" min="1" value="1" class="quantite"></td>
+				<td>
+					<input type="number" name="quantite_0" min="1" value="1" class="quantite">
+					<i class="fa fa-minus-square moinsQuantite" title="-1 en quantité"></i>
+					<i class="fa fa-plus-square plusQuantite" title="+1 en quantité"></i>
+				</td>
 				<td><input type="number" name="prixClient_0" class="prixClient prix" step="any"> €</td>
 				<td><input type="number" name="prixFournisseur_0" class="prixFournisseur prix" step="any"> €</td>
 				<td>
@@ -109,6 +113,32 @@ var nbCodeBarre = 0;  //< Le nombre d'article scanné. Utilisé pour envoyé tou
 var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
 var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problèmes de concurences avec AJAX... Elle permet de stocké des donnée le temps qu'une requete soit passée
 
+/**
+ * Fonction réagissant lors du clic sur le bouton - à côté de la quantité de produit.
+ * Diminue la quantité de 1 en faisait attention de ne pas descendre en dessous de 0.
+ */
+function moinsQuantite() {
+	var input = $(this).parent().find(".quantite");
+	var qt = parseInt(input.val()) - 1;
+	if(qt < 0)
+		qt = 0;
+
+	input.val(qt);
+	calculerPrixTotal();
+}
+
+/**
+ * FOnction réagissant lors du clic sur le bouton + à côté de la quantité produit.
+ * Augmente la quantité produit de 1.
+ */
+function plusQuantite() {
+	var input = $(this).parent().find(".quantite");
+	var qt = parseInt(input.val()) + 1;
+
+	input.val(qt);
+	calculerPrixTotal();
+}
+
 /** 
  * Fonction ouvrant une fenetre de saisie manuelle de code barre
  */
@@ -121,6 +151,7 @@ $(".saisie_manuelle").click(function () {
 		resizable: false,
 		draggable: false
 	});
+	dial.find("input").val('');
 });
 
 /**
@@ -322,6 +353,8 @@ function supprimerLigne () {
 $('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
 $('.ajoutProduit').click(ajoutProduit); // On bind le clic sur bouton - avec la fonction de suppression
 $('.modifierAttribut').click(modifierAttribut); // On bind le clic sur bouton modifer avec la modification d'attibut
+$('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
+$('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
 
 /**
  * Fonction appelé automatique au chargement de la page.
@@ -486,6 +519,10 @@ function validerCodeBarre(saisieManuelle) {
 	$('.supprimer').click(supprimerLigne);
 	$('.selectProduit').unbind('change');
 	$('.selectProduit').change(onChangeSelect);
+	$('.moinsQuantite').unbind("click");
+	$('.plusQuantite').unbind("click");
+	$('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
+	$('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
 
 	ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
 	ligneCur.show(); // On affiche l'article qu'on vient de scanner

@@ -125,7 +125,7 @@ ALBA - Factures
 		<table class="tableau_input">
 			<tr>
 				<td>
-					<label>Date : </label>
+					<label>À partir de : </label>
 				</td>
 				<td>
 					<input type="text" id="date_de_recherche_facture" name="date" size="20" value="aaaa-mm-jj">
@@ -176,7 +176,6 @@ ALBA - Factures
 {% endblock %}
 
 {% block javascripts %}
-<link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}"/>
 <script>
 var format_affichage_date = "yy-mm-dd";
 var explication_client = "Nom";

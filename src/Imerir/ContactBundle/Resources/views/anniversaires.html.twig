@@ -108,6 +108,10 @@ menuSelected
 <link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}">
 <script>
 
+{% if liste_des_anniversaires is empty %}
+	$(".tableau").hide();
+{% endif %}
+
 $("#fieldset_ajout").hide();
 $("#bouton_supprimer_date").hide();
 $("#div_recherche").css("border-bottom", "none");

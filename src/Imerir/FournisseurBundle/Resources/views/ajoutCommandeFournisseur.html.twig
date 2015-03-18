@@ -280,18 +280,25 @@ Pour modifier une commande cliquez simplement sur la ligne de la commande corres
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_creation_commande_fournisseur') }}" method="post">
+    <form action="{{ path('imerir_creation_commande_fournisseur') }}" method="get">
         <table>
             <tr>
                 <td><label for="recherche_commande_fournisseur_nom_fournisseur">Fournisseur :</label></td>
-                <td><input type="text" name="recherche_fournisseur_nom_fournisseur"></td>
+                <td>
+                	<select name="recherche_fournisseur_nom_fournisseur" style="width: 150px">
+                		{% for i in liste_fournisseurs %}
+                			<option>{{ i.nom }}</option>
+                		{% endfor %}
+                	</select>
+                </td>
+                
                 <td><label for="recherche_fournisseur_article">Article :</label></td>
                 <td><input type="text" name="recherche_fournisseur_article"></td>
             </tr>
             <tr>
                 <td> <label for="recherche_commande_fournisseur_id">Référence :</label></td>
                 <td> <input type="text" name="recherche_commande_fournisseur_id"></td>
-                <td><button type="submit" class="bouton">
+                <td></td><td><button type="submit" class="bouton">
             <i class="fa fa-search"></i>Rechercher
         </button></td>
             </tr>

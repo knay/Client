@@ -24,6 +24,24 @@ menuSelected
     ALBA - Réception commandes
 {% endblock %}
 
+{% block aide %}
+Cette page vous permet de réaliser la réception d'articles.
+<br>La réception doit être affecté à une commande enregistrée sur le logiciel.
+<br><br><b>Recherche : </b>
+<br>La première étape pour réaliser une réception est de retrouver grâce aux champs de recherches,
+<br> la commande correspondante.
+<br>Pour vous simplifier cette recherche, les commandes sont triées par date descendante.
+<br><br>
+<b>Ajout : </b>
+<br>Une fois votre commande retrouvée, cliquez sur la ligne correspondante à cette dernière.
+<br>La quantité à ajouté est le minimum pour réaliser une réception.
+<br>En effet, vous pouvez ne pas remplir de date de réception, si l'enregistrement de la réception est fait,
+<br>le même jour que la réception réelle.
+<br><br>
+L'ajout d'une réception pour une commande sera possible jusqu'à que la quantité soit égale ou supérieure à la quantité souhaitée.
+<br>Vous retrouverez les commandes complètes dans l'écran d'historique des commandes fournisseurs.
+{% endblock %}
+
 
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_reception_article_saisie' %}

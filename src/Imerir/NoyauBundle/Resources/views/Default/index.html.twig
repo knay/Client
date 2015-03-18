@@ -93,97 +93,7 @@
 	</span>
 	<table id="tabRechClient" class="tableau_contact" style="display:none; width:100%">
 	</table>
-	<div style="display: none;" id="divAjoutClient">
-		<input type="button" value="Retour" class="bouton retour_client"><br>
-		<form action="{{ path('imerir_validation_creation_client') }}" method="post">
-			<table id="tableau_input">
-	            <tr>
-	                <td><label for="nom">Nom </label></td>
-	                <td><input type="text" name="nom"/></td>
-	                <input type="button" value="Ajouter" id="valideNewClient" class="bouton">
-	            </tr>
-	            <tr>
-	                <td><label for="nom">Prenom </label></td>
-	                <td><input type="text" name="prenom"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-	                <td><input type="date" name="date_naissance" id="datepicker"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="civilite">Civilité </label></td>
-	                <td>
-	                    <select name="civilite">
-	                        <option value="Mlle.">Mlle.</option>
-	                        <option value="Mme.">Mme.</option>
-	                        <option value="M.">M.</option>
-	                    </select>
-	                </td>
-	            </tr>
-	            <tr>
-	                <td><label for="email">Email </label></td>
-	                <td><input type="text" name="email"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="telephone_portable">Telephone portable </label></td>
-	                <td><input type="text" name="telephone_portable"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="ok_sms">Désire recevoir des SMS </label></td>
-	                <td><input type="checkbox" name="ok_sms"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
-	                <td><input type="checkbox" name="ok_mail"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="notes">Notes </label></td>
-	                <td><textarea name="notes"></textarea></td>
-	            </tr>
-	            <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
-	        </table>
-	
-	        {% set nbAdresse = 0 %}
-	        {#champs pour l'adresse#}
-	        <div id="lst_adresse">
-	            <table class="tableau" id="tableau">
-	                <tr>
-	                    <th></th>
-	                    <th class="titre_lst">Pays</th>
-	                    <th class="titre_lst">Ville</th>
-	                    <th class="titre_lst">Code postal</th>
-	                    <th class="titre_lst">N° voie</th>
-	                    <th class="titre_lst">Voie</th>
-	                    <th class="titre_lst">N° appartement</th>
-	                    <th class="titre_lst">Téléphone fixe</th>
-	                </tr>
-	                {% if detail_adresse.adresse is defined %}
-	                    {% for i in detail_adresse.adresse %}
-	                        <tr>
-	                            <td>
-	                                <i class="fa fa-minus-square supprimer"></i>
-	                            </td>
-	                            <td>
-	                                <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
-	                            </td>
-	                        </tr>
-	                        {% set nbAdresse = nbAdresse + 1 %}
-	                    {% endfor %}
-	                {% endif %}
-	                <tr class="last">
-	                    <td><i class="fa fa-plus-square ajout ajouter"></i></td>
-	                    <td><input type="text" name="pays{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="ville{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="voie{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
-	                </tr>
-	            </table>
-	        </div>
-	    </form>
-	</div>
+	<div id="divAjoutClient"></div>
 </div>
 
 <fieldset id="fieldset_ajout">
@@ -367,7 +277,8 @@ function plusQuantite() {
  * de création client.
  * Cette fonction utilise la page de /creation/validation du bundle contact pour enregistrer les données.
  */
-$("#valideNewClient").click(function () {
+function ajoutClient (event) {
+	event.preventDefault();
 	var form = $("#divAjoutClient").find("form");
 	var path = form.attr("action");
 	var method = form.attr("method");
@@ -395,7 +306,8 @@ $("#valideNewClient").click(function () {
 		   },
 		   type: method
 	});
-});
+	return false;
+}
 
 /**
  * Permet de réagir lorsque l'on clic sur le bouton rechercher un client. 
@@ -483,16 +395,48 @@ $("#chercher_client").click(function () {
 $('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
 $('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
 $('#ajout_client').click(function () {
-	$("#divAjoutClient").show();
+	var divAjout = $("#divAjoutClient");
+	divAjout.hide();
 	$("#dialogClient").children("p").hide();
 	$("#presAjoutClient").hide();
 	$("#tabRechClient").hide();
+	$("#chargement").show();
+
+	
+	divAjout.load('{{ path('imerir_creation_client') }}', function () {
+		divAjout.find("head").remove();
+		divAjout.find("#menu").remove();
+		divAjout.find("#div_menu").remove();
+		divAjout.find("#header").remove();
+        divAjout.find("#title_page").remove();
+        divAjout.find("#fieldset_recherche").remove();
+        divAjout.find("#div_num_page").remove();
+        divAjout.find("#affichage").css("left", "0");
+        divAjout.find("#affichage").css("width", "100%");
+
+		divAjout.prepend('<buton type="button" class="retour_client bouton"><i class="fa fa-reply"></i>Retour</buton>'+divAjout.html());
+		divAjout.show();
+		$("#chargement").hide();
+
+		$( "#menu" ).children( "li" ).unbind("click");
+
+		$(".retour_client").unbind("click");
+		$(".retour_client").click(function () {
+			$("#divAjoutClient").hide();
+			$("#dialogClient").children("p").show();
+			$("#presAjoutClient").show();
+			$("#tabRechClient").hide();
+		});
+
+        divAjout.find("form").submit(ajoutClient); // Si on fait un recherche on bloque la req et on passe en ajax
+	});
+	
 });
 $(".retour_client").click(function () {
 	$("#divAjoutClient").hide();
 	$("#dialogClient").children("p").show();
 	$("#presAjoutClient").show();
-	$("#tabRechClient").show();
+	$("#tabRechClient").hide();
 });
 
 /**
@@ -574,7 +518,7 @@ $(".saisie_client").click(function () {
 	});
 
 	$("#divAjoutClient").hide();
-	$("#dialogClient").children("p").show();
+	$("#dialogClient").children("span").show();
 });
 
 /**

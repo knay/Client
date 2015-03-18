@@ -388,7 +388,7 @@ menuSelected
             dial.find("#affichage").css("left", "0");
             dial.find("#affichage").css("width", "100%");
 
-            dial.find("#chargement").remove();
+            dial.find("#chargement").hide();
 
             $( "#menu" ).children( "li" ).unbind("click");
             dial.find("#div_recherche").find("form").submit(submitRechercheArticle); // Si on fait un recherche on bloque la req et on passe en ajax

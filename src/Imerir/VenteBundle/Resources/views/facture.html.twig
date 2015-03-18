@@ -16,8 +16,22 @@ ALBA - Factures
 
 {% block venteBlock %}menuSelected{% endblock %}
 
-{% block ajout %}
+{% block aide %}
+<p>
+	Cette page vous permet d'imprimer une facture.<p>
+</p>
+<h3>Chercher une facture</h3>
+<p>
+	À l'aide du formulaire de recherche, chercher la facture que vous souhaitez imprimer, puis cliquer sur celle-ci.
+</p>
+<h3>Imprimer la facture</h3>
+<p>
+	Une fois la facture choisie, il vous suffit de vérifier les informations puis de cliquer sur le bouton imprimer pour
+	obtenir une version papier de la facture.
+</p>
+{% endblock %}
 
+{% block ajout %}
 	{% set variable_de_boucle = 0 %}
 	{% set montant_total = 0 %}
 	{% set prix_de_la_tva = 0 %}

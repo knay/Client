@@ -4,16 +4,58 @@
     <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
 {% endblock %}
 
-{% block title_page %}
-Votre caisse
-{% endblock %}
+{% block title_page %}Votre caisse{% endblock %}
 
-{% block title %}
-ALBA - Votre caisse
-{% endblock %}
+{% block title %}ALBA - Votre caisse{% endblock %}
 
-{% block caisseBlock %}
-menuSelected
+{% block caisseBlock %}menuSelected{% endblock %}
+
+{% block aide %}
+<p>
+	Cette page vous permet d'effecuter une vente.<br>
+	Lorsque vous arrivez sur cette page, deux choix s'offrent à vous : 
+</p>
+<ul>
+	<li>Scanner un article pour initier la vente</li>
+	<li>Ou, si le code barre ne fonctionne pas, saisir manuellement celui-ci.</li>
+</ul>
+<p>
+	Une fois l'article scanné vous pouvez choisir la quantité vendue. Pour cela vous pouvez, soit appuyer 
+	sur les boutons plus et moins dans la colonne "Quantité", soit scanner l'article une seconde fois.
+</p>
+<p>
+	Vous pouvez aussi appliquer une promotion spontannée sur le produit de votre choix en modifiant la valeur
+	du champs dans la colonne promotion. La promotion appliquée sera en pourcentage.
+</p>
+<h3>Problèmes et solutions</h3>
+<ul>
+	<li>
+		<b>Problème :</b> La douchette à scanné des codes barres erronnées.<br>
+		<b>Solution :</b> Supprimer les articles dont les code barres sont erroné avec le bouton rouge, et rescanner l'article.
+	</li>
+	<li>
+		<b>Problème :</b> L'article n'a pas de prix.<br>
+		<b>Solution :</b> Le code barre n'est peut être pas bon. Supprimer puis rescanner l'article. Si le problème
+		persiste, c'est surement que le produit n'a pas été préalablement enregistré sur le logiciel. Dans ce cas là 
+		il faut finir la vente sans utiliser le logiciel, tout en notant les articles vendu sur un morceau de papier.
+		Une fois la vente sur papier effectuée, ajouter l'article au logiciel.
+	</li>
+	<li>
+		<b>Problème :</b> La douchette n'arrive pas à lire le code barre.<br>
+		<b>Solution :</b> Si le code barre est lisible, utiliser le bouton en haut de votre ecran permettant de faire une 
+		saisie manuelle de code barre. Si le code barre est illisible, trouver un autre article du même type et essayer le
+		code barre présent sur cet article.
+	</li>
+	<li>
+		<b>Problème :</b> Le client ne souhaite pas fournir ses informations.<br>
+		<b>Solution :</b> Ne pas associer de client à cette vente (ce n'est pas obligatoire).
+	</li>
+	<li>
+		<b>Problème :</b> Le moyen de paiement utiliser par le client n'est pas présent dans la liste déroulante.<br>
+		<b>Solution :</b> Valider la vente sans préciser de moyen de paiement. Après la vente, penser à ajouter le moyen
+		de paiement dans le menu Vente -> Moyens de paiement.
+	</li>
+</ul>
 {% endblock %}
 
 {% block affichage %}

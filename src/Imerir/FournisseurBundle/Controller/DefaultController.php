@@ -212,19 +212,20 @@ class DefaultController extends Controller
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
 
+        $liste_adresses_fournisseur = '';
         //IL faut recuperer dans un tableau toutes les valeurs adresse pour chaque fournisseur
         //$count, $offset,$est_fournisseur,$ref_id, $pays, $ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-        try {
-            $return_adresses_fournisseur = $soap->call('getAdresses', array('count' => 0, 'offset' => 0, 'est_fournisseur' => true,
-                'ref_id' => strval($modif_id), 'pays' => '', 'ville' => '', 'voie' => '', 'num_voie' => '',
-                'code_postal' => '', 'num_appartement' => '', 'telephone_fixe' => ''));
-            $liste_adresses_fournisseur = json_decode($return_adresses_fournisseur);
+        if ($modif_id !== null) {
+	        try {
+	            $return_adresses_fournisseur = $soap->call('getAdresses', array('count' => 0, 'offset' => 0, 'est_fournisseur' => true,
+	                'ref_id' => strval($modif_id), 'pays' => '', 'ville' => '', 'voie' => '', 'num_voie' => '',
+	                'code_postal' => '', 'num_appartement' => '', 'telephone_fixe' => ''));
+	            $liste_adresses_fournisseur = json_decode($return_adresses_fournisseur);
+	        }
+	        catch(\SoapFault $e) {
+	            $erreur .=$e->getMessage();
+	        }
         }
-        catch(\SoapFault $e) {
-            $erreur .=$e->getMessage();
-        }
-
-
 
         return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu'=>$menu_sous_menu,'modif_id'=>$modif_id,
             'modif_nom'=>$modif_nom,'modif_email'=>$modif_email,

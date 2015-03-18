@@ -19,9 +19,9 @@ class ReceptionCommandeController extends Controller
         <label for="recherche_commande_fournisseur_id">Numéro de commande :</label>
         <input type="text" name="recherche_commande_fournisseur_id">
         */
-        $recherche_nom = $query->request->get('recherche_fournisseur_nom_fournisseur');
-        $recherche_article = $query->request->get('recherche_fournisseur_article');
-        $recherche_commande = $query->request->get('recherche_commande_fournisseur_id');
+        $recherche_nom = $query->query->get('recherche_fournisseur_nom_fournisseur');
+        $recherche_article = $query->query->get('recherche_fournisseur_article');
+        $recherche_commande = $query->query->get('recherche_commande_fournisseur_id');
 
         $erreur = '';
 
@@ -88,15 +88,21 @@ class ReceptionCommandeController extends Controller
 
         $erreur = '';
 
-        try {
-            $return_liste_lignes_commandes = $soap->call('getLignesCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
-                'fournisseur_nom' => '', 'commande_id' => $modif_commande_id, 'article_code' => ''));
+        $liste_lignes_commandes = '';
+        
+        if($modif_commande_id != null){
+        	try {
+        		$return_liste_lignes_commandes = $soap->call('getLignesCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
+        				'fournisseur_nom' => '', 'commande_id' => $modif_commande_id, 'article_code' => ''));
+        	}
+        	catch(\SoapFault $e) {
+        		$erreur .=$e->getMessage();
+        	}
+        	$liste_lignes_commandes = json_decode($return_liste_lignes_commandes);
         }
-        catch(\SoapFault $e) {
-            $erreur .=$e->getMessage();
-        }
+        
 
-        $liste_lignes_commandes = json_decode($return_liste_lignes_commandes);
+        
 
         //PARTIE COMMUNE//////////////////////////////////////////
         try {

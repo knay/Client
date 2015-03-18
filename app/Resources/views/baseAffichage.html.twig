@@ -16,7 +16,7 @@
 	</div>
 	{# Gestion des pages dans le tableau de recherche #}	
 	{% set numLigne = 0 %}
-	{% set ligneParPage = 2 %}
+	{% set ligneParPage = 20 %}
 	{% set page = 1 %}
 	{% if app.request.get('page') != "" %}
 		{% set page = app.request.get('page') %}

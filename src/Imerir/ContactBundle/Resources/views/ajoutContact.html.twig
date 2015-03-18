@@ -40,7 +40,7 @@ menuSelected
                 </tr>
                 <tr>
                     <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="date" name="date_naissance" id="datepicker"/></td>
+                    <td><input type="text" name="date_naissance" class="datepicker"/></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -141,7 +141,7 @@ menuSelected
                 </tr>
                 <tr>
                     <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="text" name="date_naissance" id="datepicker"></td>
+                    <td><input type="text" name="date_naissance" class="datepicker"></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -245,7 +245,7 @@ menuSelected
                 <td><input type="text" name="new_prenom" value="{{ modif_prenom }}"></td></tr>
 
                 <tr><td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="text" name="new_date_naissance" id="datepicker"></td></tr>
+                    <td><input type="text" name="new_date_naissance" class="datepicker"></td></tr>
 
                 <tr><td><label for="nom">Civilité </label></td>
                     <td>
@@ -404,7 +404,7 @@ menuSelected
                 </tr>
                 <tr>
                     <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-                    <td><input type="text" name="date_naissance" id="datepicker"></td>
+                    <td><input type="text" name="date_naissance" class="datepicker"></td>
                 </tr>
                 <tr>
                     <td><label for="civilite">Civilité </label></td>
@@ -507,7 +507,7 @@ menuSelected
                 <td><input type="text" name="recherche_contact_prenom"></td>
 
                 <td><label for="recherche_contact_date_naissance">Date de naissance :</label></td>
-                <td><input type="text" name="recherche_contact_date_naissance" id="datepicker"></td>
+                <td><input type="text" name="recherche_contact_date_naissance" class="datepicker"></td>
             </tr>
             <tr>
                 <td><label for="recherche_contact_civilite">Civilité :</label></td>
@@ -610,7 +610,6 @@ menuSelected
 {% endblock %}
 
 {% block javascripts %}
-    <link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}">
 <script>
     //variables
     var numAdresse = 200;
@@ -682,13 +681,13 @@ menuSelected
 
     $(function() {
 
-        $( "#datepicker" ).datepicker({
+        $( ".datepicker" ).datepicker({
             changeMonth: true,
             changeYear: true
         });
         {% if modif_date_naissance is defined %}
             var date = "{{ modif_date_naissance }}";
-            $("#datepicker").datepicker("setDate",date);
+            $(".datepicker").datepicker("setDate",date);
         {% endif %}
     });
     //Permet de gerer la langue du datepicker
@@ -708,7 +707,7 @@ menuSelected
             currentText: 'Aujourd\'hui',
             monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
                 'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
-            monthNamesShort: ['janv.', 'f�vr.', 'mars', 'avril', 'mai', 'juin',
+            monthNamesShort: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin',
                 'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
             dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
             dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],

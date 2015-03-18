@@ -24,6 +24,19 @@ ALBA - Contacts
 menuSelected
 {% endblock %}
 
+{% block aide %}
+Cette page vous permet <em>d'ajouter</em>, <em>modifier</em> ou <em>rechercher</em> un contact.<br>
+Un contact peut être une <em>personne</em> ou une <em>société</em>.<br><br>
+<b>Création : </b><br>
+Renseigner le plus de champs possible dans ce formulaire pour vous permettre un suivi client efficace.<br>
+Le champs <em>nom</em> est le plus important, de plus, posséder <em>une adresse de facturation</em> (une adresse de facturation au maximum par contact),
+<br> vous permettra de produire une <em>facture</em> simplement.<br>
+Il est à noter que vous pouvez ajouter autant d'adresses annexes que vous le désirez en appuyant sur le bouton "plus" à gauche de chaque nouvelle adresse.<br><br>
+<b>Modification:</b><br>
+Pour modifier un contact, vous pouvez cliquer sur la ligne du contact correspondant dans le tableau de recherche.<br>
+Valider votre modification via le bouton "Modifier".
+{% endblock %}
+
 
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_creation_client' %}

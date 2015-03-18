@@ -377,6 +377,8 @@ menuSelected
     function submitRechercheArticle (event) {
         event.preventDefault();
         var params = $(this).serialize();
+
+        dial.html('<div id="chargement"><h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2></div>');
         dial.load('{{ path('imerir_produit_article') }}', params, function () {
         	dial.find("#div_menu").remove();
             dial.find("#header").remove();
@@ -385,6 +387,8 @@ menuSelected
             dial.find("#div_num_page").remove();
             dial.find("#affichage").css("left", "0");
             dial.find("#affichage").css("width", "100%");
+
+            dial.find("#chargement").remove();
 
             $( "#menu" ).children( "li" ).unbind("click");
             dial.find("#div_recherche").find("form").submit(submitRechercheArticle); // Si on fait un recherche on bloque la req et on passe en ajax

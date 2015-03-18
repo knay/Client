@@ -136,7 +136,7 @@ class ArticleController extends Controller
     		$produit = '';
     		if ($query->get('nomLigneProduit') !== null)
     			$lp = $query->get('nomLigneProduit');
-    		if ($req->get('nomProduit') !== null)
+    		if ($query->get('nomProduit') !== null)
     			$produit = $query->get('nomProduit');
     		// On va chercher tous les articles en fonction des critères de recherche
     		$resultRecherche = $soap->call('rechercheArticle', array('nomLigneProduit'=>$lp, 'ligneProduit'=>$produit)); 

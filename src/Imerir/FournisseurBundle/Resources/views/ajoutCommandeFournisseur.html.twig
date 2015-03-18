@@ -2,6 +2,7 @@
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/ajoutLigneProduit.css') }}"/>
+    <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/>
 {% endblock %}
 
 {% block title_page %}
@@ -26,6 +27,10 @@ menuSelected
 
 
 {% block ajout %}
+	<div id="dialog" style="display: none" title="Selectionnez un article"></div>
+	<div id="chargement" style="display: none;">
+		<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>
+	</div>
     {% if app.request.attributes.get('_route')=='imerir_creation_commande_fournisseur' %}
         <form action="{{ path('imerir_creation_validation_commande_fournisseur') }}" method="post" id="formulaire_creation_commande_fournisseur">
             <table id="tableau_input">
@@ -64,7 +69,7 @@ menuSelected
 
                         <td>
                             <input type="text" class="commande_input" name="article"/>
-                            <label class="fa fa-th recherche rechercher"></label>
+                            <label class="fa fa-search recherche rechercher"></label>
                         </td>
                         <td>
                             <input type="number" class="commande_input" name="qty" min="0">
@@ -115,7 +120,7 @@ menuSelected
 
                         <td>
                             <input class="commande_input" type="text" width="80" name="article"/>
-                            <label class="fa fa-th recherche rechercher"></label>
+                            <label class="fa fa-search recherche rechercher"></label>
                         </td>
                         <td>
                             <input class="commande_input" type="number" name="qty" min="0">
@@ -181,7 +186,7 @@ menuSelected
                                 <input class="est_visible" type="hidden" name="modif_est_visible_{{ i.ligne_commande_id }}" value="1"/>
                             </td>
                             <td><input class="commande_input" type="text" name="modif_article_{{ i.ligne_commande_id }}" value="{{ i.code_barre }}"/>
-                                <label class="fa fa-th recherche rechercher"></label></td>
+                                <label class="fa fa-search recherche rechercher"></label></td>
                             <td><input class="commande_input" type="number" min="0" name="modif_quantite_souhaite_{{ i.ligne_commande_id }}" value="{{ i.quantite_souhaite }}"/></td>
                         </tr>
                     {% endfor %}
@@ -192,7 +197,7 @@ menuSelected
 
                         <td>
                             <input class="commande_input" type="text" width="80" name="article"/>
-                            <label class="fa fa-th recherche rechercher"></label>
+                            <label class="fa fa-search recherche rechercher"></label>
                         </td>
                         <td>
                             <input class="commande_input" type="number" min="0" name="qty">
@@ -243,7 +248,7 @@ menuSelected
 
                             <td>
                                 <input class="commande_input" type="text" width="80" name="article"/>
-                                <label class="fa fa-th recherche rechercher"></label>
+                                <label class="fa fa-search recherche rechercher"></label>
                             </td>
                             <td>
                                 <input class="commande_input" type="number" min="0" name="qty">
@@ -320,11 +325,90 @@ menuSelected
 <script>
     //variables
     var numLigneCommande = 200;
+    var derniereLigneCliquee = null;
+    var dial = $("#dialog");
     ///
     $('tr').click(function () {
         $(this).children('td').children('form').submit();
     });
 
+    /**
+     * Permet d'ouvrir une dialog permettant de rechercher un article.
+     */
+    function choisirArticle() {
+    	derniereLigneCliquee = $(this).parent().parent();
+
+    	$("#chargement").show();
+    	$("#fieldset_ajout").find("form").hide();
+    	
+    	dial.load('{{ path('imerir_produit_article') }}', function () {
+        	dial.dialog({
+                modal: true,
+                width: "90%",
+            	height: "700",
+            	resizable: false,
+            	draggable: false,
+            	close: function() {
+                	$("#chargement").hide();
+                	$("#fieldset_ajout").find("form").show();
+                }
+            });
+        	dial.find("#div_menu").remove();
+            dial.find("#header").remove();
+            dial.find("#title_page").remove();
+            dial.find("#fieldset_ajout").remove();
+            dial.find("#div_num_page").remove();
+            dial.find("#affichage").css("left", "0");
+            dial.find("#affichage").css("width", "100%");
+            
+            $( "#menu" ).children( "li" ).unbind("click");
+            dial.find("#div_recherche").find("form").submit(submitRechercheArticle); // Si on fait un recherche on bloque la req et on passe en ajax
+            dial.find(".tableau").find("tr").unbind("click");
+            dial.find(".tableau").find("tr").click(clickLigneArticle);
+    	});
+    }
+
+    /**
+     * Permet de ne pas envoyer le formulaire directement, mais de 
+     * le faire passer en AJAX.
+     * Cette fonction est utilisée lorsque l'on fait une recherche d'article
+     * depuis la dialog. 
+     */
+    function submitRechercheArticle (event) {
+        event.preventDefault();
+        var params = $(this).serialize();
+        dial.load('{{ path('imerir_produit_article') }}', params, function () {
+        	dial.find("#div_menu").remove();
+            dial.find("#header").remove();
+            dial.find("#title_page").remove();
+            dial.find("#fieldset_ajout").remove();
+            dial.find("#div_num_page").remove();
+            dial.find("#affichage").css("left", "0");
+            dial.find("#affichage").css("width", "100%");
+
+            $( "#menu" ).children( "li" ).unbind("click");
+            dial.find("#div_recherche").find("form").submit(submitRechercheArticle); // Si on fait un recherche on bloque la req et on passe en ajax
+            dial.find(".tableau").find("tr").unbind("click");
+            dial.find(".tableau").find("tr").click(clickLigneArticle);
+        });
+        return false;
+    }
+
+    function clickLigneArticle() {
+        var codebarre = $(this).find('input[name="codeBarre"]').val();
+
+        derniereLigneCliquee.find("input").first().val(codebarre);
+
+        dial.dialog("close");
+
+    	$("#chargement").hide();
+    	$("#fieldset_ajout").find("form").show();
+        
+        return false;
+    }
+    
+	$(".rechercher").click(choisirArticle);
+		
     /**
     * Fonction permettant de réagir lors du click sur ajouter un élément.
     * Cette fonction vérfie si un valeur est précisé, et si oui, ajoute
@@ -334,16 +418,11 @@ menuSelected
             function ajoutItem() {
                 var last = $("#lst_commande").find('tr').last();
                 var input = $(last).find('input');
-                /*
-                if ($(input).val() === "") {
-                    input.select();
-                }
-                */
-               // else {
+
                 $("#lst_commande").children("table").append(
                 '<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td>'
-                +'<td><input type="text" width="80" name="article'+numLigneCommande+'"/><label class="fa fa-th recherche rechercher"></label></td>'
-                +'<td><input type="number" min="0" name="qty'+numLigneCommande+'"></td>'
+                +'<td><input type="text" class="commande_input" name="article'+numLigneCommande+'"/> <label class="fa fa-search recherche rechercher"></label></td>'
+                +'<td><input type="number" class="commande_input" min="0" name="qty'+numLigneCommande+'"></td>'
                 +'</tr>'
                 );
 
@@ -355,11 +434,12 @@ menuSelected
                 last.toggleClass("last");
 
                 $(this).unbind('click');
+                $(".rechercher").unbind('click');
+                $(".rechercher").click(choisirArticle);
                 $("#lst_commande").find('.ajouter').click(ajoutItem);
                 $("#lst_commande").find('.supprimer').click(supprimerItem);
 
                 numAdresse++;
-                //}
             }
     );
     $('.supprimer').click(supprimerItem); // On bind le click sur le boutton moins avec la fonction de suppression de ligne
@@ -408,7 +488,7 @@ menuSelected
             currentText: 'Aujourd\'hui',
             monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
                 'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
-            monthNamesShort: ['janv.', 'f�vr.', 'mars', 'avril', 'mai', 'juin',
+            monthNamesShort: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin',
                 'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
             dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
             dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],

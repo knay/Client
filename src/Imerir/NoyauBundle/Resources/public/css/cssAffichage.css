@@ -194,10 +194,13 @@ input[type="submit"]:hover {
 }
 
 .recherche {
-	color: darkgreen;
+	color: white;
 	cursor: pointer;
-	font-size: 15pt;
+	font-size: 12pt;
 	vertical-align: middle;
+	background-color: orange;
+	padding: 2px;
+	border-radius: 3px;
 }
 
 .supprimer {

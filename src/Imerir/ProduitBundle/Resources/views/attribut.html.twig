@@ -138,17 +138,17 @@ que la marque de celui-ci, ou sa couleur.
 	</button>
 	
 	{% if modification == true %}
+		<button class="bouton" type="button" id="btnSupprimer">
+			<i class="fa fa-trash-o"></i> Supprimer
+		</button>
 		<a href="{{ path('imerir_produit_modif_attributs') }}" class="bouton">
 			<i class="fa fa-reply"></i>Annuler
 		</a>
 	{% endif %}
 </form>
 	{% if modification == true %}
-	<form method="post" action="{{ path('imerir_produit_supprimer_attributs') }}">
+	<form method="post" action="{{ path('imerir_produit_supprimer_attributs') }}" id="formSupprimer">
 		<input type="hidden" name="id" value="{{ detail_attribut.id }}">
-		<button class="bouton" type="submit">
-			<i class="fa fa-trash-o"></i> Supprimer
-		</button>
 	</form>
 	{% endif %}
 {% endblock %}
@@ -215,6 +215,10 @@ que la marque de celui-ci, ou sa couleur.
 	var numLigne = 200;
 	var selectCourant = 0;
 
+	$("#btnSupprimer").click(function () {
+		$("#formSupprimer").submit();
+	});
+	
 	$('tr').click(function () {
 		$(this).children('td').children('form').submit();
 	});

@@ -129,6 +129,43 @@ class LigneProduitController extends Controller
             array('liste_ligne_produit'=>$liste_ligne_produit,'lp_nom_val'=>$nom_modif_lp,'lp_id_val'=>$id_modif_lp,
                 'result_menu' => $menu_sous_menu,'erreur'=>$erreur));
     }
+    
+    public function execSupprLigneProduitAction(){
+    	$query = $this->get('request');
+    	$id = $query->request->get('id_lp');
+    	
+    	$erreur = '';
+    	$soap = $this->get('noyau_soap');
+    	
+    	if($id != null){
+    		try{
+    			$soap->call('supprLigneProduit',array('id'=>$id));
+    		}
+    		catch(\SoapFault $e) {
+    			$erreur.=$e->getMessage();
+    		}
+    	}
+    	
+    	try {
+    		$return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => '', 'attribut' => ''));
+    		$liste_ligne_produit = json_decode($return_lp);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
+    	
+    	try {
+    		//on recupere le menu et sous menu
+    		$return_menu = $soap->call('getMenu', array());
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    	
+    	return $this->render('ImerirProduitBundle::ajoutLigneProduit.html.twig', array('liste_ligne_produit'=>$liste_ligne_produit,
+    			'result_menu' => $menu_sous_menu,'erreur'=>$erreur));
+    }
 
     public function execModifLigneProduitAction()
     {

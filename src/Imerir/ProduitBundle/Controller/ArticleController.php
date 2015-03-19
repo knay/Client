@@ -17,6 +17,72 @@ class ArticleController extends Controller
 	 * Action permettant de sauvegarder les modifications sur un article.
 	 * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
 	 */
+	public function supprimerArticleAction () {
+		$soap = $this->get('noyau_soap');
+		$erreur = '';
+	
+		$req = $this->getRequest()->request;
+		$query = $this->getRequest()->query;
+		$tabRech = array();
+		$codeBarre = '';
+		
+		if ($req->get('code_barre') !== null)
+			$codeBarre = $req->get('code_barre');
+	
+		try {
+			$return_produits = $soap->call('supprimerArticle', array('code_barre'=>$codeBarre));
+		}
+		catch(\SoapFault $e) {
+			$erreur.=$e->getMessage();
+		}
+	
+		try {
+			// On récupère tous les produits pour les afficher dans un <select>
+			$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
+			$produitsRetour = json_decode($return_produits);
+				
+			$return_all_ligne_produit = $soap->call('getAllLigneProduit',array()); // On recupere toutes les lignes produits pour la recherche
+			$all_ligne_produit = json_decode($return_all_ligne_produit);
+		}
+		catch(\SoapFault $e) {
+			$erreur.=$e->getMessage();
+		}
+	
+		try {
+			$lp = '';
+			$produit = '';
+			if ($query->get('nomLigneProduit') !== null)
+				$lp = $query->get('nomLigneProduit');
+			if ($query->get('nomProduit') !== null)
+				$produit = $query->get('nomProduit');
+			// On va chercher tous les articles en fonction des critères de recherche
+			$resultRecherche = $soap->call('rechercheArticle', array('nomLigneProduit'=>$lp, 'ligneProduit'=>$produit));
+			$tabRech = json_decode($resultRecherche);
+		}
+		catch(\SoapFault $e) {
+			$erreur.=$e->getMessage();
+		}
+			
+		try {
+			$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
+			$menu_sous_menu = json_decode($return_menu);
+		}
+		catch(\SoapFault $e) {
+			$erreur.=$e->getMessage();
+		}
+	
+		return $this->render('ImerirProduitBundle::article.html.twig', array('produit' => $produitsRetour,
+				'result_menu' => $menu_sous_menu,
+				'erreur' => $erreur,
+				'result_all_ligne_produit' => $all_ligne_produit,
+				'tab_recherche' => $tabRech,
+				'codeBarre' => $codeBarre));
+	}
+	
+	/**
+	 * Action permettant de sauvegarder les modifications sur un article.
+	 * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
+	 */
 	public function saveArticleAction () {
 		$soap = $this->get('noyau_soap');
 		$erreur = '';

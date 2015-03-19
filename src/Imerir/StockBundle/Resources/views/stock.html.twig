@@ -1,22 +1,23 @@
 {% extends "::baseAffichage.html.twig" %}
 
-{% block title_page %}
-Stock
-{% endblock %}
+{% block title_page %}Stock{% endblock %}
 
-{% block title %}
-ALBA - Stock
-{% endblock %}
+{% block title %}ALBA - Stock{% endblock %}
 
-{% block produitBlock %}
-menuSelected
-{% endblock %}
+{% block title_ajout %}Stats{% endblock %}
+
+{% block produitBlock %}menuSelected{% endblock %}
 
 {% block stylesheets %}
      <link rel="stylesheet" href="{{ asset('bundles/imerirstock/css/stock.css') }}"/> 
 {% endblock %}
 
-{% block title_ajout %}Stats{% endblock %}
+{% block aide %}
+<p>
+	Cette page vous permet de voir les quantités que vous avez pour chaque article.<br>
+	Vous pouvez faire une recherche pour avoir un article spécifique grâce au formulaire de recherche.
+</p>
+{% endblock %}
 
 {% block ajout %}
 	<label>Visualiser la difference</label>

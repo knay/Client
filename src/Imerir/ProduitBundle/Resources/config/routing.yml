@@ -13,6 +13,10 @@ imerir_produit_supprimer_attributs:
 imerir_produit_creation_produit:
     path:     /produits/creation
     defaults: { _controller: ImerirProduitBundle:Default:ajoutProduit }
+    
+imerir_produit_suppression_produit:
+    path:     /produits/suppression
+    defaults: { _controller: ImerirProduitBundle:Default:execSupprProduit }    
 
 imerir_produit_validation_creation_produit:
     path:     /produits/creation/validation

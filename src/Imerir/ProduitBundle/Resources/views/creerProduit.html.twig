@@ -33,7 +33,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
 {% endblock %}
 
 {% block ajout %}
-    {% if app.request.attributes.get('_route')=='imerir_produit_creation_produit' %}
+    {% if (app.request.attributes.get('_route')=='imerir_produit_creation_produit' or app.request.attributes.get('_route')=='imerir_produit_suppression_produit') %}
         <form action="{{ path('imerir_produit_validation_creation_produit') }}" method="post" id="formulaire_creation_produit">
              <table class="tableau_input">
                 <tr>
@@ -54,6 +54,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
             <button type="submit" class="bouton">
                 <i class="fa fa-check"></i>Valider la saisie
             </button>
+            <a class="bouton" href="{{ path('imerir_produit_creation_produit') }}"><i class="fa fa-reply"></i>Annuler</a>
         </form>
     {% endif %}
 
@@ -78,6 +79,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
             <button type="submit" class="bouton">
                 <i class="fa fa-check"></i>Valider la saisie
             </button>
+            <a class="bouton" href="{{ path('imerir_produit_creation_produit') }}"><i class="fa fa-reply"></i>Annuler</a>
         </form>
         {% if erreur == '' %}
             <p class="validation_message">Le produit "{{ produit_add }}" a bien été ajouté pour la ligne produit "{{ lp_produit_add }}"</p>
@@ -115,7 +117,14 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
             <button type="submit" class="bouton">
                 <i class="fa fa-edit"></i>Modifier
             </button>
+            <a class="bouton" href="{{ path('imerir_produit_creation_produit') }}"><i class="fa fa-reply"></i>Annuler</a>
+	        <button class="bouton" type="button" id="btnSupprimer">
+				<i class="fa fa-trash-o"></i> Supprimer
+			</button></td>
         </form>
+        <form action="{{ path('imerir_produit_suppression_produit') }}" method="post" id="formSupprimer">
+            	<input type="hidden" name="id_modif_p" value="{{ id_modif_p }}">
+       	</form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_modification_produit' %}
@@ -139,6 +148,7 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
             <button type="submit" class="bouton">
                 <i class="fa fa-check"></i>Valider la saisie
             </button>
+            <a class="bouton" href="{{ path('imerir_produit_creation_produit') }}"><i class="fa fa-reply"></i>Annuler</a>
         </form>
         {% if erreur == '' %}
             <p class="validation_message">Le produit "{{ old_p }}" a bien été modifié en produit "{{ new_p }}" pour la ligne produit "{{ new_lp }}"</p>
@@ -220,6 +230,11 @@ Ici, vous pouvez ajouter ou modifier un produit. Un produit peut contenir plusie
 
 {% block javascripts %}
     <script>
+
+	    $("#btnSupprimer").click(function () {
+			$("#formSupprimer").submit();
+		});
+	
         $('tr').click(function () {
             $(this).children('td').children('form').submit();
         });

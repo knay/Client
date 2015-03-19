@@ -174,6 +174,54 @@ class DefaultController extends Controller
                 'erreur'=>$erreur));
     }
 
+    public function execSupprProduitAction(){
+    	$query = $this->get('request');
+    	
+    	$id_modif_p = $query->request->get('id_modif_p');
+    	
+    	$erreur = '';
+    	
+    	$soap = $this->get('noyau_soap');
+    	
+    	
+    	if($id_modif_p !== null){
+    		try{
+    			$soap->call('supprProduit',array('id'=>$id_modif_p));
+    		}
+    		catch(\SoapFault $e) {
+    			$erreur .=$e->getMessage();
+    		}
+    	}
+    	
+    	//on récupère toutes les lignes produits
+    	try {
+    		$return_lp = $soap->call('getLigneProduit', array('count' => 0, 'offset' => 0, 'nom' => ''));
+    		$lignesProduitsretour = json_decode($return_lp);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
+    	
+    	//on récupère tous les produits
+    	try {
+    		$return_produits = $soap->call('getProduit', array('count' => 0, 'offset' => 0, 'nom' => '', 'ligneproduit' => ''));
+    		$produitsRetour = json_decode($return_produits);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
+    	
+    	//on recupere le menu et sous menu
+    	$return_menu = $soap->call('getMenu', array());
+    	$menu_sous_menu = json_decode($return_menu);
+    	
+    	return $this->render('ImerirProduitBundle::creerProduit.html.twig', array('ligne_produit' => $lignesProduitsretour,
+    			'produits'=>$produitsRetour,
+    			'result_menu' => $menu_sous_menu,
+    			'erreur'=>$erreur
+    	));
+    	
+    }
     public function execModifProduitAction()
     {
 

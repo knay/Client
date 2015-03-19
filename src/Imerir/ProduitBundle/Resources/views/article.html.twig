@@ -48,7 +48,7 @@
 			<i class="fa fa-pencil"></i>Faire une saisie manuelle de code barre
 		</button>
 	</div>
-	<form action="{{ path('imerir_produit_article_save') }}" method="post" >
+	<form action="{{ path('imerir_produit_article_save') }}" method="post">
 		<p>Veuillez compléter les informations suivantes : </p>
 		<table class="tableau_input" >
 			<tr>
@@ -84,20 +84,20 @@
 	 		<tr>
 	 			<td><button class="bouton" type="submit"><i class="fa fa-check"></i>Enregistrer</button></td>
 	 			<td>
+		 			<button class="bouton" type="button" id="btnSupprimer">
+						<i class="fa fa-trash-o"></i> Supprimer
+					</button>
+					<a href="{{ path('imerir_produit_article') }}" class="bouton">
+						<i class="fa fa-reply"></i>Annuler
+					</a>
 				</td>
 	 		</tr>
 		</table>
 	</form>
-	
-	<form method="post" action="{{ path('imerir_produit_article_supprimer') }}">
-		<a href="{{ path('imerir_produit_article') }}" class="bouton">
-			<i class="fa fa-reply"></i>Annuler
-		</a>
+	<form method="post" action="{{ path('imerir_produit_article_supprimer') }}" id="formSupprimer">
 		<input type="hidden" name="code_barre" class="valeurCodeBarre" value="{{ codeBarre }}">
-		<button class="bouton" type="submit">
-			<i class="fa fa-trash-o"></i> Supprimer
-		</button>
 	</form>
+	
 </div>
 <!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
 <div id="message_accueil">
@@ -189,6 +189,10 @@ var isScanne = false;
 
 $("#fieldset_recherche").find(".tableau").find('tr').click(function () {
 	$(this).find("form").submit();
+});
+
+$("#btnSupprimer").click(function () {
+	$("#formSupprimer").submit();
 });
 
 //Gestion des selects en fonction de la ligne produits selectionne

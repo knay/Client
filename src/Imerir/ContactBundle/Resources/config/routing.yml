@@ -34,4 +34,8 @@ imerir_contact_anniversaires_rechercher:
     path: /contacts/anniversaires/rechercher
     defaults: { _controller: ImerirContactBundle:Anniversaires:getAnniversaire }
     
+imerir_suppression_client:
+    path:     /contacts/suppression
+    defaults: { _controller: ImerirContactBundle:Default:execSupprContact }    
+    
     

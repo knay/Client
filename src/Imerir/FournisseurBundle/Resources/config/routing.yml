@@ -36,4 +36,8 @@ imerir_historique_commande_fournisseur:
     
 imerir_suppression_fournisseur:
     path: /fournisseurs/suppression
-    defaults: { _controller: ImerirFournisseurBundle:Default:execSupprFournisseur }    
+    defaults: { _controller: ImerirFournisseurBundle:Default:execSupprFournisseur }
+    
+imerir_suppression_commande_fournisseur:
+    path: /fournisseurs/commandes/suppression
+    defaults: { _controller: ImerirFournisseurBundle:Commandes:execSupprCommande }        

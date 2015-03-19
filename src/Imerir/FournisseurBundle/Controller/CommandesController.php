@@ -198,6 +198,56 @@ class CommandesController extends Controller
     }
 
 
+    public function execSupprCommandeAction(){
+    	//PARTIE COMMUNE////////
+    	$soap = $this->get('noyau_soap');
+    	$query = $this->get('request');
+    	///////////////////////
+    	
+    	$erreur = '';
+    	
+    	foreach ($query->request as $key => $value) {
+    		if (substr($key, 0, strlen('modif_commande_id')) === 'modif_commande_id') {
+    			$id = $value;
+    		}
+    	}
+    	
+    	if($id != null){
+    		try{
+    			$soap->call('supprCommandeFournisseur',array('id'=>$id));
+    			
+    		}
+    		catch(\SoapFault $e) {
+    			$erreur .=$e->getMessage();
+    		}
+    		
+    	}
+    	//PARTIE COMMUNE//////////////////////////////////////////
+    	$return_menu = $soap->call('getMenu', array());
+    	$menu_sous_menu = json_decode($return_menu);
+    	
+    	try {
+    		$return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
+    				'telephone_portable' => '', 'reference_client' => '', 'notes' => ''));
+    		$liste_fournisseurs = json_decode($return);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
+    	
+    	try {
+    		$return_commandes = $soap->call('getCommandesFournisseurs', array('count' => 0, 'offset' => 0, 'fournisseur_id' => '',
+    				'fournisseur_nom' => '', 'commande_id' => '', 'article_code' => ''));
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
+    	
+    	$liste_commandes = json_decode($return_commandes);
+    	return $this->render('ImerirFournisseurBundle::ajoutCommandeFournisseur.html.twig',array('result_menu' => $menu_sous_menu,
+    			'liste_fournisseurs'=>$liste_fournisseurs,'liste_commandes'=>$liste_commandes,'nbLignes'=>0,'erreur'=>$erreur));
+    	////////////////////////////////////////////////////////////
+    }
     public function execModifCommandeAction(){
         //PARTIE COMMUNE////////
         $soap = $this->get('noyau_soap');

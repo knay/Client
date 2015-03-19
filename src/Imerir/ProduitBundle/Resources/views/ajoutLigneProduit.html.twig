@@ -30,25 +30,37 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 {% block ajout %}
     {% if app.request.attributes.get('_route')=='imerir_produit_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
-            <div id="divNom">
-                <label for="nom">Nom de la ligne produit : </label>
-                <input type="text" name="nom"/>
-            </div>
-            <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Valider la saisie
-            </button>
+            <table class="tableau_input">
+            <tr>
+            	<td><label for="nom">Nom : </label></td>
+	            <td><input type="text" name="nom"/></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td><button type="submit" class="bouton">
+	                <i class="fa fa-check"></i>Valider la saisie
+	            </button></td>
+            </tr>
+            </table>
+            
         </form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_creation_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
-            <div id="divNom">
-                <label for="nom">Nom de la ligne produit : </label>
-                <input type="text" name="nom"/>
-            </div>
-            <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Valider la saisie
-            </button>
+            <table class="tableau_input">
+            <tr>
+            	<td><label for="nom">Nom : </label></td>
+	            <td><input type="text" name="nom"/></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td><button type="submit" class="bouton">
+	                <i class="fa fa-check"></i>Valider la saisie
+	            </button></td>
+            </tr>
+            </table>
+            
         </form>
         <p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajoutée</p>
     {% endif %}
@@ -56,27 +68,42 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
     {% if app.request.attributes.get('_route')=='imerir_produit_modification_ligne_produit' %}
 
         <form action="{{ path('imerir_produit_validation_modification_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
-            <div id="divNom">
-                <label for="nom">Nom de la ligne produit : </label>
-                <input type="hidden" name="id_lp" value="{{ lp_id_val }}">
-                <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
-                <input type="text" name="nom" value="{{ lp_nom_val }}"/>
-            </div>
-            <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Modifier
-            </button>
+            <table>
+            	<tr>
+            	<td>
+	                <label for="nom">Nom : </label>
+	                <input type="hidden" name="id_lp" value="{{ lp_id_val }}">
+	                <input type="hidden" name="old_nom" value="{{ lp_nom_val }}">
+	            </td>    
+	            <td>    
+	                <input type="text" name="nom" value="{{ lp_nom_val }}"/>
+            	</td>
+            	</tr>
+            	<tr>
+            		<td></td>
+	            	<td><button type="submit" class="bouton">
+	                <i class="fa fa-edit"></i>Modifier
+	            	</button></td>
+	           </tr> 	
+            </table>
         </form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_modification_ligne_produit' %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
-            <div id="divNom">
-                <label for="nom">Nom de la ligne produit : </label>
-                <input type="text" name="nom"/>
-            </div>
-            <button type="submit" class="bouton">
-                <i class="fa fa-check"></i>Valider la saisie
-            </button>
+            <table class="tableau_input">
+            <tr>
+            	<td><label for="nom">Nom : </label></td>
+	            <td><input type="text" name="nom"/></td>
+            </tr>
+            <tr>
+	            <td></td>
+	            <td><button type="submit" class="bouton">
+	                <i class="fa fa-check"></i>Valider la saisie
+	            </button></td>
+            </tr>
+            </table>
+            
         </form>
         {% if erreur == '' %}
             <p class="validation_message">La ligne produit "{{ old_nom_lp }}" a bien été modifiée en "{{ nom_lp_add }}"</p>
@@ -87,29 +114,57 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="post">
-        <label for="recherche_lp">Nom : </label><input type="text" name="recherche_lp">
-        <label for="recherche_attribut">Attribut : </label><input type="text" name="recherche_attribut">
-        <button type="submit" class="bouton">
-            <i class="fa fa-search"></i>Rechercher
-        </button>
+    <form action="{{ path('imerir_produit_creation_ligne_produit') }}" method="get">
+    	<table>
+        	<tr>
+        		<td><label for="recherche_lp">Nom : </label></td>
+        		<td><input type="text" name="recherche_lp"></td>
+        	</tr>
+        	<tr>
+        		<td><label for="recherche_attribut">Attribut : </label></td>
+        		<td><input type="text" name="recherche_attribut"></td>
+        	</tr>
+        	<tr>
+        		<td></td>
+        		<td>
+        			<button type="submit" class="bouton">
+            			<i class="fa fa-search"></i>Rechercher
+            		</button>
+            	</td>
+            </tr>
+        </table>
     </form>
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_ligne_produit"><th>Nom ligne produit</th><th>Attributs</th></tr>
+    <tr class="liste_ligne_produit"><th>Ligne produit</th><th>Attributs</th></tr>
     {% for i in liste_ligne_produit %}
-
-        <tr><td>{{ i.nom }}
-                <form method="post" action="{{ path('imerir_produit_modification_ligne_produit') }}" style="display: none">
-                    <input type="hidden" name="id_lp" value="{{ i.id }}">
-                    <input type="hidden" name="nom_lp" value="{{ i.nom }}">
-                </form>
-            </td>
-            <td>{{ i.attribut_nom }}</td></tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+        	<tr>
+        		<td>{{ i.nom }}
+                	<form method="post" action="{{ path('imerir_produit_modification_ligne_produit') }}" style="display: none">
+                    	<input type="hidden" name="id_lp" value="{{ i.id }}">
+                    	<input type="hidden" name="nom_lp" value="{{ i.nom }}">
+                	</form>
+            	</td>
+            	<td>{{ i.attribut_nom }}</td>
+            </tr>
+        {% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
 {% endblock %}
 
+{% block numero_page %}
+	{% if liste_ligne_produit|length > ligneParPage %}
+		{% for i in 0..liste_ligne_produit|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
 <script>

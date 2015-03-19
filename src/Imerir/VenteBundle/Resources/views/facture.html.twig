@@ -16,17 +16,34 @@ ALBA - Factures
 
 {% block venteBlock %}menuSelected{% endblock %}
 
-{% block ajout %}
+{% block aide %}
+<p>
+	Cette page vous permet d'imprimer une facture.<p>
+</p>
+<h3>Chercher une facture</h3>
+<p>
+	À l'aide du formulaire de recherche, chercher la facture que vous souhaitez imprimer, puis cliquer sur celle-ci.
+</p>
+<h3>Imprimer la facture</h3>
+<p>
+	Une fois la facture choisie, il vous suffit de vérifier les informations puis de cliquer sur le bouton imprimer pour
+	obtenir une version papier de la facture.
+</p>
+{% endblock %}
 
+{% block ajout %}
 	{% set variable_de_boucle = 0 %}
 	{% set montant_total = 0 %}
 	{% set prix_de_la_tva = 0 %}
 	{% set montant_avec_tva = 0 %}
 	{% set tva = 20 %}
 	<a href="#" onclick="window.print()" class="bouton"><i class="fa fa-print"></i> Imprimer</a>
+	<a href="{{ path('imerir_vente_facture') }}" class="bouton">
+		<i class="fa fa-reply"></i>Annuler
+	</a>
 	<div class="feuille_facture">
 		<div id="logo_facture">
-			<img src="http://localhost/client/src/Imerir/VenteBundle/Resources/public/img/logo_facture.png" alt="logo les caprices de lili">
+			<img src="{{ asset ('bundles/imerirvente/img/logo_facture.png') }}" alt="logo les caprices de lili">
 		</div>
 		<div id="information">
 			<div id="information_facture">
@@ -64,11 +81,20 @@ ALBA - Factures
 				{% if detail_facture_test != '' %}
 					{% for i in detail_facture_test %}
 						<tr>
-							<td class="col_article_contenu">{{ i.nom_produit|capitalize }}</td>
+							<td class="col_article_contenu">
+								{% if i.nombre_article < 0 %}
+									<b>[ Retour ]</b>
+								{% endif %} 
+								{{ i.nom_produit|capitalize }}
+							</td>
 							<td class="col_article_contenu">{{ i.nom_article }}</td>
 							<td>{{ i.nombre_article }}</td>
 							<td>{{ i.prix_article|number_format(2, '.', ',') }} &euro;</td>
-							<td>{{ i.reduction_article }}</td>
+							<td>
+								{% if i.reduction_article != '' %}
+									{{ i.reduction_article }} %
+								{% endif %}
+							</td>
 							<td>{{ i.montant_facture|round(2, 'common')|number_format(2, '.', ',') }} &euro;</td>
 							{% set montant_total =  montant_total +  i.montant_facture %}
 						</tr>
@@ -109,12 +135,33 @@ ALBA - Factures
 {% endblock %}
 
 {% block recherche %}
-	<form method="post" action="{{ path('imerir_vente_facture') }}">
-		<label>Date : </label><input type="text" id="date_de_recherche_facture" name="date" size="20" value="aaaa-mm-jj">
-		<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
-		<label>Client : </label><input type="text" id="recherche_client" name="client" size="20">
-		<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
-		<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
+	<form method="get" action="{{ path('imerir_vente_facture') }}">
+		<table class="tableau_input">
+			<tr>
+				<td>
+					<label>À partir de : </label>
+				</td>
+				<td>
+					<input type="text" id="date_de_recherche_facture" name="date" size="20" value="aaaa-mm-jj">
+					<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<label>Client : </label>
+				</td>
+				<td>
+					<input type="text" id="recherche_client" name="client" size="20">
+					<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
+				</td>
+				<td></td>
+			</tr>
+		</table>
 	</form>
 {% endblock %}
 
@@ -127,23 +174,36 @@ ALBA - Factures
     </tr>
     
     {% for i in result_facture %}
-        <tr class="select_ligne">
-        	<td>
-        		<form method="post" action="{{ path('imerir_vente_facture_detail') }}" >
-	        		<input type="hidden" name="ligne_numero" value="{{ i.numero }}">
-    			</form>
-    		{{ i.numero }}
-        	</td>
-        	<td>{{ i.date }}</td>
-            <td>{{ i.client }}</td>
-            <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
-		</tr>
-		
+    	{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr class="select_ligne">
+	        	<td>
+	        		<form method="post" action="{{ path('imerir_vente_facture_detail') }}" >
+		        		<input type="hidden" name="ligne_numero" value="{{ i.numero }}">
+	    			</form>
+	    		{{ i.numero }}
+	        	</td>
+	        	<td>{{ i.date }}</td>
+	            <td>{{ i.client }}</td>
+	            <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
+			</tr>
+		{% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
 {% endblock %}
 
+{% block numero_page %}
+	{% if result_facture|length > ligneParPage %}
+		{% for i in 0..result_facture|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
+{% endblock %}
+
 {% block javascripts %}
-<link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}"/>
 <script>
 var format_affichage_date = "yy-mm-dd";
 var explication_client = "Nom";

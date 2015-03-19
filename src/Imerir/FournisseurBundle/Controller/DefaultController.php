@@ -12,11 +12,11 @@ class DefaultController extends Controller
 
         $query = $this->get('request');
         //TODO ajouter un champs post dans le twig avec recherche fournisseur
-        $recherche_fournisseur_nom = $query->request->get('recherche_fournisseur_nom');
-        $recherche_fournisseur_email = $query->request->get('recherche_fournisseur_email');
-        $recherche_fournisseur_telephone_portable = $query->request->get('recherche_fournisseur_telephone_portable');
-        $recherche_fournisseur_reference_client = $query->request->get('recherche_fournisseur_reference_client');
-        $recherche_fournisseur_notes = $query->request->get('recherche_fournisseur_notes');
+        $recherche_fournisseur_nom = $query->query->get('recherche_fournisseur_nom');
+        $recherche_fournisseur_email = $query->query->get('recherche_fournisseur_email');
+        $recherche_fournisseur_telephone_portable = $query->query->get('recherche_fournisseur_telephone_portable');
+        $recherche_fournisseur_reference_client = $query->query->get('recherche_fournisseur_reference_client');
+        $recherche_fournisseur_notes = $query->query->get('recherche_fournisseur_notes');
 
         $erreur = '';
 
@@ -212,19 +212,20 @@ class DefaultController extends Controller
         $return_menu = $soap->call('getMenu', array());
         $menu_sous_menu = json_decode($return_menu);
 
+        $liste_adresses_fournisseur = '';
         //IL faut recuperer dans un tableau toutes les valeurs adresse pour chaque fournisseur
         //$count, $offset,$est_fournisseur,$ref_id, $pays, $ville, $voie, $num_voie, $code_postal, $num_appartement,$telephone_fixe
-        try {
-            $return_adresses_fournisseur = $soap->call('getAdresses', array('count' => 0, 'offset' => 0, 'est_fournisseur' => true,
-                'ref_id' => strval($modif_id), 'pays' => '', 'ville' => '', 'voie' => '', 'num_voie' => '',
-                'code_postal' => '', 'num_appartement' => '', 'telephone_fixe' => ''));
-            $liste_adresses_fournisseur = json_decode($return_adresses_fournisseur);
+        if ($modif_id !== null) {
+	        try {
+	            $return_adresses_fournisseur = $soap->call('getAdresses', array('count' => 0, 'offset' => 0, 'est_fournisseur' => true,
+	                'ref_id' => strval($modif_id), 'pays' => '', 'ville' => '', 'voie' => '', 'num_voie' => '',
+	                'code_postal' => '', 'num_appartement' => '', 'telephone_fixe' => ''));
+	            $liste_adresses_fournisseur = json_decode($return_adresses_fournisseur);
+	        }
+	        catch(\SoapFault $e) {
+	            $erreur .=$e->getMessage();
+	        }
         }
-        catch(\SoapFault $e) {
-            $erreur .=$e->getMessage();
-        }
-
-
 
         return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,'result_menu'=>$menu_sous_menu,'modif_id'=>$modif_id,
             'modif_nom'=>$modif_nom,'modif_email'=>$modif_email,

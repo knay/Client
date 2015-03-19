@@ -18,6 +18,13 @@ menuSelected
 
 {% block title_ajout %}Vos statistiques{% endblock %}
 
+{% block aide %}
+Cette page vous permet de cibler votre clientèle.<br><br>
+Vous y retrouverez l'intérêt de votre clientèle pour les offres promotionnelles via <em>SMS</em> et <em>e-mail</em>,<br>
+les <em>tranches d'âges</em> de votre clientèle et enfin <em>la proximité</em> de cette dernière.<br><br>
+Pour plus d'information sur les statistiques déplacez le curseur de votre souris sur une des zones qui vous intéresse.
+{% endblock %}
+
 {% block ajout %}
 <p class="choixGraph">
     Choisissez une option :<br>
@@ -26,7 +33,7 @@ menuSelected
     <a class="bouton boutonSelected" href="{{ path('imerir_stats_client_ville') }}"><i class="fa fa-pie-chart"></i>Villes</a>
 </p>
 
-<h3>Répartition des contacts à travers les villes : </h3>
+<h3>Répartition des contacts à travers les villes ( Top 7 ): </h3>
 <div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
 <div class="legende">
 </div>

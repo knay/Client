@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block title_ajout %}
-    RECEPTION
+    Réception
 {% endblock %}
 
 {% block title_recherche %}
@@ -22,6 +22,24 @@ menuSelected
 
 {% block title %}
     ALBA - Réception commandes
+{% endblock %}
+
+{% block aide %}
+Cette page vous permet de réaliser la réception d'articles.
+<br>La réception doit être affecté à une commande enregistrée sur le logiciel.
+<br><br><b>Recherche : </b>
+<br>La première étape pour réaliser une réception est de retrouver grâce aux champs de recherches,
+<br> la commande correspondante.
+<br>Pour vous simplifier cette recherche, les commandes sont triées par date descendante.
+<br><br>
+<b>Ajout : </b>
+<br>Une fois votre commande retrouvée, cliquez sur la ligne correspondante à cette dernière.
+<br>La quantité à ajouté est le minimum pour réaliser une réception.
+<br>En effet, vous pouvez ne pas remplir de date de réception, si l'enregistrement de la réception est fait,
+<br>le même jour que la réception réelle.
+<br><br>
+L'ajout d'une réception pour une commande sera possible jusqu'à que la quantité soit égale ou supérieure à la quantité souhaitée.
+<br>Vous retrouverez les commandes complètes dans l'écran d'historique des commandes fournisseurs.
 {% endblock %}
 
 
@@ -62,9 +80,7 @@ menuSelected
                     <td>
                         <input type="text" name="date_reception"  class="datepicker">
                     </td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
             </table>
             <div id="lst_commande">
@@ -94,12 +110,15 @@ menuSelected
                                 </label>
                             </td>
                             <td>
-                                <input type="number" name="quantite_ajoute_{{ i.ligne_commande_id }}">
+                                <input type="number" min="0" name="quantite_ajoute_{{ i.ligne_commande_id }}">
                             </td>
                         </tr>
                     {% endfor %}
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         {% endif %}
 
         {% if app.request.attributes.get('_route')=='imerir_reception_article_saisie_validation' %}
@@ -115,45 +134,73 @@ menuSelected
             <p class="validation_message">La commande n° {{ commande_id }} a bien été modifiée</p>
         {% endif %}
     {% endif %}
-    <form action="{{ path('imerir_reception_article') }}" method="post">
-        <label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label>
-        <input type="text" name="recherche_fournisseur_nom_fournisseur">
-        <label for="recherche_fournisseur_article">Article :</label>
-        <input type="text" name="recherche_fournisseur_article">
-        <label for="recherche_commande_fournisseur_id">Numéro de commande :</label>
-        <input type="text" name="recherche_commande_fournisseur_id">
-        <button type="submit" class="bouton">
+    <form action="{{ path('imerir_reception_article') }}" method="get">
+    <table>
+    <tr>
+        <td><label for="recherche_commande_fournisseur_nom_fournisseur">Fournisseur :</label></td>
+        {#<td><input type="text" name="recherche_fournisseur_nom_fournisseur"></td>#}
+        <td>
+                	<select name="recherche_fournisseur_nom_fournisseur" style="width: 150px">
+                		{% for i in liste_fournisseurs %}
+                			<option>{{ i.nom }}</option>
+                		{% endfor %}
+                	</select>
+        </td>
+        <td><label for="recherche_fournisseur_article">Article :</label></td>
+        <td><input type="text" name="recherche_fournisseur_article"></td>
+    </tr>
+    <tr>    
+        <td><label for="recherche_commande_fournisseur_id">Référence commande :</label></td>
+        <td><input type="text" name="recherche_commande_fournisseur_id"></td>
+        <td></td><td><button type="submit" class="bouton">
             <i class="fa fa-search"></i>Rechercher
-        </button>
+        </button></td>
+    </tr>    
+    </table>    
     </form>
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_fournisseurs"><th>Numéro de la commande</th><th>Nom fournisseur</th><th>Date de la commande</th>
+    <tr class="liste_fournisseurs"><th>Référence commande</th><th>Fournisseur</th><th>Date de la commande</th>
         <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
     {% for i in liste_commandes %}
-
-        <tr><td>{{ i.commande_id }}</td><td>{{ i.fournisseur_nom }}
-                <form method="post" action="{{ path('imerir_reception_article_saisie') }}" style="display: none">
-                    <input type="hidden" name="modif_fournisseur_nom" value="{{ i.fournisseur_nom }}">
-                    <input type="hidden" name="modif_fournisseur_id" value="{{ i.fournisseur_id }}">
-                    <input type="hidden" name="modif_commande_date_commande" value="{{ i.date_commande }}">
-                    <input type="hidden" name="modif_commande_id" value="{{ i.commande_id }}">
-                    <input type="hidden" name="modif_code_barre" value="{{ i.code_barre }}">
-                    <input type="hidden" name="modif_quantite_souhaite" value="{{ i.quantite_souhaite }}">
-                    <input type="hidden" name="modif_quantite_recu" value="{{ i.quantite_recu }}">
-                </form>
-            </td>
-            <td>{{ i.date_commande }}</td>
-        <td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td>
-            <td>
-                {% if i.quantite_recu == '' %}
-                    0
-                {% else %}
-                    {{ i.quantite_recu }}
-                {% endif %}
-            </td></tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr><td>{{ i.commande_id }}</td><td>{{ i.fournisseur_nom }}
+	                <form method="post" action="{{ path('imerir_reception_article_saisie') }}" style="display: none">
+	                    <input type="hidden" name="modif_fournisseur_nom" value="{{ i.fournisseur_nom }}">
+	                    <input type="hidden" name="modif_fournisseur_id" value="{{ i.fournisseur_id }}">
+	                    <input type="hidden" name="modif_commande_date_commande" value="{{ i.date_commande }}">
+	                    <input type="hidden" name="modif_commande_id" value="{{ i.commande_id }}">
+	                    <input type="hidden" name="modif_code_barre" value="{{ i.code_barre }}">
+	                    <input type="hidden" name="modif_quantite_souhaite" value="{{ i.quantite_souhaite }}">
+	                    <input type="hidden" name="modif_quantite_recu" value="{{ i.quantite_recu }}">
+	                </form>
+	            </td>
+	            <td>{{ i.date_commande }}</td>
+	        <td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td>
+	            <td>
+	                {% if i.quantite_recu == '' %}
+	                    0
+	                {% else %}
+	                    {{ i.quantite_recu }}
+	                {% endif %}
+	            </td>
+	       </tr>
+       {% endif %}
+       {% set numLigne = numLigne + 1 %}
     {% endfor %}
+{% endblock %}
+
+{% block numero_page %}
+	{% if liste_commandes|length > ligneParPage %}
+		{% for i in 0..liste_commandes|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
 {% endblock %}
 
 {% block javascripts %}
@@ -186,7 +233,7 @@ menuSelected
                 $("#lst_commande").children("table").append(
                 '<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td>'
                 +'<td><input type="text" width="80" name="article'+numLigneCommande+'"/><label class="fa fa-th recherche rechercher"></label></td>'
-                +'<td><input type="number" name="qty'+numLigneCommande+'"></td>'
+                +'<td><input type="number" min="0" name="qty'+numLigneCommande+'"></td>'
                 +'</tr>'
                 );
 

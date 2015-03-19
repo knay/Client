@@ -26,3 +26,11 @@
 #dialogRetour table {
 	margin: 0 auto;
 }
+
+.tableau_input select {
+	width: 200px;
+}
+
+.tableau_input input {
+	width: 200px;
+}

@@ -12,7 +12,7 @@ class RetourClientController extends Controller
     	$menu_sous_menu = array();
     	$facture = array();
     	$erreur = '';
-    	$req = $this->get('request')->request;
+    	$req = $this->get('request')->query;
     	
     	$dateDebut = $req->get('dateDebut');
     	$dateFin = $req->get('dateFin');

@@ -8,8 +8,8 @@
     Historique des commandes fournisseurs
 {% endblock %}
 
-{% block title_ajout %}
-    HISTORIQUE DES COMMANDES COMPLETES
+{% block title_recherche %}
+    Historique des commandes complètes 
 {% endblock %}
 
 {% block fournisseurBlock %}
@@ -20,12 +20,18 @@ menuSelected
     ALBA - Historique commandes fournisseurs
 {% endblock %}
 
-{% block ajout %}
-    <form action="{{ path('imerir_historique_commande_fournisseur') }}" method="post">
+{% block aide %}
+Cette page vous permet de visualiser toutes les lignes de commandes complètes.<br>
+<br>Si un trop grand nombre de lignes de commandes sont affichées à l'écran,
+<br> vous pouvez filtrer l'affichage grâce aux champs de recherches.
+{% endblock %}
+
+{% block recherche %}
+    <form action="{{ path('imerir_historique_commande_fournisseur') }}" method="get">
         <table>
             <tr>
-                <td><label for="recherche_commande_fournisseur_nom_fournisseur">Nom fournisseur :</label></td>
-                <td><select name="recherche_commande_fournisseur_nom_fournisseur">
+                <td><label for="recherche_commande_fournisseur_nom_fournisseur">Fournisseur :</label></td>
+                <td><select name="recherche_commande_fournisseur_nom_fournisseur" style="width: 150px">
                     <option></option>
                     {% for i in liste_fournisseurs %}
                         <option value="{{ i.nom }}">{{ i.nom }}</option>
@@ -33,7 +39,7 @@ menuSelected
                 </select></td>
                 <td> <label for="recherche_fournisseur_article">Article :</label></td>
                 <td><input type="text" name="recherche_fournisseur_article"></td>
-                <td><label for="recherche_commande_fournisseur_id">Numéro de commande :</label></td>
+                <td><label for="recherche_commande_fournisseur_id">Référence :</label></td>
                 <td><input type="text" name="recherche_commande_fournisseur_id"></td>
                 <td><button type="submit" class="bouton">
                     <i class="fa fa-search"></i>Rechercher
@@ -47,24 +53,38 @@ menuSelected
             </tr>
         </table>
     </form>
-
+{% endblock %}
+{% block table %}
     <tr class="liste_fournisseurs">
-        <table class="tableau"><th>Numéro de la commande</th><th>Nom fournisseur</th><th>Date de la commande</th>
+       	<th>Référence </th><th>Fournisseur</th><th>Date de la commande</th>
         <th>Article</th><th>Quantité souhaitée</th><th>Quantité reçue</th></tr>
         {% for i in liste_commandes %}
-
-            <tr><td>{{ i.commande_id }}</td><td>{{ i.fournisseur_nom }}</td>
-                <td>{{ i.date_commande }}</td>
-            <td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
-
+			{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	            <tr><td>{{ i.commande_id }}</td><td>{{ i.fournisseur_nom }}</td>
+	                <td>{{ i.date_commande }}</td>
+	            <td>{{ i.code_barre}}</td><td>{{ i.quantite_souhaite }}</td><td>{{ i.quantite_recu }}</td></tr>
+			{% endif %}
+			{% set numLigne = numLigne + 1 %}
         {% endfor %}
         </table>
+{% endblock %}
+
+{% block numero_page %}
+	{% if liste_commandes|length > ligneParPage %}
+		{% for i in 0..liste_commandes|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
 {% endblock %}
 
 {% block javascripts %}
 <script>
     //variables
-    $("#fieldset_recherche").hide();
+    $("#fieldset_ajout").hide();
     var numLigneCommande = 200;
     ///
     $('tr').click(function () {

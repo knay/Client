@@ -11,13 +11,24 @@
 
 <fieldset id="fieldset_recherche">
 	<legend id="titre_fieldset" >{% block title_recherche %}Recherche{% endblock %}</legend> 
-	{% block recherche %}{% endblock %}
+	<div id="div_recherche">
+		{% block recherche %}{% endblock %}
+	</div>
+	{# Gestion des pages dans le tableau de recherche #}	
+	{% set numLigne = 0 %}
+	{% set ligneParPage = 20 %}
+	{% set page = 1 %}
+	{% if app.request.get('page') != "" %}
+		{% set page = app.request.get('page') %}
+	{% endif %}
+
 	{% block tableaux %}
 		<table class="tableau">
 			{% block table %}
 			{% endblock %}
 		</table>
 	{% endblock %}
+	<div id="div_num_page">{% block numero_page %}{% endblock %}</div>
 	{% block bouton_export %}{% endblock %}
 </fieldset>
 {% endblock %}

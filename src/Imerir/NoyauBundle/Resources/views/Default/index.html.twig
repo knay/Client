@@ -4,16 +4,58 @@
     <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
 {% endblock %}
 
-{% block title_page %}
-Votre caisse
-{% endblock %}
+{% block title_page %}Votre caisse{% endblock %}
 
-{% block title %}
-ALBA - Votre caisse
-{% endblock %}
+{% block title %}ALBA - Votre caisse{% endblock %}
 
-{% block caisseBlock %}
-menuSelected
+{% block caisseBlock %}menuSelected{% endblock %}
+
+{% block aide %}
+<p>
+	Cette page vous permet d'effecuter une vente.<br>
+	Lorsque vous arrivez sur cette page, deux choix s'offrent à vous : 
+</p>
+<ul>
+	<li>Scanner un article pour initier la vente</li>
+	<li>Ou, si le code barre ne fonctionne pas, saisir manuellement celui-ci.</li>
+</ul>
+<p>
+	Une fois l'article scanné vous pouvez choisir la quantité vendue. Pour cela vous pouvez, soit appuyer 
+	sur les boutons plus et moins dans la colonne "Quantité", soit scanner l'article une seconde fois.
+</p>
+<p>
+	Vous pouvez aussi appliquer une promotion spontannée sur le produit de votre choix en modifiant la valeur
+	du champs dans la colonne promotion. La promotion appliquée sera en pourcentage.
+</p>
+<h3>Problèmes et solutions</h3>
+<ul>
+	<li>
+		<b>Problème :</b> La douchette à scanné des codes barres erronnées.<br>
+		<b>Solution :</b> Supprimer les articles dont les code barres sont erroné avec le bouton rouge, et rescanner l'article.
+	</li>
+	<li>
+		<b>Problème :</b> L'article n'a pas de prix.<br>
+		<b>Solution :</b> Le code barre n'est peut être pas bon. Supprimer puis rescanner l'article. Si le problème
+		persiste, c'est surement que le produit n'a pas été préalablement enregistré sur le logiciel. Dans ce cas là 
+		il faut finir la vente sans utiliser le logiciel, tout en notant les articles vendu sur un morceau de papier.
+		Une fois la vente sur papier effectuée, ajouter l'article au logiciel.
+	</li>
+	<li>
+		<b>Problème :</b> La douchette n'arrive pas à lire le code barre.<br>
+		<b>Solution :</b> Si le code barre est lisible, utiliser le bouton en haut de votre ecran permettant de faire une 
+		saisie manuelle de code barre. Si le code barre est illisible, trouver un autre article du même type et essayer le
+		code barre présent sur cet article.
+	</li>
+	<li>
+		<b>Problème :</b> Le client ne souhaite pas fournir ses informations.<br>
+		<b>Solution :</b> Ne pas associer de client à cette vente (ce n'est pas obligatoire).
+	</li>
+	<li>
+		<b>Problème :</b> Le moyen de paiement utiliser par le client n'est pas présent dans la liste déroulante.<br>
+		<b>Solution :</b> Valider la vente sans préciser de moyen de paiement. Après la vente, penser à ajouter le moyen
+		de paiement dans le menu Vente -> Moyens de paiement.
+	</li>
+</ul>
 {% endblock %}
 
 {% block affichage %}
@@ -31,106 +73,27 @@ menuSelected
 	<div id="chargement" style="display: none;">
 		<h2><i class="fa fa-pulse fa-spinner"></i>Chargement...</h2>
 	</div>
-	<p>
-		Chercher un client :
-		<input type="text" id="critereRechClient">
-		<button class="bouton" id="chercher_client"><i class="fa fa-search"></i>Rechercher</button>
-		<table id="tabRechClient" class="tableau">
-		</table>
-	</p>
-	<p>Ou<br>Ajouter un nouveau client : 
-	<button type="button" class="bouton" id="ajout_client"><i class="fa fa-user-plus"></i>Nouveau client</button></p>
-	<div style="display: none;" id="divAjoutClient">
-		<input type="button" value="Retour" class="bouton retour_client"><br>
-		<form action="{{ path('imerir_validation_creation_client') }}" method="post">
-			<table id="tableau_input">
-	            <tr>
-	                <td><label for="nom">Nom </label></td>
-	                <td><input type="text" name="nom"/></td>
-	                <input type="button" value="Ajouter" id="valideNewClient" class="bouton">
-	            </tr>
-	            <tr>
-	                <td><label for="nom">Prenom </label></td>
-	                <td><input type="text" name="prenom"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
-	                <td><input type="date" name="date_naissance" id="datepicker"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="civilite">Civilité </label></td>
-	                <td>
-	                    <select name="civilite">
-	                        <option value="Mlle.">Mlle.</option>
-	                        <option value="Mme.">Mme.</option>
-	                        <option value="M.">M.</option>
-	                    </select>
-	                </td>
-	            </tr>
-	            <tr>
-	                <td><label for="email">Email </label></td>
-	                <td><input type="text" name="email"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="telephone_portable">Telephone portable </label></td>
-	                <td><input type="text" name="telephone_portable"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="ok_sms">Désire recevoir des SMS </label></td>
-	                <td><input type="checkbox" name="ok_sms"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="ok_mail">Désire recevoir des e-mails </label></td>
-	                <td><input type="checkbox" name="ok_mail"/></td>
-	            </tr>
-	            <tr>
-	                <td><label for="notes">Notes </label></td>
-	                <td><textarea name="notes"></textarea></td>
-	            </tr>
-	            <tr><td><label for="lst_adresse">Liste des adresses : </label></td></tr>
-	        </table>
-	
-	        {% set nbAdresse = 0 %}
-	        {#champs pour l'adresse#}
-	        <div id="lst_adresse">
-	            <table class="tableau" id="tableau">
-	                <tr>
-	                    <th></th>
-	                    <th class="titre_lst">Pays</th>
-	                    <th class="titre_lst">Ville</th>
-	                    <th class="titre_lst">Code postal</th>
-	                    <th class="titre_lst">N° voie</th>
-	                    <th class="titre_lst">Voie</th>
-	                    <th class="titre_lst">N° appartement</th>
-	                    <th class="titre_lst">Téléphone fixe</th>
-	                </tr>
-	                {% if detail_adresse.adresse is defined %}
-	                    {% for i in detail_adresse.adresse %}
-	                        <tr>
-	                            <td>
-	                                <i class="fa fa-minus-square supprimer"></i>
-	                            </td>
-	                            <td>
-	                                <input type="text" name="adresse{{ nbAdresse }}" value="{{ i.valeurAdresse }}"/>
-	                            </td>
-	                        </tr>
-	                        {% set nbAdresse = nbAdresse + 1 %}
-	                    {% endfor %}
-	                {% endif %}
-	                <tr class="last">
-	                    <td><i class="fa fa-plus-square ajout ajouter"></i></td>
-	                    <td><input type="text" name="pays{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="ville{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="code_postal{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="num_voie{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="voie{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="num_appartement{{ nbAdresse }}"/></td>
-	                    <td><input type="text" name="telephone_fixe{{ nbAdresse }}"/></td>
-	                </tr>
-	            </table>
-	        </div>
-	    </form>
-	</div>
+	<span id="presAjoutClient">
+		<span>
+			<table>
+				<tr><td>Chercher un client :</td></tr>
+				<tr><td><input type="text" placeholder="Nom, prénom, téléphone, addresse e-mail..." id="critereRechClient"></td>
+				<tr><td><button class="bouton" id="chercher_client"><i class="fa fa-search"></i>Rechercher</button></td></tr>
+			</table>
+		</span>
+		<span class="spanOu">
+		OU
+		</span>
+		<span>
+			<table>
+				<tr><td>Ajouter un nouveau client :</td></tr> 
+				<tr><td><button type="button" class="bouton" id="ajout_client"><i class="fa fa-user-plus"></i>Nouveau client</button></td></tr>
+			</table>
+		</span>
+	</span>
+	<table id="tabRechClient" class="tableau_contact" style="display:none; width:100%">
+	</table>
+	<div id="divAjoutClient"></div>
 </div>
 
 <fieldset id="fieldset_ajout">
@@ -194,9 +157,13 @@ menuSelected
 					</td>
 				</tr>
 			</table>
-			<h2>TOTAL À PAYER : 
+			<h2>
+				TOTAL À PAYER : 
+				<span id="prixTotal">0.0 €</span>
+			</h2>
+			<div class="alignDroite">
 				<button type="submit" id="btnCaisse" class="bouton"><i class="fa fa-check"></i>Valider la facture</button>
-				<span id="prixTotal">0.0 €</span></h2>
+			</div>
 		</form>
 	</div>
 	<!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->
@@ -244,8 +211,10 @@ $("#formulaireCaisse").submit(function (event) {
 		}
 	});
 
-	if (true === sansPrix) 
-		message = "Attention : certain articles n'ont pas de prix renseigné.\n" + message;
+	if (true === sansPrix) {
+		alert("Attention : Vous ne pouvez pas valider une facture avec un article inconnu. \nSupprimer cet article pour continuer.");
+		return false;
+	}
 	
 	if (idClient === "-1" || idClient === "") 
 		message = "Attention : cette vente n'est affectée à aucun client.\n" + message;
@@ -308,7 +277,8 @@ function plusQuantite() {
  * de création client.
  * Cette fonction utilise la page de /creation/validation du bundle contact pour enregistrer les données.
  */
-$("#valideNewClient").click(function () {
+function ajoutClient (event) {
+	event.preventDefault();
 	var form = $("#divAjoutClient").find("form");
 	var path = form.attr("action");
 	var method = form.attr("method");
@@ -316,6 +286,7 @@ $("#valideNewClient").click(function () {
 
 	$("#chargement").show();
 	$("#divAjoutClient").hide();
+	$("#presAjoutClient").hide();
 	$("#dialogClient").children("p").hide();
 	$("#tabRechClient").hide();
 
@@ -330,11 +301,13 @@ $("#valideNewClient").click(function () {
 			   $("#chargement").hide();
 			   $("#divAjoutClient").hide();
 			   $("#dialogClient").children("p").show();
+			   $("#presAjoutClient").show();
 			   $("#tabRechClient").show();
 		   },
 		   type: method
 	});
-});
+	return false;
+}
 
 /**
  * Permet de réagir lorsque l'on clic sur le bouton rechercher un client. 
@@ -344,6 +317,7 @@ $("#chercher_client").click(function () {
 
 	$("#chargement").show();
 	$("#divAjoutClient").hide();
+	$("#presAjoutClient").hide();
 	$("#dialogClient").children("p").hide();
 	$("#tabRechClient").hide();
 
@@ -356,14 +330,24 @@ $("#chercher_client").click(function () {
 			   if (typeof data.erreur !== 'undefined') {
 				   alert("Une erreur est survenue lors de la recherche : \n"+data.erreur);
 				   $("#chargement").hide();
-				   $("#divAjoutClient").hide();
+				   $("#divAjoutClient").show();
+				   $("#presAjoutClient").show();
 				   $("#dialogClient").children("p").show();
 				   $("#tabRechClient").show();
 				   return;
 			   }
+
+			   $("#tabRechClient").html("");
+			   $("#tabRechClient").append("<tr>"
+					   + "<th>Civilité</th>"
+					   + "<th>Nom</th>"
+					   + "<th>Prenom</th>"
+					   + "<th>Date de naissance</th>"
+					   + "<th>Addresse mail</th>"
+					   + "<th>Téléphone</th>"
+					   + "</tr>");
 			   
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
-			   $("#tabRechClient").html("");
 			   for(i in objJson) {
 				   var nom = "";
 				   var id = 0;
@@ -389,19 +373,19 @@ $("#chercher_client").click(function () {
 					   telephone_portable = objJson[i].telephone_portable;
 				   
 				   $("#tabRechClient").append("<tr>"
+						   + "<td class=\"tdCiviliteClient\">"+escape(civilite)+"</td>"
 						   + "<td class=\"tdNomClient\"><input type=\"hidden\" value=\""+escape(id)+"\" class=\"idClient\">"+escape(nom)+"</td>"
 						   + "<td class=\"tdPrenomClient\">"+escape(prenom)+"</td>"
 						   + "<td>"+escape(date_naissance)+"</td>"
-						   + "<td class=\"tdCiviliteClient\">"+escape(civilite)+"</td>"
 						   + "<td>"+escape(email)+"</td>"
 						   + "<td>"+escape(telephone_portable)+"</td>"
 						   + "</tr>");
-
-				   $("#chargement").hide();
-				   $("#divAjoutClient").hide();
-				   $("#dialogClient").children("p").show();
-				   $("#tabRechClient").show();
 			   }
+			   $("#chargement").hide();
+			   $("#divAjoutClient").hide();
+			   $("#presAjoutClient").show();
+			   $("#dialogClient").children("p").show();
+			   $("#tabRechClient").show();
 			   $("#tabRechClient").find("tr").click(clickTrRechClient);
 		   },
 		   type: 'POST'
@@ -411,14 +395,48 @@ $("#chercher_client").click(function () {
 $('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
 $('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
 $('#ajout_client').click(function () {
-	$("#divAjoutClient").show();
+	var divAjout = $("#divAjoutClient");
+	divAjout.hide();
 	$("#dialogClient").children("p").hide();
+	$("#presAjoutClient").hide();
 	$("#tabRechClient").hide();
+	$("#chargement").show();
+
+	
+	divAjout.load('{{ path('imerir_creation_client') }}', function () {
+		divAjout.find("head").remove();
+		divAjout.find("#menu").remove();
+		divAjout.find("#div_menu").remove();
+		divAjout.find("#header").remove();
+        divAjout.find("#title_page").remove();
+        divAjout.find("#fieldset_recherche").remove();
+        divAjout.find("#div_num_page").remove();
+        divAjout.find("#affichage").css("left", "0");
+        divAjout.find("#affichage").css("width", "100%");
+
+		divAjout.prepend('<buton type="button" class="retour_client bouton"><i class="fa fa-reply"></i>Retour</buton>'+divAjout.html());
+		divAjout.show();
+		$("#chargement").hide();
+
+		$( "#menu" ).children( "li" ).unbind("click");
+
+		$(".retour_client").unbind("click");
+		$(".retour_client").click(function () {
+			$("#divAjoutClient").hide();
+			$("#dialogClient").children("p").show();
+			$("#presAjoutClient").show();
+			$("#tabRechClient").hide();
+		});
+
+        divAjout.find("form").submit(ajoutClient); // Si on fait un recherche on bloque la req et on passe en ajax
+	});
+	
 });
 $(".retour_client").click(function () {
 	$("#divAjoutClient").hide();
 	$("#dialogClient").children("p").show();
-	$("#tabRechClient").show();
+	$("#presAjoutClient").show();
+	$("#tabRechClient").hide();
 });
 
 /**
@@ -482,6 +500,8 @@ $(".saisie_manuelle").click(function () {
 		resizable: false,
 		draggable: false
 	});
+
+	dial.find("input").val('');
 });
 
 /** 
@@ -498,7 +518,7 @@ $(".saisie_client").click(function () {
 	});
 
 	$("#divAjoutClient").hide();
-	$("#dialogClient").children("p").show();
+	$("#dialogClient").children("span").show();
 });
 
 /**

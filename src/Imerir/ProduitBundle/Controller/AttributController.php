@@ -23,11 +23,9 @@ class AttributController extends Controller
     	$erreur = ''; // En cas d'erreur
     	$modification = false;
     	
-    	$nomRech = $this->getRequest()->request->get('rechNom'); // Si on fait une recher sur le nom de l'article
+    	$nomRech = $this->getRequest()->query->get('rechNom'); // Si on fait une recher sur le nom de l'article
     	if (null === $nomRech)
     		$nomRech = '';
-    	
-    	echo $nomRech;
     	
     	$jsonValeurAttribut = array();
     	try {
@@ -70,12 +68,12 @@ class AttributController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-        return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 
-        		                                                                   'lst_attribut' => $jsonValeurAttribut,
-        		                                                                   'detail_attribut' => $jsonValeurAttributAll,
-        																		   'result_menu' => $menu_sous_menu,
-        		                                                                   'modification' => $modification,
-        		                                                                   'erreur' => $erreur));
+        return $this->render('ImerirProduitBundle::attribut.html.twig', array('ligne_produit' => $jsonLigneProduit, 
+        		                                                              'lst_attribut' => $jsonValeurAttribut,
+        		                                                              'detail_attribut' => $jsonValeurAttributAll,
+        																	  'result_menu' => $menu_sous_menu,
+        		                                                              'modification' => $modification,
+        		                                                              'erreur' => $erreur));
     }
     
     /**
@@ -148,10 +146,10 @@ class AttributController extends Controller
     		$erreur.=$e->getMessage();
     	}
     	
-    	return $this->render('ImerirProduitBundle::ajoutAttribut.html.twig', array('ligne_produit' => $jsonLigneProduit,
-    			 																   'lst_attribut' => $jsonValeurAttribut,
-    			 																   'result_menu' => $menu_sous_menu, 
-    			                                                                   'modification' => false,
-    			                                                                   'erreur' => $erreur));
+    	return $this->render('ImerirProduitBundle::attribut.html.twig', array('ligne_produit' => $jsonLigneProduit,
+    			 															  'lst_attribut' => $jsonValeurAttribut,
+    			 															  'result_menu' => $menu_sous_menu, 
+    			                                                              'modification' => false,
+    			                                                              'erreur' => $erreur));
     }
 }

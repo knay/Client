@@ -14,14 +14,25 @@ ALBA - Fournisseurs
 
 {% block title_ajout %}
     {% if app.request.attributes.get('_route')=='imerir_modification_fournisseur' %}
-        MODIFICATION
+        Modification
     {% else %}
-        AJOUT
+        Ajout
     {% endif %}
 {% endblock %}
 
 {% block fournisseurBlock %}
 menuSelected
+{% endblock %}
+
+{% block aide %}
+Cette page vous permet <em>d'ajouter</em>, <em>modifier</em> ou <em>rechercher</em> un fournisseur.<br><br>
+<b>Création : </b><br>
+Renseigner le plus de champs possible dans ce formulaire pour vous permettre un suivi fournisseur efficace.<br>
+Le champs <em>nom</em> est le plus important, de plus, vous pourrez ensuite ajouter une commande à ce fournisseur<br>
+Il est à noter que vous pouvez ajouter autant d'adresses annexes que vous le désirez en appuyant sur le bouton "plus" à gauche de chaque nouvelle adresse.<br><br>
+<b>Modification:</b><br>
+Pour modifier un fournisseur, vous pouvez cliquer sur la ligne du fournisseur correspondant dans le tableau de recherche.<br>
+Valider votre modification via le bouton "Modifier".
 {% endblock %}
 
 
@@ -30,11 +41,9 @@ menuSelected
         <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table id="tableau_input">
             <tr>
-                <td><label for="nom">Nom fournisseur </label></td>
+                <td><label for="nom">Nom </label></td>
                 <td><input type="text" name="nom"/></td>
-                <button type="submit" class="bouton">
-                    <i class="fa fa-check"></i>Valider la saisie
-                </button>
+                
             </tr>
             <tr>
                 <td><label for="email">Email </label></td>
@@ -94,6 +103,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                    <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
     {% endif %}
 
@@ -101,11 +113,9 @@ menuSelected
         <form action="{{ path('imerir_validation_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table id="tableau_input">
                 <tr>
-                    <td><label for="nom">Nom fournisseur </label></td>
+                    <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
                 <tr>
                     <td><label for="email">Email </label></td>
@@ -163,6 +173,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
 
         {% if erreur == '' %}
@@ -174,13 +187,11 @@ menuSelected
 
         <form action="{{ path('imerir_validation_modification_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table id="tableau_input">
-                <tr><td><label for="nom">Nom fournisseur </label>
+                <tr><td><label for="nom">Nom </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
                 <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
-                <button type="submit" class="bouton">
-                    <i class="fa fa-check"></i>Modifier
-                </button>
+                
                 <tr><td><label for="nom">Email </label></td>
                 <td><input type="text" name="new_email" value="{{ modif_email }}"/></td></tr>
                 <tr><td><label for="nom">Téléphone portable </label></td>
@@ -246,6 +257,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                    <i class="fa fa-edit"></i>Modifier
+            </button>
         </form>
     {% endif %}
 
@@ -253,11 +267,9 @@ menuSelected
         <form action="{{ path('imerir_creation_fournisseur') }}" method="post" id="formulaire_creation_fournisseur">
             <table>
                 <tr>
-                    <td><label for="nom">Nom fournisseur </label></td>
+                    <td><label for="nom">Nom </label></td>
                     <td><input type="text" name="nom"/></td>
-                    <button type="submit" class="bouton">
-                        <i class="fa fa-check"></i>Valider la saisie
-                    </button>
+                    
                 </tr>
                 <tr>
                     <td><label for="email">Email </label></td>
@@ -315,6 +327,9 @@ menuSelected
                     </tr>
                 </table>
             </div>
+            <button type="submit" class="bouton">
+                        <i class="fa fa-check"></i>Valider la saisie
+            </button>
         </form>
 
         {% if erreur == '' %}
@@ -325,12 +340,12 @@ menuSelected
 {% endblock %}
 
 {% block recherche %}
-    <form action="{{ path('imerir_creation_fournisseur') }}" method="post">
+    <form action="{{ path('imerir_creation_fournisseur') }}" method="get">
         <table>
             <tr>
-            <td><label for="recherche_fournisseur_nom">Nom fournisseur :</label></td>
+            <td><label for="recherche_fournisseur_nom">Nom :</label></td>
                 <td><input type="text" name="recherche_fournisseur_nom"></td>
-                <td><label for="recherche__fournisseur_email">Email fournisseur :</label></td>
+                <td><label for="recherche__fournisseur_email">Email :</label></td>
                 <td><input type="text" name="recherche_fournisseur_email"></td>
             </tr>
             <tr>
@@ -347,24 +362,37 @@ menuSelected
 {% endblock %}
 
 {% block table %}
-    <tr class="liste_fournisseurs"><th>Nom fournisseur</th><th>Email</th><th>Telephone portable</th>
+    <tr class="liste_fournisseurs"><th>Nom </th><th>Email</th><th>Telephone portable</th>
         <th>Référence client</th><th>Notes</th></tr>
     {% for i in liste_fournisseurs %}
-
-        <tr><td>{{ i.nom }}
-                <form method="post" action="{{ path('imerir_modification_fournisseur') }}" style="display: none">
-                    <input type="hidden" name="id_f" value="{{ i.id }}">
-                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
-                    <input type="hidden" name="email_f" value="{{ i.email }}">
-                    <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
-                    <input type="hidden" name="reference_client_f" value="{{ i.reference_client }}">
-                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
-                </form>
-            </td>
-        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td><td>{{ i.reference_client }}</td><td>{{ i.notes }}</td></tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+	        <tr><td>{{ i.nom }}
+	                <form method="post" action="{{ path('imerir_modification_fournisseur') }}" style="display: none">
+	                    <input type="hidden" name="id_f" value="{{ i.id }}">
+	                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
+	                    <input type="hidden" name="email_f" value="{{ i.email }}">
+	                    <input type="hidden" name="telephone_portable_f" value="{{ i.telephone_portable }}">
+	                    <input type="hidden" name="reference_client_f" value="{{ i.reference_client }}">
+	                    <input type="hidden" name="notes_f" value="{{ i.notes }}">
+	                </form>
+	            </td>
+	        <td>{{ i.email }}</td><td>{{ i.telephone_portable }}</td><td>{{ i.reference_client }}</td><td>{{ i.notes }}</td></tr>
+        {% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
 {% endblock %}
 
+{% block numero_page %}
+	{% if liste_fournisseurs|length > ligneParPage %}
+		{% for i in 0..liste_fournisseurs|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
+{% endblock %}
 
 {% block javascripts %}
 <script>

@@ -76,3 +76,6 @@ fos_user:
     db_driver: orm
     firewall_name: main
     user_class: Imerir\NoyauBundle\Entity\Utilisateur
+    
+parameters:
+    soap_serveur: http://localhost/serveur/web/app_dev.php/soap

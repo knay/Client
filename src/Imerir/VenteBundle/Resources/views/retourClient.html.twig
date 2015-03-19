@@ -21,8 +21,10 @@
 				<tr>
 					<td>Produit : 
 						{% if detail_facture is defined %}
-							{% if detail_facture != '' %}
-							<input type="hidden" name="idFacture" value="{{ detail_facture.0.numero_facture }}">
+							{% if detail_facture is not empty %}
+								{% if detail_facture != '' %}
+								<input type="hidden" name="idFacture" value="{{ detail_facture.0.numero_facture }}">
+								{% endif %}
 							{% endif %}
 						{% endif %}
 					</td>
@@ -63,7 +65,7 @@
 			</table>
 		</form>
 	</div>
-
+	
 	{% set montant_total = 0 %}
 	{% set prix_de_la_tva = 0 %}
 	{% set montant_avec_tva = 0 %}
@@ -72,12 +74,14 @@
 		<div id="information_facture">
 		{% if detail_facture is defined %}
 			{% if detail_facture != '' %}
-				<label class="en_gras_souligner">Facture n&deg;{{ detail_facture.0.numero_facture }}<br></label>
-				<div id="detail_sur_client">
-					<label class="en_gras">Le :</label> {{ detail_facture.0.date_facture }}<br>
-					<label class="en_gras">Client :</label> {{ detail_facture.0.nom_client }} {{ detail_facture.0.prenom_client }}<br>
-					<label class="en_gras">Mode de r&egrave;glement : </label>{{ detail_facture.0.nom_moyen_paiement }}
-				</div>
+				{% if detail_facture is not empty %}
+					<label class="en_gras_souligner">Facture n&deg;{{ detail_facture.0.numero_facture }}<br></label>
+					<div id="detail_sur_client">
+						<label class="en_gras">Le :</label> {{ detail_facture.0.date_facture }}<br>
+						<label class="en_gras">Client :</label> {{ detail_facture.0.nom_client }} {{ detail_facture.0.prenom_client }}<br>
+						<label class="en_gras">Mode de r&egrave;glement : </label>{{ detail_facture.0.nom_moyen_paiement }}
+					</div>
+				{% endif %}
 			{% endif %}
 		{% endif %}
 		</div>
@@ -119,11 +123,14 @@
 		{% endif %}
 		</table>
 	</div>
+	<a href="{{ path('imerir_vente_retour_client') }}" class="bouton">
+		<i class="fa fa-reply"></i>Annuler
+	</a>
 {% endblock %}
 
 {% block recherche %}
 <p>Chercher une facture :</p>
-<form action="{{ path('imerir_vente_retour_client') }}" method="POST"> 
+<form action="{{ path('imerir_vente_retour_client') }}" method="GET"> 
 	<table class="tableau_input">
 		<tr>
 			<td>Client : </td>
@@ -144,12 +151,12 @@
 			<td><input type="text" name="nomProduit"></td>
 		</tr>
 		<tr>
-			<td>Date : </td>
-			<td>À partir du : <input type="text" name="dateDebut" class="datePicker"></td>
+			<td>À partir du : </td>
+			<td><input type="text" name="dateDebut" class="datePicker"></td>
 		</tr>
 		<tr>
-			<td></td>
-			<td>Jusqu'au : <input type="text" name="dateFin" class="datePicker"></td>
+			<td>Jusqu'au : </td>
+			<td><input type="text" name="dateFin" class="datePicker"></td>
 		</tr>
 		<tr>
 			<td>
@@ -170,18 +177,33 @@
 	</tr>
 	    
 	{% for i in result_facture %}
-    <tr class="select_ligne">
-     	<td>
-        	<form method="post" action="{{ path('imerir_vente_retour_client_detail') }}" >
-       			<input type="hidden" name="id_facture" value="{{ i.numero }}">
-    		</form>
-    			{{ i.numero }}
-        </td>
-       	<td>{{ i.date }}</td>
-        <td>{{ i.client }}</td>
-        <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
-	</tr>
+		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
+		    <tr class="select_ligne">
+		     	<td>
+		        	<form method="post" action="{{ path('imerir_vente_retour_client_detail') }}" >
+		       			<input type="hidden" name="id_facture" value="{{ i.numero }}">
+		    		</form>
+		    			{{ i.numero }}
+		        </td>
+		       	<td>{{ i.date }}</td>
+		        <td>{{ i.client }}</td>
+		        <td>{{ i.montant|round(2, 'common')|number_format(2, '.', ',') }}</td>
+			</tr>
+		{% endif %}
+        {% set numLigne = numLigne + 1 %}
     {% endfor %}
+{% endblock %}
+
+{% block numero_page %}
+	{% if result_facture|length > ligneParPage %}
+		{% for i in 0..result_facture|length/ligneParPage %}
+			{% if i == page-1 %}
+				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% else %} 
+				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+			{% endif %}
+		{% endfor %}  
+	{% endif %}
 {% endblock %}
 
 {% block javascripts %}
@@ -202,7 +224,11 @@ $(function() {
 $(document).ready(function (e) {
 	{% if detail_facture is defined %}
 		{% if detail_facture != '' %}
-			$("#fieldset_ajout").show();
+			{% if detail_facture is not empty %}
+				$("#fieldset_ajout").show();
+			{% else %}
+				$("#fieldset_ajout").hide();
+			{% endif %}
 		{% else %}
 			$("#fieldset_ajout").hide();
 		{% endif %}

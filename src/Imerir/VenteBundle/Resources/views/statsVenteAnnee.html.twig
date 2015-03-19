@@ -21,10 +21,10 @@ menuSelected
 {% block ajout %}
 	<p class="choixGraph">
 	{# 	Choisissez une option :<br>#}
-		<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats_mensuelles') }}">
+		<a class="bouton" href="{{ path('imerir_vente_stats_mensuelles') }}">
 			<i class="fa fa-area-chart"></i>Ventes Mensuelles
 		</a>
-		<a class="bouton" href="{{ path('imerir_vente_stats_annuelles') }}">
+		<a class="bouton boutonSelected " href="{{ path('imerir_vente_stats_annuelles') }}">
 			<i class="fa fa-area-chart"></i>Ventes Annuelles
 		</a>
 		<a class="bouton" href="{{ path('imerir_vente_stats_top_vente') }}">
@@ -34,9 +34,9 @@ menuSelected
 	{# 	<a class="bouton" href="">Vente et caract√©ristiques produits</a>#}
 	</p>
 	
-	<form method="post" action="{{ path('imerir_vente_stats_mensuelles') }}">
+	<form method="post" action="{{ path('imerir_vente_stats_annuelles') }}">
 			<label>Date : </label>
-			<input type="text" id="date_de_recherche_vente" name="date" size="20">
+			<input type="text" id="date_de_recherche_vente" name="date" placeholder='2015' maxlength="4" size="10">
 			<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
 			<button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
 	</form>
@@ -44,7 +44,7 @@ menuSelected
 	<p class="choixGraph">
 	</p>
 	
-	<h3>Chiffre d'affaires par jours (en &euro;) : </h3>
+	<h3>Chiffre d'affaires par mois (en &euro;) : </h3>
 	<table>
 		<tr>
 			<td>
@@ -52,19 +52,13 @@ menuSelected
 					<ul>
 						<li>
 							<span style="background-color: rgba(36,187,241,1); display: inline-block; height: 5px; width: 30px;">&nbsp;</span>
-							{% for i in mois %}
-				                  {{ i }} /
-				            {% endfor %}
-				            {% for i in annee %}
+							{% for i in annee %}
 				                  {{ i }}
 				            {% endfor %}
 						</li>
 						<li>
 							<span style="background-color: rgba(150,150,150,1); display: inline-block; height: 5px; width: 30px;">&nbsp;</span>
-							{% for i in mois %}
-				                  {{ i }} /
-				            {% endfor %}
-				            {% for i in annee %}
+							{% for i in annee %}
 				                  {{ i-1 }}
 				            {% endfor %}
 						</li>
@@ -74,47 +68,16 @@ menuSelected
 			<td>
 				<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
 			</td>
-		<tr>
+		</tr>
 	</table>
 {% endblock %}
-
 
 {% block javascripts %}
 <link rel="stylesheet" href="{{ asset('../vendor/components/jqueryui/themes/smoothness/jquery-ui.css') }}"/>
 <script>
 $("#bouton_supprimer_date").hide();
+$("#fieldset_recherche").hide();
 
-/**
- * Quand la page est charg√©e on enl√®ve le fieldset de recherche qui ne sert √† rien.
- */
-
-$(document).ready(function() {
-	$('#fieldset_recherche').remove();
-   	$('#date_de_recherche_vente').datepicker({
-		changeMonth: true,
-     	changeYear: true,
-     	changeDay: false,
-     	dateFormat: 'MM-yy',
-
-    	onClose: function() {
-        	var iMonth = $("#ui-datepicker-div .ui-datepicker-month :selected").val();
-        	var iYear = $("#ui-datepicker-div .ui-datepicker-year :selected").val();
-        	$(this).datepicker('setDate', new Date(iYear, iMonth, 1));
-        	$("#bouton_supprimer_date").show();
-     	},
-
-     	beforeShow: function() {
-       		if ((selDate = $(this).val()).length > 0) 
-       		{
-          		iYear = selDate.substring(selDate.length - 4, selDate.length);
-          		iMonth = jQuery.inArray(selDate.substring(0, selDate.length - 5), 
-                $(this).datepicker('option', 'monthNames'));
-          		$(this).datepicker('option', 'defaultDate', new Date(iYear, iMonth, 1));
-          		$(this).datepicker('setDate', new Date(iYear, iMonth, 1));
-       		}
-    	}
-	});
-});
 
 var data = {
         labels : [
@@ -177,47 +140,23 @@ var options = {
 var ctx = $("#myChart").get(0).getContext("2d");
 var graph = new Chart(ctx).Line(data);
 
+$("#date_de_recherche_vente").change(function(){
+	$("#bouton_supprimer_date").show();
+	$valeur = $("#date_de_recherche_vente").val();
+	if($valeur.length < 4){
+		$("#date_de_recherche_vente").css("color","red");
+	}
+	else{
+		
+	}
+});
 
 //Permet de gerer l'evenement du bouton de suppresion  de la date
 $("#bouton_supprimer_date").click(function(){
 	$("#date_de_recherche_vente" ).val('');
 	$("#bouton_supprimer_date").hide();
+	$("#date_de_recherche_vente").css("color","black");
 });
-
-//Permet de gerer la langue du datepicker
-(function( factory ) {
-	if ( typeof define === "function" && define.amd ) {
-
-		define([ "../jquery.ui.datepicker" ], factory );
-	} else {
-		factory( jQuery.datepicker );
-	}
-	
-}(function( datepicker ) {
-	datepicker.regional['fr'] = {
-		closeText: 'Fermer',
-		prevText: 'Pr&eacutec&eacutedent',
-		nextText: 'Suivant',
-		currentText: 'Aujourd\'hui',
-		monthNames: ['01', '02', '03', '04', '05', '06',
-			'07', '08', '09', '10', '11', '12'],
-		monthNamesShort: ['janv.', 'f&eacutevr.', 'mars', 'avril', 'mai', 'juin',
-			'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
-		dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
-		dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
-		dayNamesMin: ['D','L','M','M','J','V','S'],
-		weekHeader: 'Sem.',
-		dateFormat: 'yy-mm-dd',
-		firstDay: 1,
-		isRTL: false,
-		showMonthAfterYear: false,
-		yearSuffix: ''};
-	datepicker.setDefaults(datepicker.regional['fr']);
-
-	return datepicker.regional['fr'];
-
-}));
-//
 
 </script>
 {% endblock %}

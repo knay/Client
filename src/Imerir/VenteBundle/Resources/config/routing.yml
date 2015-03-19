@@ -1,6 +1,10 @@
-imerir_vente_stats:
-    path:     /vente/stats
+imerir_vente_stats_mensuelles:
+    path:     /vente/stats/mensuelles
     defaults: { _controller: ImerirVenteBundle:Stats:index }
+    
+imerir_vente_stats_annuelles:
+    path:     /vente/stats/annuelles
+    defaults: { _controller: ImerirVenteBundle:Stats:statsVenteAnnuelle }
 
 imerir_vente_stats_top_vente:
     path:     /vente/stats/top

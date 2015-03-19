@@ -6,9 +6,17 @@ imerir_vente_stats_annuelles:
     path:     /vente/stats/annuelles
     defaults: { _controller: ImerirVenteBundle:Stats:statsVenteAnnuelle }
 
-imerir_vente_stats_top_vente:
-    path:     /vente/stats/top
-    defaults: { _controller: ImerirVenteBundle:Stats:topVente }
+imerir_vente_stats_top_vente_mois:
+    path:     /vente/stats/top/mois
+    defaults: { _controller: ImerirVenteBundle:Stats:topVenteMois }
+    
+imerir_vente_stats_top_vente_trois_mois:
+    path:     /vente/stats/top/trois/mois
+    defaults: { _controller: ImerirVenteBundle:Stats:topVenteTroisMois }
+    
+imerir_vente_stats_top_vente_six_mois:
+    path:     /vente/stats/top/six/mois
+    defaults: { _controller: ImerirVenteBundle:Stats:topVenteSixMois }
     
 imerir_vente_facture:
     path:     /vente/facture

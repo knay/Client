@@ -194,7 +194,7 @@ class StatsController extends Controller
     	
     }
     
-    public function topVenteAction()
+    public function topVenteMoisAction()
     {
     	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
     	$menu_sous_menu = array();
@@ -210,7 +210,7 @@ class StatsController extends Controller
     	}
     	 
     	try {
-    		$return_moyenne = $soap->call('statsVenteTopVente', array('nbTop' => 3)); // On récupère le menu/sous-menu
+    		$return_moyenne = $soap->call('statsVenteTopVente', array('nbMois' => 0)); // On récupère le menu/sous-menu
     		$stats = json_decode($return_moyenne);
     	}
     	catch(\SoapFault $e) {
@@ -221,5 +221,60 @@ class StatsController extends Controller
     																			 'stats' => $stats,
 																    			 'erreur' => $erreur));
     }
+    
+    public function topVenteTroisMoisAction()
+    {
+    	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
+    	$menu_sous_menu = array();
+    	$erreur = '';
+    	$stats = array();
+    
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    
+    	try {
+    		$return_moyenne = $soap->call('statsVenteTopVente', array('nbMois' => 3)); // On récupère le menu/sous-menu
+    		$stats = json_decode($return_moyenne);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    
+    	return $this->render('ImerirVenteBundle::statsTopVente.html.twig', array('result_menu' => $menu_sous_menu,
+    			'stats' => $stats,
+    			'erreur' => $erreur));
+    }
 
+    public function topVenteSixMoisAction()
+    {
+    	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
+    	$menu_sous_menu = array();
+    	$erreur = '';
+    	$stats = array();
+    
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récupère le menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    
+    	try {
+    		$return_moyenne = $soap->call('statsVenteTopVente', array('nbMois' => 6)); // On récupère le menu/sous-menu
+    		$stats = json_decode($return_moyenne);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    
+    	return $this->render('ImerirVenteBundle::statsTopVente.html.twig', array('result_menu' => $menu_sous_menu,
+    			'stats' => $stats,
+    			'erreur' => $erreur));
+    }
 }

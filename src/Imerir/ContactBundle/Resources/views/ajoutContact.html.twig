@@ -39,7 +39,7 @@ Valider votre modification via le bouton "Modifier".
 
 
 {% block ajout %}
-    {% if app.request.attributes.get('_route')=='imerir_creation_client' %}
+    {% if (app.request.attributes.get('_route')=='imerir_creation_client' or app.request.attributes.get('_route')=='imerir_suppression_client') %}
         <form action="{{ path('imerir_validation_creation_client') }}" method="post" id="formulaire_creation_client">
             <table id="tableau_input">
                 <tr>
@@ -137,6 +137,7 @@ Valider votre modification via le bouton "Modifier".
             <button type="submit" class="bouton">
                         <i class="fa fa-check"></i>Valider la saisie
             </button>
+            <a class="bouton" href="{{ path('imerir_creation_client') }}"><i class="fa fa-reply"></i>Annuler</a>
         </form>
     {% endif %}
 
@@ -400,6 +401,8 @@ Valider votre modification via le bouton "Modifier".
             <button type="submit" class="bouton">
                     <i class="fa fa-edit"></i>Modifier
             </button>
+            <a class="bouton" href="{{ path('imerir_creation_client') }}"><i class="fa fa-reply"></i>Annuler</a>
+            <a class="bouton" href="{{ path('imerir_suppression_client') }}"><i class="fa fa-trash"></i>Supprimer</a>
         </form>
     {% endif %}
 
@@ -499,6 +502,7 @@ Valider votre modification via le bouton "Modifier".
             <button type="submit" class="bouton">
                         <i class="fa fa-check"></i>Valider la saisie
             </button>
+            <a class="bouton" href="{{ path('imerir_creation_client') }}"><i class="fa fa-reply"></i>Annuler</a>
         </form>
         {% if erreur == '' %}
             <p class="validation_message">Le contact "{{ old_nom }}" a bien été modifié</p>
@@ -554,8 +558,8 @@ Valider votre modification via le bouton "Modifier".
                     </select></td>
                 <td><button type="submit" class="bouton">
                         <i class="fa fa-search"></i>Rechercher
-                    </button>
-            </tr>
+                    </button></td>
+                    </tr>
         </table>
     </form>
 {% endblock %}

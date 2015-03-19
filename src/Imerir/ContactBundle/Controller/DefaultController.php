@@ -321,6 +321,46 @@ class DefaultController extends Controller
             'nbAdresse'=>0,'erreur'=>$erreur));
 
     }
+    
+    public function execSupprContactAction(){
+    	$soap = $this->get('noyau_soap');
+    	$query = $this->get('request');
+    	
+    	$erreur = '';
+    	
+    	//on recupere l'id du contact avant de le rendre invisible (suppression)
+    	$old_id = $query->request->get('old_id');
+    	
+    	//echo $old_id;
+    	
+    	if($old_id != null){
+    		try{
+    			$soap->call('supprContact',array('id'=>$old_id));
+    		}
+    		catch(\SoapFault $e) {
+    			$erreur .=$e->getMessage();
+    		}
+    	}
+    	try {
+    		$return = $soap->call('getContacts', array('count' => 0, 'offset' => 0, 'nom' => '', 'prenom' => '',
+    				'date_naissance' => '',
+    				'civilite' => '', 'email' => '', 'telephone_portable' => '', 'ok_sms' => '',
+    				'ok_mail' => '', 'notes' => ''));
+    		$liste_contacts = json_decode($return);
+    	
+    		//on recupere le menu et sous menu
+    		$return_menu = $soap->call('getMenu', array());
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .= $e->getMessage();
+    	}
+    	
+    	//TODO invoquer le bon twig
+    	return $this->render('ImerirContactBundle::ajoutContact.html.twig', array('liste_contacts'=>$liste_contacts,'result_menu' => $menu_sous_menu,
+    			'nbAdresse'=>0,'erreur'=>$erreur));
+    	
+    }
 
     public function execModifContactAction(){
         $soap = $this->get('noyau_soap');

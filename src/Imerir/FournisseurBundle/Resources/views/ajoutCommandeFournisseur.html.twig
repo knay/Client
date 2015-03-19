@@ -93,6 +93,8 @@ Pour modifier une commande cliquez simplement sur la ligne de la commande corres
 			<button type="submit" class="bouton">
                         <i class="fa fa-check"></i>Valider la saisie
              </button>
+             <a class="bouton" href="{{ path('imerir_creation_commande_fournisseur') }}"><i class="fa fa-reply"></i>Annuler</a>
+            
         </form>
     {% endif %}
 
@@ -144,7 +146,8 @@ Pour modifier une commande cliquez simplement sur la ligne de la commande corres
                     <button type="submit" class="bouton">
                         <i class="fa fa-check"></i>Valider la saisie
                     </button>
-                  
+                  <a class="bouton" href="{{ path('imerir_creation_commande_fournisseur') }}"><i class="fa fa-reply"></i>Annuler</a>
+        		
             </form>        
             {% if erreur == '' %}
                 <p class="validation_message">La commande a bien été ajoutée</p>
@@ -221,7 +224,16 @@ Pour modifier une commande cliquez simplement sur la ligne de la commande corres
             <button type="submit" class="bouton">
                         <i class="fa fa-edit"></i>Modifier
             </button>
+            <a class="bouton" href="{{ path('imerir_creation_commande_fournisseur') }}"><i class="fa fa-reply"></i>Annuler</a>
+        	<button class="bouton" type="button" id="btnSupprimer">
+						<i class="fa fa-trash-o"></i> Supprimer
+			</button>
             </form>
+            <form action="{{ path('imerir_suppression_commande_fournisseur') }}" method="post" id="formSupprimer">
+            	{% for i in liste_lignes_commandes %}
+            		<input type="hidden" name="modif_commande_id_{{ i.ligne_commande_id }}" value="{{ i.commande_id }}"/>
+            	{% endfor %}
+       		</form>
         {% endif %}
 
         {% if app.request.attributes.get('_route')=='imerir_modification_validation_commande_fournisseur' %}
@@ -272,6 +284,8 @@ Pour modifier une commande cliquez simplement sur la ligne de la commande corres
                 <button type="submit" class="bouton">
                             <i class="fa fa-check"></i>Valider la saisie
                 </button>
+                <a class="bouton" href="{{ path('imerir_creation_commande_fournisseur') }}"><i class="fa fa-reply"></i>Annuler</a>
+        		
                 </form>
                 {% if erreur == '' %}
                     <p class="validation_message">La commande n° {{ commande_id }} a bien été modifiée</p>
@@ -348,6 +362,10 @@ Pour modifier une commande cliquez simplement sur la ligne de la commande corres
     var derniereLigneCliquee = null;
     var dial = $("#dialog");
     ///
+    $("#btnSupprimer").click(function () {
+		$("#formSupprimer").submit();
+	});
+	
     $('tr').click(function () {
         $(this).children('td').children('form').submit();
     });

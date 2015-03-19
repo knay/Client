@@ -402,8 +402,15 @@ Valider votre modification via le bouton "Modifier".
                     <i class="fa fa-edit"></i>Modifier
             </button>
             <a class="bouton" href="{{ path('imerir_creation_client') }}"><i class="fa fa-reply"></i>Annuler</a>
-            <a class="bouton" href="{{ path('imerir_suppression_client') }}"><i class="fa fa-trash"></i>Supprimer</a>
+            <button class="bouton" type="button" id="btnSupprimer">
+						<i class="fa fa-trash-o"></i> Supprimer
+			</button>
+            
         </form>
+        <form action="{{ path('imerir_suppression_client') }}" method="post" id="formSupprimer">
+            	<input type="hidden" name="old_id" value="{{ modif_id }}">
+       	</form>
+        
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_validation_modification_client' %}
@@ -630,6 +637,10 @@ Valider votre modification via le bouton "Modifier".
     //variables
     var numAdresse = 200;
     ///
+    $("#btnSupprimer").click(function () {
+		$("#formSupprimer").submit();
+	});
+    
     $('tr').click(function () {
         $(this).children('td').children('form').submit();
     });

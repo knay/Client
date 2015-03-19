@@ -28,7 +28,8 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 {% endblock %}
 
 {% block ajout %}
-    {% if app.request.attributes.get('_route')=='imerir_produit_creation_ligne_produit' %}
+    {% if (app.request.attributes.get('_route')=='imerir_produit_creation_ligne_produit' or 
+    app.request.attributes.get('_route')=='imerir_produit_suppression_ligne_produit') %}
         <form action="{{ path('imerir_produit_validation_creation_ligne_produit') }}" method="post" id="formulaire_creation_ligne_produit">
             <table class="tableau_input">
             <tr>
@@ -40,6 +41,7 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 	            <td><button type="submit" class="bouton">
 	                <i class="fa fa-check"></i>Valider la saisie
 	            </button></td>
+	            <td><a class="bouton" href="{{ path('imerir_produit_creation_ligne_produit') }}"><i class="fa fa-reply"></i>Annuler</a></td>
             </tr>
             </table>
             
@@ -58,6 +60,7 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 	            <td><button type="submit" class="bouton">
 	                <i class="fa fa-check"></i>Valider la saisie
 	            </button></td>
+	            <td><a class="bouton" href="{{ path('imerir_produit_creation_ligne_produit') }}"><i class="fa fa-reply"></i>Annuler</a></td>
             </tr>
             </table>
             
@@ -81,12 +84,19 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
             	</tr>
             	<tr>
             		<td></td>
-	            	<td><button type="submit" class="bouton">
+	            	<td><button type="submit" class="bouton" style="width:130px">
 	                <i class="fa fa-edit"></i>Modifier
 	            	</button></td>
+	            	<td><a class="bouton" href="{{ path('imerir_produit_creation_ligne_produit') }}"><i class="fa fa-reply"></i>Annuler</a></td>
+	            	<td><button class="bouton" type="button" id="btnSupprimer">
+							<i class="fa fa-trash-o"></i> Supprimer
+						</button></td>
 	           </tr> 	
             </table>
         </form>
+        <form action="{{ path('imerir_produit_suppression_ligne_produit') }}" method="post" id="formSupprimer">
+            	<input type="hidden" name="id_lp" value="{{ lp_id_val }}">
+       	</form>
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_validation_modification_ligne_produit' %}
@@ -168,6 +178,11 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 
 {% block javascripts %}
 <script>
+	$("#btnSupprimer").click(function () {
+		$("#formSupprimer").submit();
+	});
+
+	
     $('tr').click(function () {
         $(this).children('td').children('form').submit();
     });

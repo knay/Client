@@ -29,6 +29,10 @@ imerir_produit_validation_modification_produit:
 imerir_produit_creation_ligne_produit:
     path:     /ligne_produits/creation
     defaults: { _controller: ImerirProduitBundle:LigneProduit:ajoutLigneProduit }
+    
+imerir_produit_suppression_ligne_produit:
+    path:     /ligne_produits/suppression
+    defaults: { _controller: ImerirProduitBundle:LigneProduit:execSupprLigneProduit }    
 
 imerir_produit_validation_creation_ligne_produit:
     path:     /ligne_produits/creation/validation

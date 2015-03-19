@@ -234,6 +234,43 @@ class DefaultController extends Controller
             'nbAdresse'=>0,'erreur'=>$erreur));
 
     }
+    
+    public function execSupprFournisseurAction(){
+    	$soap = $this->get('noyau_soap');
+    	$query = $this->get('request');
+    	
+    	$old_id = $query->request->get('old_id');
+    	
+    	$erreur = '';
+    	
+    	if($old_id != null){
+    		try {
+    			$soap->call('supprFournisseur', array('id' =>$old_id));
+    		}
+    		catch(\SoapFault $e) {
+    			$erreur .=$e->getMessage();
+    		}
+    	}
+    	
+    	try {
+    		$return = $soap->call('getFournisseurs', array('count' => 0, 'offset' => 0, 'nom' => '', 'email' => '',
+    				'telephone_portable' => '', 'reference_client' => '', 'notes' => ''));
+    		$liste_fournisseurs = json_decode($return);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur .=$e->getMessage();
+    	}
+    	
+    	//on recupere le menu et sous menu
+    	$return_menu = $soap->call('getMenu', array());
+    	$menu_sous_menu = json_decode($return_menu);
+    	
+    	return $this->render('ImerirFournisseurBundle::ajoutFournisseur.html.twig', array('liste_fournisseurs'=>$liste_fournisseurs,
+    			'result_menu'=>$menu_sous_menu,
+    			'nbAdresse'=>0,'erreur'=>$erreur));
+    	
+    	
+    }
 
     public function execModifFournisseurAction(){
         $soap = $this->get('noyau_soap');

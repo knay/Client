@@ -33,3 +33,7 @@ imerir_modification_validation_commande_fournisseur:
 imerir_historique_commande_fournisseur:
     path: /fournisseurs/commandes/historique
     defaults: { _controller: ImerirFournisseurBundle:Commandes:historiqueCommande }
+    
+imerir_suppression_fournisseur:
+    path: /fournisseurs/suppression
+    defaults: { _controller: ImerirFournisseurBundle:Default:execSupprFournisseur }    

@@ -6,6 +6,10 @@ imerir_produit_save_attributs:
     path:     /produits/attribut/save
     defaults: { _controller: ImerirProduitBundle:Attribut:saveAttribut }
 
+imerir_produit_supprimer_attributs:
+    path:     /produits/attribut/supprimer
+    defaults: { _controller: ImerirProduitBundle:Attribut:supprimerAttribut }
+
 imerir_produit_creation_produit:
     path:     /produits/creation
     defaults: { _controller: ImerirProduitBundle:Default:ajoutProduit }
@@ -45,6 +49,10 @@ imerir_produit_article:
 imerir_produit_article_save:
     path:     /article/save
     defaults: { _controller: ImerirProduitBundle:Article:saveArticle }
+
+imerir_produit_article_supprimer:
+    path:     /article/supprimer
+    defaults: { _controller: ImerirProduitBundle:Article:supprimerArticle }
     
 imerir_produit_code_barre:
     path:     /code_barre

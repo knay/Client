@@ -1,24 +1,32 @@
 {% extends "::baseAffichage.html.twig" %}
 
-{% block title_page %}
-Articles
-{% endblock %}
+{% block title_page %}Articles{% endblock %}
 
-{% block title %}
-ALBA - Article
-{% endblock %}
+{% block title %}ALBA - Article{% endblock %}
 
-{% block produitBlock %}
-menuSelected
-{% endblock %}
+{% block produitBlock %}menuSelected{% endblock %}
 
-{% block title_ajout %}
-Ajouter/modifier un article
-{% endblock %}
+{% block title_ajout %}Ajouter/modifier un article{% endblock %}
 
 {% block stylesheets %}
 <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
 <link rel="stylesheet" href="{{ asset('bundles/imerirproduit/css/cssArticle.css') }}"/> 
+{% endblock %}
+
+{% block aide %}
+<p>
+	Cette page vous permet de modifier ou de créer de nouveau article.
+</p>
+<h3>Retrouver l'article</h3>
+<p>
+	Pour modifier un article il vous faut tout d'abord le retrouver. <br>
+	Pour le retrouver vous pouvez utiliser le formulaire de recherche en bas de page, ou bien scanner l'article.
+</p>
+<h3>Modifier/ajout un article</h3>
+<p>
+	Une fois l'article choisi (ou le nouveau code barre saisie), il faut remplir tous les champs concernant l'article puis 
+	cliquer sur valider.
+</p>
 {% endblock %}
 
 {% block ajout %}
@@ -76,12 +84,19 @@ Ajouter/modifier un article
 	 		<tr>
 	 			<td><button class="bouton" type="submit"><i class="fa fa-check"></i>Enregistrer</button></td>
 	 			<td>
-		 			<a href="{{ path('imerir_produit_article') }}" class="bouton">
-						<i class="fa fa-reply"></i>Annuler
-					</a>
 				</td>
 	 		</tr>
 		</table>
+	</form>
+	
+	<form method="post" action="{{ path('imerir_produit_article_supprimer') }}">
+		<a href="{{ path('imerir_produit_article') }}" class="bouton">
+			<i class="fa fa-reply"></i>Annuler
+		</a>
+		<input type="hidden" name="code_barre" class="valeurCodeBarre" value="{{ codeBarre }}">
+		<button class="bouton" type="submit">
+			<i class="fa fa-trash-o"></i> Supprimer
+		</button>
 	</form>
 </div>
 <!-- Message s'affichant uniquement au chargement de la page, dès qu'on scan un item on l'enlève -->

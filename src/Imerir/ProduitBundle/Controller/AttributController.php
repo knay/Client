@@ -14,6 +14,61 @@ use Symfony\Component\Security\Core\Authentication\Token\UsernamePasswordToken;
 class AttributController extends Controller
 {
 	/**
+     * Action appelée lorsque l'on sauvegarde les valeurs d'un attribut.
+     * 
+     * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
+     */
+    public function supprimerAttributAction()
+    {
+    	$soap = $this->get('noyau_soap'); // Récup du client SOAP depuis le service.
+    	$erreur = ''; // En cas d'erreur
+    	$req = $this->getRequest()->request;
+    	$id = 0;
+    	
+    	if (null !== $req->get('id'))
+    		$id = $req->get('id');
+		
+		try {
+			$ret = $soap->call('supprimerAttribut', array('id' => $id)); // On modif/ajoute l'attribut sur le serveur SOAP
+		}
+		catch(\SoapFault $e) {
+			$erreur.=$e->getMessage();
+		}
+		
+		try {
+			$args = array('nom' => '', 'idLigneProduit' => 0, 'idAttribut' => 0, 'avecValeurAttribut' => true, 'avecLigneProduit' => false);
+			$ret = $soap->call('getAttribut', $args); // On récup les attributs pour affichage en bas (juste le nom pas les valeurs)
+			$jsonValeurAttribut = json_decode($ret);
+		}
+		catch(\SoapFault $e) {
+		$erreur.=$e->getMessage();
+		}
+		
+    	try {
+    		$args = array('count' => 0, 'offset' => 0, 'nom' => '');
+    		$return = $soap->call('getLigneProduit', $args); // On récupère toutes les lignes produits pour affichage dans le <select>
+    		$jsonLigneProduit = json_decode($return);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    	
+    	try {
+    		$return_menu = $soap->call('getMenu', array()); // On récup menu/sous-menu
+    		$menu_sous_menu = json_decode($return_menu);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
+    	
+    	return $this->render('ImerirProduitBundle::attribut.html.twig', array('ligne_produit' => $jsonLigneProduit,
+    			 															  'lst_attribut' => $jsonValeurAttribut,
+    			 															  'result_menu' => $menu_sous_menu, 
+    			                                                              'modification' => false,
+    			                                                              'erreur' => $erreur));
+    }
+	
+	/**
 	 * Action appélée lorsque à la page de modification d'un attribut et de ses valeurs.
 	 * @return \Symfony\Component\HttpFoundation\Response La réponse HTML.
 	 */

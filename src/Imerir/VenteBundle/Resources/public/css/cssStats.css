@@ -1,3 +1,7 @@
+.legend {
+/* 	width: auto; */
+}
+
 .legende li {
 	list-style: none;
 }
@@ -10,7 +14,8 @@
 
 .graphiqueConteneur {
 	text-align: center;
-	padding-left:20%;
+	margin-left:40%;
+	width:50%;
 }
 
 .choixGraph {

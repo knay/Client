@@ -19,32 +19,47 @@ menuSelected
 {% block title_ajout %}Vos statistiques{% endblock %}
 
 {% block ajout %}
-<p class="choixGraph">
-	Choisissez une option :<br>
-	<a class="bouton" href="{{ path('imerir_vente_stats_mensuelles') }}">
-			<i class="fa fa-area-chart"></i>Ventes Mensuelles
-		</a>
-		<a class="bouton" href="{{ path('imerir_vente_stats_annuelles') }}">
-			<i class="fa fa-area-chart"></i>Ventes Annuelles
-		</a>
-		<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats_top_vente_mois') }}">
-			<i class="fa fa-pie-chart"></i>Produits stars
-		</a>
-{# 	<a class="bouton" href="">Mes lignes produits</a>#}
-{# 	<a class="bouton" href="">Vente et caractéristiques produits</a>#}
-</p>
-
-<p class="choixGraph">
-	<a class="bouton" href="{{ path('imerir_vente_stats_top_vente_mois') }}">Mois courant</a>
-	<a class="bouton" href="{{ path('imerir_vente_stats_top_vente_trois_mois') }}">3 dernier mois</a>
-	<a class="bouton" href="{{ path('imerir_vente_stats_top_vente_six_mois') }}">6 dernier mois</a>
-</p>
-
-<h3>Les produits rapportant le plus d'argent (en euro) : </h3>
-<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
-<div class="legende">
-Légende : 
-</div>
+	<p class="choixGraph">
+		Choisissez une option :<br>
+		<a class="bouton" href="{{ path('imerir_vente_stats_mensuelles') }}">
+				<i class="fa fa-area-chart"></i>Ventes Mensuelles
+			</a>
+			<a class="bouton" href="{{ path('imerir_vente_stats_annuelles') }}">
+				<i class="fa fa-area-chart"></i>Ventes Annuelles
+			</a>
+			<a class="bouton boutonSelected" href="{{ path('imerir_vente_stats_top_vente_mois') }}">
+				<i class="fa fa-pie-chart"></i>Produits stars
+			</a>
+	</p>
+	
+	<p class="choixGraph">
+		<a class="bouton" href="{{ path('imerir_vente_stats_top_vente_mois') }}">Mois courant</a>
+		<a class="bouton" href="{{ path('imerir_vente_stats_top_vente_trois_mois') }}">3 derniers mois</a>
+		<a class="bouton" href="{{ path('imerir_vente_stats_top_vente_six_mois') }}">6 derniers mois</a>
+	</p>
+	
+	{% if app.request.attributes.get('_route')=='imerir_vente_stats_top_vente_mois' %}
+		<h3>Top 3 des produits sur le mois (en &euro;) : </h3>
+	{% endif %}
+	{% if app.request.attributes.get('_route')=='imerir_vente_stats_top_vente_trois_mois' %}
+		<h3>Top 3 des produits sur les trois derniers mois (en &euro;) : </h3>
+	{% endif %}
+	{% if app.request.attributes.get('_route')=='imerir_vente_stats_top_vente_six_mois' %}
+		<h3>Top 3 des produits sur les six derniers mois (en &euro;) : </h3>
+	{% endif %}
+	
+	<table>
+		<tr>
+			<td>
+				<div class="legende">
+				Légende : 
+				</div>
+			</td>
+			<td>				
+				<div class="graphiqueConteneur"><canvas id="myChart" width="600" height="400"></canvas></div>
+			</td>
+		</tr>
+	</table>
 {% endblock %}
 
 {% block javascripts %}

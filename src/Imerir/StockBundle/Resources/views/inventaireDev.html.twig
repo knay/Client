@@ -1,19 +1,41 @@
 {% extends "::baseAffichage.html.twig" %}
 
-{% block title_ajout %}
-Faire un premier inventaire
-{% endblock %}
+{% block title_ajout %}Faire un premier inventaire{% endblock %}
 
-{% block title_page %}
-Inventaire complet
-{% endblock %}
+{% block title_page %}Inventaire complet{% endblock %}
 
-{% block title %}
-ALBA - Iventaire complet
-{% endblock %}
+{% block title %}ALBA - Iventaire complet{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
+{% endblock %}
+
+{% block aide %}
+<p>
+Cette page vous permet de faire un inventaire complet de vos produits.<br>
+Un inventaire complet vous permet de saisir directement les prix des articles (prix fournisseur et prix de vente).<br>
+Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
+</p>
+<ul>
+	<li>Scanner l'article ou saisir le code barre manuellement</li>
+	<li>
+		Choisir le produit concerné par l'article. Si vous ne l'avez pas enregistré au préalable, vous pouvez le faire
+		en cliquand sur le bouton "plus" de la colonne "Produit".
+	</li>
+	<li>
+		Choisir les caractéristiques de cet article. Vous pouvez modifier les attributs en cliquant sur le crayon 
+		dans la colonne "Attributs".
+	</li>
+	<li>
+		Préciser le nombre d'article que vous avez avec les boutons "plus" et "moins" de la colonne quantité. 
+		Vous pouvez aussi scanné l'article plusieurs fois pour augmenter la quantité.
+	</li>
+	<li>Saisir le prix fournisseur.</li>
+	<li>Saisir le prix de vente.</li>
+</ul>
+<p>
+	Vous pouvez à tout moment faire une saisie manuelle de code barre en cliquant sur le bouton en haut de votre écran.
+</p>
 {% endblock %}
 
 {% block ajout %}

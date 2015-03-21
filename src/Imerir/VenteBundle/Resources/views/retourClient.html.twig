@@ -14,6 +14,29 @@
 
 {% block title_ajout %}Effectuer un retour client{% endblock %}
 
+{% block aide %}
+<p>
+	Cette interface vous permet de prendre en compte un retour effectué par un client.<br>
+	Pour effectuer un retour client suivez les étapes ci-dessous : 
+</p>
+<ul>
+	<li>
+		Pour faire un retour client, il vous faut tout d'abord choisir la facture concerné par le retour.<br>
+		Pour retrouver cette facture, utiliser le nom du client, ou la date de vente du produit.
+	</li>
+	<li>
+		Une fois la facture selectionnée, il faut choisir l'article que le client vous retourne.
+	</li>
+	<li>
+		Saisissez ensuite la quantité d'article retourné et valider.
+	</li>
+</ul>
+<p>
+	Si, lorsque vous choisissez une facture, une ligne apparait avec une quantité négative, 
+	c'est qu'il s'agit d'un retour client.
+</p>
+{% endblock %}
+
 {% block ajout %}
 	<div id="dialogRetour" style="display: none;" title="Confirmer le retour client">
 		<form method="post" action="{{ path('imerir_vente_valider_retour_client') }}">

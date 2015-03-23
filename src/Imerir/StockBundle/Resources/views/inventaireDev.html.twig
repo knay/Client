@@ -74,7 +74,7 @@ Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
 				<td>
 					<select name="produit_0" class="selectProduit">
 						{% for j in produit %}
-							<option>{{ j.p }}</option>
+							<option>{{ j.lp }} - {{ j.p }}</option>
 						{% endfor %}
 					</select>
 					<i class="fa fa-plus-square ajout ajoutProduit"></i>
@@ -241,6 +241,7 @@ function ajoutProduit() {
         dial.find("#header").remove();
         dial.find("#title_page").remove();
         dial.find("#fieldset_recherche").remove();
+        dial.find("a").remove();
         dial.find("#affichage").css("left", "0");
         dial.find("#affichage").css("width", "100%");
 
@@ -267,7 +268,7 @@ function ajoutProduit() {
      		   },
      		   success: function(data) {
      			  var select = ligne.find('.selectProduit');
-     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valProduit+'</option>');
+     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valLigneProduit+'-'+valProduit+'</option>');
      			  $("#dialog").dialog("close");
      			  ligne.effect( "highlight", {}, "3000" );
      			  select.trigger('change');
@@ -292,13 +293,16 @@ function ajoutProduit() {
 function modifierAttribut() {
 	var ligne = $(this).parent().parent().parent(); // La ligne sur laquelle on a cliqué
 	var idAttr = $(this).parent().find('.id_attribut').val();
+	var data = {id : idAttr};
+	if (idAttr === "0")
+		data = {};
 
 	$("#dialog").attr("title", "Modifier un attribut");
 
 	$("#contenneur_inventaire").hide();
 	$("#chargement").show();
 
-    $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', {id : idAttr }, function () {
+    $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', data, function () {
         var dial = $("#dialog");
         
         dial.dialog({
@@ -317,6 +321,7 @@ function modifierAttribut() {
         dial.find("#header").remove();
         dial.find("#title_page").remove();
         dial.find("#fieldset_recherche").remove();
+        dial.find("a").remove();
         dial.find("#affichage").css("left", "0");
         dial.find("#affichage").css("width", "100%");
 
@@ -439,7 +444,7 @@ function getArticleFromSoap(ligne) {
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
 			   var nomProduit = cellule.children(".selectProduit").children('option');
 			   nomProduit.each(function (e) {
-				   if ($(this).html() === objJson['nomProduit'])
+				   if ($(this).html().split("-")[1].trim() === objJson['nomProduit'])
 					   $(this).attr("selected", true);
 			   });
 

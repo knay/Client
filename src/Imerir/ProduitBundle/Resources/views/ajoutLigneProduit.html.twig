@@ -65,7 +65,9 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
             </table>
             
         </form>
-        <p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajoutée</p>
+        {% if erreur == '' %}
+        	<p class="validation_message">La ligne produit "{{ nom_lp_add }}" a bien été ajoutée</p>
+        {% endif %}	
     {% endif %}
 
     {% if app.request.attributes.get('_route')=='imerir_produit_modification_ligne_produit' %}

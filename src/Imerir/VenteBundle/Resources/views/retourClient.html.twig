@@ -59,7 +59,10 @@
 				</tr>
 				<tr>
 					<td>Promotion appliquée lors de l'achat : </td>
-					<td id="tdPromo"><input type="number" name="promo" value="" min="0" max="100"></td>
+					<td id="tdPromo">
+						<span class="affichagePromo"></span>
+						<input type="hidden" name="promo" value="" min="0" max="100">
+					</td>
 				</tr>
 				<tr>
 					<td>Prix unitaire : </td>
@@ -330,6 +333,7 @@ $("#tableau_detail_facture").find('tr:not(:first)').click(function () {
 	$("#tdCodeBarre").find("input").val(codeBarre);
 	$("#tdPromo").find("input").val(promo);
 	$("#tdPrix").html(prixUnitaire);
+	$("#tdPromo").find(".affichagePromo").html(promo);
 	$("#tdQuantite").find("input").val('1');
 	calculerPrixTotal();
 });

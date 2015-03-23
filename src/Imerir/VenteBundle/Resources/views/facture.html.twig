@@ -142,7 +142,7 @@ ALBA - Factures
 					<label>À partir de : </label>
 				</td>
 				<td>
-					<input type="text" id="date_de_recherche_facture" name="date" size="20" value="aaaa-mm-jj">
+					<input type="text" id="date_de_recherche_facture" name="date" size="20" placeholder="aaaa-mm-jj">
 					<i id="bouton_supprimer_date" class="fa supprimer fa-minus-square"></i>
 				</td>
 			</tr>
@@ -151,7 +151,7 @@ ALBA - Factures
 					<label>Client : </label>
 				</td>
 				<td>
-					<input type="text" id="recherche_client" name="client" size="20">
+					<input type="text" id="recherche_client" name="client" size="20" placeholder="nom">
 					<i id="bouton_supprimer_client" class="fa supprimer fa-minus-square"></i>
 				</td>
 			</tr>
@@ -206,12 +206,9 @@ ALBA - Factures
 {% block javascripts %}
 <script>
 var format_affichage_date = "yy-mm-dd";
-var explication_client = "Nom";
 $("#bouton_supprimer_date").hide();
 $("#fieldset_ajout").hide();
 $("#bouton_supprimer_client").hide();
-$("#date_de_recherche_facture").val('aaaa-mm-jj');
-$("#recherche_client").val(explication_client);
 
 //Permet de parametrer le datepicker
 $(function() {
@@ -223,12 +220,12 @@ $(function() {
 
 //Afficher l'icone de suppression lorsqu'une date est inscrite
 $("#date_de_recherche_facture").change(function(){
-	$("#bouton_supprimer_date").css("display","inline");
+	$("#bouton_supprimer_date").show();
 });
 
 //Permet de gerer l'evenement du bouton de suppresion  de la date
 $("#bouton_supprimer_date").click(function(){
-	$( "#date_de_recherche_facture" ).val('aaaa-mm-jj');
+	$( "#date_de_recherche_facture" ).val('');
 	$("#bouton_supprimer_date").hide();
 });
 
@@ -240,15 +237,9 @@ $("#recherche_client").change(function(){
 //Permet de gerer l'evenement sur le bouton de suppresion de la recherche client
 $("#bouton_supprimer_client").click(function(){
 	$("#bouton_supprimer_client").hide();
-	$("#recherche_client").val(explication_client);
+	$("#recherche_client").val('');
 });
 
-//Permet d'effacer la valeur du champ si elle est egal a nom, donc quand on click pour la premeir fois sur le input
-$("#recherche_client").click(function(){
-	if ($("#recherche_client").val() == explication_client){
-		$("#recherche_client").val('');
-	}
-});
 
 //Permet de gerer lorsque l'utilisateur click sur une ligne du tableau
 $(".select_ligne").click( function(){

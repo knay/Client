@@ -53,15 +53,20 @@
 		                	<option>{{ i.nom_ligne_produit }}</option>
 		            	{% endfor %}
 		        	</select>
+		        	<i id="bouton_supprimer_ligne_produit" class="fa supprimer fa-minus-square"></i>
 		        </td>
 	        </tr>
 	        <tr>
 	        	<td><label>Produit : </label></td>
-	        	<td><select id="select_produit" name="nomProduit"></select></td>
+	        	<td><select id="select_produit" name="nomProduit"></select>
+	        	<i id="bouton_supprimer_produit" class="fa supprimer fa-minus-square"></i>
+	        	</td>
 	        </tr>
 	        <tr>
 	        	<td><label>Code barre article : </label></td>
-	        	<td><input id="article_recherche" type="text" name="nomArticle" placeholder="4651334009303"></td>
+	        	<td><input id="article_recherche" type="text" name="nomArticle" placeholder="4651334009303">
+	        	<i id="bouton_supprimer_article" class="fa supprimer fa-minus-square"></i>
+	        	</td>
 	        </tr>
         </table>
         <button class="bouton" ><i class="fa fa-search"></i> Rechercher</button>
@@ -106,24 +111,60 @@
 
 {% block javascripts %}
 <script>
-$("#fieldset_ajout").css( "display", "none");
+$("#fieldset_ajout").hide();
+$("#bouton_supprimer_produit").hide();
+$("#bouton_supprimer_article").hide();
+$("#bouton_supprimer_ligne_produit").hide();
 		
-	// Gestion des selects en fonction de la ligne produits selectionne
-	$( "#select_ligne_produit" ).change(function() {
-		$.ajax({
-			   url: '{{ path('imerir_ajax_stock_get_produit') }}',
-			   data: { nomLigneProduit: $(this).val() },
-			   success: function(data) {
-				   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
-				   $("#select_produit").html('');
-				   $("#select_produit").html('<option></option>');
-					for(id_produit in objJson){
-						 $("#select_produit").html( $("#select_produit").html()+'<option>'+objJson[id_produit]['produit']+'</option>');
-					}
-				   },
-			   type: 'POST'
-		});
+// Gestion des selects en fonction de la ligne produits selectionne
+$( "#select_ligne_produit" ).change(function() {
+	$.ajax({
+		   url: '{{ path('imerir_ajax_stock_get_produit') }}',
+		   data: { nomLigneProduit: $(this).val() },
+		   success: function(data) {
+			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
+			   $("#select_produit").html('');
+			   $("#select_produit").html('<option></option>');
+				for(id_produit in objJson){
+					 $("#select_produit").html( $("#select_produit").html()+'<option>'+objJson[id_produit]['produit']+'</option>');
+				}
+			   },
+		   type: 'POST'
 	});
+});
+
+//Afficher l'icone de suppression
+$("#select_ligne_produit").change(function(){
+	$("#bouton_supprimer_ligne_produit").show();
+});
+
+//Afficher l'icone de suppression
+$("#select_produit").change(function(){
+	$("#bouton_supprimer_produit").show();
+});
+
+//Afficher l'icone de suppression
+$("#article_recherche").change(function(){
+	$("#bouton_supprimer_article").show();
+});
+
+//Permet de gerer l'evenement du bouton de suppresion
+$("#bouton_supprimer_produit").click(function(){
+	$("#select_produit").val('');
+	$("#bouton_supprimer_produit").hide();
+});
+
+//Permet de gerer l'evenement du bouton de suppresion
+$("#bouton_supprimer_article").click(function(){
+	$("#article_recherche").val('');
+	$("#bouton_supprimer_article").hide();
+});
+
+//Permet de gerer l'evenement du bouton de suppresion
+$("#bouton_supprimer_ligne_produit").click(function(){
+	$("#select_ligne_produit").val('');
+	$("#bouton_supprimer_ligne_produit").hide();
+});
 	
 </script>
 {% endblock %}

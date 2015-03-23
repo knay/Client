@@ -37,7 +37,8 @@ menuSelected
 	    {% if app.request.attributes.get('_route')=='imerir_vente_creation_moyen_paiement' %}
 	        <form action="{{ path('imerir_vente_creation_moyen_paiement') }}" method="post">
                 <label>Nom du moyen de paiement : </label>
-                <input type="text" name="nom"/><br>
+                <input id="non_recherche" type="text" name="nom" placeholder="Carte bancaire"/>
+                <i id="bouton_supprimer_nom" class="fa supprimer fa-minus-square"></i><br>
 	            <button class="bouton" ><i class="fa fa-plus"></i> Ajouter</button>
 	        </form>
 	    {% endif %}
@@ -97,8 +98,21 @@ menuSelected
 
 {% block javascripts %}
 <script>
-    $('tr').click(function () {
-        $(this).children('td').children('form').submit();
-    });
+$("#bouton_supprimer_nom").hide();
+
+$('tr').click(function () {
+	$(this).children('td').children('form').submit();
+});
+
+//Afficher l'icone de suppression
+$("#non_recherche").change(function(){
+	$("#bouton_supprimer_nom").show();
+});
+
+//Permet de gerer l'evenement du bouton de suppresion
+$("#bouton_supprimer_nom").click(function(){
+	$("#non_recherche").val('');
+	$("#bouton_supprimer_nom").hide();
+});
 </script>
 {% endblock %}

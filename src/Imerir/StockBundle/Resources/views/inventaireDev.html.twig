@@ -402,8 +402,11 @@ $(document).keypress(function(e) {
 	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
 	// n'est plus la douchette qui est maître
-	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
+	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) {
+		if (e.keyCode === 13)
+			return false; 
 		return true;
+	}
 	
 	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette
@@ -512,7 +515,9 @@ function validerCodeBarre(saisieManuelle) {
 	var ligne = tableau.find("tr").last().clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
 	var cellule = ligne.children('td');
 	var nbCaract = 0;
+	var existeDeja = false; // Permettra de savoir si on a déjà scané cet article ou non
 	var ligneCur = tableau.find("tr").last(); // On récupère la ligne de tableau sur laquelle on va travailler
+	var lignes = tableau.find("tr");
 
 	if (saisieManuelle !== true && input.val().length < 10) {
 		input.val('');
@@ -522,35 +527,56 @@ function validerCodeBarre(saisieManuelle) {
 	$("#chargement").show();
 	$("#contenneur_inventaire").hide();
 	$("#message_accueil").hide();
-	
-	nbCodeBarre++;
-	
-	cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
-	cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
-	cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
-	cellule.children(".prixClient").attr('name', 'prixClient_'+nbCodeBarre);
-	cellule.children(".prixFournisseur").attr('name', 'prixFournisseur_'+nbCodeBarre);
-	cellule.children(".valAttribut").each(function (e) {
-		$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
-		nbCaract++;
+
+
+	lignes.each(function (e) { // On regarde dans toutes les lignes pour savoir si l'article à déjà été scanné
+		if (e === lignes.length - 1) // si c'est la ligne en cours, aucun interet on arrete la boucle
+			return; 
+
+		// Si c'est la même valeur de code barre c'est que l'article à déjà été scanné, on incrémente la quantité
+		if ($(this).find(".valeurCodeBarre").val() == ligneCur.find('.valeurCodeBarre').val()) {
+			existeDeja = true;
+			var qt = parseInt($(this).children('td').children(".quantite").val())+1;
+			$(this).children('td').children(".quantite").val(""+qt);
+			ligneCur.find(".valeurCodeBarre").val('');
+			$("#chargement_caisse").children("span").hide();
+		}
 	});
-	cellule.children(".valeurCodeBarre").val('');
-	tableau.append(ligne);
 
-	$('.supprimer').unbind('click');
-	$('.supprimer').click(supprimerLigne);
-	$('.selectProduit').unbind('change');
-	$('.selectProduit').change(onChangeSelect);
-	$('.moinsQuantite').unbind("click");
-	$('.plusQuantite').unbind("click");
-	$('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
-	$('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
-
-	ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
-	ligneCur.show(); // On affiche l'article qu'on vient de scanner
+	if (existeDeja === false) {
+		nbCodeBarre++;
+		
+		cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
+		cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
+		cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
+		cellule.children(".prixClient").attr('name', 'prixClient_'+nbCodeBarre);
+		cellule.children(".prixFournisseur").attr('name', 'prixFournisseur_'+nbCodeBarre);
+		cellule.children(".valAttribut").each(function (e) {
+			$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
+			nbCaract++;
+		});
+		cellule.children(".valeurCodeBarre").val('');
+		tableau.append(ligne);
 	
-	$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
-	getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+		$('.supprimer').unbind('click');
+		$('.supprimer').click(supprimerLigne);
+		$('.selectProduit').unbind('change');
+		$('.selectProduit').change(onChangeSelect);
+		$('.moinsQuantite').unbind("click");
+		$('.plusQuantite').unbind("click");
+		$('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
+		$('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
+	
+		ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
+		ligneCur.show(); // On affiche l'article qu'on vient de scanner
+
+		$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
+		getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+	}
+	else {
+		 $("#contenneur_inventaire").show();
+		 $("#chargement").hide();
+	}
 }
 
 $("#inputSubmit").attr("disabled", false); // Par défaut le bouton submit et accessible

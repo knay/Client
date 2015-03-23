@@ -11,9 +11,9 @@ class DefaultController extends Controller
         $soap = $this->get('noyau_soap');
 
         $query = $this->get('request');
-        $nomRech = $query->request->get('rechProduit');
-        $ligneProduitRech = $query->request->get('rechLp');
-        $attributRech = $query->request->get('rechAttribut');
+        $nomRech = $query->query->get('rechProduit');
+        $ligneProduitRech = $query->query->get('rechLp');
+        $attributRech = $query->query->get('rechAttribut');
 
         $erreur = '';
 

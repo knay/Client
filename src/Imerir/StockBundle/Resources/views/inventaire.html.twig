@@ -70,7 +70,7 @@ Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
 				<td>
 					<select name="produit_0" class="selectProduit">
 						{% for j in produit %}
-							<option>{{ j.lp }} - {{ j.p }}</option>
+							<option value="{{ j.p }}">{{ j.lp }} - {{ j.p }}</option>
 						{% endfor %}
 					</select>
 					<i class="fa fa-plus-square ajout ajoutProduit"></i>
@@ -532,7 +532,7 @@ function onChangeSelect() {
 	$.ajax({
 		   url: '{{ path('imerir_ajax_inventaire_get_attribut') }}',
 		   data: {
-		      nom: $(this).val()
+		      nom: $(this).val().split("-")[1].trim()
 		   },
 		   success: function(data) {
 			   var objJson = JSON.parse(data); // On parse les data puis on affiche les attributs et les valeurs atribut correctement.

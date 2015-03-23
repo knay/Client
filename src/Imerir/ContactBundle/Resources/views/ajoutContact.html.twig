@@ -629,9 +629,9 @@ Valider votre modification via le bouton "Modifier".
 	{% if liste_contacts|length > ligneParPage %}
 		{% for i in 0..liste_contacts|length/ligneParPage %}
 			{% if i == page-1 %}
-				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+				<a class="num_page selected_page" href="{{ path('imerir_creation_client', app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
 			{% else %} 
-				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+				<a class="num_page" href="{{ path('imerir_creation_client', app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
 			{% endif %}
 		{% endfor %}  
 	{% endif %}

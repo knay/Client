@@ -155,17 +155,19 @@ class DefaultController extends Controller
 
         if($Contact_notes===null)
             $Contact_notes='';
-
-        try{
-            $soap->call('ajoutContact',array('nom' => $Contact_nom,'prenom'=>$Contact_prenom ,
-                'date_naissance'=>$Contact_date_naissance,'civilite'=>$Contact_civilite,
-                'email'=>$Contact_email,
-                'telephone_portable'=>$Contact_telephone_portable,
-                'ok_sms'=>$Contact_ok_sms,'ok_mail'=>$Contact_ok_mail,'notes'=>$Contact_notes));
-        }
-        catch(\SoapFault $e) {
-            $erreur .=$e->getMessage();
-        }
+        
+		if($Contact_nom != ''){
+	        try{
+	            $soap->call('ajoutContact',array('nom' => $Contact_nom,'prenom'=>$Contact_prenom ,
+	                'date_naissance'=>$Contact_date_naissance,'civilite'=>$Contact_civilite,
+	                'email'=>$Contact_email,
+	                'telephone_portable'=>$Contact_telephone_portable,
+	                'ok_sms'=>$Contact_ok_sms,'ok_mail'=>$Contact_ok_mail,'notes'=>$Contact_notes));
+	        }
+	        catch(\SoapFault $e) {
+	            $erreur .=$e->getMessage();
+	        }
+		}
         ////////////////////////////////////////////////////////////////////////////
         /**
          * PARTIE ADRESSES

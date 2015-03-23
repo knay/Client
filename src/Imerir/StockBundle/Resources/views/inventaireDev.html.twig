@@ -1,19 +1,41 @@
 {% extends "::baseAffichage.html.twig" %}
 
-{% block title_ajout %}
-Faire un premier inventaire
-{% endblock %}
+{% block title_ajout %}Faire un premier inventaire{% endblock %}
 
-{% block title_page %}
-Inventaire complet
-{% endblock %}
+{% block title_page %}Inventaire complet{% endblock %}
 
-{% block title %}
-ALBA - Iventaire complet
-{% endblock %}
+{% block title %}ALBA - Iventaire complet{% endblock %}
 
 {% block stylesheets %}
     <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
+{% endblock %}
+
+{% block aide %}
+<p>
+Cette page vous permet de faire un inventaire complet de vos produits.<br>
+Un inventaire complet vous permet de saisir directement les prix des articles (prix fournisseur et prix de vente).<br>
+Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
+</p>
+<ul>
+	<li>Scanner l'article ou saisir le code barre manuellement</li>
+	<li>
+		Choisir le produit concerné par l'article. Si vous ne l'avez pas enregistré au préalable, vous pouvez le faire
+		en cliquand sur le bouton "plus" de la colonne "Produit".
+	</li>
+	<li>
+		Choisir les caractéristiques de cet article. Vous pouvez modifier les attributs en cliquant sur le crayon 
+		dans la colonne "Attributs".
+	</li>
+	<li>
+		Préciser le nombre d'article que vous avez avec les boutons "plus" et "moins" de la colonne quantité. 
+		Vous pouvez aussi scanné l'article plusieurs fois pour augmenter la quantité.
+	</li>
+	<li>Saisir le prix fournisseur.</li>
+	<li>Saisir le prix de vente.</li>
+</ul>
+<p>
+	Vous pouvez à tout moment faire une saisie manuelle de code barre en cliquant sur le bouton en haut de votre écran.
+</p>
 {% endblock %}
 
 {% block ajout %}
@@ -52,7 +74,7 @@ ALBA - Iventaire complet
 				<td>
 					<select name="produit_0" class="selectProduit">
 						{% for j in produit %}
-							<option>{{ j.p }}</option>
+							<option>{{ j.lp }} - {{ j.p }}</option>
 						{% endfor %}
 					</select>
 					<i class="fa fa-plus-square ajout ajoutProduit"></i>
@@ -219,6 +241,7 @@ function ajoutProduit() {
         dial.find("#header").remove();
         dial.find("#title_page").remove();
         dial.find("#fieldset_recherche").remove();
+        dial.find("a").remove();
         dial.find("#affichage").css("left", "0");
         dial.find("#affichage").css("width", "100%");
 
@@ -270,13 +293,16 @@ function ajoutProduit() {
 function modifierAttribut() {
 	var ligne = $(this).parent().parent().parent(); // La ligne sur laquelle on a cliqué
 	var idAttr = $(this).parent().find('.id_attribut').val();
+	var data = {id : idAttr};
+	if (idAttr === "0")
+		data = {};
 
 	$("#dialog").attr("title", "Modifier un attribut");
 
 	$("#contenneur_inventaire").hide();
 	$("#chargement").show();
 
-    $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', {id : idAttr }, function () {
+    $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', data, function () {
         var dial = $("#dialog");
         
         dial.dialog({
@@ -295,6 +321,7 @@ function modifierAttribut() {
         dial.find("#header").remove();
         dial.find("#title_page").remove();
         dial.find("#fieldset_recherche").remove();
+        dial.find("a").remove();
         dial.find("#affichage").css("left", "0");
         dial.find("#affichage").css("width", "100%");
 
@@ -380,8 +407,11 @@ $(document).keypress(function(e) {
 	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
 	// n'est plus la douchette qui est maître
-	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
+	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) {
+		if (e.keyCode === 13)
+			return false; 
 		return true;
+	}
 	
 	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette
@@ -490,7 +520,9 @@ function validerCodeBarre(saisieManuelle) {
 	var ligne = tableau.find("tr").last().clone(); // On prépare le clone de la ligne pour l'ajouter au tableau
 	var cellule = ligne.children('td');
 	var nbCaract = 0;
+	var existeDeja = false; // Permettra de savoir si on a déjà scané cet article ou non
 	var ligneCur = tableau.find("tr").last(); // On récupère la ligne de tableau sur laquelle on va travailler
+	var lignes = tableau.find("tr");
 
 	if (saisieManuelle !== true && input.val().length < 10) {
 		input.val('');
@@ -500,35 +532,56 @@ function validerCodeBarre(saisieManuelle) {
 	$("#chargement").show();
 	$("#contenneur_inventaire").hide();
 	$("#message_accueil").hide();
-	
-	nbCodeBarre++;
-	
-	cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
-	cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
-	cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
-	cellule.children(".prixClient").attr('name', 'prixClient_'+nbCodeBarre);
-	cellule.children(".prixFournisseur").attr('name', 'prixFournisseur_'+nbCodeBarre);
-	cellule.children(".valAttribut").each(function (e) {
-		$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
-		nbCaract++;
+
+
+	lignes.each(function (e) { // On regarde dans toutes les lignes pour savoir si l'article à déjà été scanné
+		if (e === lignes.length - 1) // si c'est la ligne en cours, aucun interet on arrete la boucle
+			return; 
+
+		// Si c'est la même valeur de code barre c'est que l'article à déjà été scanné, on incrémente la quantité
+		if ($(this).find(".valeurCodeBarre").val() == ligneCur.find('.valeurCodeBarre').val()) {
+			existeDeja = true;
+			var qt = parseInt($(this).children('td').children(".quantite").val())+1;
+			$(this).children('td').children(".quantite").val(""+qt);
+			ligneCur.find(".valeurCodeBarre").val('');
+			$("#chargement_caisse").children("span").hide();
+		}
 	});
-	cellule.children(".valeurCodeBarre").val('');
-	tableau.append(ligne);
 
-	$('.supprimer').unbind('click');
-	$('.supprimer').click(supprimerLigne);
-	$('.selectProduit').unbind('change');
-	$('.selectProduit').change(onChangeSelect);
-	$('.moinsQuantite').unbind("click");
-	$('.plusQuantite').unbind("click");
-	$('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
-	$('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
-
-	ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
-	ligneCur.show(); // On affiche l'article qu'on vient de scanner
+	if (existeDeja === false) {
+		nbCodeBarre++;
+		
+		cellule.children(".selectProduit").attr('name', 'produit_'+nbCodeBarre);
+		cellule.children(".quantite").attr('name', 'quantite_'+nbCodeBarre);
+		cellule.children(".valeurCodeBarre").attr('name', 'code_'+nbCodeBarre);
+		cellule.children(".prixClient").attr('name', 'prixClient_'+nbCodeBarre);
+		cellule.children(".prixFournisseur").attr('name', 'prixFournisseur_'+nbCodeBarre);
+		cellule.children(".valAttribut").each(function (e) {
+			$(this).attr('name', 'caract_'+nbCodeBarre+'_'+nbCaract);
+			nbCaract++;
+		});
+		cellule.children(".valeurCodeBarre").val('');
+		tableau.append(ligne);
 	
-	$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
-	getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+		$('.supprimer').unbind('click');
+		$('.supprimer').click(supprimerLigne);
+		$('.selectProduit').unbind('change');
+		$('.selectProduit').change(onChangeSelect);
+		$('.moinsQuantite').unbind("click");
+		$('.plusQuantite').unbind("click");
+		$('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
+		$('.plusQuantite').click(plusQuantite); // On bind le clic sur le bouton plus de la quantite avec la fonction
+	
+		ligne.hide(); // On le cache, ça sera la prochaine ligne qui sera afficher au prochain scan
+		ligneCur.show(); // On affiche l'article qu'on vient de scanner
+
+		$("#inputSubmit").attr("disabled", false); // On remet en service le boutton submit
+		getArticleFromSoap(input.parent().parent()); // On récupère l'article depuis le SOAP pour afficher ces caractéristiques
+	}
+	else {
+		 $("#contenneur_inventaire").show();
+		 $("#chargement").hide();
+	}
 }
 
 $("#inputSubmit").attr("disabled", false); // Par défaut le bouton submit et accessible

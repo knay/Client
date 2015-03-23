@@ -1,23 +1,40 @@
 {% extends "::baseAffichage.html.twig" %}
 
-{% block title_ajout %}
-Faire un inventaire
-{% endblock %}
+{% block title_ajout %}Faire un inventaire{% endblock %}
 
-{% block title_page %}
-Inventaire
-{% endblock %}
+{% block title_page %}Inventaire{% endblock %}
 
-{% block title %}
-ALBA - Inventaire
-{% endblock %}
+{% block title %}ALBA - Inventaire{% endblock %}
 
-{% block produitBlock %}
-menuSelected
-{% endblock %}
+{% block produitBlock %}menuSelected{% endblock %}
 
 {% block stylesheets %}
      <link rel="stylesheet" href="{{ asset('bundles/imerirnoyau/css/cssCaisse.css') }}"/> 
+{% endblock %}
+
+{% block aide %}
+<p>
+Cette page vous permet de faire un inventaire de vos produits.<br>
+Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
+</p>
+<ul>
+	<li>Scanner l'article ou saisir le code barre manuellement</li>
+	<li>
+		Choisir le produit concerné par l'article. Si vous ne l'avez pas enregistré au préalable, vous pouvez le faire
+		en cliquand sur le bouton "plus" de la colonne "Produit".
+	</li>
+	<li>
+		Choisir les caractéristiques de cet article. Vous pouvez modifier les attributs en cliquant sur le crayon 
+		dans la colonne "Attributs".
+	</li>
+	<li>
+		Préciser le nombre d'article que vous avez avec les boutons "plus" et "moins" de la colonne quantité. 
+		Vous pouvez aussi scanné l'article plusieurs fois pour augmenter la quantité.
+	</li>
+</ul>
+<p>
+	Vous pouvez à tout moment faire une saisie manuelle de code barre en cliquant sur le bouton en haut de votre écran.
+</p>
 {% endblock %}
 
 {% block ajout %}
@@ -53,7 +70,7 @@ menuSelected
 				<td>
 					<select name="produit_0" class="selectProduit">
 						{% for j in produit %}
-							<option>{{ j.p }}</option>
+							<option>{{ j.lp }} - {{ j.p }}</option>
 						{% endfor %}
 					</select>
 					<i class="fa fa-plus-square ajout ajoutProduit"></i>
@@ -180,13 +197,16 @@ $("#valid_saisie").click(function () {
 function modifierAttribut() {
 	var ligne = $(this).parent().parent().parent(); // La ligne sur laquelle on a cliqué
 	var idAttr = $(this).parent().find('.id_attribut').val();
+	var data = {id : idAttr};
+	if (idAttr === "0")
+		data = {};
 
 	$("#dialog").attr("title", "Modifier un attribut");
 
 	$("#contenneur_inventaire").hide();
 	$("#chargement").show();
 
-    $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', {id : idAttr }, function () {
+    $("#dialog").load('{{ path('imerir_produit_modif_attributs') }}', data, function () {
         var dial = $("#dialog");
         
         dial.dialog({
@@ -205,6 +225,7 @@ function modifierAttribut() {
         dial.find("#header").remove();
         dial.find("#title_page").remove();
         dial.find("#fieldset_recherche").remove();
+        dial.find("a").remove();
         dial.find("#affichage").css("left", "0");
         dial.find("#affichage").css("width", "100%");
 
@@ -275,6 +296,7 @@ function ajoutProduit() {
         dial.find("#header").remove();
         dial.find("#title_page").remove();
         dial.find("#fieldset_recherche").remove();
+        dial.find("a").remove();
         dial.find("#affichage").css("left", "0");
         dial.find("#affichage").css("width", "100%");
 
@@ -377,8 +399,11 @@ $(document).keypress(function(e) {
 	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
 	// n'est plus la douchette qui est maître
-	if ($('.selectProduit:focus').length || $('.quantite:focus').length || $(".valAttribut:focus").length) 
+	if ($('.selectProduit:focus').length || $('.quantite:focus').length || $(".valAttribut:focus").length) {
+		if (e.keyCode === 13)
+			return false; 
 		return true;
+	}
 		
 	var input = $(".valeurCodeBarre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette

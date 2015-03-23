@@ -576,8 +576,11 @@ $(document).keypress(function(e) {
 	
 	// Si l'utilisateur à le curseur sur un champ texte, c'est qu'il veut écrire et ce 
 	// n'est plus la douchette qui est maître
-	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) 
+	if ($('.prix:focus').length || $('.promo:focus').length || $('.quantite:focus').length) {
+		if (e.keyCode === 13)
+			return false; 
 		return true;
+	}
 	
 	var input = $(".code_barre").last(); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus tout autre input, il ne devrait y avoir que les trois du dessus

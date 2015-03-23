@@ -532,7 +532,7 @@ function onChangeSelect() {
 	$.ajax({
 		   url: '{{ path('imerir_ajax_inventaire_get_attribut') }}',
 		   data: {
-		      nom: $(this).val()
+		      nom: $(this).val().split("-")[1].trim()
 		   },
 		   success: function(data) {
 			   var objJson = JSON.parse(data); // On parse les data puis on affiche les attributs et les valeurs atribut correctement.

@@ -13,8 +13,8 @@ class LigneProduitController extends Controller
         $soap = $this->get('noyau_soap');
 
         $query = $this->get('request');
-        $recherche_lp = $query->request->get('recherche_lp');
-        $recherche_attribut = $query->request->get('recherche_attribut');
+        $recherche_lp = $query->query->get('recherche_lp');
+        $recherche_attribut = $query->query->get('recherche_attribut');
 
         if($recherche_lp===null)
             $nom='';

@@ -170,9 +170,9 @@ Ici, vous pouvez ajouter ou modifier une ligne de produit. Une ligne de produit 
 	{% if liste_ligne_produit|length > ligneParPage %}
 		{% for i in 0..liste_ligne_produit|length/ligneParPage %}
 			{% if i == page-1 %}
-				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+				<a class="num_page selected_page" href="{{ path('imerir_produit_creation_ligne_produit', app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
 			{% else %} 
-				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+				<a class="num_page" href="{{ path('imerir_produit_creation_ligne_produit', app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
 			{% endif %}
 		{% endfor %}  
 	{% endif %}

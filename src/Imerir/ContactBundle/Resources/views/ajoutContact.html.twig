@@ -52,7 +52,7 @@ Valider votre modification via le bouton "Modifier".
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><label for="nom">Date de naissance (JJ/MM/AAAA) </label></td>
                     <td><input type="text" name="date_naissance" class="datepicker"/></td>
                 </tr>
                 <tr>
@@ -154,7 +154,7 @@ Valider votre modification via le bouton "Modifier".
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><label for="nom">Date de naissance (JJ/MM/AAAA) </label></td>
                     <td><input type="text" name="date_naissance" class="datepicker"></td>
                 </tr>
                 <tr>
@@ -250,7 +250,7 @@ Valider votre modification via le bouton "Modifier".
                 <tr><td><label for="nom">Nom </label>
                 <input type="hidden" name="old_id" value="{{ modif_id }}">
                 <input type="hidden" name="old_nom" value="{{ modif_nom }}"></td>
-                <td><input type="text" name="new_nom" value="{{ modif_nom }}"/></td></tr>
+                <td><input type="text" name="new_nom" value="{{ modif_nom|upper }}"/></td></tr>
 
                 
 
@@ -258,7 +258,7 @@ Valider votre modification via le bouton "Modifier".
                         <input type="hidden" name="old_prenom" value="{{ modif_prenom|lower|capitalize }}"></td>
                 <td><input type="text" name="new_prenom" value="{{ modif_prenom|lower|capitalize }}"></td></tr>
 
-                <tr><td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                <tr><td><label for="nom">Date de naissance (JJ/MM/AAAA) </label></td>
                     <td><input type="text" name="new_date_naissance" class="datepicker"></td></tr>
 
                 <tr><td><label for="nom">Civilité </label></td>
@@ -426,7 +426,7 @@ Valider votre modification via le bouton "Modifier".
                     <td><input type="text" name="prenom"/></td>
                 </tr>
                 <tr>
-                    <td><label for="nom">Date de naissance (AAAA-MM-JJ) </label></td>
+                    <td><label for="nom">Date de naissance (JJ/MM/AAAA) </label></td>
                     <td><input type="text" name="date_naissance" class="datepicker"></td>
                 </tr>
                 <tr>
@@ -585,7 +585,7 @@ Valider votre modification via le bouton "Modifier".
     </tr>
     {% for i in liste_contacts %}
 		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
-	        <tr><td>{{ i.civilite }}</td><td>{{ i.nom }}
+	        <tr><td>{{ i.civilite }}</td><td>{{ i.nom|upper }}
 	                <form method="post" action="{{ path('imerir_modification_client') }}" style="display: none">
 	                    <input type="hidden" name="id_f" value="{{ i.id }}">
 	                    <input type="hidden" name="nom_f" value="{{ i.nom }}">
@@ -600,7 +600,12 @@ Valider votre modification via le bouton "Modifier".
 	                </form>
 	            </td>
 	            <td>{{ i.prenom|lower|capitalize }}</td>
-	            <td>{{ i.date_naissance }}</td>
+	            <td>
+	            {% if i.date_naissance == '00/00/0000' or i.date_naissance == '' %}
+	            {% else %}
+	            	{{ i.date_naissance }}
+	            {% endif %}	
+	            </td>
 	            <td>{{ i.email }}</td>
 	            <td>{{ i.telephone_portable }}</td>
 	            {% if i.ok_sms=='1' %}
@@ -740,7 +745,8 @@ Valider votre modification via le bouton "Modifier".
             dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
             dayNamesMin: ['D','L','M','M','J','V','S'],
             weekHeader: 'Sem.',
-            dateFormat: 'yy-mm-dd',
+            //dateFormat: 'yy-mm-dd',
+            dateFormat: 'dd/mm/yy',
             firstDay: 1,
             isRTL: false,
             showMonthAfterYear: false,

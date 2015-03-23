@@ -347,9 +347,9 @@ Pour modifier une commande cliquez simplement sur la ligne de la commande corres
 	{% if liste_commandes|length > ligneParPage %}
 		{% for i in 0..liste_commandes|length/ligneParPage %}
 			{% if i == page-1 %}
-				<a class="num_page selected_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+				<a class="num_page selected_page" href="{{ path('imerir_creation_commande_fournisseur', app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
 			{% else %} 
-				<a class="num_page" href="{{ path(app.request.attributes.get('_route'), app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
+				<a class="num_page" href="{{ path('imerir_creation_commande_fournisseur', app.request.query.all|merge({'page': i+1})) }}">{{ i+1 }}</a>
 			{% endif %}
 		{% endfor %}  
 	{% endif %}

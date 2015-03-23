@@ -88,7 +88,7 @@ Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
 					   liées à cet attribut dans les options de ce select #}
 					{% for j in attributs %} 
 						<label for="caract_0_{{ nbCarac }}">{{ j.nom }} : </label>
-						<select name="caract_0_{{ nbCarac }}" class="valAttribut">
+						<select name="caract_0_{{ nbCarac }}" class="valAttribut" size="10">
 						{% for i in j.valeurs %}
 							<option value="{{ j.nom }}_{{ i }}">{{ i }}</option>
 						{% endfor %}
@@ -323,7 +323,7 @@ function ajoutProduit() {
      		   },
      		   success: function(data) {
      			  var select = ligne.find('.selectProduit');
-     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valProduit+'</option>');
+     			  select.html(select.html()+'<option value="'+valProduit.split("-")[0].trim()+'" selected>'+valLigneProduit+' - '+valProduit+'</option>');
      			  $("#dialog").dialog("close");
      			  ligne.effect( "highlight", {}, "3000" );
      			  select.trigger('change');
@@ -508,7 +508,7 @@ function getArticleFromSoap(ligne) {
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
 			   var nomProduit = cellule.children(".selectProduit").children('option');
 			   nomProduit.each(function (e) {
-				   if ($(this).html() === objJson['nomProduit'])
+				   if ($(this).html().split("-")[1].trim() === objJson['nomProduit'])
 					   $(this).attr("selected", true);
 			   });
 

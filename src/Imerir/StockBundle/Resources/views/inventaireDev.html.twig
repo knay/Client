@@ -268,7 +268,7 @@ function ajoutProduit() {
      		   },
      		   success: function(data) {
      			  var select = ligne.find('.selectProduit');
-     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valProduit+'</option>');
+     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valLigneProduit+'-'+valProduit+'</option>');
      			  $("#dialog").dialog("close");
      			  ligne.effect( "highlight", {}, "3000" );
      			  select.trigger('change');
@@ -444,7 +444,7 @@ function getArticleFromSoap(ligne) {
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
 			   var nomProduit = cellule.children(".selectProduit").children('option');
 			   nomProduit.each(function (e) {
-				   if ($(this).html() === objJson['nomProduit'])
+				   if ($(this).html().split("-")[1].trim() === objJson['nomProduit'])
 					   $(this).attr("selected", true);
 			   });
 

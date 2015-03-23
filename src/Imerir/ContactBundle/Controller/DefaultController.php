@@ -209,7 +209,7 @@ class DefaultController extends Controller
         //print_r($adresse_pays);
         //PARTIE OU ON RECUPERE LA REF DU Contact
         try {
-            $retour_ref_Contact = $soap->call('getContacts', array('count' => 0, 'offset' => 0, 'nom' => $Contact_nom,
+            $retour_ref_Contact = $soap->call('getContacts', array('count' => '', 'offset' => '', 'nom' => $Contact_nom,
                 'prenom' => $Contact_prenom, 'date_naissance' => $Contact_date_naissance,
                 'civilite' => $Contact_civilite, 'email' => $Contact_email, 'telephone_portable' => $Contact_telephone_portable,
                 'ok_sms' => $Contact_ok_sms,
@@ -221,6 +221,7 @@ class DefaultController extends Controller
         catch(\SoapFault $e) {
             $erreur .=$e->getMessage();
         }
+        
         //print_r($ref_Contact);
         if(!empty($adresse_pays[0]) || !empty($adresse_ville[0]) || !empty($adresse_code_postal[0]) || !empty($adresse_voie[0]) ||
             !empty($adresse_num_voie[0]) || !empty($adresse_num_appartement[0]) || !empty($adresse_telephone_fixe[0])) {

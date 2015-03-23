@@ -74,7 +74,7 @@ Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
 				<td>
 					<select name="produit_0" class="selectProduit">
 						{% for j in produit %}
-							<option>{{ j.lp }} - {{ j.p }}</option>
+							<option value="{{ j.p }}">{{ j.lp }} - {{ j.p }}</option>
 						{% endfor %}
 					</select>
 					<i class="fa fa-plus-square ajout ajoutProduit"></i>
@@ -268,7 +268,7 @@ function ajoutProduit() {
      		   },
      		   success: function(data) {
      			  var select = ligne.find('.selectProduit');
-     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valLigneProduit+'-'+valProduit+'</option>');
+     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valLigneProduit+' - '+valProduit+'</option>');
      			  $("#dialog").dialog("close");
      			  ligne.effect( "highlight", {}, "3000" );
      			  select.trigger('change');

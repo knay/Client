@@ -9,6 +9,7 @@ ALBA - Factures
 {% endblock %}
 
 {% block stylesheets %}
+{# <link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssFacture_safari.css') }}"/> #}
 <link rel="stylesheet" href="{{ asset('bundles/imerirvente/css/cssFacture.css') }}"/> 
 {% endblock %}
 
@@ -41,6 +42,7 @@ ALBA - Factures
 	<a href="{{ path('imerir_vente_facture') }}" class="bouton">
 		<i class="fa fa-reply"></i>Annuler
 	</a>
+	<div id="div">
 	<div class="feuille_facture">
 		<div id="logo_facture">
 			<img src="{{ asset ('bundles/imerirvente/img/logo_facture.png') }}" alt="logo les caprices de lili">
@@ -131,6 +133,7 @@ ALBA - Factures
 			Siret n&deg;514 862 275 00013 - RCS Perpignan - Code Ape 4771Z<br>
 			N&deg; de TVA Intracommunautaire : FR62 514 862 275
 		</div>
+	</div>
 	</div>
 {% endblock %}
 

@@ -8,7 +8,7 @@
 	margin-right: auto;
 	margin-top: 10px;
 	background-color: white;
-	border:1px solid black;
+	border:0.8px solid black;
 }
 
 #logo_facture {
@@ -111,33 +111,25 @@
 }
 
 @media print{
-	
-	#div {
-		height: 100%;
-        width: 100%;
-        position: fixed;
-        top: 0px;
-        left: 1.5cm;
-        margin: auto;
-        font-size: 13pt;
-        margin-top:0cm;
-        border: none;
-        overflow:visible;
-	}
-	
 	body * {
 		visibility: hidden;
 		background-color: white;
 	}
 	
 	.feuille_facture {
+/* 		page-break-inside:avoid; */
 		visibility: visible;
-		border: none;
-		border-top: 0.07em solid #3F3F3F;
-        border-bottom: 0.07em solid #3F3F3F; 
-		width: 27cm;
-/* 		height: 39cm; */
-		height: 38.6cm;
+		height: 95%;
+        width: 99.7%;
+        position: fixed;
+        top: 0px;
+        left: 0px;
+        margin: auto;
+        font-size: 13pt;
+        margin-top:1cm;
+        border: none;
+        border-top: 0.8px solid black;
+        border-bottom: 0.8px solid black; 
 	}
 	
 	#logo_facture {
@@ -163,9 +155,8 @@
 	}
 	
 	#tableau_detail_facture {
-		margin-left:auto;
-		margin-right: auto;
-		width: 27cm;
+		margin-left: 0.5cm;
+		width: 95%;
 	}
 	
 	#tableau_detail_facture th,td{
@@ -173,10 +164,8 @@
 	}
 	
 	#bas_de_page_facture {
-		position: fixed;
-/* 		top: 36cm; */
-		top: 35.5cm;
-		left: 7.5cm;
+		position: absolute;
+		bottom: 0;
 	}
 	
 	.feuille_facture * {

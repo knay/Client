@@ -22,12 +22,12 @@ class InventaireDevController extends Controller
     	$soap = $this->get('noyau_soap');
     	$erreur = '';
     	
-    	// On récupère tous les produits pour les afficher dans un <select>
     	try {
-    		$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-    		$produitsRetour = json_decode($return_produits);}
+    		$return_all_ligne_produit = $soap->call('getAllLigneProduit',array());//on recupere toutes les lignes produits
+    		$all_ligne_produit = json_decode($return_all_ligne_produit);
+    	}
     	catch(\SoapFault $e) {
-    		$erreur .= $e->getMessage();
+    		$erreur.=$e->getMessage();
     	}
     	
 
@@ -53,7 +53,7 @@ class InventaireDevController extends Controller
     	} 
     	
         return $this->render('ImerirStockBundle::inventaireDev.html.twig', 
-        	                  array('produit'     => $produitsRetour,
+        	                  array('result_all_ligne_produit'     => $all_ligne_produit,
         			                'attributs'   => json_decode($retSoapAttributs),
         	   		                'result_menu' => $menu_sous_menu,
         	                  		'erreur'      => $erreur));
@@ -69,14 +69,13 @@ class InventaireDevController extends Controller
     	$tabArticle = array();
     	$erreur = '';
     	
-    	// On récupère tous les produits pour les afficher dans un <select>
     	try {
-    		$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-    		$produitsRetour = json_decode($return_produits);
+    		$return_all_ligne_produit = $soap->call('getAllLigneProduit',array());//on recupere toutes les lignes produits
+    		$all_ligne_produit = json_decode($return_all_ligne_produit);
     	}
     	catch(\SoapFault $e) {
-            $erreur .= $e->getMessage();
-        }
+    		$erreur.=$e->getMessage();
+    	}
     	// S'il y a des produits, on récupère également les attributs du premier
     	// (parce que c'est celui qui est selectionné au départ)
     	if (isset($produitsRetour[0]->p)) {
@@ -134,7 +133,7 @@ class InventaireDevController extends Controller
     	}
     	
     	return $this->render('ImerirStockBundle::inventaireDev.html.twig',
-			    			  array('produit'     => $produitsRetour,
+			    			  array('result_all_ligne_produit'     => $all_ligne_produit,
 			    			 	    'attributs'   => json_decode($retSoapAttributs),
 			    			 	    'result_menu' => $menu_sous_menu,
 			    			  		'erreur'      => $erreur));

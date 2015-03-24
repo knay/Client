@@ -68,10 +68,12 @@ Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
 			<tr style="display: none">
 				<td><i class="fa fa-minus-square supprimer"></i></td>
 				<td>
+					<select class="select_ligne_produit">
+		            	{% for i in result_all_ligne_produit %}
+		                	<option>{{ i.nom_ligne_produit }}</option>
+		            	{% endfor %}
+		        	</select>
 					<select name="produit_0" class="selectProduit">
-						{% for j in produit %}
-							<option value="{{ j.p }}">{{ j.lp }} - {{ j.p }}</option>
-						{% endfor %}
 					</select>
 					<i class="fa fa-plus-square ajout ajoutProduit"></i>
 				</td>
@@ -128,6 +130,7 @@ Lorsque vous faites un inventaire, il faut suivre les étapes suivantes :
 var nbCodeBarre = 0;  //< Le nombre d'article scanné. Utilisé pour envoyé toutes les données en POST sans qu'elles aient le même nom
 var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
 var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problèmes de concurences avec AJAX... Elle permet de stocké des donnée le temps qu'une requete soit passée
+var dernierProduit = '';
 
 /**
  * Fonction réagissant lors du clic sur le bouton - à côté de la quantité de produit.
@@ -153,6 +156,37 @@ function plusQuantite() {
 
 	input.val(qt);
 	calculerPrixTotal();
+}
+
+//Gestion des selects en fonction de la ligne produits selectionne
+$( ".select_ligne_produit" ).change(refreshProduitLigneProduit);
+
+function refreshProduitLigneProduit() {
+	var selectLp = $(this);
+	$.ajax({
+		   url: '{{ path('imerir_ajax_stock_get_produit') }}',
+		   data: { nomLigneProduit: $(this).val() },
+		   success: function(data) {
+			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
+			   var select = $(selectLp).parent().find(".selectProduit");
+			   select.html('');
+				for(id_produit in objJson){
+					select.html( select.html()+'<option>'+objJson[id_produit]['produit']+'</option>');
+				}
+
+				if (dernierProduit !== '') {
+					var nomProduit = select.children('option');
+	 	    		nomProduit.each(function (e) {
+			   		if ($(this).html() === dernierProduit)
+				   		$(this).attr("selected", true);
+		    		});
+		   		}
+				
+				select.trigger('change');
+				dernierProduit = '';
+			   },
+		   type: 'POST'
+	});
 }
 
 /** 
@@ -323,7 +357,7 @@ function ajoutProduit() {
      		   },
      		   success: function(data) {
      			  var select = ligne.find('.selectProduit');
-     			  select.html(select.html()+'<option value="'+valProduit.split("-")[0].trim()+'" selected>'+valLigneProduit+' - '+valProduit+'</option>');
+     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valLigneProduit+' - '+valProduit+'</option>');
      			  $("#dialog").dialog("close");
      			  ligne.effect( "highlight", {}, "3000" );
      			  select.trigger('change');
@@ -474,6 +508,8 @@ function validerCodeBarre(saisieManuelle) {
 		$('.supprimer').click(supprimerLigne);
 		$('.selectProduit').unbind('change');
 		$('.selectProduit').change(onChangeSelect);
+		$('.select_ligne_produit').unbind('change');
+		$('.select_ligne_produit').change(refreshProduitLigneProduit);
 		$('.moinsQuantite').unbind("click");
 		$('.plusQuantite').unbind("click");
 		$('.moinsQuantite').click(moinsQuantite); // On bind le clic sur le bouton moins de la quantite avec la fonction
@@ -506,15 +542,17 @@ function getArticleFromSoap(ligne) {
 		   },
 		   success: function(data) {
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
-			   var nomProduit = cellule.children(".selectProduit").children('option');
-			   nomProduit.each(function (e) {
-				   if ($(this).html().split("-")[1].trim() === objJson['nomProduit'])
+			   var nomLigneProduit = cellule.children(".select_ligne_produit").children('option');
+			   nomLigneProduit.each(function (e) {
+				   if ($(this).html() === objJson['nomLigneProduit'])
 					   $(this).attr("selected", true);
-			   });
-
+			   })
+			   
+			   dernierProduit = objJson['nomProduit'];
+			   
 			   valeurCaracteristique = objJson.attributs; // Pour problème de concurences AJAX. Pour passer une variable à la fonction 'onChangeSelect' 
 
-			   cellule.children(".selectProduit").trigger('change'); // On simule le fait que l'on veuille changer de produit pour mettre à jour les attributs
+			   cellule.children(".select_ligne_produit").trigger('change'); // On simule le fait que l'on veuille changer de produit pour mettre à jour les attributs
 		   },
 		   type: 'POST'
 	});
@@ -532,7 +570,7 @@ function onChangeSelect() {
 	$.ajax({
 		   url: '{{ path('imerir_ajax_inventaire_get_attribut') }}',
 		   data: {
-		      nom: $(this).val().split("-")[1].trim()
+		      nom: $(this).val()
 		   },
 		   success: function(data) {
 			   var objJson = JSON.parse(data); // On parse les data puis on affiche les attributs et les valeurs atribut correctement.

@@ -22,9 +22,13 @@ class InventaireController extends Controller
     	$soap = $this->get('noyau_soap');
     	$erreur = '';
     	
-    	// On récupère tous les produits pour les afficher dans un <select>
-    	$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-    	$produitsRetour = json_decode($return_produits);
+    	try {
+    		$return_all_ligne_produit = $soap->call('getAllLigneProduit',array());//on recupere toutes les lignes produits
+    		$all_ligne_produit = json_decode($return_all_ligne_produit);
+    	}
+    	catch(\SoapFault $e) {
+    		$erreur.=$e->getMessage();
+    	}
 
     	// S'il y a des produits, on récupère également les attributs du premier 
     	// (parce que c'est celui qui est selectionné au départ)
@@ -48,7 +52,7 @@ class InventaireController extends Controller
     	}
     	
         return $this->render('ImerirStockBundle::inventaire.html.twig', 
-        	                  array('produit'     => $produitsRetour,
+        	                  array('result_all_ligne_produit'     => $all_ligne_produit,
         			                'attributs'   => json_decode($retSoapAttributs),
         	   		                'result_menu' => $menu_sous_menu,
         	                  		'erreur'      => $erreur
@@ -67,9 +71,8 @@ class InventaireController extends Controller
     	
     	
     	try {
-    		// On récupère tous les produits pour les afficher dans un <select>
-    		$return_produits = $soap->call('getProduit', array('count'=>0, 'offset'=>0, 'nom'=>'', 'ligneproduit'=>''));
-    		$produitsRetour = json_decode($return_produits);
+    		$return_all_ligne_produit = $soap->call('getAllLigneProduit',array());//on recupere toutes les lignes produits
+    		$all_ligne_produit = json_decode($return_all_ligne_produit);
     	}
     	catch(\SoapFault $e) {
     		$erreur.=$e->getMessage();
@@ -120,7 +123,7 @@ class InventaireController extends Controller
     	}
     	
     	return $this->render('ImerirStockBundle::inventaire.html.twig',
-			    			  array('produit'     => $produitsRetour,
+			    			  array('result_all_ligne_produit'     => $all_ligne_produit,
 			    			 	    'attributs'   => json_decode($retSoapAttributs),
 			    			 	    'result_menu' => $menu_sous_menu,
 			    			  		'erreur'      => $erreur

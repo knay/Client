@@ -145,7 +145,7 @@ class ArticleController extends Controller
 		try {
 			$lp = '';
 			$produit = '';
-			if ($$query->get('nomLigneProduit') !== null)
+			if ($query->get('nomLigneProduit') !== null)
 				$lp = $query->get('nomLigneProduit');
 			if ($query->get('nomProduit') !== null)
 				$produit = $query->get('nomProduit');

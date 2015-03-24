@@ -108,7 +108,16 @@ ALBA - Factures
 				<tr id="last"><td></td><td></td><td></td><td></td><td></td><td></td></tr>
 				
 				{% set prix_de_la_tva = (montant_total*tva)/100 %}
-				{% set montant_avec_tva = montant_total + prix_de_la_tva %}
+				{% set montant_sans_tva = montant_total - prix_de_la_tva %}
+				
+				<tr>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td class="en_gras">TOTAL H.T</td>
+					<td>{{ montant_sans_tva|round(2, 'common')|number_format(2, '.', ',') }} &euro;</td>
+				</tr>
 				
 				<tr>
 					<td></td>
@@ -124,7 +133,7 @@ ALBA - Factures
 					<td></td>
 					<td></td>
 					<td></td>
-					<td class="en_gras">TOTAL H.T</td>
+					<td class="en_gras">TOTAL T.T.C</td>
 					<td class="en_gras">{{ montant_total|round(2, 'common')|number_format(2, '.', ',') }} &euro;</td>
 				</tr>
 			</table>

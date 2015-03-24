@@ -73,7 +73,7 @@ menuSelected
     {% for i in liste_mode_paiement %}
     	{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
 	        <tr>
-	        	<td>{{ i.paiement_nom }}
+	        	<td>{{ i.paiement_nom | capitalize }}
 	                <form method="post" action="{{ path('imerir_vente_afficher_modification_moyen_paiement') }}" style="display: none">
 	                    <input type="hidden" name="id_selected" value="{{ i.paiement_id }}">
 	                    <input type="hidden" name="nom_selected" value="{{ i.paiement_nom }}">

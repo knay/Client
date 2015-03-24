@@ -154,14 +154,14 @@
 					</form>
 					{{ i.codeBarre }}
 				</td>
-				<td>{{ i.ligneProduit }}</td>
+				<td>{{ i.ligneProduit | capitalize }}</td>
 				<td>{{ i.produit }}</td>
 				<td>
 					{% for j in i.valAttribut %}
 						{% if loop.last %}
-						{{ j }}
+						{{ j | capitalize }}
 						{% else %}
-						{{ j }},
+						{{ j | capitalize }},
 						{% endif %}
 					{% endfor %}
 				</td>

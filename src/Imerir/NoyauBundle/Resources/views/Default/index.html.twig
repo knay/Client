@@ -357,28 +357,28 @@ $("#chercher_client").click(function () {
 				   var email = "";
 				   var telephone_portable = "";
 
-				   if (typeof objJson[i].nom != 'undefined')
+				   if (typeof objJson[i].nom !== 'undefined' && objJson[i].nom !== null)
 					   nom = objJson[i].nom;
 				   if (typeof objJson[i].id != 'undefined')
 					   id = objJson[i].id;
-				   if (typeof objJson[i].prenom != 'undefined')
+				   if (typeof objJson[i].prenom != 'undefined' && objJson[i].prenom !== null)
 					   prenom = objJson[i].prenom;
-				   if (typeof objJson[i].date_naissance != 'undefined')
+				   if (typeof objJson[i].date_naissance != 'undefined' && objJson[i].date_naissance !== null)
 					   date_naissance = objJson[i].date_naissance;
-				   if (typeof objJson[i].civilite != 'undefined')
+				   if (typeof objJson[i].civilite != 'undefined' && objJson[i].civilite !== null)
 					   civilite = objJson[i].civilite;
-				   if (typeof objJson[i].email != 'undefined')
+				   if (typeof objJson[i].email != 'undefined' && objJson[i].email !== null)
 					   email = objJson[i].email;
-				   if (typeof objJson[i].telephone_portable != 'undefined')
+				   if (typeof objJson[i].telephone_portable != 'undefined' && objJson[i].telephone_portable !== null)
 					   telephone_portable = objJson[i].telephone_portable;
 				   
 				   $("#tabRechClient").append("<tr>"
-						   + "<td class=\"tdCiviliteClient\">"+escape(civilite)+"</td>"
-						   + "<td class=\"tdNomClient\"><input type=\"hidden\" value=\""+escape(id)+"\" class=\"idClient\">"+escape(nom)+"</td>"
-						   + "<td class=\"tdPrenomClient\">"+escape(prenom)+"</td>"
-						   + "<td>"+escape(date_naissance)+"</td>"
-						   + "<td>"+escape(email)+"</td>"
-						   + "<td>"+escape(telephone_portable)+"</td>"
+						   + "<td class=\"tdCiviliteClient\">"+capitalise(civilite)+"</td>"
+						   + "<td class=\"tdNomClient\"><input type=\"hidden\" value=\""+id+"\" class=\"idClient\">"+nom.toUpperCase()+"</td>"
+						   + "<td class=\"tdPrenomClient\">"+capitalise(prenom)+"</td>"
+						   + "<td>"+date_naissance+"</td>"
+						   + "<td>"+email+"</td>"
+						   + "<td>"+telephone_portable+"</td>"
 						   + "</tr>");
 			   }
 			   $("#chargement").hide();
@@ -678,6 +678,10 @@ function validerCodeBarre(saisieManuelle) {
 	$('input').change(calculerPrixTotal);
 	$('.supprimer').unbind("click"); // On bind le clic sur bouton - avec la fonction de suppression
 	$('.supprimer').click(supprimerLigne); // On bind le clic sur bouton - avec la fonction de suppression
+}
+
+function capitalise(string) {
+    return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
 }
 </script>
 {% endblock %}

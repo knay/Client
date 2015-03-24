@@ -311,7 +311,9 @@ function ajoutProduit() {
 	
 	$("#contenneur_inventaire").hide();
 	$("#chargement").show();
-	   
+
+	$('.ajoutProduit').unbind('click');
+	$('.ajoutProduit').unbind('click');
     $("#dialog").load('{{ path('imerir_produit_creation_produit') }}', function () {
     	var dial = $("#dialog");
     	$("#dialog").dialog({
@@ -357,7 +359,15 @@ function ajoutProduit() {
      		   },
      		   success: function(data) {
      			  var select = ligne.find('.selectProduit');
-     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valLigneProduit+' - '+valProduit+'</option>');
+     			  var selectLp = ligne.find('.select_ligne_produit');
+     			  select.html(select.html()+'<option value="'+valProduit+'" selected>'+valProduit+'</option>');
+
+     			 var nomLigneProduit = selectLp.children('option');
+  			 		nomLigneProduit.each(function (e) {
+			   		if ($(this).html() === valLigneProduit)
+				   		$(this).attr("selected", true);
+		    	  });
+		    	  
      			  $("#dialog").dialog("close");
      			  ligne.effect( "highlight", {}, "3000" );
      			  select.trigger('change');
@@ -602,7 +612,9 @@ function onChangeSelect() {
 			   });
 
 			   $('.ajoutProduit').unbind('click');
+			   $('.ajoutProduit').unbind('click');
 			   $('.ajoutProduit').click(ajoutProduit); // On bind le clic sur bouton - avec la fonction de suppression
+			   $('.modifierAttribut').unbind('click');
 			   $('.modifierAttribut').unbind('click');
 			   $('.modifierAttribut').click(modifierAttribut); // On bind le clic sur bouton modifer avec la modification d'attibut
 			   
@@ -618,5 +630,9 @@ function onChangeSelect() {
 }
 
 $("#inputSubmit").attr("disabled", false); // Par défaut le bouton submit et accessible
+
+$(window).bind('beforeunload', function(){
+	  return 'Si vous quittez cette page, les données saisies ne seront pas enregistrées.';
+});
 </script>
 {% endblock %}

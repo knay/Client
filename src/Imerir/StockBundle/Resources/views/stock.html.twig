@@ -88,7 +88,7 @@
 		    {% else %}
 		      	<tr>
 		    {% endif %}
-	     		<td>{{ i.ligne_produit }}</td>
+	     		<td>{{ i.ligne_produit | capitalize }}</td>
 	            <td>{{ i.produit }}</td>
 	            <td id="article_stats">{{ i.article }}</td>
 	            <td>{{ i.quantite }}</td>

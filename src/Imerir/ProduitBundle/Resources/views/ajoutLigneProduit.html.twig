@@ -163,13 +163,13 @@ effectuer, cliquez sur le bouton "Modifier".
     {% for i in liste_ligne_produit %}
 		{% if ( numLigne >= (page-1)*ligneParPage ) and ( numLigne < (page-1)*ligneParPage+ligneParPage ) %}
         	<tr>
-        		<td>{{ i.nom }}
+        		<td>{{ i.nom | capitalize }}
                 	<form method="post" action="{{ path('imerir_produit_modification_ligne_produit') }}" style="display: none">
                     	<input type="hidden" name="id_lp" value="{{ i.id }}">
                     	<input type="hidden" name="nom_lp" value="{{ i.nom }}">
                 	</form>
             	</td>
-            	<td>{{ i.attribut_nom }}</td>
+            	<td>{{ i.attribut_nom | capitalize }}</td>
             </tr>
         {% endif %}
         {% set numLigne = numLigne + 1 %}

@@ -300,6 +300,7 @@ des informations de cette dernière.
                 <td><label for="recherche_commande_fournisseur_nom_fournisseur">Fournisseur :</label></td>
                 <td>
                 	<select name="recherche_fournisseur_nom_fournisseur" style="width: 150px">
+                		<option></option>
                 		{% for i in liste_fournisseurs %}
                 			<option>{{ i.nom }}</option>
                 		{% endfor %}

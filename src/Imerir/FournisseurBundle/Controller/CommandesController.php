@@ -334,9 +334,8 @@ class CommandesController extends Controller
             }
             //INSERTION
             try {
-                $soap->call('ajoutCommandeFournisseur', array('fournisseur_id' => json_encode($commande_nom_fournisseur),
-                    'article_code' => json_encode($commande_article)
-                , 'date_commande' => json_encode($commande_date), 'quantite_souhaite' => json_encode($commande_qty)));
+                $soap->call('ajoutLigneCommandeFournisseur', array('commande_id' => json_encode($modif_commande_id),
+                    'article_code' => json_encode($commande_article), 'quantite_souhaite' => json_encode($commande_qty)));
             }
             catch(\SoapFault $e) {
                 $erreur .=$e->getMessage();

@@ -90,7 +90,7 @@ class InventaireController extends Controller
     		$clef = explode('_', $key);
     		
     		if (isset($clef[1])) {
-	    		$tabArticle[intval($clef[1])]['attributs'] = array();
+	    		//$tabArticle[intval($clef[1])]['attributs'] = array();
 	    		if ($clef[0] === 'produit') { // Si c'est le nom du produit concerné
 	    			$tabArticle[intval($clef[1])]['produit'] = $value;
 	    		}

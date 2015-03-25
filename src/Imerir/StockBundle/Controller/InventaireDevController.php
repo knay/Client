@@ -107,7 +107,6 @@ class InventaireDevController extends Controller
 	    		else if ($clef[0] === 'caract') { // Si c'est une valeur d'attribut
 	    			$attributs = explode('_', $value);
 	    			$tabArticle[intval($clef[1])]['attributs'][$attributs[0]] = $attributs[1];
-	    			print_r($tabArticle);
 	    		}
 	    		else if ($clef[0] === 'prixClient') { // Si c'est un prix client
 	    			$tabArticle[intval($clef[1])]['prixClient'] = floatval($value);

@@ -145,6 +145,11 @@
 												<li>{{ j }}</li>
 											</a>
 										{% endif %}
+										{% if j == "Inventaire complet" %}
+	 						    			<a href="{{ path('imerir_stock_inventaire_dev') }}">
+												<li>{{ j }}</li>
+											</a>
+										{% endif %}
 										{% if j == "Lignes produits" %}
 	 						    			<a href="{{ path('imerir_produit_creation_ligne_produit') }}">
 												<li>{{ j }}</li>

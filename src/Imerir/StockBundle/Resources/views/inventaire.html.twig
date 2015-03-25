@@ -592,7 +592,7 @@ function onChangeSelect() {
 			   
 			   objJson.forEach(function (attr) {
 				   celulle.append('<label for="caract_'+numLigne+'_'+numValAttribut+'">'+attr.nom+' : </label> ');
-				   celulle.append('<div><select name="caract_'+numLigne+'_'+numValAttribut+'"></select><i class="fa fa-pencil-square modifier modifierAttribut"></i><input type="hidden" class="id_attribut" name="id" value="'+attr.id+'"></div><br/>');
+				   celulle.append('<div><select name="caract_'+numLigne+'_'+numValAttribut+'"></select><i class="fa fa-pencil-square modifier modifierAttribut"></i><input type="hidden" class="id_attribut" name="id_'+numValAttribut+'" value="'+attr.id+'"></div><br/>');
 				   var select = celulle.find('select').last();
 				   for (valAttr in attr.valeurs) {
 					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] === attr.valeurs[valAttr])
@@ -601,7 +601,7 @@ function onChangeSelect() {
 						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 				   }
 
-				   celulle.append('<input type="hidden" class="id_attribut" name="id" value="'+attr.id+'">');
+				   celulle.append('<input type="hidden" class="id_attribut" name="id_'+numValAttribut+'" value="'+attr.id+'">');
 				   
 				   if (celulle.children('select').html() == '') {
 					   celulle.children('select').remove();

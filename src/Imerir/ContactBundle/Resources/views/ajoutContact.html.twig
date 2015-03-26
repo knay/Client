@@ -531,7 +531,7 @@ Valider votre modification via le bouton "Modifier".
                 <td><input type="text" name="recherche_contact_prenom"></td>
 
                 <td><label for="recherche_contact_date_naissance">Date de naissance :</label></td>
-                <td><input type="text" name="recherche_contact_date_naissance" class="datepicker"></td>
+                <td><input type="text" name="recherche_contact_date_naissance" class="datepicker_search"></td>
             </tr>
             <tr>
                 <td><label for="recherche_contact_civilite">Civilité :</label></td>
@@ -754,6 +754,52 @@ Valider votre modification via le bouton "Modifier".
         datepicker.setDefaults(datepicker.regional['fr']);
 
         return datepicker.regional['fr'];
+
+    }));
+
+
+
+    //search
+    
+    $(function() {
+
+        $( ".datepicker_search" ).datepicker({
+            changeMonth: true,
+            changeYear: true
+        });
+    });
+    //Permet de gerer la langue du datepicker
+    (function( factory ) {
+        if ( typeof define === "function" && define.amd ) {
+
+            define([ "../jquery.ui.datepicker" ], factory );
+        } else {
+            factory( jQuery.datepicker );
+        }
+
+    }(function( datepicker_search ) {
+        datepicker_search.regional['fr'] = {
+            closeText: 'Fermer',
+            prevText: 'Pr&eacutec&eacutedent',
+            nextText: 'Suivant',
+            currentText: 'Aujourd\'hui',
+            monthNames: ['janvier', 'f&eacutevrier', 'mars', 'avril', 'mai', 'juin',
+                'juillet', 'ao&ucirct', 'septembre', 'octobre', 'novembre', 'd&eacutecembre'],
+            monthNamesShort: ['janv.', 'févr.', 'mars', 'avril', 'mai', 'juin',
+                'juil.', 'ao&ucirct', 'sept.', 'oct.', 'nov.', 'd&eacutec.'],
+            dayNames: ['dimanche', 'lundi', 'mardi', 'mercredi', 'jeudi', 'vendredi', 'samedi'],
+            dayNamesShort: ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'],
+            dayNamesMin: ['D','L','M','M','J','V','S'],
+            weekHeader: 'Sem.',
+            //dateFormat: 'yy-mm-dd',
+            dateFormat: 'dd/mm/yy',
+            firstDay: 1,
+            isRTL: false,
+            showMonthAfterYear: false,
+            yearSuffix: ''};
+        datepicker_search.setDefaults(datepicker.regional['fr']);
+
+        return datepicker_search.regional['fr'];
 
     }));
 </script>

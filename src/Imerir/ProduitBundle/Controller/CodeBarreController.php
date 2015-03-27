@@ -20,6 +20,7 @@ class CodeBarreController extends Controller
     	$erreur = ''; // En cas d'erreur
     	$menu_sous_menu = array();
     	$codeBarre = array();
+    	$lstCodeBarre = array();
     	$nbX = 2;
     	$nbY = 5;
     	
@@ -47,9 +48,18 @@ class CodeBarreController extends Controller
 	    	catch(\SoapFault $e) {
 	    		$erreur.=$e->getMessage();
 	    	}
-	    	$codeBarre = rand(1000000000000, 9999999999999);
-	    	while (in_array($codeBarre, $allCodeBarre)) {
-	    		$codeBarre = rand(1000000000000, 9999999999999);
+	    	for ($j = 0 ; $j < $nbX*$nbY ; $j++) {
+		    	$codeBarre = '';
+		    	for ($i = 0 ; $i < 13 ; $i++) {
+		    		$codeBarre.= rand(0, 9);
+		    	}
+		    	while (in_array($codeBarre, $allCodeBarre)) {
+		    		$codeBarre = '';
+		    		for ($i = 0 ; $i < 13 ; $i++) {
+		    			$codeBarre.= rand(0, 9);
+		    		}
+		    	}
+		    	array_push($lstCodeBarre, $codeBarre);
 	    	}
     	}
     	else {
@@ -64,7 +74,7 @@ class CodeBarreController extends Controller
     		$erreur.=$e->getMessage();
    		}
    		
-        return $this->render('ImerirProduitBundle::codeBarre.html.twig', array('code_barre' => $codeBarre, 
+        return $this->render('ImerirProduitBundle::codeBarre.html.twig', array('code_barre' => $lstCodeBarre, 
         		                                                               'result_menu' => $menu_sous_menu,
         		                                                               'nbX' => $nbX,
         		                                                               'nbY' => $nbY,

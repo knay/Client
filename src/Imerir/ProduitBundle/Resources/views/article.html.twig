@@ -54,7 +54,10 @@
 		<table class="tableau_input" >
 			<tr>
 				<td><label for="code">Code barre : </label></td>
-				<td><input type="text" name="code" class="valeurCodeBarre" readonly="readonly" value="{{ codeBarre }}"></td>
+				<td>
+					<input type="hidden" class="valeurCodeBarreCache">
+					<input type="text" name="code" class="valeurCodeBarre" readonly="readonly" value="{{ codeBarre }}">
+				</td>
 			</tr>
 			<tr>
 				<td><label for="produit">Produit : </label></td> 
@@ -260,7 +263,7 @@ $("#valid_saisie").click(function () {
 		return;
 	}
 
-	var inputCodeBarre = $(".valeurCodeBarre");
+	var inputCodeBarre = $(".valeurCodeBarreCache");
 	inputCodeBarre.val(valeurSaisie); // On fait comme si on avait fait avec la douchette, on met dans l'input qui va bien
 	
 	validerCodeBarre(true); // On fait comme si on avait eu un code barre
@@ -285,7 +288,7 @@ $(document).keypress(function(e) {
 		return true;
 	}
 	
-	var input = $(".valeurCodeBarre"); // On récupère l'input dans lequel on va venir écrire le code barre
+	var input = $(".valeurCodeBarreCache"); // On récupère l'input dans lequel on va venir écrire le code barre
 	var elementfocus = $('input:focus').blur(); // On défocus les input pours pas écrire dessus avec la douchette
 
 	$("#inputSubmit").attr("disabled", true);  // On grise le boutton submit le temps du traitement
@@ -427,13 +430,15 @@ function onChangeSelect() {
  *                       saisie manuelle on ne tient pas compte de la longueur du code barre.
  */
 function validerCodeBarre(saisieManuelle) {
-	var input = $(".valeurCodeBarre"); // On récupère l'input dans lequel on va venir écrire le code barre
+	var input = $(".valeurCodeBarreCache"); // On récupère l'input dans lequel on va venir écrire le code barre
 	
 	if (saisieManuelle !== true && input.val().length < 10) {
 		input.val('');
 		isScanne = false;
 		return true;
 	}
+
+	var inputVisible = $(".valeurCodeBarre").val(input.val()); // On récupère l'input dans lequel on va venir écrire le code barre
 
 	$("#chargement").show();
 	$("#message_accueil").hide();

@@ -396,10 +396,14 @@ function onChangeSelect() {
 				   span.append('<select name="caract_'+numValAttribut+'"></select><br/>');
 				   var select = span.children('select').last();
 				   for (valAttr in attr.valeurs) {
-					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom].toUpperCase() === attr.valeurs[valAttr].toUpperCase())
-					   	  select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
-					   else 
-						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
+					   if (typeof valeurCaracteristique !== 'undefined' && typeof valeurCaracteristique[attr.nom] !== 'undefined') {
+					   	  if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom].toUpperCase() === attr.valeurs[valAttr].toUpperCase())
+					   	  	  select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
+					   	  else 
+						  	  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
+					   }
+					   else
+						   select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 				   }
 				   
 				   if (span.children('select').html() == '') {

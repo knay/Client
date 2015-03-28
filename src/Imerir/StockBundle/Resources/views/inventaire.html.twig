@@ -178,7 +178,7 @@ function refreshProduitLigneProduit() {
 				if (dernierProduit !== '') {
 					var nomProduit = select.children('option');
 	 	    		nomProduit.each(function (e) {
-			   		if ($(this).html() === dernierProduit)
+			   		if ($(this).html().toUpperCase() === dernierProduit.toUpperCase())
 				   		$(this).attr("selected", true);
 		    		});
 		   		}
@@ -365,7 +365,7 @@ function ajoutProduit() {
 
      			 var nomLigneProduit = selectLp.children('option');
   			 		nomLigneProduit.each(function (e) {
-			   		if ($(this).html() === valLigneProduit)
+			   		if ($(this).html().toUpperCase() === valLigneProduit.toUpperCase())
 				   		$(this).attr("selected", true);
 		    	  });
 		    	  
@@ -557,7 +557,7 @@ function getArticleFromSoap(ligne) {
 			   var objJson = JSON.parse(data); // On parse les datas et on trouve le produit correspondant à l'article dans la liste.
 			   var nomLigneProduit = cellule.children(".select_ligne_produit").children('option');
 			   nomLigneProduit.each(function (e) {
-				   if ($(this).html() === objJson['nomLigneProduit'])
+				   if ($(this).html().toUpperCase() === objJson['nomLigneProduit'].toUpperCase())
 					   $(this).attr("selected", true);
 			   })
 			   
@@ -598,7 +598,7 @@ function onChangeSelect() {
 				   celulle.append('<div><select name="caract_'+numLigne+'_'+numValAttribut+'"></select><i class="fa fa-pencil-square modifier modifierAttribut"></i><input type="hidden" class="id_attribut" name="id" value="'+attr.id+'"></div><br/>');
 				   var select = celulle.find('select').last();
 				   for (valAttr in attr.valeurs) {
-					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] === attr.valeurs[valAttr])
+					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom].toUpperCase() === attr.valeurs[valAttr].toUpperCase())
 					   	  select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 					   else 
 						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');

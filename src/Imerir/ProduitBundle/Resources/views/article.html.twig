@@ -55,7 +55,7 @@
 			<tr>
 				<td><label for="code">Code barre : </label></td>
 				<td>
-					<input type="hidden" class="valeurCodeBarreCache">
+					<input type="hidden" class="valeurCodeBarreCache" value="{{ codeBarre }}">
 					<input type="text" name="code" class="valeurCodeBarre" readonly="readonly" value="{{ codeBarre }}">
 				</td>
 			</tr>
@@ -346,7 +346,7 @@ function getArticleFromSoap() {
 			   nomProduit.attr("selected", false);
 			   nomProduit.first().attr("selected", true);
 			   nomProduit.each(function (e) {
-				   if ($(this).html() === objJson['nomProduit']) {
+				   if ($(this).html().toUpperCase() === objJson['nomProduit'].toUpperCase()) {
 					   nomProduit.first().attr("selected", false);
 					   $(this).attr("selected", true);
 				   }
@@ -396,7 +396,7 @@ function onChangeSelect() {
 				   span.append('<select name="caract_'+numValAttribut+'"></select><br/>');
 				   var select = span.children('select').last();
 				   for (valAttr in attr.valeurs) {
-					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] === attr.valeurs[valAttr])
+					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom].toUpperCase() === attr.valeurs[valAttr].toUpperCase())
 					   	  select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 					   else 
 						  select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');

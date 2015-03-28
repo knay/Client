@@ -178,7 +178,7 @@ function refreshProduitLigneProduit() {
 				if (dernierProduit !== '') {
 					var nomProduit = select.children('option');
 	 	    		nomProduit.each(function (e) {
-			   		if ($(this).html().toUpperCase() === dernierProduit.toUpperCase())
+			   		if ($(this).html() === dernierProduit)
 				   		$(this).attr("selected", true);
 		    		});
 		   		}

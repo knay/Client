@@ -4,6 +4,8 @@
 
 {% block title_page %}Inventaire complet{% endblock %}
 
+{% block produitBlock %}menuSelected{% endblock %}
+
 {% block title %}ALBA - Iventaire complet{% endblock %}
 
 {% block stylesheets %}
@@ -138,6 +140,7 @@ var nbCodeBarre = 0;  //< Le nombre d'article scanné. Utilisé pour envoyé tou
 var tableau = $("#table_code_barre"); //< Le tableau représentant les éléments scanné à la caisse
 var valeurCaracteristique = ''; //< Cette variable est utilisé pour des problèmes de concurences avec AJAX... Elle permet de stocké des donnée le temps qu'une requete soit passée
 var dernierProduit = '';
+var quiterPage = false;
 
 /**
  * Fonction réagissant lors du clic sur le bouton - à côté de la quantité de produit.
@@ -218,8 +221,10 @@ $("#form_inventaire").submit(function (event) {
 	var message = "Confirmer l'inventaire ?"; // Le message de base du message de confirmation
 
 	// On affiche le message et on valide ou pas
-	if (confirm(message) === true) 
+	if (confirm(message) === true) {
+		quiterPage = true;
 		return true;
+	}
 	else {
 		event.preventDefault(); // On empeche le comportement par défaut le temps de vérifier
 		return false;
@@ -641,7 +646,8 @@ function validerCodeBarre(saisieManuelle) {
 $("#inputSubmit").attr("disabled", false); // Par défaut le bouton submit et accessible
 
 $(window).bind('beforeunload', function(){
-	return 'Si vous quittez cette page, les données saisies ne seront pas enregistrées.';
+	if (quiterPage !== true)
+		return 'Si vous quittez cette page, les données saisies ne seront pas enregistrées.';
 });
 </script>
 {% endblock %}

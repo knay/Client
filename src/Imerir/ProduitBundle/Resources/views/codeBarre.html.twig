@@ -99,10 +99,12 @@ de code barre.
 		Pour imprimer cliquez sur le bouton en dessous de l'aperçu.
 	</p>
 	<table class="code_barre">
+		{% set i = 0 %}
 		{% for y in 1..nbY %}
 		<tr>
 			{% for x in 1..nbX %}
-			<td>*{{ code_barre }}*</td>
+			<td>*{{ code_barre[i] }}*</td>
+			{% set i = i+1 %}
 			{% endfor %}
 		</tr>
 		{% endfor %}

@@ -346,10 +346,12 @@ function getArticleFromSoap() {
 			   nomProduit.attr("selected", false);
 			   nomProduit.first().attr("selected", true);
 			   nomProduit.each(function (e) {
-				   if ($(this).html().toUpperCase() === objJson['nomProduit'].toUpperCase()) {
-					   nomProduit.first().attr("selected", false);
-					   $(this).attr("selected", true);
-				   }
+				   if (typeof objJson['nomProduit'] !== 'undefined') {
+				       if ($(this).html().toUpperCase() === objJson['nomProduit'].toUpperCase()) {
+					       nomProduit.first().attr("selected", false);
+					       $(this).attr("selected", true);
+				       }
+			   	   }
 			   });
 
 			   if (typeof objJson['nomProduit'] == "undefined")

@@ -265,7 +265,7 @@ Valider votre modification via le bouton "Modifier".
                     <td>
                         <select name="new_civilite" style="width: 150px">
                             {% if modif_civilite == 'Mlle' %}
-                                <option selected value="">Mlle</option>
+                                <option selected>Mlle</option>
                             {% else %}
                                 <option>Mlle</option>
                             {% endif %}
@@ -382,6 +382,9 @@ Valider votre modification via le bouton "Modifier".
 	                        	<option>Facturation</option>
 	                        	<option>Autre</option>
 	                        {% endif %}
+	                    {% elseif liste_adresses_contact|length == 0 %}
+	                        	<option>Facturation</option>
+	                        	<option>Autre</option>
 	                    {% else %}
 	                        	<option>Autre</option>
 	                        	<option>Facturation</option>
@@ -717,7 +720,7 @@ Valider votre modification via le bouton "Modifier".
             changeMonth: true,
             changeYear: true
         });
-        {% if modif_date_naissance is defined %}
+        {% if modif_date_naissance is defined and modif_date_naissance != '' and modif_date_naissance != '00/00/0000' %}
             var date = "{{ modif_date_naissance }}";
             $(".datepicker").datepicker("setDate",date);
         {% endif %}

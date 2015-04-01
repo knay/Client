@@ -763,10 +763,10 @@ Valider votre modification via le bouton "Modifier".
     
     $(function() {
 
-        $( ".datepicker_search" ).datepicker({
-            changeMonth: true,
-            changeYear: true
-        });
+      	$( ".datepicker_search" ).datepicker({
+          	changeMonth: true,
+           	changeYear: true
+       	});
     });
     //Permet de gerer la langue du datepicker
     (function( factory ) {
@@ -797,7 +797,7 @@ Valider votre modification via le bouton "Modifier".
             isRTL: false,
             showMonthAfterYear: false,
             yearSuffix: ''};
-        datepicker_search.setDefaults(datepicker.regional['fr']);
+        datepicker_search.setDefaults(datepicker_search.regional['fr']);
 
         return datepicker_search.regional['fr'];
 

@@ -412,7 +412,11 @@ $('#ajout_client').click(function () {
         divAjout.find("#fieldset_recherche").remove();
         divAjout.find("#div_num_page").remove();
         divAjout.find("#affichage").css("left", "0");
-        divAjout.find("#affichage").css("width", "100%");
+        divAjout.find("#affichage").css("width", "95%");
+        divAjout.find("#fieldset_ajout").css("width", "95%");
+        divAjout.find(".tableau_contact").find('input').css("width", "120px");
+        divAjout.find("input[name='date_naissance']").attr('placeholder', '30/01/2000');
+        divAjout.find("a").remove();
 
 		divAjout.prepend('<buton type="button" class="retour_client bouton"><i class="fa fa-reply"></i>Retour</buton>'+divAjout.html());
 		divAjout.show();
@@ -448,7 +452,9 @@ function clickTrRechClient() {
 	$("#spanNomClient").html($(this).find(".tdCiviliteClient").html() + " " + 
 						     $(this).find(".tdPrenomClient").html() + " " + $(this).find(".tdNomClient").html());
 
-	$("#dialogClient").dialog("close");
+//	$("#dialogClient").dialog("close");
+	$("#dialogClient").parent().hide();
+	$(".ui-widget-overlay").hide();
 }
 
 /**

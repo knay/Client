@@ -282,6 +282,9 @@ function ajoutClient (event) {
 	var form = $("#divAjoutClient").find("form");
 	var path = form.attr("action");
 	var method = form.attr("method");
+	var nom = $("#divAjoutClient").find("input[name='nom']").last().val();
+	var prenom = $("#divAjoutClient").find("input[name='prenom']").last().val();
+	
 	var queryString = form.serialize();
 
 	$("#chargement").show();
@@ -290,19 +293,19 @@ function ajoutClient (event) {
 	$("#dialogClient").children("p").hide();
 	$("#tabRechClient").hide();
 
+	$("#critereRechClient").val(nom);
+	   
 	$.ajax({
 		   url: path,
 		   data: queryString,
 		   success: function(data) {
-			   var civilite = form.find('select[name="civilite"]').val();
-			   var nom = form.find('input[name="nom"]').val();
-			   var prenom = form.find('input[name="prenom"]').val();
-
 			   $("#chargement").hide();
 			   $("#divAjoutClient").hide();
 			   $("#dialogClient").children("p").show();
 			   $("#presAjoutClient").show();
-			   $("#tabRechClient").show();
+			   $("#tabRechClient").hide();
+
+			   $("#chercher_client").trigger("click");
 		   },
 		   type: method
 	});

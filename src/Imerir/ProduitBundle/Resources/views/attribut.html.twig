@@ -75,7 +75,6 @@ que la marque de celui-ci, ou sa couleur.
 					<i class="fa fa-plus-square ajout ajouter"></i>
 				</td>
 				<td>
-					<input type="text" name="attribut{{ nbAttribut }}"/>
 				</td>
 			</tr>
 		</table>
@@ -91,12 +90,7 @@ que la marque de celui-ci, ou sa couleur.
 				{% for i in detail_attribut.ligneProduit %}
 					<tr>
 						<td>
-							{% if loop.last %}
-								{# Le dernier c'est un boutton ajouter et pas supprimer qu'il faut mettre #}
-								<i class="fa fa-plus-square ajout ajouter"></i>
-							{% else %}
-								<i class="fa fa-minus-square supprimer"></i>
-							{% endif %}
+							<i class="fa fa-minus-square supprimer"></i>
 						</td>
 						<td class="{% if loop.last %}last{% endif %}">
 							<select name="lg_produit{{ nbLigneProduit }}">
@@ -117,15 +111,25 @@ que la marque de celui-ci, ou sa couleur.
 						</td>
 					</tr>
 				{% endfor %}
+				<tr>
+					<td><i class="fa fa-plus-square ajout ajouter"></i></td>
+					<td>
+					</td>
+				</tr>
 			{% else %}
 				<tr class="last">
-					<td><i class="fa fa-plus-square ajout ajouter"></i></td>
+					<td><i class="fa fa-minus-square supprimer"></i></td>
 					<td>
 						<select name="lg_produit1">
 						{% for j in ligne_produit %}
 							<option>{{ j.nom }}</option>
 						{% endfor %}
 						</select>
+					</td>
+				</tr>
+				<tr>
+					<td><i class="fa fa-plus-square ajout ajouter"></i></td>
+					<td>
 					</td>
 				</tr>
 			{% endif %}
@@ -232,25 +236,25 @@ que la marque de celui-ci, ou sa couleur.
 		function ajoutItem() {
 			var last = $("#lst_attribut").find('tr').last();
 			var input = $(last).find('input');
-			if ($(input).val() === "") {
-				input.select();
-			}
-			else {
-				$("#lst_attribut").children("table").append('<tr><td><i class="fa fa-plus-square ajout ajouter"></i></td><td><input type="text" name="attribut'+numAttribut+'"/></td></tr>');
 
-				last.find("i").toggleClass("ajout");
-				last.find("i").toggleClass("supprimer");
-				last.find("i").toggleClass("fa-plus-square");
-				last.find("i").toggleClass("fa-minus-square");
-				last.find("i").toggleClass("ajouter");
-				last.toggleClass("last");
+			var last = $("#lst_attribut").find('tr').last();
+			clone = last.clone().appendTo($("#lst_attribut").children("table"));
+			last.find("td").last().append('<input type="text" name="attribut'+numAttribut+'"/>');
+			last.find('select').attr("name", "attribut"+numAttribut);
+			
+			
+			last.find("i").toggleClass("ajout");
+			last.find("i").toggleClass("supprimer");
+			last.find("i").toggleClass("fa-plus-square");
+			last.find("i").toggleClass("fa-minus-square");
+			last.find("i").toggleClass("ajouter");
+			last.toggleClass("last");
 
-				$(this).unbind('click');
-				$("#lst_attribut").find('.ajouter').click(ajoutItem);
-				$("#lst_attribut").find('.supprimer').click(supprimerItem);
+			$(this).unbind('click');
+			$("#lst_attribut").find('.ajouter').click(ajoutItem);
+			$("#lst_attribut").find('.supprimer').click(supprimerItem);
 
-				numAttribut++;
-			}
+			numAttribut++;
 		}
 	);
 
@@ -262,7 +266,8 @@ que la marque de celui-ci, ou sa couleur.
 	  * Elle est appelée lorsque l'on clic sur le boutton moins.
 	  */
 	 function supprimerItem() {
-	 	 $(this).parent().parent().remove();
+		 if ($(this).parent().parent().parent().find("tr").length > 3)
+		 	 $(this).parent().parent().remove();
 	 }
 
 	 /**
@@ -273,10 +278,14 @@ que la marque de celui-ci, ou sa couleur.
 	 $("#lst_ligne_produit").find('.ajouter').click(
 		function ajoutLigne() {
 			var last = $("#lst_ligne_produit").find('tr').last();
+			var first = $("#lst_ligne_produit").find('tr').eq(1);
 			var tableau = $("#lst_ligne_produit").children("table");
-			
+
 			clone = last.clone().appendTo(tableau);
-			clone.find('select').attr("name", "lg_produit"+numLigne);
+			last.find('td').last().append(first.find('select').clone());
+			
+			//last.find("td").last().append('<input type="text" name="attribut'+numAttribut+'"/>');
+			last.find('select').attr("name", "lg_produit"+numLigne);
 			
 			last.find("i").toggleClass("ajout");
 			last.find("i").toggleClass("supprimer");

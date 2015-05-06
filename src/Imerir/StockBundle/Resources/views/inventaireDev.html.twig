@@ -538,12 +538,12 @@ function onChangeSelect() {
 				   celulle.append('<div><select name="caract_'+numLigne+'_'+numValAttribut+'"></select><i class="fa fa-pencil-square modifier modifierAttribut"></i><input type="hidden" class="id_attribut" name="id" value="'+attr.id+'"></div><br/>');
 				   var select = celulle.find('select').last();
 				   for (valAttr in attr.valeurs) {
-					   if (typeof valeurCaracteristique !== 'undefined' && typeof valeurCaracteristique[attr.nom] !== 'undefined') {
-					       if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom].toUpperCase() === attr.valeurs[valAttr].toUpperCase())
-					   	       select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
-					       else 
-						       select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
-				       }
+					   if (valeurCaracteristique !== null && valeurCaracteristique[attr.nom] !== null) {
+					  	  if (typeof valeurCaracteristique !== 'undefined' && typeof valeurCaracteristique[attr.nom] !== 'undefined' && valeurCaracteristique[attr.nom].toUpperCase() === attr.valeurs[valAttr].toUpperCase())
+					   	 	 select.append('<option selected value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
+					   	  else 
+						  	 select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
+					   }
 					   else 
 						   select.append('<option value="'+attr.nom+'_'+attr.valeurs[valAttr]+'">'+attr.valeurs[valAttr]+'</option>');
 				   }
